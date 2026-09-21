@@ -701,6 +701,54 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- TAB 6: PLATFORM STATUS -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <div v-show="activeTab === 'platform'" class="space-y-8">
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+        <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
+          <div class="w-10 h-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center">
+            <Lock class="w-5 h-5" />
+          </div>
+          <div>
+            <h3 class="text-sm font-medium text-gray-900 lowercase">platform access</h3>
+            <p class="text-xs font-bold text-gray-400 lowercase">close the platform for maintenance</p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
+          <div class="space-y-1">
+            <h4 class="text-sm font-medium text-gray-900 lowercase">close platform</h4>
+            <p class="text-xs text-gray-500 lowercase">disables access for students, vendors, and dispatchers</p>
+            <p v-if="platformForm.isClosed" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
+              <AlertTriangle class="w-3 h-3" />
+              platform is currently closed. all users will see a maintenance screen.
+            </p>
+            <p v-else class="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
+              <CheckCircle class="w-3 h-3" />
+              platform is open and operating normally.
+            </p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" v-model="platformForm.isClosed" class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+          </label>
+        </div>
+
+        <div class="flex justify-end pt-6 border-t border-gray-50">
+          <button 
+            @click="confirmSave('platform')" 
+            :disabled="savingPlatform"
+            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-xs font-medium lowercase hover:bg-red-500 transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
+          >
+            <Loader2 v-if="savingPlatform" class="w-4 h-4 animate-spin" />
+            <Save v-else class="w-4 h-4" />
+            <span>{{ savingPlatform ? 'saving...' : 'save platform status' }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
     <!-- CONFIRMATION MODAL -->
     <!-- ═══════════════════════════════════════════════════════ -->
     <Teleport to="body">
@@ -743,7 +791,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue';
-import { Zap, Loader2, Truck, DollarSign, Tag, Bell, Megaphone, Moon, Info, AlertTriangle, CheckCircle, Calculator, Save, ShieldAlert, Briefcase } from 'lucide-vue-next';
+import { Zap, Loader2, Truck, DollarSign, Tag, Bell, Megaphone, Moon, Info, AlertTriangle, CheckCircle, Calculator, Save, ShieldAlert, Briefcase, Lock } from 'lucide-vue-next';
 import { admin_api } from '@/api_factory/modules/admin';
 import { useCustomToast } from '@/composables/core/useCustomToast';
 
@@ -759,6 +807,7 @@ const tabs = [
   { id: 'adverts', label: 'adverts', icon: Megaphone },
   { id: 'campaigns', label: 'campaigns', icon: Moon },
   { id: 'erranders', label: 'erranders', icon: Briefcase },
+  { id: 'platform', label: 'platform status', icon: Lock },
 ];
 
 // ─── Info Tooltips ────────────────
@@ -773,6 +822,7 @@ const savingComms = ref(false);
 const savingAdvert = ref(false);
 const savingExamBrethren = ref(false);
 const savingErrander = ref(false);
+const savingPlatform = ref(false);
 
 const erranderForm = reactive({
   maxConcurrentOrders: 0,
@@ -823,6 +873,10 @@ const examBrethrenForm = reactive({
   isActive: false,
 });
 
+const platformForm = reactive({
+  isClosed: false,
+});
+
 // ─── Revenue Calculator ────────────────
 const estimatedRevenue = computed(() => {
   return form.convenienceFee + form.commissionFlatFee + form.platformProcessingFee;
@@ -871,6 +925,10 @@ const confirmSave = (type: string) => {
     confirmModal.message = 'you are about to update errander configuration. this affects how many orders they can accept at once and their payouts.';
     confirmModal.changes.push(`max concurrent orders: <strong>${erranderForm.maxConcurrentOrders === 0 ? 'infinite (0)' : erranderForm.maxConcurrentOrders}</strong>`);
     confirmModal.changes.push(`minimum payout: <strong>₦${erranderForm.minimumPayout}</strong>`);
+  } else if (type === 'platform') {
+    confirmModal.message = 'you are about to update the global platform status. closing the platform will block all students, vendors, and dispatchers from using the apps.';
+    confirmModal.changes.push(`platform closed: <strong>${platformForm.isClosed ? 'YES (apps blocked)' : 'NO (apps open)'}</strong>`);
+    if (platformForm.isClosed) confirmModal.changes.push('<span class="text-red-600">⚠️ warning: all users (except admins) will see a maintenance screen.</span>');
   }
 
   confirmModal.show = true;
@@ -885,18 +943,20 @@ const executeConfirmedSave = async () => {
   else if (type === 'adverts') await saveAdvertSettings();
   else if (type === 'campaigns') await saveExamBrethrenSettings();
   else if (type === 'erranders') await saveErranderSettings();
+  else if (type === 'platform') await savePlatformSettings();
 };
 
 // ─── Load Settings ────────────────
 const loadSettings = async () => {
   try {
-    const [errandRes, commsRes, advertRes, examBrethrenRes, erranderSettingsRes, payoutRes] = await Promise.all([
+    const [errandRes, commsRes, advertRes, examBrethrenRes, erranderSettingsRes, payoutRes, platformRes] = await Promise.all([
       admin_api.getCustomErrandSettings(),
       admin_api.getCommunicationsSettings(),
       admin_api.getAdvertSettings(),
       admin_api.getExamBrethrenSettings(),
       admin_api.getErranderSettings(),
-      admin_api.getPayoutSettings()
+      admin_api.getPayoutSettings(),
+      admin_api.getPlatformStatus()
     ]);
     
     if (errandRes.data) {
@@ -946,6 +1006,10 @@ const loadSettings = async () => {
 
     if (payoutRes.data) {
       erranderForm.minimumPayout = payoutRes.data.amount ?? 1000;
+    }
+
+    if (platformRes.data) {
+      platformForm.isClosed = platformRes.data.isClosed ?? false;
     }
   } catch (e: any) {
     console.error('Failed to load settings:', e);
@@ -1048,6 +1112,21 @@ const saveErranderSettings = async () => {
     showToast({ title: 'error', message: e.response?.data?.message || 'failed to save errander settings.', toastType: 'error' });
   } finally {
     savingErrander.value = false;
+  }
+};
+
+const savePlatformSettings = async () => {
+  savingPlatform.value = true;
+  try {
+    await admin_api.updatePlatformStatus({
+      isClosed: platformForm.isClosed,
+    });
+    showToast({ title: 'success', message: 'platform status updated!', toastType: 'success' });
+  } catch (e: any) {
+    console.error('Failed to save platform status:', e);
+    showToast({ title: 'error', message: e.response?.data?.message || 'failed to update platform status.', toastType: 'error' });
+  } finally {
+    savingPlatform.value = false;
   }
 };
 

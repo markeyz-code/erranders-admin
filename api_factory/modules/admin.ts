@@ -141,6 +141,14 @@ export const admin_api = {
     return GATEWAY_ENDPOINT_WITH_AUTH.put('/settings/exam-brethren', payload);
   },
 
+  getPlatformStatus: () => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.get('/settings/platform-status/public');
+  },
+
+  updatePlatformStatus: (payload: { isClosed: boolean }) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.put('/settings/platform-status', payload);
+  },
+
   updateUser: (id: string, payload: any) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.put(`/admin/users/${id}`, payload);
   },
