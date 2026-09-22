@@ -715,21 +715,62 @@
           </div>
         </div>
 
+        <!-- Student App Toggle -->
         <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
           <div class="space-y-1">
-            <h4 class="text-sm font-medium text-gray-900 lowercase">close platform</h4>
-            <p class="text-xs text-gray-500 lowercase">disables access for students, vendors, and dispatchers</p>
-            <p v-if="platformForm.isClosed" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
+            <h4 class="text-sm font-medium text-gray-900 lowercase">student app</h4>
+            <p class="text-xs text-gray-500 lowercase">close the student-facing app for maintenance</p>
+            <p v-if="platformForm.isStudentAppClosed" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
               <AlertTriangle class="w-3 h-3" />
-              platform is currently closed. all users will see a maintenance screen.
+              student app is closed. students will see a maintenance screen.
             </p>
             <p v-else class="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
               <CheckCircle class="w-3 h-3" />
-              platform is open and operating normally.
+              student app is open.
             </p>
           </div>
           <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" v-model="platformForm.isClosed" class="sr-only peer">
+            <input type="checkbox" v-model="platformForm.isStudentAppClosed" class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+          </label>
+        </div>
+
+        <!-- Vendor App Toggle -->
+        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
+          <div class="space-y-1">
+            <h4 class="text-sm font-medium text-gray-900 lowercase">vendor app</h4>
+            <p class="text-xs text-gray-500 lowercase">close the vendor/merchant app for maintenance</p>
+            <p v-if="platformForm.isVendorAppClosed" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
+              <AlertTriangle class="w-3 h-3" />
+              vendor app is closed. vendors will see a maintenance screen.
+            </p>
+            <p v-else class="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
+              <CheckCircle class="w-3 h-3" />
+              vendor app is open.
+            </p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" v-model="platformForm.isVendorAppClosed" class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+          </label>
+        </div>
+
+        <!-- Dispatch App Toggle -->
+        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
+          <div class="space-y-1">
+            <h4 class="text-sm font-medium text-gray-900 lowercase">dispatch app</h4>
+            <p class="text-xs text-gray-500 lowercase">close the errand ninja / dispatch app for maintenance</p>
+            <p v-if="platformForm.isDispatchAppClosed" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
+              <AlertTriangle class="w-3 h-3" />
+              dispatch app is closed. riders will see a maintenance screen.
+            </p>
+            <p v-else class="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
+              <CheckCircle class="w-3 h-3" />
+              dispatch app is open.
+            </p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" v-model="platformForm.isDispatchAppClosed" class="sr-only peer">
             <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
           </label>
         </div>
@@ -874,7 +915,9 @@ const examBrethrenForm = reactive({
 });
 
 const platformForm = reactive({
-  isClosed: false,
+  isStudentAppClosed: false,
+  isVendorAppClosed: false,
+  isDispatchAppClosed: false,
 });
 
 // ─── Revenue Calculator ────────────────
@@ -926,9 +969,11 @@ const confirmSave = (type: string) => {
     confirmModal.changes.push(`max concurrent orders: <strong>${erranderForm.maxConcurrentOrders === 0 ? 'infinite (0)' : erranderForm.maxConcurrentOrders}</strong>`);
     confirmModal.changes.push(`minimum payout: <strong>₦${erranderForm.minimumPayout}</strong>`);
   } else if (type === 'platform') {
-    confirmModal.message = 'you are about to update the global platform status. closing the platform will block all students, vendors, and dispatchers from using the apps.';
-    confirmModal.changes.push(`platform closed: <strong>${platformForm.isClosed ? 'YES (apps blocked)' : 'NO (apps open)'}</strong>`);
-    if (platformForm.isClosed) confirmModal.changes.push('<span class="text-red-600">⚠️ warning: all users (except admins) will see a maintenance screen.</span>');
+    confirmModal.message = 'you are about to update platform status for individual apps. each toggle controls maintenance mode independently.';
+    confirmModal.changes.push(`student app: <strong>${platformForm.isStudentAppClosed ? '🔴 CLOSED' : '🟢 OPEN'}</strong>`);
+    confirmModal.changes.push(`vendor app: <strong>${platformForm.isVendorAppClosed ? '🔴 CLOSED' : '🟢 OPEN'}</strong>`);
+    confirmModal.changes.push(`dispatch app: <strong>${platformForm.isDispatchAppClosed ? '🔴 CLOSED' : '🟢 OPEN'}</strong>`);
+    if (platformForm.isStudentAppClosed || platformForm.isVendorAppClosed || platformForm.isDispatchAppClosed) confirmModal.changes.push('<span class="text-red-600">⚠️ warning: closed apps will show a maintenance screen to their users.</span>');
   }
 
   confirmModal.show = true;
@@ -1009,7 +1054,9 @@ const loadSettings = async () => {
     }
 
     if (platformRes.data) {
-      platformForm.isClosed = platformRes.data.isClosed ?? false;
+      platformForm.isStudentAppClosed = platformRes.data.isStudentAppClosed ?? platformRes.data.isClosed ?? false;
+      platformForm.isVendorAppClosed = platformRes.data.isVendorAppClosed ?? platformRes.data.isClosed ?? false;
+      platformForm.isDispatchAppClosed = platformRes.data.isDispatchAppClosed ?? platformRes.data.isClosed ?? false;
     }
   } catch (e: any) {
     console.error('Failed to load settings:', e);
@@ -1119,7 +1166,9 @@ const savePlatformSettings = async () => {
   savingPlatform.value = true;
   try {
     await admin_api.updatePlatformStatus({
-      isClosed: platformForm.isClosed,
+      isStudentAppClosed: platformForm.isStudentAppClosed,
+      isVendorAppClosed: platformForm.isVendorAppClosed,
+      isDispatchAppClosed: platformForm.isDispatchAppClosed,
     });
     showToast({ title: 'success', message: 'platform status updated!', toastType: 'success' });
   } catch (e: any) {

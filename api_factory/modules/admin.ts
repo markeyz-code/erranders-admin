@@ -145,7 +145,7 @@ export const admin_api = {
     return GATEWAY_ENDPOINT_WITH_AUTH.get('/settings/platform-status/public');
   },
 
-  updatePlatformStatus: (payload: { isClosed: boolean }) => {
+  updatePlatformStatus: (payload: { isStudentAppClosed: boolean; isVendorAppClosed: boolean; isDispatchAppClosed: boolean }) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.put('/settings/platform-status', payload);
   },
 
