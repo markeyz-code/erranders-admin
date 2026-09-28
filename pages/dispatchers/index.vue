@@ -269,7 +269,7 @@
                 <th class="px-6 py-4 font-bold">School & Matric</th>
                 <th class="px-6 py-4 font-bold">Verification</th>
                 <th class="px-6 py-4 font-bold text-center">Deliveries</th>
-                <th class="px-6 py-4 font-bold text-center text-[#FF5C1A]">Wallet/Earnings</th>
+                <th class="px-6 py-4 font-bold text-center text-[#FF5C1A]">Wallet Balance</th>
                 <th class="px-6 py-4 font-bold text-center">Status</th>
                 <th class="px-6 py-4 font-bold text-right">Actions</th>
               </tr>
@@ -308,10 +308,7 @@
                 <td class="px-6 py-4 text-center">
                   <div class="flex flex-col items-center justify-center gap-1">
                     <span class="font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2.5 py-1 rounded-md border border-[#FF5C1A]/20 text-xs" title="Wallet Balance">
-                      Wallet: ₦{{ Number(errander.user?.walletBalance || 0).toLocaleString() }}
-                    </span>
-                    <span class="font-medium text-gray-500 text-[10px]" title="Total Earnings">
-                      Earned: ₦{{ Number(errander.totalEarnings || 0).toLocaleString() }}
+                      ₦{{ Number(errander.user?.walletBalance || 0).toLocaleString() }}
                     </span>
                   </div>
                 </td>
