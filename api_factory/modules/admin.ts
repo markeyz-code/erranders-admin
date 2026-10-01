@@ -212,4 +212,8 @@ export const admin_api = {
   getFastestDispatchers: (limit: number = 4) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/dispatchers-fastest?limit=${limit}`);
   },
+
+  getWalletTransactions: (userId: string, page: number = 1, limit: number = 20) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.get(`/wallets/all?userId=${userId}&page=${page}&limit=${limit}`);
+  },
 };

@@ -160,6 +160,52 @@
         <div v-if="activeTab === 'finances'" class="space-y-6">
           <UserFinances :userId="userId" userRole="student" />
         </div>
+
+        <!-- Wallet Activities Tab -->
+        <div v-if="activeTab === 'wallet'">
+          <div v-if="walletLoading" class="py-12 flex justify-center">
+            <div class="w-8 h-8 border-4 border-[#FF5C1A] border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <div v-else-if="walletTransactions.length === 0" class="flex flex-col items-center justify-center py-12 text-center">
+            <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+              <Wallet class="w-8 h-8 text-gray-400" />
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-1">No Wallet Activities</h3>
+            <p class="text-sm text-gray-500 max-w-sm">There are no wallet transactions for this user.</p>
+          </div>
+          <div v-else class="max-md:overflow-x-auto md:overflow-visible pb-24 md:pb-0">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-gray-100/60 bg-gray-50/50 text-[11px] uppercase tracking-wider text-gray-500">
+                  <th class="py-4 px-6 font-bold">Ref</th>
+                  <th class="py-4 px-4 font-bold">Date</th>
+                  <th class="py-4 px-4 font-bold">Type</th>
+                  <th class="py-4 px-4 font-bold">Amount</th>
+                  <th class="py-4 px-6 font-bold">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr v-for="tx in walletTransactions" :key="tx._id" class="hover:bg-gray-50 transition-colors">
+                  <td class="py-4 px-6 font-mono font-medium text-gray-900 text-sm">
+                    {{ tx.reference || tx._id.slice(-8) }}
+                  </td>
+                  <td class="py-4 px-4 text-sm text-gray-500">
+                    {{ new Date(tx.createdAt).toLocaleDateString() }}
+                  </td>
+                  <td class="py-4 px-4 text-sm font-semibold capitalize" :class="tx.type === 'credit' ? 'text-emerald-600' : 'text-rose-600'">
+                    {{ tx.type }}
+                  </td>
+                  <td class="py-4 px-4 font-bold text-gray-900 text-sm">
+                    ₦{{ (tx.amount || 0).toLocaleString() }}
+                  </td>
+                  <td class="py-4 px-6">
+                    <StatusBadge :status="tx.status" class="scale-90 origin-left" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -212,7 +258,8 @@ const ordersLoading = ref(false);
 const tabs = [
   { key: 'overview', label: 'Overview' },
   { key: 'activity', label: 'Activity & History' },
-  { key: 'finances', label: 'Finances & Payouts' }
+  { key: 'finances', label: 'Finances & Payouts' },
+  { key: 'wallet', label: 'Wallet Activities' }
 ];
 const activeTab = ref('overview');
 
@@ -248,6 +295,25 @@ const fetchUserOrders = async () => {
     console.error('Error fetching user orders:', err);
   } finally {
     ordersLoading.value = false;
+  }
+};
+
+const walletTransactions = ref<any[]>([]);
+const walletLoading = ref(false);
+
+const fetchWalletTransactions = async () => {
+  walletLoading.value = true;
+  try {
+    const res = await admin_api.getWalletTransactions(userId);
+    if (res.data?.data) {
+      walletTransactions.value = res.data.data;
+    } else if (Array.isArray(res.data)) {
+      walletTransactions.value = res.data;
+    }
+  } catch (err) {
+    console.error('Error fetching wallet transactions:', err);
+  } finally {
+    walletLoading.value = false;
   }
 };
 
@@ -294,5 +360,6 @@ const copyToClipboard = (text: string) => {
 onMounted(() => {
   fetchUser();
   fetchUserOrders();
+  fetchWalletTransactions();
 });
 </script>

@@ -63,6 +63,7 @@
             <span v-if="profile.batchOrders?.length" class="bg-[#FF5C1A] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">{{ profile.batchOrders.length }}</span>
           </button>
           <button @click="activeTab = 'finances'" :class="activeTab === 'finances' ? 'text-[#FF5C1A] border-b-2 border-[#FF5C1A] font-bold' : 'text-gray-500 hover:text-gray-700 font-medium'" class="px-6 py-4 whitespace-nowrap transition-colors">Finances & Payouts</button>
+          <button @click="activeTab = 'wallet'" :class="activeTab === 'wallet' ? 'text-[#FF5C1A] border-b-2 border-[#FF5C1A] font-bold' : 'text-gray-500 hover:text-gray-700 font-medium'" class="px-6 py-4 whitespace-nowrap transition-colors">Wallet Activities</button>
         </div>
 
         <div class="p-6 bg-gray-50/30">
@@ -289,6 +290,55 @@
             <UserFinances v-if="profile.user?._id" :userId="profile.user._id" userRole="errander" />
           </div>
 
+          <!-- WALLET ACTIVITIES TAB -->
+          <div v-else-if="activeTab === 'wallet'" class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+            <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-6 flex items-center gap-2">
+              <Wallet class="w-4 h-4" /> Wallet Activities
+            </h3>
+            <div v-if="walletLoading" class="py-12 flex justify-center">
+              <div class="w-8 h-8 border-4 border-[#FF5C1A] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            <div v-else-if="walletTransactions.length === 0" class="flex flex-col items-center justify-center py-12 text-center">
+              <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                <Wallet class="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 mb-1">No Wallet Activities</h3>
+              <p class="text-sm text-gray-500 max-w-sm">There are no wallet transactions for this dispatcher.</p>
+            </div>
+            <div v-else class="max-md:overflow-x-auto md:overflow-visible pb-24 md:pb-0">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-gray-100/60 bg-gray-50/50 text-[11px] uppercase tracking-wider text-gray-500">
+                    <th class="py-4 px-6 font-bold">Ref</th>
+                    <th class="py-4 px-4 font-bold">Date</th>
+                    <th class="py-4 px-4 font-bold">Type</th>
+                    <th class="py-4 px-4 font-bold">Amount</th>
+                    <th class="py-4 px-6 font-bold">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  <tr v-for="tx in walletTransactions" :key="tx._id" class="hover:bg-gray-50 transition-colors">
+                    <td class="py-4 px-6 font-mono font-medium text-gray-900 text-sm">
+                      {{ tx.reference || tx._id.slice(-8) }}
+                    </td>
+                    <td class="py-4 px-4 text-sm text-gray-500">
+                      {{ new Date(tx.createdAt).toLocaleDateString() }}
+                    </td>
+                    <td class="py-4 px-4 text-sm font-semibold capitalize" :class="tx.type === 'credit' ? 'text-emerald-600' : 'text-rose-600'">
+                      {{ tx.type }}
+                    </td>
+                    <td class="py-4 px-4 font-bold text-gray-900 text-sm">
+                      ₦{{ (tx.amount || 0).toLocaleString() }}
+                    </td>
+                    <td class="py-4 px-6">
+                      <StatusBadge :status="tx.status" class="scale-90 origin-left" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -342,7 +392,9 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { GATEWAY_ENDPOINT_WITH_AUTH } from '@/api_factory/axios.config'
-import { ArrowLeft, User, Mail, Phone, DollarSign, Star, Shield, CheckCircle, FileText, Search, Receipt, Clock, MapPin, X } from 'lucide-vue-next'
+import { admin_api } from '@/api_factory/modules/admin'
+import { ArrowLeft, User, Mail, Phone, DollarSign, Star, Shield, CheckCircle, FileText, Search, Receipt, Clock, MapPin, X, Wallet } from 'lucide-vue-next'
+import StatusBadge from '@/components/ui/StatusBadge.vue'
 import TransactionsList from '@/components/TransactionsList.vue'
 import UserFinances from '@/components/users/UserFinances.vue'
 
@@ -368,10 +420,32 @@ const fetchProfile = async () => {
   try {
     const res = await GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/dispatchers/${route.params.id}`)
     profile.value = res.data?.data || res.data || null
+    if (profile.value?.user?._id) {
+      await fetchWalletTransactions(profile.value.user._id);
+    }
   } catch (error) {
     console.error('Failed to fetch dispatcher profile', error)
   } finally {
     loading.value = false
+  }
+}
+
+const walletTransactions = ref<any[]>([])
+const walletLoading = ref(false)
+
+const fetchWalletTransactions = async (userId: string) => {
+  walletLoading.value = true
+  try {
+    const res = await admin_api.getWalletTransactions(userId)
+    if (res.data?.data) {
+      walletTransactions.value = res.data.data
+    } else if (Array.isArray(res.data)) {
+      walletTransactions.value = res.data
+    }
+  } catch (err) {
+    console.error('Error fetching wallet transactions:', err)
+  } finally {
+    walletLoading.value = false
   }
 }
 
