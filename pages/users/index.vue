@@ -384,6 +384,43 @@
                     </div>
                   </div>
                 </div>
+                
+                <!-- Transactions Ledger -->
+                <div class="mt-8">
+                  <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2 mb-4">
+                    Transactions Ledger
+                  </h4>
+                  <div v-if="walletLoading" class="flex justify-center py-6">
+                    <div class="w-6 h-6 border-2 border-[#FF5C1A] border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                  <div v-else-if="walletTransactions.length === 0" class="text-center py-6">
+                    <p class="text-xs text-gray-500">No wallet transactions found.</p>
+                  </div>
+                  <div v-else class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                      <thead>
+                        <tr class="border-b border-gray-100 bg-gray-50/50 text-[10px] uppercase tracking-wider text-gray-500">
+                          <th class="py-3 px-3 font-bold">Ref</th>
+                          <th class="py-3 px-3 font-bold">Date</th>
+                          <th class="py-3 px-3 font-bold text-right">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-100">
+                        <tr v-for="tx in walletTransactions" :key="tx._id" class="hover:bg-gray-50 transition-colors">
+                          <td class="py-3 px-3 font-mono font-medium text-gray-900 text-[11px]">
+                            {{ tx.reference || tx._id.slice(-8) }}
+                          </td>
+                          <td class="py-3 px-3 text-[11px] text-gray-500">
+                            {{ new Date(tx.createdAt).toLocaleDateString() }}
+                          </td>
+                          <td class="py-3 px-3 font-bold text-[11px] text-right" :class="tx.type === 'credit' ? 'text-emerald-600' : 'text-rose-600'">
+                            {{ tx.type === 'credit' ? '+' : '-' }}₦{{ (tx.amount || 0).toLocaleString() }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </template>
             <!-- Edit Tab -->
@@ -684,12 +721,33 @@ const openUserDrawer = async (userId: string) => {
       role: selectedUser.value.role || 'student',
       adminDepartment: selectedUser.value.adminDepartment?._id || selectedUser.value.adminDepartment || null
     };
+    await fetchWalletTransactions(selectedUser.value._id);
   } catch (e) {
     console.error('Failed to fetch user:', e);
     showToast({ title: 'Error', message: 'Failed to load user details', toastType: 'error' });
     drawerOpen.value = false;
   } finally {
     drawerLoading.value = false;
+  }
+};
+
+const walletTransactions = ref<any[]>([]);
+const walletLoading = ref(false);
+
+const fetchWalletTransactions = async (userId: string) => {
+  walletLoading.value = true;
+  walletTransactions.value = [];
+  try {
+    const res = await admin_api.getWalletTransactions(userId);
+    if (res.data?.data) {
+      walletTransactions.value = res.data.data;
+    } else if (Array.isArray(res.data)) {
+      walletTransactions.value = res.data;
+    }
+  } catch (err) {
+    console.error('Error fetching wallet transactions:', err);
+  } finally {
+    walletLoading.value = false;
   }
 };
 
