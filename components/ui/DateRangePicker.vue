@@ -3,7 +3,7 @@
     <!-- Trigger Button -->
     <button 
       @click="isOpen = !isOpen"
-      class="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors shadow-sm text-sm font-medium text-gray-700 min-w-[240px] justify-between"
+      class="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-25 rounded-xl hover:bg-gray-50 transition-colors shadow-sm text-sm font-medium text-gray-700 min-w-[240px] justify-between"
     >
       <div class="flex items-center gap-2">
         <Calendar class="w-4 h-4 text-gray-500" />
@@ -13,7 +13,7 @@
     </button>
 
     <!-- Popover -->
-    <div v-if="isOpen" class="absolute right-0 mt-2 bg-white border border-gray-100 shadow-2xl rounded-2xl z-50 overflow-hidden min-w-[640px] animate-in fade-in slide-in-from-top-2 p-6">
+    <div v-if="isOpen" class="absolute right-0 mt-2 bg-white border border-gray-50 shadow-2xl rounded-2xl z-50 overflow-hidden min-w-[640px] animate-in fade-in slide-in-from-top-2 p-6">
       
       <!-- Calendars Container -->
       <div class="flex gap-8">

@@ -1,14 +1,14 @@
 <template>
   <div class="space-y-4">
     <!-- Filters -->
-    <div class="flex flex-col sm:flex-row gap-4 items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-100">
+    <div class="flex flex-col sm:flex-row gap-4 items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-50">
       <div class="flex-1 w-full relative">
         <Search class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         <input 
           v-model="filters.search" 
           type="text" 
           placeholder="Search order # or customer..." 
-          class="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] transition-all"
+          class="w-full pl-10 pr-4 py-2 text-sm border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] transition-all"
           @input="debounceFetch"
         />
       </div>
@@ -16,7 +16,7 @@
         <select 
           v-model="filters.status" 
           @change="fetchOrders"
-          class="px-4 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20"
+          class="px-4 py-2 text-sm border border-gray-25 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20"
         >
           <option value="">All Statuses</option>
           <option value="pending">Pending</option>
@@ -31,19 +31,19 @@
           v-model="filters.startDate" 
           type="date" 
           @change="fetchOrders"
-          class="px-4 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20"
+          class="px-4 py-2 text-sm border border-gray-25 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20"
         />
         <input 
           v-model="filters.endDate" 
           type="date" 
           @change="fetchOrders"
-          class="px-4 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20"
+          class="px-4 py-2 text-sm border border-gray-25 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20"
         />
       </div>
     </div>
 
     <!-- Table -->
-    <div class="bg-white rounded-xl border border-gray-100 overflow-hidden relative min-h-[300px]">
+    <div class="bg-white rounded-xl border border-gray-50 overflow-hidden relative min-h-[300px]">
       <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-white/50 z-10 backdrop-blur-sm">
         <div class="w-8 h-8 border-4 border-[#FF5C1A] border-t-transparent rounded-full animate-spin"></div>
       </div>
@@ -120,14 +120,14 @@
           <button 
             @click="page--" 
             :disabled="page === 1"
-            class="px-3 py-1.5 text-xs font-bold text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="px-3 py-1.5 text-xs font-bold text-gray-700 bg-white border border-gray-25 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Previous
           </button>
           <button 
             @click="page++" 
             :disabled="page >= totalPages"
-            class="px-3 py-1.5 text-xs font-bold text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="px-3 py-1.5 text-xs font-bold text-gray-700 bg-white border border-gray-25 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Next
           </button>

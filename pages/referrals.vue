@@ -19,7 +19,7 @@
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <template v-if="statsLoading">
-        <div v-for="i in 4" :key="`stat-${i}`" class="bg-white p-5 rounded-xl border border-gray-100 animate-pulse">
+        <div v-for="i in 4" :key="`stat-${i}`" class="bg-white p-5 rounded-xl border border-gray-50 animate-pulse">
           <div class="w-10 h-10 bg-gray-100 rounded-lg mb-4"></div>
           <div class="w-20 h-3 bg-gray-100 rounded mb-2"></div>
           <div class="w-16 h-6 bg-gray-100 rounded"></div>
@@ -27,7 +27,7 @@
       </template>
       <template v-else>
         <div v-for="stat in statCards" :key="stat.label"
-          class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all duration-300">
+          class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md transition-all duration-300">
           <!-- Abstract Background Glow -->
           <div class="absolute -right-6 -top-6 w-24 h-24 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                :class="stat.bgClass.replace('bg-', 'bg-').replace('/10', '/5').replace('text-', 'bg-')"></div>
@@ -44,21 +44,21 @@
     </div>
 
     <!-- Tabs -->
-    <div class="flex items-center gap-1 bg-gray-50 p-1 rounded-lg w-fit border border-gray-100">
+    <div class="flex items-center gap-1 bg-gray-50 p-1 rounded-lg w-fit border border-gray-50">
       <button v-for="tab in tabs" :key="tab.key" @click="activeTab = tab.key"
         class="px-4 py-1.5 rounded-md text-xs font-medium transition-all"
-        :class="activeTab === tab.key ? 'bg-white text-gray-900 shadow-sm border border-gray-100/50' : 'text-gray-500 hover:text-gray-700'">
+        :class="activeTab === tab.key ? 'bg-white text-gray-900 shadow-sm border border-gray-50/50' : 'text-gray-500 hover:text-gray-700'">
         {{ tab.label }}
       </button>
     </div>
 
     <!-- Facilitators Tab -->
-    <div v-if="activeTab === 'facilitators'" class="bg-white rounded-xl border border-gray-100 overflow-visible">
+    <div v-if="activeTab === 'facilitators'" class="bg-white rounded-xl border border-gray-50 overflow-visible">
       <div class="p-4 border-b border-gray-100 flex items-center justify-between gap-4">
         <div class="relative flex-1 max-w-sm">
           <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input v-model="facilitatorSearch" type="text" placeholder="Search facilitators..."
-            class="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-100 rounded-lg text-base font-medium focus:outline-none focus:border-gray-300 focus:bg-white transition-colors" />
+            class="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-50 rounded-lg text-base font-medium focus:outline-none focus:border-gray-300 focus:bg-white transition-colors" />
         </div>
       </div>
 
@@ -75,7 +75,7 @@
 
       <!-- Empty State -->
       <div v-else-if="filteredFacilitators.length === 0" class="py-16 text-center">
-        <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3 border border-gray-100">
+        <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3 border border-gray-50">
           <Users class="w-5 h-5 text-gray-400" />
         </div>
         <h3 class="text-sm font-semibold text-gray-900 mb-1">No Facilitators Found</h3>
@@ -108,7 +108,7 @@
           <!-- Code -->
           <div class="hidden md:flex flex-col items-center gap-0.5 flex-shrink-0 w-24">
             <span class="text-[9px] font-medium text-gray-400 uppercase tracking-wide">Code</span>
-            <span class="text-xs font-semibold text-gray-700 bg-gray-100 px-2 py-0.5 rounded border border-gray-100 font-mono">{{ fac.referralCode }}</span>
+            <span class="text-xs font-semibold text-gray-700 bg-gray-100 px-2 py-0.5 rounded border border-gray-50 font-mono">{{ fac.referralCode }}</span>
           </div>
 
           <!-- Referral Count -->
@@ -139,7 +139,7 @@
     </div>
 
     <!-- Referrals Tab -->
-    <div v-if="activeTab === 'referrals'" class="bg-white rounded-xl border border-gray-100 overflow-visible">
+    <div v-if="activeTab === 'referrals'" class="bg-white rounded-xl border border-gray-50 overflow-visible">
       <div class="p-4 border-b border-gray-100 flex items-center justify-between">
         <h3 class="font-semibold text-gray-900 text-sm">All Referrals</h3>
         <span class="text-xs font-medium text-gray-500">{{ referralData?.total || 0 }} total</span>
@@ -158,7 +158,7 @@
 
       <!-- Empty -->
       <div v-else-if="!referralData?.referrals?.length" class="py-16 text-center">
-        <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3 border border-gray-100">
+        <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3 border border-gray-50">
           <Gift class="w-5 h-5 text-gray-400" />
         </div>
         <h3 class="text-sm font-semibold text-gray-900 mb-1">No Referrals Yet</h3>
@@ -218,10 +218,10 @@
     </div>
 
     <!-- Leaderboard Tab -->
-    <div v-if="activeTab === 'leaderboard'" class="bg-white rounded-xl border border-gray-100 overflow-visible">
+    <div v-if="activeTab === 'leaderboard'" class="bg-white rounded-xl border border-gray-50 overflow-visible">
       <div class="p-4 border-b border-gray-100 flex items-center gap-2">
         <h3 class="font-semibold text-gray-900 text-sm">Leaderboard</h3>
-        <span class="text-[10px] font-medium text-gray-500 bg-gray-100 border border-gray-100 px-1.5 py-0.5 rounded">TOP 20</span>
+        <span class="text-[10px] font-medium text-gray-500 bg-gray-100 border border-gray-50 px-1.5 py-0.5 rounded">TOP 20</span>
       </div>
 
       <div v-if="leaderboardLoading" class="p-6 space-y-4">
@@ -234,7 +234,7 @@
       </div>
 
       <div v-else-if="leaderboard.length === 0" class="py-16 text-center">
-        <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3 border border-gray-100">
+        <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3 border border-gray-50">
           <Trophy class="w-5 h-5 text-gray-400" />
         </div>
         <h3 class="text-sm font-semibold text-gray-900 mb-1">Leaderboard Empty</h3>
@@ -292,7 +292,7 @@
         leave-to-class="opacity-0"
       >
         <div v-if="showAddModal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/30 backdrop-blur-sm px-4" @click.self="showAddModal = false">
-          <div class="bg-white rounded-xl shadow-lg border border-gray-100 max-w-sm w-full p-6 space-y-5">
+          <div class="bg-white rounded-xl shadow-lg border border-gray-50 max-w-sm w-full p-6 space-y-5">
             <div>
               <h2 class="text-lg font-semibold text-gray-900">Add Facilitator</h2>
               <p class="text-xs text-gray-500 mt-0.5">Register a new campus ambassador.</p>
@@ -302,23 +302,23 @@
               <div>
                 <label class="text-xs font-medium text-gray-700 block mb-1">Full Name *</label>
                 <input v-model="newFac.name" type="text" required
-                  class="w-full px-3 py-2 bg-white border border-gray-100 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="e.g. John Doe" />
+                  class="w-full px-3 py-2 bg-white border border-gray-50 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="e.g. John Doe" />
               </div>
               <div>
                 <label class="text-xs font-medium text-gray-700 block mb-1">Email *</label>
                 <input v-model="newFac.email" type="email" required
-                  class="w-full px-3 py-2 bg-white border border-gray-100 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="john@example.com" />
+                  class="w-full px-3 py-2 bg-white border border-gray-50 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="john@example.com" />
               </div>
               <div class="grid grid-cols-2 gap-3">
                 <div>
                   <label class="text-xs font-medium text-gray-700 block mb-1">Matric No.</label>
                   <input v-model="newFac.matricNumber" type="text"
-                    class="w-full px-3 py-2 bg-white border border-gray-100 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="Optional" />
+                    class="w-full px-3 py-2 bg-white border border-gray-50 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="Optional" />
                 </div>
                 <div>
                   <label class="text-xs font-medium text-gray-700 block mb-1">Skill</label>
                   <input v-model="newFac.skill" type="text"
-                    class="w-full px-3 py-2 bg-white border border-gray-100 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="e.g. Design" />
+                    class="w-full px-3 py-2 bg-white border border-gray-50 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="e.g. Design" />
                 </div>
               </div>
 
@@ -334,7 +334,7 @@
 
               <div class="flex gap-2 pt-2">
                 <button type="button" @click="showAddModal = false"
-                  class="flex-1 py-2 bg-white border border-gray-100 text-gray-700 rounded-lg font-medium text-xs hover:bg-gray-50 transition-colors">
+                  class="flex-1 py-2 bg-white border border-gray-50 text-gray-700 rounded-lg font-medium text-xs hover:bg-gray-50 transition-colors">
                   Cancel
                 </button>
                 <button type="submit" :disabled="addingFac"
@@ -358,7 +358,7 @@
         leave-to-class="opacity-0"
       >
         <div v-if="showDeactivateModal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/30 backdrop-blur-sm px-4" @click.self="showDeactivateModal = false">
-          <div class="bg-white rounded-xl shadow-lg border border-gray-100 max-w-sm w-full p-6 text-center space-y-4">
+          <div class="bg-white rounded-xl shadow-lg border border-gray-50 max-w-sm w-full p-6 text-center space-y-4">
             <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mx-auto border border-red-100">
               <UserMinus class="w-5 h-5 text-red-500" />
             </div>
@@ -370,7 +370,7 @@
             </div>
             <div class="flex gap-2 pt-2">
               <button @click="showDeactivateModal = false"
-                class="flex-1 py-2 bg-white border border-gray-100 text-gray-700 rounded-lg font-medium text-xs hover:bg-gray-50 transition-colors">
+                class="flex-1 py-2 bg-white border border-gray-50 text-gray-700 rounded-lg font-medium text-xs hover:bg-gray-50 transition-colors">
                 Cancel
               </button>
               <button @click="confirmDeactivate"
@@ -392,7 +392,7 @@
         leave-to-class="opacity-0"
       >
         <div v-if="showDetailsModal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/30 backdrop-blur-sm px-4" @click.self="showDetailsModal = false">
-          <div class="bg-white rounded-xl shadow-lg border border-gray-100 max-w-md w-full overflow-hidden">
+          <div class="bg-white rounded-xl shadow-lg border border-gray-50 max-w-md w-full overflow-hidden">
             <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
               <h3 class="font-semibold text-gray-900 text-sm">Referral Details</h3>
               <button @click="showDetailsModal = false" class="p-1 hover:bg-gray-100 rounded text-gray-500">
@@ -402,7 +402,7 @@
             <div class="p-5 space-y-4" v-if="selectedReferral">
               
               <!-- Referrer Info -->
-              <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+              <div class="bg-gray-50 p-3 rounded-lg border border-gray-50">
                 <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wide mb-1">Referred By</p>
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600">
@@ -417,13 +417,13 @@
 
               <!-- Arrow -->
               <div class="flex justify-center -my-1 relative z-10">
-                <div class="bg-white border border-gray-100 rounded-full p-1">
+                <div class="bg-white border border-gray-50 rounded-full p-1">
                   <ArrowDown class="w-3 h-3 text-gray-400" />
                 </div>
               </div>
 
               <!-- Referred Info -->
-              <div class="bg-white border border-gray-100 p-3 rounded-lg shadow-sm">
+              <div class="bg-white border border-gray-50 p-3 rounded-lg shadow-sm">
                 <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wide mb-1">New User Signed Up</p>
                 <div class="flex justify-between items-start">
                   <div>
@@ -439,11 +439,11 @@
 
               <!-- Stats / Rewards -->
               <div class="grid grid-cols-2 gap-3 pt-2">
-                <div class="border border-gray-100 rounded-lg p-3 text-center">
+                <div class="border border-gray-50 rounded-lg p-3 text-center">
                   <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Status</p>
                   <p class="text-xs font-semibold capitalize mt-1" :class="{'text-emerald-600': selectedReferral.status === 'completed', 'text-amber-600': selectedReferral.status === 'pending'}">{{ selectedReferral.status }}</p>
                 </div>
-                <div class="border border-gray-100 rounded-lg p-3 text-center">
+                <div class="border border-gray-50 rounded-lg p-3 text-center">
                   <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Points Earned</p>
                   <p class="text-xs font-semibold text-gray-900 mt-1">{{ selectedReferral.referrerPointsAwarded }}</p>
                 </div>
@@ -467,11 +467,11 @@
           <p class="text-xs text-gray-500 mb-4">{{ selectedFacilitator.email }}</p>
           
           <div class="flex items-center gap-4 text-center w-full px-6">
-            <div class="flex-1 bg-gray-50 p-3 rounded-lg border border-gray-100">
+            <div class="flex-1 bg-gray-50 p-3 rounded-lg border border-gray-50">
               <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Total Referrals</p>
               <p class="text-lg font-semibold text-gray-900">{{ selectedFacilitator.totalReferrals || 0 }}</p>
             </div>
-            <div class="flex-1 bg-gray-50 p-3 rounded-lg border border-gray-100">
+            <div class="flex-1 bg-gray-50 p-3 rounded-lg border border-gray-50">
               <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Points Earned</p>
               <p class="text-lg font-semibold text-gray-900">{{ (selectedFacilitator.pointsEarned || 0).toLocaleString() }}</p>
             </div>
@@ -487,7 +487,7 @@
           </div>
           
           <div v-else-if="facilitatorReferrals.length === 0" class="text-center py-10">
-            <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2 border border-gray-200">
+            <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2 border border-gray-25">
                <Users class="w-4 h-4 text-gray-400" />
             </div>
             <p class="text-xs text-gray-500 font-medium">No activity yet</p>
@@ -496,12 +496,12 @@
           <div v-else class="space-y-4 relative pl-4 before:content-[''] before:absolute before:left-[21px] before:top-4 before:bottom-4 before:w-px before:bg-gray-200">
             <div v-for="(ref, index) in facilitatorReferrals" :key="ref._id" class="relative">
               <!-- Timeline Node -->
-              <div class="absolute -left-[27px] top-4 w-3 h-3 rounded-full bg-white border-2 flex items-center justify-center"
+              <div class="absolute -left-[27px] top-4 w-3 h-3 rounded-full bg-white border flex items-center justify-center"
                    :class="index === 0 ? 'border-[#FF5C1A]' : 'border-gray-300'">
                  <div v-if="index === 0" class="w-1 h-1 rounded-full bg-[#FF5C1A]"></div>
               </div>
               
-              <div class="bg-white p-4 rounded-xl border border-gray-100 flex items-center justify-between shadow-sm hover:shadow-md hover:border-gray-200 transition-all">
+              <div class="bg-white p-4 rounded-xl border border-gray-50 flex items-center justify-between shadow-sm hover:shadow-md hover:border-gray-200 transition-all">
                 <div class="flex items-center gap-3">
                   <div class="w-10 h-10 rounded-lg bg-[#FF5C1A]/10 text-[#FF5C1A] border border-[#FF5C1A]/20 flex items-center justify-center font-bold text-sm">
                     {{ ref.referred?.firstName?.charAt(0) || ref.referredType?.charAt(0)?.toUpperCase() || 'U' }}
@@ -593,10 +593,10 @@ const tabs = [
 // ─── Computed ────────────────────────────────────────────────────
 
 const statCards = computed(() => [
-  { label: 'Total Referrals', value: statsData.value?.totalReferrals || 0, icon: Gift, bgClass: 'bg-gray-50 text-gray-600 border border-gray-100' },
-  { label: 'Active Facilitators', value: statsData.value?.activeFacilitators || 0, icon: Users, bgClass: 'bg-gray-50 text-gray-600 border border-gray-100' },
-  { label: 'This Week', value: statsData.value?.recentReferrals || 0, icon: TrendingUp, bgClass: 'bg-gray-50 text-gray-600 border border-gray-100' },
-  { label: 'Points Awarded', value: (statsData.value?.totalPointsAwarded || 0).toLocaleString(), icon: Star, bgClass: 'bg-gray-50 text-gray-600 border border-gray-100' },
+  { label: 'Total Referrals', value: statsData.value?.totalReferrals || 0, icon: Gift, bgClass: 'bg-gray-50 text-gray-600 border border-gray-50' },
+  { label: 'Active Facilitators', value: statsData.value?.activeFacilitators || 0, icon: Users, bgClass: 'bg-gray-50 text-gray-600 border border-gray-50' },
+  { label: 'This Week', value: statsData.value?.recentReferrals || 0, icon: TrendingUp, bgClass: 'bg-gray-50 text-gray-600 border border-gray-50' },
+  { label: 'Points Awarded', value: (statsData.value?.totalPointsAwarded || 0).toLocaleString(), icon: Star, bgClass: 'bg-gray-50 text-gray-600 border border-gray-50' },
 ])
 
 const filteredFacilitators = computed(() => {

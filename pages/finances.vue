@@ -8,12 +8,12 @@
           v-model="searchQuery"
           type="text" 
           placeholder="Search transactions by name or description..." 
-          class="w-full pl-10 pr-4 py-2.5 bg-white hover:bg-gray-50 transition-colors border border-gray-100 rounded-lg text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] placeholder:text-gray-400 shadow-sm"
+          class="w-full pl-10 pr-4 py-2.5 bg-white hover:bg-gray-50 transition-colors border border-gray-50 rounded-lg text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] placeholder:text-gray-400 shadow-sm"
         />
       </div>
       <div class="flex items-center gap-2 shrink-0">
         <DateRangePicker v-model:start="startDate" v-model:end="endDate" />
-        <button @click="triggerExport" class="px-4 py-3 bg-white hover:bg-gray-50 border border-gray-100 rounded-xl text-sm font-semibold text-gray-700 transition-colors flex items-center gap-2 shadow-sm h-[52px]">
+        <button @click="triggerExport" class="px-4 py-3 bg-white hover:bg-gray-50 border border-gray-50 rounded-xl text-sm font-semibold text-gray-700 transition-colors flex items-center gap-2 shadow-sm h-[52px]">
           <Download class="w-4 h-4" /> Export
         </button>
       </div>
@@ -33,15 +33,15 @@
           
           <!-- Loading State -->
           <template v-if="loading && !stats">
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 animate-pulse h-40 shadow-sm mb-6"></div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-50 animate-pulse h-40 shadow-sm mb-6"></div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div v-for="i in 4" :key="`fin-loading-${i}`" class="bg-white p-5 rounded-xl border border-gray-100 animate-pulse h-32 shadow-sm"></div>
+              <div v-for="i in 4" :key="`fin-loading-${i}`" class="bg-white p-5 rounded-xl border border-gray-50 animate-pulse h-32 shadow-sm"></div>
             </div>
           </template>
 
           <template v-else>
             <!-- Revenue Performance Widget -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="bg-white p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
               <div class="absolute -right-12 -top-12 w-48 h-48 bg-emerald-50 rounded-full blur-3xl opacity-50"></div>
               
               <div class="flex-1 space-y-1 z-10 w-full">
@@ -67,7 +67,7 @@
             <!-- Financial Cards Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               <!-- Platform Revenue Card -->
-              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-[#FF5C1A]/30 transition-all duration-300">
+              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-[#FF5C1A]/30 transition-all duration-300">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-[#FF5C1A]/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="w-10 h-10 rounded-xl bg-[#FF5C1A]/10 flex items-center justify-center mb-4 border border-[#FF5C1A]/20 group-hover:scale-110 transition-transform duration-300">
                   <TrendingUp class="w-5 h-5 text-[#FF5C1A]" />
@@ -84,7 +84,7 @@
               </div>
 
               <!-- Marketplace Platform Share Card -->
-              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-[#FF5C1A]/30 transition-all duration-300">
+              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-[#FF5C1A]/30 transition-all duration-300">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-[#FF5C1A]/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="w-10 h-10 rounded-xl bg-[#FF5C1A]/10 flex items-center justify-center mb-4 border border-[#FF5C1A]/20 group-hover:scale-110 transition-transform duration-300">
                   <Package class="w-5 h-5 text-[#FF5C1A]" />
@@ -101,7 +101,7 @@
               </div>
 
               <!-- Custom Errands Platform Share Card -->
-              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-[#FF5C1A]/30 transition-all duration-300">
+              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-[#FF5C1A]/30 transition-all duration-300">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-[#FF5C1A]/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="w-10 h-10 rounded-xl bg-[#FF5C1A]/10 flex items-center justify-center mb-4 border border-[#FF5C1A]/20 group-hover:scale-110 transition-transform duration-300">
                   <Sparkles class="w-5 h-5 text-[#FF5C1A]" />
@@ -118,7 +118,7 @@
               </div>
 
               <!-- Vendor Accrued Card -->
-              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-emerald-200 transition-all duration-300">
+              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-emerald-200 transition-all duration-300">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-emerald-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center mb-4 border border-emerald-100 group-hover:scale-110 transition-transform duration-300">
                   <Store class="w-5 h-5 text-emerald-600" />
@@ -135,7 +135,7 @@
               </div>
 
               <!-- Dispatcher Accrued Card -->
-              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-indigo-200 transition-all duration-300">
+              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-indigo-200 transition-all duration-300">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-indigo-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center mb-4 border border-indigo-100 group-hover:scale-110 transition-transform duration-300">
                   <Truck class="w-5 h-5 text-indigo-600" />
@@ -152,7 +152,7 @@
               </div>
 
               <!-- Vendor Payouts Card -->
-              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-amber-200 transition-all duration-300">
+              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-amber-200 transition-all duration-300">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-amber-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center mb-4 border border-amber-100 group-hover:scale-110 transition-transform duration-300">
                   <ArrowUpRight class="w-5 h-5 text-amber-600" />
@@ -169,7 +169,7 @@
               </div>
 
               <!-- Dispatcher Payouts Card -->
-              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-fuchsia-200 transition-all duration-300">
+              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-fuchsia-200 transition-all duration-300">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-fuchsia-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="w-10 h-10 rounded-xl bg-fuchsia-50 flex items-center justify-center mb-4 border border-fuchsia-100 group-hover:scale-110 transition-transform duration-300">
                   <ArrowUpRight class="w-5 h-5 text-fuchsia-600" />
@@ -186,7 +186,7 @@
               </div>
 
               <!-- Student Funding Card -->
-              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-blue-200 transition-all duration-300">
+              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-blue-200 transition-all duration-300">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-blue-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4 border border-blue-100 group-hover:scale-110 transition-transform duration-300">
                   <Wallet class="w-5 h-5 text-blue-600" />
@@ -203,7 +203,7 @@
               </div>
 
               <!-- Student Usage Card -->
-              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-rose-200 transition-all duration-300">
+              <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-rose-200 transition-all duration-300">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-rose-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div class="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center mb-4 border border-rose-100 group-hover:scale-110 transition-transform duration-300">
                   <CreditCard class="w-5 h-5 text-rose-600" />
@@ -300,7 +300,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           <!-- Top Spender -->
-          <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:border-blue-200 transition-colors">
+          <div class="bg-white p-5 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:border-blue-200 transition-colors">
             <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
             <div class="flex items-start justify-between mb-3">
               <div>
@@ -321,7 +321,7 @@
           </div>
 
           <!-- Highest Points -->
-          <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:border-amber-200 transition-colors">
+          <div class="bg-white p-5 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:border-amber-200 transition-colors">
             <div class="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
             <div class="flex items-start justify-between mb-3">
               <div>
@@ -342,7 +342,7 @@
           </div>
 
           <!-- Top Vendor -->
-          <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:border-emerald-200 transition-colors">
+          <div class="bg-white p-5 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:border-emerald-200 transition-colors">
             <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
             <div class="flex items-start justify-between mb-3">
               <div>
@@ -363,7 +363,7 @@
           </div>
 
           <!-- Top Errander -->
-          <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:border-indigo-200 transition-colors">
+          <div class="bg-white p-5 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:border-indigo-200 transition-colors">
             <div class="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
             <div class="flex items-start justify-between mb-3">
               <div>
@@ -387,7 +387,7 @@
     </div>
 
     <!-- Transaction Ledger -->
-    <div class="bg-white rounded-xl border border-gray-100 overflow-visible min-h-[400px] shadow-sm">
+    <div class="bg-white rounded-xl border border-gray-50 overflow-visible min-h-[400px] shadow-sm">
       <div class="border-b border-gray-100 bg-gray-50/50">
         <div class="flex items-center justify-between p-4 pb-0 max-md:overflow-x-auto md:overflow-visible pb-24 md:pb-0">
           <div class="flex items-center gap-6">
@@ -399,7 +399,7 @@
               <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
             </button>
           </div>
-          <button class="mb-4 flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-md text-xs font-semibold text-gray-600 border border-gray-100 hover:bg-gray-50 transition-colors shadow-sm">
+          <button class="mb-4 flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-md text-xs font-semibold text-gray-600 border border-gray-50 hover:bg-gray-50 transition-colors shadow-sm">
             <ListFilter class="w-3 h-3" />
             Filter
           </button>
@@ -462,7 +462,7 @@
                 </div>
               </td>
               <td class="py-4 px-5">
-                <div class="inline-flex items-center gap-2 pr-3 py-1.5 pl-1.5 bg-white border border-gray-100 rounded-lg shadow-sm group-hover:border-[#FF5C1A]/30 transition-all">
+                <div class="inline-flex items-center gap-2 pr-3 py-1.5 pl-1.5 bg-white border border-gray-50 rounded-lg shadow-sm group-hover:border-[#FF5C1A]/30 transition-all">
                   <div :class="tx.type === 'credit' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'" class="w-6 h-6 border rounded-md flex items-center justify-center text-[11px] font-black shrink-0">
                     <ArrowDownLeft v-if="tx.type === 'credit'" class="w-3.5 h-3.5" />
                     <ArrowUpRight v-else class="w-3.5 h-3.5" />
@@ -502,7 +502,7 @@
                 <p class="text-[11px] font-mono font-bold text-gray-600 truncate max-w-[120px] bg-gray-50 px-2 py-1 rounded">{{ tx.reference || (tx.order ? 'Order #' + tx.order.slice(-6) : 'N/A') }}</p>
               </td>
               <td class="py-4 px-6 text-right">
-                <div class="inline-flex items-center gap-1 px-2.5 py-2 rounded-xl bg-gray-50 border border-gray-100 text-gray-500 group-hover:bg-black group-hover:text-white transition-colors">
+                <div class="inline-flex items-center gap-1 px-2.5 py-2 rounded-xl bg-gray-50 border border-gray-50 text-gray-500 group-hover:bg-black group-hover:text-white transition-colors">
                   <ChevronRight class="w-4 h-4" />
                 </div>
               </td>
@@ -520,7 +520,7 @@
           <button 
             @click="handlePageChange(currentPage - 1)" 
             :disabled="currentPage === 1"
-            class="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-white hover:text-gray-900 hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+            class="p-1.5 rounded-lg border border-gray-25 text-gray-500 hover:bg-white hover:text-gray-900 hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
           >
             <ChevronLeft class="w-4 h-4" />
           </button>
@@ -540,7 +540,7 @@
           <button 
             @click="handlePageChange(currentPage + 1)" 
             :disabled="currentPage === totalPages"
-            class="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-white hover:text-gray-900 hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+            class="p-1.5 rounded-lg border border-gray-25 text-gray-500 hover:bg-white hover:text-gray-900 hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
           >
             <ChevronRight class="w-4 h-4" />
           </button>
@@ -563,7 +563,7 @@
           </div>
 
           <div class="relative mb-2 mt-4">
-            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-black to-gray-800 flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-black/20 border-2 border-gray-800">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-black to-gray-800 flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-black/20 border border-gray-800">
               {{ selectedTransaction.wallet?.owner?.firstName?.[0] || 'U' }}
             </div>
             <div class="absolute -bottom-2 left-1/2 -translate-x-1/2">
@@ -592,7 +592,7 @@
               Transaction Details
             </h4>
             
-            <div class="bg-white rounded-lg border border-gray-100 shadow-sm overflow-visible">
+            <div class="bg-white rounded-lg border border-gray-50 shadow-sm overflow-visible">
               <div class="flex items-center justify-between p-3 border-b border-gray-50 hover:bg-gray-50/50 transition-colors group">
                 <span class="text-[11px] font-semibold text-gray-500">Transaction ID</span>
                 <div class="flex items-center gap-2">
@@ -643,7 +643,7 @@
             </h4>
 
             <div class="grid grid-cols-1 gap-2">
-              <div v-if="selectedTransaction.order" class="flex items-center justify-between p-3 rounded-lg border border-gray-100 shadow-sm bg-white cursor-pointer hover:border-[#FF5C1A]/30 hover:shadow-md transition-all group">
+              <div v-if="selectedTransaction.order" class="flex items-center justify-between p-3 rounded-lg border border-gray-50 shadow-sm bg-white cursor-pointer hover:border-[#FF5C1A]/30 hover:shadow-md transition-all group">
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded-full bg-[#FF5C1A]/10 flex items-center justify-center group-hover:bg-[#FF5C1A]/20 transition-colors">
                     <Package class="w-4 h-4 text-[#FF5C1A]" />
@@ -658,7 +658,7 @@
                 </div>
               </div>
               
-              <div v-if="selectedTransaction.reference" class="flex items-center justify-between p-3 rounded-lg border border-gray-100 shadow-sm bg-white">
+              <div v-if="selectedTransaction.reference" class="flex items-center justify-between p-3 rounded-lg border border-gray-50 shadow-sm bg-white">
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center">
                     <FileText class="w-4 h-4 text-gray-500" />
@@ -678,7 +678,7 @@
               <Sparkles class="w-3.5 h-3.5" />
               Metadata
             </h4>
-            <div class="bg-white rounded-lg border border-gray-100 shadow-sm overflow-visible divide-y divide-gray-50">
+            <div class="bg-white rounded-lg border border-gray-50 shadow-sm overflow-visible divide-y divide-gray-50">
               <div class="flex justify-between items-center p-2.5 hover:bg-gray-50 transition-colors" v-for="(value, key) in selectedTransaction.metadata" :key="key">
                 <span class="text-[10px] font-semibold text-gray-500 capitalize">{{ key.replace(/([A-Z])/g, ' $1').trim() }}</span>
                 <span class="text-[10px] font-bold text-gray-900 text-right truncate max-w-[200px]" :title="String(value)">{{ value }}</span>

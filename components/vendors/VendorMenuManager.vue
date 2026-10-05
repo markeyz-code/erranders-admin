@@ -57,7 +57,7 @@
       <h3 class="text-lg font-bold text-gray-900">Vendor Combo Packs</h3>
     </div>
 
-    <div v-if="packs.length === 0" class="text-center py-8 bg-gray-50 rounded-2xl border border-gray-100 mb-8">
+    <div v-if="packs.length === 0" class="text-center py-8 bg-gray-50 rounded-2xl border border-gray-50 mb-8">
       <Utensils class="w-10 h-10 text-gray-300 mx-auto mb-3" />
       <h4 class="text-gray-900 font-semibold mb-1">No Packs Found</h4>
       <p class="text-gray-500 text-sm">This vendor has not added any combo packs.</p>
@@ -98,14 +98,14 @@
       <Loader2 class="w-8 h-8 text-[#FF5C1A] animate-spin" />
     </div>
     
-    <div v-else-if="menuItems.length === 0" class="text-center py-12 bg-gray-50 rounded-2xl border border-gray-100">
+    <div v-else-if="menuItems.length === 0" class="text-center py-12 bg-gray-50 rounded-2xl border border-gray-50">
       <Utensils class="w-12 h-12 text-gray-300 mx-auto mb-3" />
       <h4 class="text-gray-900 font-semibold mb-1">No Menu Items Found</h4>
       <p class="text-gray-500 text-sm">This vendor has not added any items yet.</p>
     </div>
 
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div v-for="item in menuItems" :key="item._id" class="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-[#FF5C1A]/30 transition-colors">
+      <div v-for="item in menuItems" :key="item._id" class="bg-white rounded-2xl border border-gray-25 overflow-hidden hover:border-[#FF5C1A]/30 transition-colors">
         <div class="h-32 bg-gray-100 relative">
           <img v-if="item.image || (item.images && item.images.length > 0)" :src="item.image || item.images[0]" class="w-full h-full object-cover" />
           <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
@@ -148,7 +148,7 @@
           </button>
         </div>
         <div class="p-5 space-y-5">
-          <div class="bg-gray-50 p-3 rounded-lg border border-gray-100 mb-2">
+          <div class="bg-gray-50 p-3 rounded-lg border border-gray-50 mb-2">
             <p class="text-sm font-semibold text-gray-900">{{ selectedItem?.name }}</p>
             <p class="text-xs text-gray-500 mt-1">Configure special behaviors like platform prepaid promotions.</p>
           </div>

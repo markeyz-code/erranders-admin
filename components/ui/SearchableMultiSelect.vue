@@ -2,7 +2,7 @@
   <div class="relative w-full" ref="containerRef">
     <!-- Search Input & Selected Badges -->
     <div 
-      class="w-full bg-white border border-gray-200 rounded-xl p-2 text-sm focus-within:border-parentPrimary focus-within:ring-1 focus-within:ring-parentPrimary min-h-[42px] flex flex-wrap gap-1 items-center cursor-text"
+      class="w-full bg-white border border-gray-25 rounded-xl p-2 text-sm focus-within:border-parentPrimary focus-within:ring-1 focus-within:ring-parentPrimary min-h-[42px] flex flex-wrap gap-1 items-center cursor-text"
       @click="isOpen = true"
     >
       <div v-for="item in selectedItems" :key="item.value" class="flex items-center gap-1 bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-xs">
@@ -22,7 +22,7 @@
     </div>
 
     <!-- Dropdown -->
-    <div v-if="isOpen" class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+    <div v-if="isOpen" class="absolute z-50 w-full mt-1 bg-white border border-gray-25 rounded-xl shadow-lg max-h-60 overflow-y-auto">
       <div v-if="filteredOptions.length === 0" class="p-3 text-sm text-gray-500 text-center">
         No results found.
       </div>

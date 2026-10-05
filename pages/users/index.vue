@@ -9,12 +9,12 @@
             v-model="searchQuery"
             type="text" 
             placeholder="Search name or email..." 
-            class="w-full pl-14 pr-14 py-3.5 bg-white hover:bg-gray-50 transition-colors border border-gray-100 rounded-xl text-base font-semibold focus:outline-none focus:ring-4 focus:ring-[#FF5C1A]/5 focus:border-[#FF5C1A]/20 placeholder:text-gray-400 shadow-sm"
+            class="w-full pl-14 pr-14 py-3.5 bg-white hover:bg-gray-50 transition-colors border border-gray-50 rounded-xl text-base font-semibold focus:outline-none focus:ring-4 focus:ring-[#FF5C1A]/5 focus:border-[#FF5C1A]/20 placeholder:text-gray-400 shadow-sm"
           />
         </div>
         <!-- Quick Stats Grid -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto">
-          <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-100 shadow-none shrink-0">
+          <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-50 shadow-none shrink-0">
             <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
               <UsersIcon class="w-5 h-5 text-blue-600" />
             </div>
@@ -23,7 +23,7 @@
               <span class="text-lg font-black text-gray-900 leading-none">{{ users.length }}</span>
             </div>
           </div>
-          <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-100 shadow-none shrink-0">
+          <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-50 shadow-none shrink-0">
             <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
               <Activity class="w-5 h-5 text-emerald-600" />
             </div>
@@ -32,7 +32,7 @@
               <span class="text-lg font-black text-gray-900 leading-none">{{ activeUsersCount }}</span>
             </div>
           </div>
-          <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-100 shadow-none shrink-0">
+          <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-50 shadow-none shrink-0">
             <div class="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center">
               <XCircle class="w-5 h-5 text-rose-600" />
             </div>
@@ -41,7 +41,7 @@
               <span class="text-lg font-black text-gray-900 leading-none">{{ suspendedUsersCount }}</span>
             </div>
           </div>
-          <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-100 shadow-none shrink-0">
+          <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-50 shadow-none shrink-0">
             <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
               <DollarSign class="w-5 h-5 text-indigo-600" />
             </div>
@@ -80,7 +80,7 @@
       </div>
 
       <!-- Table Section -->
-      <div class="bg-white rounded-[1.25rem] border border-gray-100/60 shadow-sm hover:shadow-md transition-all overflow-visible relative">
+      <div class="bg-white rounded-[1.25rem] border border-gray-50/60 shadow-sm hover:shadow-md transition-all overflow-visible relative">
         <div class="px-6 py-5 border-b border-gray-100/60 bg-gray-50/50 flex justify-between items-center">
           <h3 class="text-sm font-bold text-gray-900 tracking-tight uppercase">Platform Users</h3>
         </div>
@@ -91,7 +91,7 @@
         </div>
 
         <div v-else-if="filteredUsers.length === 0" class="py-20 text-center">
-          <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-4 shadow-sm border border-gray-100">
+          <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-4 shadow-sm border border-gray-50">
             <UsersIcon class="w-8 h-8" />
           </div>
           <h4 class="font-bold text-gray-900 tracking-tight">No users found</h4>
@@ -215,7 +215,7 @@
             </div>
 
             <!-- Quick Stats Row -->
-            <div class="flex items-center justify-between w-4/5 mt-6 bg-white rounded-lg border border-gray-100 divide-x divide-gray-100 shadow-sm">
+            <div class="flex items-center justify-between w-4/5 mt-6 bg-white rounded-lg border border-gray-50 divide-x divide-gray-100 shadow-sm">
               <div class="text-center flex-1 py-3">
                 <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-0.5">Wallet Balance</p>
                 <p class="text-sm font-bold text-[#FF5C1A]">₦{{ Number(selectedUser.walletBalance || 0).toLocaleString() }}</p>
@@ -354,7 +354,7 @@
                       </div>
                     </template>
                     <template v-else>
-                      <p class="text-xs font-medium text-gray-400 italic">No addresses saved</p>
+                      <p class="text-xs font-medium text-gray-400 ">No addresses saved</p>
                     </template>
                   </div>
                 </div>
@@ -391,7 +391,7 @@
                     Transactions Ledger
                   </h4>
                   <div v-if="walletLoading" class="flex justify-center py-6">
-                    <div class="w-6 h-6 border-2 border-[#FF5C1A] border-t-transparent rounded-full animate-spin"></div>
+                    <div class="w-6 h-6 border border-[#FF5C1A] border-t-transparent rounded-full animate-spin"></div>
                   </div>
                   <div v-else-if="walletTransactions.length === 0" class="text-center py-6">
                     <p class="text-xs text-gray-500">No wallet transactions found.</p>
@@ -428,19 +428,19 @@
               <form @submit.prevent="handleUpdateUser" class="space-y-4">
                 <div class="space-y-2">
                   <label class="text-sm font-medium text-gray-700">First Name</label>
-                  <input v-model="editPayload.firstName" type="text" class="w-full p-3 bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
+                  <input v-model="editPayload.firstName" type="text" class="w-full p-3 bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
                   <label class="text-sm font-medium text-gray-700">Last Name</label>
-                  <input v-model="editPayload.lastName" type="text" class="w-full p-3 bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
+                  <input v-model="editPayload.lastName" type="text" class="w-full p-3 bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
                   <label class="text-sm font-medium text-gray-700">Phone</label>
-                  <input v-model="editPayload.phone" type="text" class="w-full p-3 bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
+                  <input v-model="editPayload.phone" type="text" class="w-full p-3 bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
                   <label class="text-sm font-medium text-gray-700">Role</label>
-                  <select v-model="editPayload.role" class="w-full p-3 bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
+                  <select v-model="editPayload.role" class="w-full p-3 bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option value="student">Student</option>
                     <option value="vendor">Vendor</option>
                     <option value="errander">Errander</option>
@@ -449,7 +449,7 @@
                 </div>
                 <div v-if="editPayload.role === 'admin'" class="space-y-2">
                   <label class="text-sm font-medium text-gray-700">Admin Department</label>
-                  <select v-model="editPayload.adminDepartment" class="w-full p-3 bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
+                  <select v-model="editPayload.adminDepartment" class="w-full p-3 bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option :value="null">Super Admin (No Department)</option>
                     <option v-for="dept in departments" :key="dept._id" :value="dept._id">{{ dept.name }}</option>
                   </select>
@@ -518,7 +518,7 @@
               v-model.number="fundModal.amount"
               type="number" 
               placeholder="e.g. 500" 
-              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#FF5C1A] focus:border-transparent transition-all"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#FF5C1A] focus:border-transparent transition-all"
             />
           </div>
           <div>
@@ -527,14 +527,14 @@
               v-model="fundModal.description"
               type="text" 
               placeholder="e.g. Customer Service Refund" 
-              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#FF5C1A] focus:border-transparent transition-all"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#FF5C1A] focus:border-transparent transition-all"
             />
           </div>
         </div>
         <div class="p-6 bg-gray-50 border-t border-gray-100 flex gap-3">
           <button 
             @click="fundModal.isOpen = false"
-            class="flex-1 py-3 px-4 rounded-xl font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
+            class="flex-1 py-3 px-4 rounded-xl font-semibold text-gray-700 bg-white border border-gray-25 hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
@@ -543,7 +543,7 @@
             :disabled="fundModal.loading || !fundModal.amount"
             class="flex-1 py-3 px-4 rounded-xl font-bold text-white bg-[#FF5C1A] hover:bg-[#E04D12] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
-            <span v-if="fundModal.loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></span>
+            <span v-if="fundModal.loading" class="w-5 h-5 border border-white/30 border-t-white rounded-full animate-spin mr-2"></span>
             Fund Wallet
           </button>
         </div>
@@ -577,7 +577,7 @@
               v-model.number="debitModal.amount"
               type="number" 
               placeholder="e.g. 500" 
-              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#FF5C1A] focus:border-transparent transition-all"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl text-base font-medium focus:outline-none focus:ring-2 focus:ring-[#FF5C1A] focus:border-transparent transition-all"
             />
           </div>
           <div>
@@ -585,7 +585,7 @@
             <textarea 
               v-model="debitModal.description"
               placeholder="e.g. Paid cash to user" 
-              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-[#FF5C1A] focus:border-transparent transition-all resize-none"
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-25 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-[#FF5C1A] focus:border-transparent transition-all resize-none"
               rows="2"
             ></textarea>
           </div>
@@ -593,7 +593,7 @@
         <div class="p-6 bg-gray-50 border-t border-gray-100 flex gap-3">
           <button 
             @click="debitModal.isOpen = false"
-            class="flex-1 py-3 px-4 rounded-xl font-semibold text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
+            class="flex-1 py-3 px-4 rounded-xl font-semibold text-gray-700 bg-white border border-gray-25 hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
@@ -602,7 +602,7 @@
             :disabled="debitModal.loading || !debitModal.amount"
             class="flex-1 py-3 px-4 rounded-xl font-bold text-white bg-red-600 hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
-            <span v-if="debitModal.loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></span>
+            <span v-if="debitModal.loading" class="w-5 h-5 border border-white/30 border-t-white rounded-full animate-spin mr-2"></span>
             Process Debit
           </button>
         </div>

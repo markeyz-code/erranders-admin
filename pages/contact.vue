@@ -12,25 +12,25 @@
       <h1 class="text-4xl font-medium text-gray-900 tracking-tight mb-2">Internal Directory</h1>
       <p class="text-lg text-gray-500 mb-10">Contacts for internal operations, engineering, and management.</p>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        <div class="bg-gray-50 rounded-2xl p-8 border border-gray-100">
+        <div class="bg-gray-50 rounded-2xl p-8 border border-gray-50">
           <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-600 mb-4"><Mail class="w-6 h-6" /></div>
           <h3 class="font-bold text-gray-900 text-lg mb-2">Engineering Team</h3>
           <p class="text-gray-500 text-sm mb-4">For platform bugs, feature requests, and API issues.</p>
           <a href="mailto:engineering@erranders.org" class="text-gray-900 font-bold text-sm hover:underline">engineering@erranders.org</a>
         </div>
-        <div class="bg-gray-50 rounded-2xl p-8 border border-gray-100">
+        <div class="bg-gray-50 rounded-2xl p-8 border border-gray-50">
           <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-600 mb-4"><Phone class="w-6 h-6" /></div>
           <h3 class="font-bold text-gray-900 text-lg mb-2">Ops Emergency</h3>
           <p class="text-gray-500 text-sm mb-4">For platform outages, critical security incidents, or major order failures.</p>
           <a href="tel:+2341234567893" class="text-gray-900 font-bold text-sm hover:underline">+234 123 456 7893</a>
         </div>
-        <div class="bg-gray-50 rounded-2xl p-8 border border-gray-100">
+        <div class="bg-gray-50 rounded-2xl p-8 border border-gray-50">
           <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-600 mb-4"><Users class="w-6 h-6" /></div>
           <h3 class="font-bold text-gray-900 text-lg mb-2">People & HR</h3>
           <p class="text-gray-500 text-sm mb-4">For team access requests, onboarding, and HR-related inquiries.</p>
           <a href="mailto:hr@erranders.org" class="text-gray-900 font-bold text-sm hover:underline">hr@erranders.org</a>
         </div>
-        <div class="bg-gray-50 rounded-2xl p-8 border border-gray-100">
+        <div class="bg-gray-50 rounded-2xl p-8 border border-gray-50">
           <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-600 mb-4"><Scale class="w-6 h-6" /></div>
           <h3 class="font-bold text-gray-900 text-lg mb-2">Legal & Compliance</h3>
           <p class="text-gray-500 text-sm mb-4">For regulatory inquiries, data privacy requests, and compliance questions.</p>

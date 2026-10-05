@@ -30,7 +30,7 @@
 
       <!-- Search -->
       <div class="p-4 bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-10">
-        <div class="bg-gray-50/80 rounded-xl flex items-center px-4 py-2.5 transition-all border border-gray-200/60 focus-within:bg-white focus-within:border-[#FF5C1A]/30 focus-within:ring-4 focus-within:ring-[#FF5C1A]/10 shadow-sm">
+        <div class="bg-gray-50/80 rounded-xl flex items-center px-4 py-2.5 transition-all border border-gray-25/60 focus-within:bg-white focus-within:border-[#FF5C1A]/30 focus-within:ring-4 focus-within:ring-[#FF5C1A]/10 shadow-sm">
           <Search class="w-4 h-4 text-gray-400 mr-3" />
           <input 
             v-model="searchQuery" 
@@ -47,7 +47,7 @@
           <div v-for="i in 5" :key="i" class="h-20 bg-gray-50 animate-pulse rounded-2xl" />
         </div>
         <div v-else-if="filteredChats.length === 0" class="flex flex-col items-center justify-center h-full text-gray-400 space-y-4 p-8 text-center">
-          <div class="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-2 border border-gray-100">
+          <div class="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-2 border border-gray-50">
             <MessageSquare class="w-8 h-8 opacity-40 text-gray-400" />
           </div>
           <div>
@@ -104,7 +104,7 @@
         <div class="relative z-10 max-w-sm mx-auto flex flex-col items-center">
           <div class="w-24 h-24 mb-8 relative">
              <div class="absolute inset-0 bg-[#FF5C1A]/10 rounded-full blur-2xl"></div>
-             <div class="w-full h-full bg-white rounded-3xl rotate-12 flex items-center justify-center shadow-xl border border-gray-100">
+             <div class="w-full h-full bg-white rounded-3xl rotate-12 flex items-center justify-center shadow-xl border border-gray-50">
                <MessageSquare class="w-10 h-10 text-[#FF5C1A] -rotate-12" />
              </div>
           </div>
@@ -112,7 +112,7 @@
           <p class="text-sm font-medium text-gray-500 leading-relaxed">
             Select a conversation from the sidebar to start messaging with customers, vendors, and erranders.
           </p>
-          <div class="mt-8 flex items-center justify-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest px-4 py-2 bg-white rounded-full border border-gray-100 shadow-sm">
+          <div class="mt-8 flex items-center justify-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest px-4 py-2 bg-white rounded-full border border-gray-50 shadow-sm">
             <Lock class="w-3.5 h-3.5" />
             <span>End-to-end encrypted</span>
           </div>

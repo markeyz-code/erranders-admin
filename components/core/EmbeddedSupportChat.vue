@@ -30,17 +30,17 @@
         <div class="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay pointer-events-none"></div>
         
         <div class="flex justify-center mb-8 sticky top-4 z-10">
-          <span class="px-4 py-1.5 bg-white/80 backdrop-blur-md text-gray-500 text-[10px] font-bold rounded-full shadow-sm border border-gray-100/50 uppercase tracking-widest">
+          <span class="px-4 py-1.5 bg-white/80 backdrop-blur-md text-gray-500 text-[10px] font-bold rounded-full shadow-sm border border-gray-50/50 uppercase tracking-widest">
             Today
           </span>
         </div>
 
         <div v-if="loading" class="flex flex-col items-center justify-center h-40 space-y-4">
-          <div class="w-8 h-8 border-2 border-[#FF5C1A]/20 border-t-[#FF5C1A] rounded-full animate-spin" />
+          <div class="w-8 h-8 border border-[#FF5C1A]/20 border-t-[#FF5C1A] rounded-full animate-spin" />
         </div>
         
         <div v-else-if="messages.length === 0" class="flex flex-col items-center justify-center p-10 text-center space-y-3 mt-10">
-          <div class="p-6 bg-white rounded-3xl shadow-sm border border-gray-100 max-w-sm w-full mx-auto">
+          <div class="p-6 bg-white rounded-3xl shadow-sm border border-gray-50 max-w-sm w-full mx-auto">
             <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-3">
               <MessageSquare class="w-6 h-6 text-gray-400" />
             </div>
@@ -63,7 +63,7 @@
           ]">
             <!-- Sender name -->
             <p v-if="!isMe(msg)" class="text-xs font-bold text-[#FF5C1A] mb-1.5">
-              {{ msg.sender?.firstName || msg.senderName || 'User' }}
+              {{ getDisplayName(msg) }}
             </p>
 
             <div v-if="msg.messageType === 'image' && (msg.attachments?.[0] || msg.attachment)" class="mb-2 -mx-2 -mt-1">
@@ -89,7 +89,7 @@
         </div>
         
         <div v-if="isTyping" class="flex items-center ml-2 transition-all relative z-10">
-          <div class="bg-white px-4 py-3 rounded-2xl rounded-tl-sm shadow-sm border border-gray-100 flex items-center gap-1.5">
+          <div class="bg-white px-4 py-3 rounded-2xl rounded-tl-sm shadow-sm border border-gray-50 flex items-center gap-1.5">
             <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div>
             <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
             <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
@@ -100,7 +100,7 @@
       <!-- Input Bar -->
       <div class="px-4 py-4 bg-white/80 backdrop-blur-md border-t border-gray-100 flex flex-col gap-2 relative z-20">
         <div class="max-w-4xl w-full mx-auto flex items-center gap-3">
-          <div class="flex-1 bg-gray-50/80 rounded-2xl px-5 py-3.5 flex items-center shadow-inner border border-gray-200/50 focus-within:bg-white focus-within:border-[#FF5C1A]/30 focus-within:ring-4 focus-within:ring-[#FF5C1A]/10 transition-all">
+          <div class="flex-1 bg-gray-50/80 rounded-2xl px-5 py-3.5 flex items-center shadow-inner border border-gray-25/50 focus-within:bg-white focus-within:border-[#FF5C1A]/30 focus-within:ring-4 focus-within:ring-[#FF5C1A]/10 transition-all">
             <input 
               v-model="newMsgText" 
               type="text" 
@@ -115,10 +115,10 @@
           <button 
             @click="triggerFileUpload" 
             :disabled="uploadingMedia"
-            class="w-12 h-12 rounded-2xl bg-gray-50 text-gray-400 hover:text-gray-600 hover:bg-gray-100 flex items-center justify-center transition-all disabled:opacity-50 border border-gray-100 shrink-0" 
+            class="w-12 h-12 rounded-2xl bg-gray-50 text-gray-400 hover:text-gray-600 hover:bg-gray-100 flex items-center justify-center transition-all disabled:opacity-50 border border-gray-50 shrink-0" 
             title="Attach file"
           >
-            <div v-if="uploadingMedia" class="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+            <div v-if="uploadingMedia" class="w-5 h-5 border border-gray-400 border-t-transparent rounded-full animate-spin"></div>
             <Paperclip v-else class="w-5 h-5" />
           </button>
 
@@ -370,6 +370,17 @@ const isMe = (msg: any) => {
   const senderId = getSenderId(msg);
   const myId = String(props.currentUserId || '');
   return !!senderId && !!myId && senderId === myId;
+};
+
+const getDisplayName = (msg: any) => {
+  let name = msg.sender?.firstName || msg.senderName || 'User';
+  if (name === 'Customer') {
+    return 'Customer Service';
+  }
+  if (msg.senderType === 'admin' || msg.sender?.role === 'admin') {
+    return 'Customer Service';
+  }
+  return name;
 };
 
 const formatTime = (dateStr: string) => {

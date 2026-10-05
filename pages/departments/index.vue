@@ -21,7 +21,7 @@
       </div>
 
       <!-- Departments List -->
-      <div class="bg-white rounded-[1.25rem] border border-gray-100/60 shadow-sm hover:shadow-md transition-all overflow-visible relative">
+      <div class="bg-white rounded-[1.25rem] border border-gray-50/60 shadow-sm hover:shadow-md transition-all overflow-visible relative">
         <div class="px-6 py-5 border-b border-gray-100/60 bg-gray-50/50 flex justify-between items-center">
           <h3 class="text-sm font-bold text-gray-900 tracking-tight uppercase">Configured Departments</h3>
         </div>
@@ -32,7 +32,7 @@
         </div>
 
         <div v-else-if="departments.length === 0" class="py-20 text-center">
-          <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-4 shadow-sm border border-gray-100">
+          <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-4 shadow-sm border border-gray-50">
             <Users class="w-8 h-8" />
           </div>
           <h4 class="font-bold text-gray-900 tracking-tight">No departments configured</h4>
@@ -88,14 +88,14 @@
     <!-- Department Form Modal -->
     <Teleport to="body">
       <div v-if="showModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4" @click.self="showModal = false">
-        <div class="bg-white rounded-[2rem] w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl relative border border-gray-100">
+        <div class="bg-white rounded-[2rem] w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl relative border border-gray-50">
           <!-- Modal Header -->
           <div class="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-white relative z-10 shrink-0">
             <div>
               <h2 class="text-2xl font-bold text-gray-900 font-display tracking-tight">{{ isEditing ? 'Edit Department' : 'Create Department' }}</h2>
               <p class="text-sm font-medium text-gray-500 mt-1">Configure department access and permissions.</p>
             </div>
-            <button @click="showModal = false" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-gray-500 transition-colors border border-gray-200/60">
+            <button @click="showModal = false" class="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-gray-500 transition-colors border border-gray-25/60">
               <X class="w-5 h-5" />
             </button>
           </div>
@@ -104,24 +104,24 @@
           <div class="p-8 overflow-y-auto custom-scrollbar flex-1 bg-gray-50/30">
             <div class="grid grid-cols-1 gap-6">
               <!-- Basic Info -->
-              <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+              <div class="bg-white p-6 rounded-2xl border border-gray-50 shadow-sm space-y-4">
                 <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <Info class="w-4 h-4 text-blue-500" /> General Information
                 </h3>
                 
                 <div>
                   <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Department Name</label>
-                  <input v-model="formData.name" type="text" placeholder="e.g., Finance, Customer Support" class="w-full px-4 py-3 bg-gray-50/50 border border-gray-200/80 rounded-xl text-sm font-medium focus:ring-4 focus:ring-[#FF5C1A]/10 focus:border-[#FF5C1A]/50 transition-all" />
+                  <input v-model="formData.name" type="text" placeholder="e.g., Finance, Customer Support" class="w-full px-4 py-3 bg-gray-50/50 border border-gray-25/80 rounded-xl text-sm font-medium focus:ring-4 focus:ring-[#FF5C1A]/10 focus:border-[#FF5C1A]/50 transition-all" />
                 </div>
                 
                 <div>
                   <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Description</label>
-                  <textarea v-model="formData.description" rows="2" placeholder="Briefly describe the role of this department" class="w-full px-4 py-3 bg-gray-50/50 border border-gray-200/80 rounded-xl text-sm font-medium focus:ring-4 focus:ring-[#FF5C1A]/10 focus:border-[#FF5C1A]/50 transition-all"></textarea>
+                  <textarea v-model="formData.description" rows="2" placeholder="Briefly describe the role of this department" class="w-full px-4 py-3 bg-gray-50/50 border border-gray-25/80 rounded-xl text-sm font-medium focus:ring-4 focus:ring-[#FF5C1A]/10 focus:border-[#FF5C1A]/50 transition-all"></textarea>
                 </div>
               </div>
 
               <!-- Module Access -->
-              <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+              <div class="bg-white p-6 rounded-2xl border border-gray-50 shadow-sm">
                 <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <Layout class="w-4 h-4 text-emerald-500" /> Module Access (Sidebar)
                 </h3>
@@ -130,7 +130,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <label v-for="module in availableModules" :key="module.path" class="flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all" :class="formData.modules.includes(module.path) ? 'border-[#FF5C1A] bg-orange-50/30 ring-1 ring-[#FF5C1A]/20' : 'border-gray-200 hover:border-gray-300 bg-white'">
                     <div class="relative flex items-center">
-                      <input type="checkbox" :value="module.path" v-model="formData.modules" class="w-5 h-5 border-2 border-gray-300 rounded text-[#FF5C1A] focus:ring-[#FF5C1A] focus:ring-offset-0 transition-all cursor-pointer" />
+                      <input type="checkbox" :value="module.path" v-model="formData.modules" class="w-5 h-5 border border-gray-300 rounded text-[#FF5C1A] focus:ring-[#FF5C1A] focus:ring-offset-0 transition-all cursor-pointer" />
                     </div>
                     <div class="flex items-center gap-2">
                       <component :is="module.icon" class="w-4 h-4 text-gray-500" :class="{ 'text-[#FF5C1A]': formData.modules.includes(module.path) }" />
@@ -141,7 +141,7 @@
               </div>
 
               <!-- Granular Permissions -->
-              <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+              <div class="bg-white p-6 rounded-2xl border border-gray-50 shadow-sm">
                 <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <ShieldCheck class="w-4 h-4 text-purple-500" /> Granular Permissions
                 </h3>
@@ -152,7 +152,7 @@
                     <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest">{{ groupName }}</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                       <label v-for="perm in group" :key="perm.id" class="flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all" :class="formData.permissions.includes(perm.id) ? 'border-purple-500 bg-purple-50/30 ring-1 ring-purple-500/20' : 'border-gray-100 hover:border-gray-200 bg-white'">
-                        <input type="checkbox" :value="perm.id" v-model="formData.permissions" class="w-4 h-4 mt-0.5 border-2 border-gray-300 rounded text-purple-600 focus:ring-purple-500 focus:ring-offset-0 transition-all cursor-pointer" />
+                        <input type="checkbox" :value="perm.id" v-model="formData.permissions" class="w-4 h-4 mt-0.5 border border-gray-300 rounded text-purple-600 focus:ring-purple-500 focus:ring-offset-0 transition-all cursor-pointer" />
                         <div>
                           <span class="block text-sm font-bold" :class="formData.permissions.includes(perm.id) ? 'text-gray-900' : 'text-gray-700'">{{ perm.label }}</span>
                           <span class="block text-[11px] text-gray-500 mt-0.5 leading-snug">{{ perm.description }}</span>
@@ -171,7 +171,7 @@
               Cancel
             </button>
             <button @click="saveDepartment" :disabled="saving" class="px-8 py-3 rounded-xl text-sm font-bold text-white bg-[#FF5C1A] hover:bg-[#FF7A45] shadow-lg shadow-[#FF5C1A]/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-              <span v-if="saving" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              <span v-if="saving" class="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin"></span>
               <Save v-else class="w-4 h-4" />
               {{ saving ? 'Saving...' : 'Save Department' }}
             </button>

@@ -35,7 +35,7 @@
     <div v-show="activeTab === 'verifications'" class="space-y-6">
       <!-- Stats -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white p-6 rounded-2xl border border-gray-100">
+        <div class="bg-white p-6 rounded-2xl border border-gray-50">
           <p class="text-sm text-gray-500 font-medium">Pending Approvals</p>
           <p class="text-3xl font-bold text-gray-900 mt-2">{{ total }}</p>
         </div>
@@ -43,7 +43,7 @@
 
     <!-- Pending Table -->
     <!-- Pending Table -->
-    <div class="bg-white rounded-[1.25rem] border border-gray-100/60 overflow-visible shadow-sm hover:shadow-md transition-all group relative">
+    <div class="bg-white rounded-[1.25rem] border border-gray-50/60 overflow-visible shadow-sm hover:shadow-md transition-all group relative">
       <div class="px-6 py-5 border-b border-gray-100/60 bg-gray-50/50">
         <h3 class="text-sm font-bold text-gray-900 tracking-tight uppercase">Requires Admin Review</h3>
       </div>
@@ -99,7 +99,7 @@
                 <span class="px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-bold rounded-lg">Tier {{ errander.verificationLevel || 1 }}</span>
               </td>
               <td class="px-6 py-4 text-center">
-                <button v-if="errander.idCardImage" @click="viewImage(errander.idCardImage)" class="inline-flex w-16 h-12 bg-gray-100 rounded-lg overflow-hidden border border-gray-100 hover:border-[#FF5C1A] transition-colors relative group">
+                <button v-if="errander.idCardImage" @click="viewImage(errander.idCardImage)" class="inline-flex w-16 h-12 bg-gray-100 rounded-lg overflow-hidden border border-gray-50 hover:border-[#FF5C1A] transition-colors relative group">
                   <img :src="errander.idCardImage" class="w-full h-full object-cover" />
                   <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
                     <span class="text-[10px] text-white font-bold">View</span>
@@ -108,7 +108,7 @@
                 <span v-else class="text-xs text-gray-400">No Image</span>
               </td>
               <td class="px-6 py-4 text-center">
-                <button v-if="errander.selfieImage" @click="viewImage(errander.selfieImage)" class="inline-flex w-12 h-12 bg-gray-100 rounded-full overflow-hidden border border-gray-100 hover:border-[#FF5C1A] transition-colors relative group">
+                <button v-if="errander.selfieImage" @click="viewImage(errander.selfieImage)" class="inline-flex w-12 h-12 bg-gray-100 rounded-full overflow-hidden border border-gray-50 hover:border-[#FF5C1A] transition-colors relative group">
                   <img :src="errander.selfieImage" class="w-full h-full object-cover" />
                   <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full">
                     <span class="text-[10px] text-white font-bold">View</span>
@@ -117,13 +117,13 @@
                 <span v-else class="text-xs text-gray-400">No Image</span>
               </td>
               <td class="px-6 py-4 text-center">
-                <button v-if="errander.ninSlipImage" @click="viewImage(errander.ninSlipImage)" class="inline-flex w-16 h-12 bg-gray-100 rounded-lg overflow-hidden border border-gray-100 hover:border-[#FF5C1A] transition-colors relative group">
+                <button v-if="errander.ninSlipImage" @click="viewImage(errander.ninSlipImage)" class="inline-flex w-16 h-12 bg-gray-100 rounded-lg overflow-hidden border border-gray-50 hover:border-[#FF5C1A] transition-colors relative group">
                   <img :src="errander.ninSlipImage" class="w-full h-full object-cover" />
                   <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
                     <span class="text-[10px] text-white font-bold">View</span>
                   </div>
                 </button>
-                <span v-else-if="errander.ninNumber" class="text-xs font-bold text-gray-900 border border-gray-100 px-2 py-1 rounded bg-gray-50">{{ errander.ninNumber }}</span>
+                <span v-else-if="errander.ninNumber" class="text-xs font-bold text-gray-900 border border-gray-50 px-2 py-1 rounded bg-gray-50">{{ errander.ninNumber }}</span>
                 <span v-else class="text-xs text-gray-400">N/A</span>
               </td>
               <td class="px-6 py-4 text-right">
@@ -154,7 +154,7 @@
         <button 
           @click="page--" 
           :disabled="page === 1"
-          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-100 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-50 rounded-lg hover:bg-gray-50 disabled:opacity-50"
         >
           Previous
         </button>
@@ -162,7 +162,7 @@
         <button 
           @click="page++" 
           :disabled="page === totalPages"
-          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-100 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-50 rounded-lg hover:bg-gray-50 disabled:opacity-50"
         >
           Next
         </button>
@@ -175,7 +175,7 @@
       
       <!-- Skeletons for Loading -->
       <div v-if="allLoading && !allDispatchers.length" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div v-for="i in 4" :key="`stat-loading-${i}`" class="bg-white p-5 rounded-xl border border-gray-100 flex flex-col justify-between animate-pulse">
+        <div v-for="i in 4" :key="`stat-loading-${i}`" class="bg-white p-5 rounded-xl border border-gray-50 flex flex-col justify-between animate-pulse">
           <div class="flex justify-between items-center mb-4">
             <div class="w-10 h-10 bg-gray-100 rounded-lg"></div>
             <div class="w-12 h-4 bg-gray-100 rounded-md"></div>
@@ -189,7 +189,7 @@
 
       <!-- Stats Grid -->
       <div v-else class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
-        <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-100 shadow-none">
+        <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-50 shadow-none">
           <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
             <Bike class="w-5 h-5 text-blue-600" />
           </div>
@@ -198,7 +198,7 @@
             <span class="text-lg font-black text-gray-900 leading-none">{{ allTotal }}</span>
           </div>
         </div>
-        <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-100 shadow-none">
+        <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-50 shadow-none">
           <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
             <CheckCircle class="w-5 h-5 text-emerald-600" />
           </div>
@@ -207,7 +207,7 @@
             <span class="text-lg font-black text-gray-900 leading-none">{{ allDispatchers.filter((d: any) => d.isApproved).length }}</span>
           </div>
         </div>
-        <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-100 shadow-none">
+        <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-50 shadow-none">
           <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
             <Clock class="w-5 h-5 text-amber-600" />
           </div>
@@ -216,7 +216,7 @@
             <span class="text-lg font-black text-gray-900 leading-none">{{ total }}</span>
           </div>
         </div>
-        <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-100 shadow-none">
+        <div class="flex items-center gap-4 px-5 py-3 bg-white rounded-xl border border-gray-50 shadow-none">
           <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
             <MapPin class="w-5 h-5 text-purple-600" />
           </div>
@@ -229,7 +229,7 @@
 
 
 
-      <div class="bg-white rounded-[1.25rem] border border-gray-100/60 overflow-visible shadow-sm hover:shadow-md transition-all group relative">
+      <div class="bg-white rounded-[1.25rem] border border-gray-50/60 overflow-visible shadow-sm hover:shadow-md transition-all group relative">
         <div class="px-6 py-5 border-b border-gray-100/60 bg-gray-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <h3 class="text-sm font-bold text-gray-900 tracking-tight uppercase">Registered Dispatchers</h3>
           <div class="w-full md:w-auto">
@@ -243,7 +243,7 @@
         </div>
         
         <div v-else-if="allDispatchers.length === 0" class="p-12 text-center">
-          <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-4 shadow-sm border border-gray-100">
+          <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-4 shadow-sm border border-gray-50">
             <Bike class="w-8 h-8" />
           </div>
           <h4 class="font-bold text-gray-900 tracking-tight">No dispatchers found</h4>
@@ -333,7 +333,7 @@
                     </button>
                     
                     <!-- Dropdown Menu -->
-                    <div v-if="activeDropdownId === errander._id" class="absolute right-0 top-full mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                    <div v-if="activeDropdownId === errander._id" class="absolute right-0 top-full mt-1 w-48 bg-white rounded-xl shadow-lg border border-gray-50 py-2 z-50">
                       <nuxt-link :to="`/dispatchers/${errander._id}`" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                         <Eye class="w-4 h-4 text-gray-400" /> View Profile
                       </nuxt-link>
@@ -380,7 +380,7 @@
           <button 
             @click="allPage--" 
             :disabled="allPage === 1"
-            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-100 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-50 rounded-lg hover:bg-gray-50 disabled:opacity-50"
           >
             Previous
           </button>
@@ -388,7 +388,7 @@
           <button 
             @click="allPage++" 
             :disabled="allPage === allTotalPages"
-            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-100 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-50 rounded-lg hover:bg-gray-50 disabled:opacity-50"
           >
             Next
           </button>
@@ -412,9 +412,9 @@
         <h3 class="text-lg font-bold text-gray-900 mb-2">Approve Dispatcher?</h3>
         <p class="text-sm text-gray-500 mb-4">Are you sure you want to approve <span class="font-bold text-gray-900">{{ selectedDispatcher?.user?.firstName }} {{ selectedDispatcher?.user?.lastName }}</span>? They will gain full access to deliveries.</p>
         
-        <div class="mb-6 text-left bg-gray-50 p-4 rounded-xl border border-gray-100">
+        <div class="mb-6 text-left bg-gray-50 p-4 rounded-xl border border-gray-50">
           <label class="block text-xs font-bold text-gray-700 mb-2">Select Tier to Grant</label>
-          <select v-model="selectedTier" class="w-full px-3 py-2 bg-white border border-gray-100 rounded-lg text-base focus:ring-1 focus:ring-emerald-500 outline-none">
+          <select v-model="selectedTier" class="w-full px-3 py-2 bg-white border border-gray-50 rounded-lg text-base focus:ring-1 focus:ring-emerald-500 outline-none">
             <option :value="1">Tier 1 (Window Shopper)</option>
             <option :value="2">Tier 2 (Basic)</option>
             <option :value="3">Tier 3 (Pro)</option>
@@ -439,7 +439,7 @@
         
         <div class="mb-6">
           <label class="block text-xs font-bold text-gray-700 mb-2">Reason for rejection (Optional)</label>
-          <textarea v-model="rejectionReason" placeholder="e.g. ID card is blurry..." class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-base focus:ring-1 focus:ring-red-500 focus:border-red-500 outline-none transition-all shadow-sm resize-none h-24"></textarea>
+          <textarea v-model="rejectionReason" placeholder="e.g. ID card is blurry..." class="w-full px-4 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base focus:ring-1 focus:ring-red-500 focus:border-red-500 outline-none transition-all shadow-sm resize-none h-24"></textarea>
         </div>
 
         <div class="flex gap-3">
@@ -650,7 +650,7 @@
 
               <div v-if="selectedProfile.batchOrders?.length" class="space-y-3 mt-6">
                 <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2 mb-4">Current Active Batch Orders</h4>
-                <div v-for="order in selectedProfile.batchOrders" :key="order._id || order" class="bg-gray-50 p-4 rounded-xl border border-gray-100/60 hover:border-[#FF5C1A]/30 transition-colors shadow-sm">
+                <div v-for="order in selectedProfile.batchOrders" :key="order._id || order" class="bg-gray-50 p-4 rounded-xl border border-gray-50/60 hover:border-[#FF5C1A]/30 transition-colors shadow-sm">
                   <div class="flex items-center justify-between mb-2">
                     <span class="font-mono text-xs font-bold text-gray-900">#{{ typeof order === 'string' ? order.slice(-6).toUpperCase() : (order._id?.slice(-6).toUpperCase() || 'UNKNOWN') }}</span>
                     <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider rounded">Batched Order</span>
@@ -672,7 +672,7 @@
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
                   <label class="text-xs font-semibold text-gray-700">School</label>
-                  <select v-model="editDispatcherPayload.school" class="w-full p-3 text-base bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
+                  <select v-model="editDispatcherPayload.school" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option value="UNILAG">UNILAG</option>
                     <option value="CMUL">CMUL</option>
                     <option value="YABATECH">YABATECH</option>
@@ -680,15 +680,15 @@
                 </div>
                 <div class="space-y-2">
                   <label class="text-xs font-semibold text-gray-700">Matric Number</label>
-                  <input v-model="editDispatcherPayload.matricNumber" type="text" class="w-full p-3 text-base bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
+                  <input v-model="editDispatcherPayload.matricNumber" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
                   <label class="text-xs font-semibold text-gray-700">NIN Number</label>
-                  <input v-model="editDispatcherPayload.ninNumber" type="text" class="w-full p-3 text-base bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
+                  <input v-model="editDispatcherPayload.ninNumber" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
                   <label class="text-xs font-semibold text-gray-700">Verification Level</label>
-                  <select v-model="editDispatcherPayload.verificationLevel" class="w-full p-3 text-base bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
+                  <select v-model="editDispatcherPayload.verificationLevel" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option :value="1">Tier 1</option>
                     <option :value="2">Tier 2</option>
                     <option :value="3">Tier 3</option>
@@ -696,7 +696,7 @@
                 </div>
                 <div class="space-y-2">
                   <label class="text-xs font-semibold text-gray-700">Verification Status</label>
-                  <select v-model="editDispatcherPayload.verificationStatus" class="w-full p-3 text-base bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
+                  <select v-model="editDispatcherPayload.verificationStatus" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option value="pending">Pending</option>
                     <option value="approved">Approved</option>
                     <option value="rejected">Rejected</option>
@@ -704,7 +704,7 @@
                 </div>
                 <div class="space-y-2">
                   <label class="text-xs font-semibold text-gray-700">Status</label>
-                  <select v-model="editDispatcherPayload.status" class="w-full p-3 text-base bg-white border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
+                  <select v-model="editDispatcherPayload.status" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option value="offline">Offline</option>
                     <option value="online">Online</option>
                     <option value="busy">Busy</option>
@@ -786,14 +786,14 @@
         <p class="text-sm text-gray-600">Set the minimum wallet balance required before vendors and erranders can request payouts.</p>
         <div>
           <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Minimum Payout Amount (₦)</label>
-          <input v-model.number="minimumPayoutAmount" type="number" step="100" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 1000">
+          <input v-model.number="minimumPayoutAmount" type="number" step="100" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 1000">
         </div>
         <button 
           @click="savePayoutConfig" 
           :disabled="isSavingPayoutConfig"
           class="w-full py-3 bg-gray-900 text-white rounded-lg font-bold hover:bg-black transition-colors disabled:opacity-50 flex items-center justify-center"
         >
-          <span v-if="isSavingPayoutConfig" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+          <span v-if="isSavingPayoutConfig" class="w-5 h-5 border border-white/30 border-t-white rounded-full animate-spin"></span>
           <span v-else>Save Configuration</span>
         </button>
       </div>

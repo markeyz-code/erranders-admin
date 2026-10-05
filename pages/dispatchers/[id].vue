@@ -22,7 +22,7 @@
 
     <div v-else class="space-y-6">
       <!-- Profile Header Card -->
-      <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center gap-6">
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-50 flex items-center gap-6">
         <div class="w-24 h-24 bg-gray-100 rounded-full overflow-hidden shrink-0 border-4 border-white shadow-md">
           <img v-if="profile.user?.avatar" :src="profile.user?.avatar" class="w-full h-full object-cover">
           <div v-else class="w-full h-full flex items-center justify-center bg-gray-50">
@@ -53,7 +53,7 @@
       </div>
 
       <!-- Tabs -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-visible">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-50 overflow-visible">
         <div class="flex max-md:overflow-x-auto md:overflow-visible pb-24 md:pb-0 border-b border-gray-100">
           <button @click="activeTab = 'overview'" :class="activeTab === 'overview' ? 'text-[#FF5C1A] border-b-2 border-[#FF5C1A] font-bold' : 'text-gray-500 hover:text-gray-700 font-medium'" class="px-6 py-4 whitespace-nowrap transition-colors">Overview</button>
           <button @click="activeTab = 'operations'" :class="activeTab === 'operations' ? 'text-[#FF5C1A] border-b-2 border-[#FF5C1A] font-bold' : 'text-gray-500 hover:text-gray-700 font-medium'" class="px-6 py-4 whitespace-nowrap transition-colors">Operations & KYC</button>
@@ -73,7 +73,7 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Identity -->
-              <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+              <div class="bg-white p-5 rounded-xl border border-gray-50 shadow-sm">
                 <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
                   <User class="w-4 h-4" /> Identity Details
                 </h3>
@@ -94,7 +94,7 @@
               </div>
 
               <!-- Financials -->
-              <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+              <div class="bg-white p-5 rounded-xl border border-gray-50 shadow-sm">
                 <h3 class="text-sm font-bold text-[#FF5C1A] uppercase tracking-wider mb-4 flex items-center gap-2">
                   <DollarSign class="w-4 h-4" /> Financials & Banking
                 </h3>
@@ -103,16 +103,16 @@
                     <div class="bg-[#FF5C1A]/5 p-3 rounded-lg border border-[#FF5C1A]/10 relative">
                       <p class="text-[10px] font-semibold text-gray-500 uppercase">Wallet Balance</p>
                       <p class="text-xl font-black text-[#FF5C1A] mt-1">₦{{ Number(profile.user?.walletBalance || 0).toLocaleString() }}</p>
-                      <button @click="showManualDebitModal = true" class="absolute top-3 right-3 text-[10px] bg-white border border-gray-200 px-2 py-1 rounded text-gray-600 hover:text-[#FF5C1A] font-bold">
+                      <button @click="showManualDebitModal = true" class="absolute top-3 right-3 text-[10px] bg-white border border-gray-25 px-2 py-1 rounded text-gray-600 hover:text-[#FF5C1A] font-bold">
                         Deduct
                       </button>
                     </div>
-                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-50">
                       <p class="text-[10px] font-semibold text-gray-500 uppercase">Total Earnings</p>
                       <p class="text-xl font-black text-gray-900 mt-1">₦{{ Number(profile.totalEarnings || 0).toLocaleString() }}</p>
                     </div>
                   </div>
-                  <div v-if="profile.bankName || profile.accountNumber" class="bg-gray-50 rounded-lg p-4 border border-gray-100 mt-4">
+                  <div v-if="profile.bankName || profile.accountNumber" class="bg-gray-50 rounded-lg p-4 border border-gray-50 mt-4">
                     <p class="text-xs font-semibold text-gray-400 uppercase mb-2">Bank Details</p>
                     <p class="font-bold text-gray-900">{{ profile.bankName || 'N/A' }}</p>
                     <p class="text-sm text-gray-600 font-mono mt-1">{{ profile.accountNumber || 'N/A' }} - {{ profile.accountName || 'N/A' }}</p>
@@ -123,7 +123,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Performance -->
-              <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+              <div class="bg-white p-5 rounded-xl border border-gray-50 shadow-sm">
                 <h3 class="text-sm font-bold text-purple-600 uppercase tracking-wider mb-4 flex items-center gap-2">
                   <Star class="w-4 h-4" /> Performance Metrics
                 </h3>
@@ -152,7 +152,7 @@
               </div>
 
               <!-- Guarantor -->
-              <div v-if="profile.guarantorDetails" class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+              <div v-if="profile.guarantorDetails" class="bg-white p-5 rounded-xl border border-gray-50 shadow-sm">
                 <h3 class="text-sm font-bold text-blue-600 uppercase tracking-wider mb-4 flex items-center gap-2">
                   <Shield class="w-4 h-4" /> Guarantor Information
                 </h3>
@@ -179,13 +179,13 @@
 
           <!-- OPERATIONS & KYC TAB -->
           <div v-else-if="activeTab === 'operations'" class="space-y-8">
-            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+            <div class="bg-white p-6 rounded-xl border border-gray-50 shadow-sm">
               <h3 class="text-sm font-bold text-emerald-600 uppercase tracking-wider mb-6 flex items-center gap-2">
                 <CheckCircle class="w-4 h-4" /> Operations & Status
               </h3>
               
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-50">
                   <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Device Status</p>
                   <div class="flex items-center gap-2">
                     <div class="w-3 h-3 rounded-full" :class="profile.status === 'online' ? 'bg-green-500' : 'bg-gray-400'"></div>
@@ -193,7 +193,7 @@
                   </div>
                 </div>
                 
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-50">
                   <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Verification Tier</p>
                   <span class="inline-flex items-center font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-lg text-sm uppercase tracking-wider border border-[#FF5C1A]/20">
                     Tier {{ profile.verificationLevel || 1 }}
@@ -208,7 +208,7 @@
             </div>
 
             <!-- Documents -->
-            <div v-if="profile.idCardImage || profile.selfieImage || profile.ninSlipImage" class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+            <div v-if="profile.idCardImage || profile.selfieImage || profile.ninSlipImage" class="bg-white p-6 rounded-xl border border-gray-50 shadow-sm">
               <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-6 flex items-center gap-2">
                 <FileText class="w-4 h-4" /> KYC Documents
               </h3>
@@ -216,7 +216,7 @@
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div v-if="profile.idCardImage" class="space-y-2">
                   <p class="text-xs font-bold text-gray-500 uppercase">ID Card</p>
-                  <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-100 border border-gray-200 cursor-pointer group" @click="viewImage(profile.idCardImage)">
+                  <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-100 border border-gray-25 cursor-pointer group" @click="viewImage(profile.idCardImage)">
                     <img :src="profile.idCardImage" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <Search class="w-8 h-8 text-white" />
@@ -226,7 +226,7 @@
                 
                 <div v-if="profile.selfieImage" class="space-y-2">
                   <p class="text-xs font-bold text-gray-500 uppercase">Selfie</p>
-                  <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-100 border border-gray-200 cursor-pointer group" @click="viewImage(profile.selfieImage)">
+                  <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-100 border border-gray-25 cursor-pointer group" @click="viewImage(profile.selfieImage)">
                     <img :src="profile.selfieImage" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <Search class="w-8 h-8 text-white" />
@@ -236,7 +236,7 @@
 
                 <div v-if="profile.ninSlipImage" class="space-y-2">
                   <p class="text-xs font-bold text-gray-500 uppercase">NIN Slip</p>
-                  <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-100 border border-gray-200 cursor-pointer group" @click="viewImage(profile.ninSlipImage)">
+                  <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-100 border border-gray-25 cursor-pointer group" @click="viewImage(profile.ninSlipImage)">
                     <img :src="profile.ninSlipImage" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <Search class="w-8 h-8 text-white" />
@@ -248,7 +248,7 @@
           </div>
 
           <!-- ERRANDS HISTORY TAB -->
-          <div v-else-if="activeTab === 'errands'" class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+          <div v-else-if="activeTab === 'errands'" class="bg-white p-6 rounded-xl border border-gray-50 shadow-sm">
             <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-6 flex items-center gap-2">
               <Receipt class="w-4 h-4" /> Historical Errands
             </h3>
@@ -256,7 +256,7 @@
           </div>
 
           <!-- ACTIVE ORDERS TAB -->
-          <div v-else-if="activeTab === 'active'" class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+          <div v-else-if="activeTab === 'active'" class="bg-white p-6 rounded-xl border border-gray-50 shadow-sm">
             <h3 class="text-sm font-bold text-[#FF5C1A] uppercase tracking-wider mb-6 flex items-center gap-2">
               <Clock class="w-4 h-4" /> Active Batch Orders
             </h3>
@@ -270,7 +270,7 @@
             </div>
             
             <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div v-for="order in profile.batchOrders" :key="order._id || order" class="bg-gray-50 p-5 rounded-xl border border-gray-200 hover:border-[#FF5C1A]/40 transition-colors shadow-sm">
+              <div v-for="order in profile.batchOrders" :key="order._id || order" class="bg-gray-50 p-5 rounded-xl border border-gray-25 hover:border-[#FF5C1A]/40 transition-colors shadow-sm">
                 <div class="flex items-center justify-between mb-3">
                   <span class="font-mono text-sm font-bold text-gray-900">#{{ typeof order === 'string' ? order.slice(-6).toUpperCase() : (order._id?.slice(-6).toUpperCase() || 'UNKNOWN') }}</span>
                   <span class="text-[10px] font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-1 rounded-md uppercase tracking-wide">Batched Order</span>
@@ -283,7 +283,7 @@
           </div>
 
           <!-- FINANCES TAB -->
-          <div v-else-if="activeTab === 'finances'" class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+          <div v-else-if="activeTab === 'finances'" class="bg-white p-6 rounded-xl border border-gray-50 shadow-sm">
             <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-6 flex items-center gap-2">
               <DollarSign class="w-4 h-4" /> Finances & Payouts
             </h3>
@@ -291,7 +291,7 @@
           </div>
 
           <!-- WALLET ACTIVITIES TAB -->
-          <div v-else-if="activeTab === 'wallet'" class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+          <div v-else-if="activeTab === 'wallet'" class="bg-white p-6 rounded-xl border border-gray-50 shadow-sm">
             <h3 class="text-sm font-bold text-gray-800 uppercase tracking-wider mb-6 flex items-center gap-2">
               <Wallet class="w-4 h-4" /> Wallet Activities
             </h3>
@@ -364,15 +364,15 @@
           <p class="text-sm text-gray-600">Use this to manually deduct funds if you've paid out the errander directly outside of the system.</p>
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Amount (₦)</label>
-            <input v-model="debitAmount" type="number" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 5000">
+            <input v-model="debitAmount" type="number" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 5000">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Reason (Optional)</label>
-            <input v-model="debitReason" type="text" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. Manual payout">
+            <input v-model="debitReason" type="text" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. Manual payout">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Proof of Withdrawal (Optional)</label>
-            <input type="file" @change="handleFileUpload" accept="image/*" class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm file:mr-4 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#FF5C1A]/10 file:text-[#FF5C1A] hover:file:bg-[#FF5C1A]/20 cursor-pointer">
+            <input type="file" @change="handleFileUpload" accept="image/*" class="w-full px-4 py-2 border border-gray-25 rounded-lg text-sm file:mr-4 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#FF5C1A]/10 file:text-[#FF5C1A] hover:file:bg-[#FF5C1A]/20 cursor-pointer">
           </div>
         </div>
         <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">

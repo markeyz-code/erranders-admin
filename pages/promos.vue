@@ -8,7 +8,7 @@
         <input 
           v-model="searchQuery" 
           type="text" 
-          class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-parentPrimary/20 focus:border-parentPrimary transition-colors sm:text-sm" 
+          class="block w-full pl-10 pr-3 py-2 border border-gray-25 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-parentPrimary/20 focus:border-parentPrimary transition-colors sm:text-sm" 
           placeholder="Search promo codes..."
         >
       </div>
@@ -23,7 +23,7 @@
     </div>
 
     <!-- Promo Codes Table -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-visible">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-50 overflow-visible">
       <div class="max-md:overflow-x-auto md:overflow-visible pb-24 md:pb-0">
         <table class="w-full text-left border-collapse">
           <thead>
@@ -108,7 +108,7 @@
               <td class="px-6 py-4">
                 <button 
                   @click="toggleStatus(promo)"
-                  class="relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
+                  class="relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
                   :class="promo.isActive ? 'bg-emerald-500' : 'bg-gray-200'"
                 >
                   <span 
@@ -145,14 +145,14 @@
           <!-- Code -->
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Promo Code *</label>
-            <input v-model="form.code" type="text" required placeholder="e.g. SUMMER50" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 px-3 text-sm font-mono uppercase focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
+            <input v-model="form.code" type="text" required placeholder="e.g. SUMMER50" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm font-mono uppercase focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <!-- Type -->
             <div>
               <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Discount Type *</label>
-              <select v-model="form.discountType" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
+              <select v-model="form.discountType" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
                 <option value="percentage">Percentage (%)</option>
                 <option value="flat">Flat Amount (₦)</option>
               </select>
@@ -161,34 +161,34 @@
             <!-- Value -->
             <div>
               <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Value *</label>
-              <input v-model.number="form.value" type="number" required min="1" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
+              <input v-model.number="form.value" type="number" required min="1" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
             </div>
           </div>
 
           <!-- Max Discount (Percentage Only) -->
           <div v-if="form.discountType === 'percentage'">
             <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Max Discount Cap (₦)</label>
-            <input v-model.number="form.maxDiscountAmount" type="number" min="0" placeholder="e.g. 1000 (0 for no limit)" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
+            <input v-model.number="form.maxDiscountAmount" type="number" min="0" placeholder="e.g. 1000 (0 for no limit)" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <!-- Min Order -->
             <div>
               <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Min Order Amount (₦)</label>
-              <input v-model.number="form.minOrderAmount" type="number" min="0" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
+              <input v-model.number="form.minOrderAmount" type="number" min="0" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
             </div>
             
             <!-- Max Usage -->
             <div>
               <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Max Global Usage</label>
-              <input v-model.number="form.maxUsageCount" type="number" min="0" placeholder="e.g. 100" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
+              <input v-model.number="form.maxUsageCount" type="number" min="0" placeholder="e.g. 100" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
             </div>
           </div>
 
           <!-- Expiry -->
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Expiry Date</label>
-            <input v-model="form.expiresAt" type="datetime-local" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
+            <input v-model="form.expiresAt" type="datetime-local" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
           </div>
 
           <div class="border-t border-gray-100 pt-4 mt-4 space-y-4">
@@ -198,7 +198,7 @@
               <!-- Order Type Restrictions -->
               <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Applicable Order Types</label>
-                <div class="flex flex-wrap gap-4 bg-gray-50 p-3 rounded-xl border border-gray-200">
+                <div class="flex flex-wrap gap-4 bg-gray-50 p-3 rounded-xl border border-gray-25">
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" value="inside_campus" v-model="form.applicableOrderTypes" class="w-4 h-4 text-parentPrimary rounded border-gray-300">
                     <span class="text-sm text-gray-700">Inside Campus</span>

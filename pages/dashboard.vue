@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-100 rounded-lg shadow-sm text-xs font-medium text-gray-600">
+        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-50 rounded-lg shadow-sm text-xs font-medium text-gray-600">
           <div class="w-2 h-2 rounded-full bg-parentPrimary"></div>
           Live Data
         </div>
@@ -26,7 +26,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Skeletons for Loading -->
         <template v-if="statsLoading">
-          <div v-for="i in 8" :key="`stat-loading-${i}`" class="bg-white p-5 rounded-xl border border-gray-100 flex flex-col justify-between animate-pulse">
+          <div v-for="i in 8" :key="`stat-loading-${i}`" class="bg-white p-5 rounded-xl border border-gray-50 flex flex-col justify-between animate-pulse">
             <div class="flex justify-between items-center mb-4">
               <div class="w-10 h-10 bg-gray-100 rounded-lg"></div>
               <div class="w-12 h-4 bg-gray-100 rounded-md"></div>
@@ -40,7 +40,7 @@
         
         <!-- Primary Stats -->
         <template v-else>
-          <div v-for="stat in dashboardStats" :key="stat.label" class="bg-white p-5 rounded-[1.25rem] border border-gray-100/60 hover:border-gray-200 transition-all hover:shadow-md group overflow-visible relative">
+          <div v-for="stat in dashboardStats" :key="stat.label" class="bg-white p-5 rounded-[1.25rem] border border-gray-50/60 hover:border-gray-200 transition-all hover:shadow-md group overflow-visible relative">
             <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-gray-50 to-transparent rounded-bl-full opacity-50 -z-10 group-hover:scale-110 transition-transform"></div>
             <div class="flex items-center justify-between mb-5 relative z-10">
               <div :class="stat.bgClass" class="w-11 h-11 rounded-xl flex items-center justify-center border border-white/50 shadow-sm">
@@ -103,7 +103,7 @@
     <!-- Middle Section -->
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
       <!-- Recent Activity -->
-      <div class="xl:col-span-2 bg-white rounded-[1.25rem] border border-gray-100/60 shadow-sm overflow-visible flex flex-col">
+      <div class="xl:col-span-2 bg-white rounded-[1.25rem] border border-gray-50/60 shadow-sm overflow-visible flex flex-col">
         <div class="p-5 flex items-center justify-between border-b border-gray-100/50 bg-gray-50/30">
           <div class="flex items-center gap-3">
             <div class="w-1.5 h-4 bg-[#FF5C1A] rounded-full"></div>
@@ -131,7 +131,7 @@
 
           <!-- Empty State -->
           <div v-else-if="recentActivity.length === 0" class="py-16 text-center bg-gray-50/50">
-            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 shadow-sm">
+            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-50 shadow-sm">
               <ShoppingBag class="w-6 h-6 text-gray-400" />
             </div>
             <h3 class="text-sm font-bold text-gray-900 mb-1">No Orders Yet</h3>
@@ -154,7 +154,7 @@
                   <!-- Customer & Order -->
                   <td class="px-5 py-4">
                     <div class="flex items-start gap-3">
-                      <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 text-gray-500 font-bold text-xs uppercase shadow-sm border border-gray-200">
+                      <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 text-gray-500 font-bold text-xs uppercase shadow-sm border border-gray-25">
                         {{ activity.customerName.charAt(0) }}
                       </div>
                       <div class="min-w-0">
@@ -237,7 +237,7 @@
         </div>
 
         <!-- Service Monitor Board -->
-        <div class="bg-white rounded-[1.25rem] border border-gray-100/60 shadow-sm overflow-visible">
+        <div class="bg-white rounded-[1.25rem] border border-gray-50/60 shadow-sm overflow-visible">
           <div class="p-5 flex items-center justify-between border-b border-gray-100/50 bg-gray-50/30">
             <div class="flex items-center gap-2">
               <Activity class="w-4 h-4 text-emerald-500" />

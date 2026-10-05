@@ -13,7 +13,7 @@
     <!-- Campaign Selector -->
     <div class="mb-6 flex items-center gap-3">
       <label class="font-bold text-gray-700 text-sm">Select Pool:</label>
-      <select v-model="campaign" @change="onCampaignChange" class="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm focus:ring-primary outline-none min-w-[300px]">
+      <select v-model="campaign" @change="onCampaignChange" class="bg-white border border-gray-25 rounded-lg px-4 py-2 text-sm focus:ring-primary outline-none min-w-[300px]">
         <option :value="null">-- Select a Campaign --</option>
         <option v-for="c in campaigns" :key="c._id" :value="c">
           {{ c.title }} ({{ c.status.toUpperCase() }})
@@ -22,7 +22,7 @@
     </div>
 
     <!-- Active Campaign Section -->
-    <div v-if="campaign" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+    <div v-if="campaign" class="bg-white rounded-xl shadow-sm border border-gray-25 overflow-hidden mb-8">
       <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50/50">
         <div>
           <h2 class="text-lg font-bold text-gray-900">{{ campaign.title }}</h2>
@@ -55,7 +55,7 @@
             <h3 class="font-bold text-gray-800">Aggregation Dashboard</h3>
             <div class="flex items-center gap-3">
               <div class="flex items-center gap-2 border-r pr-3 border-gray-200">
-                <select v-model="bulkStatus" class="text-sm bg-white border border-gray-200 rounded-lg px-3 py-1.5 focus:ring-primary outline-none">
+                <select v-model="bulkStatus" class="text-sm bg-white border border-gray-25 rounded-lg px-3 py-1.5 focus:ring-primary outline-none">
                   <option value="">Update Order Milestones...</option>
                   <option value="paid">Paid (Open)</option>
                   <option value="procuring">Procuring</option>
@@ -89,7 +89,7 @@
                   <p class="font-medium text-gray-900">{{ row.item.name }}</p>
                   <p class="text-[10px] text-gray-500 mb-2">Buffer Price: ₦{{ row.item.appPrice.toLocaleString() }}</p>
                   
-                  <div v-if="row.students && row.students.length > 0" class="flex flex-col gap-1 mt-2 p-2 bg-gray-50/80 rounded-lg border border-gray-100 max-w-[250px]">
+                  <div v-if="row.students && row.students.length > 0" class="flex flex-col gap-1 mt-2 p-2 bg-gray-50/80 rounded-lg border border-gray-50 max-w-[250px]">
                     <p class="text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Student Breakdown</p>
                     <div v-for="(student, idx) in row.students" :key="idx" class="flex items-center justify-between text-[11px]">
                       <span class="text-gray-700 truncate pr-2">{{ student.firstName || 'Student' }} {{ student.lastName || '' }}</span>
@@ -119,7 +119,7 @@
           </table>
         </div>
         <div v-else class="py-16 flex flex-col items-center justify-center text-center bg-gray-50/50 rounded-xl border border-dashed border-gray-200">
-          <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm border border-gray-100">
+          <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm border border-gray-50">
             <ShoppingCart class="w-8 h-8 text-gray-400" />
           </div>
           <h4 class="font-bold text-gray-900 text-lg tracking-tight mb-1">No Orders Yet</h4>
@@ -135,7 +135,7 @@
             </button>
           </div>
           <div class="flex flex-col gap-3">
-            <div v-for="item in catalogItems" :key="item._id" class="border border-gray-200 rounded-xl p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+            <div v-for="item in catalogItems" :key="item._id" class="border border-gray-25 rounded-xl p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
               <div class="flex items-center gap-4">
                 <div class="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
                   <img v-if="item.images?.length > 0 || item.imageUrl" :src="item.imageUrl || item.images?.[0]" class="w-full h-full object-cover" />
@@ -151,7 +151,7 @@
                   <p class="text-xs text-gray-400">Buffer Price: <span class="font-bold text-primary text-sm">₦{{ item.appPrice.toLocaleString() }}</span></p>
                 </div>
               </div>
-              <button @click="editItem(item)" class="text-sm bg-white border border-gray-200 shadow-sm hover:bg-gray-50 text-gray-700 px-5 py-2 font-semibold rounded-xl transition-colors">Edit</button>
+              <button @click="editItem(item)" class="text-sm bg-white border border-gray-25 shadow-sm hover:bg-gray-50 text-gray-700 px-5 py-2 font-semibold rounded-xl transition-colors">Edit</button>
             </div>
           </div>
         </div>
@@ -168,7 +168,7 @@
             </div>
           </div>
           <div class="grid grid-cols-3 gap-4">
-            <div v-for="cat in categories" :key="cat._id" class="border border-gray-200 rounded-xl p-4 flex justify-between items-center group">
+            <div v-for="cat in categories" :key="cat._id" class="border border-gray-25 rounded-xl p-4 flex justify-between items-center group">
               <span class="font-medium text-gray-800">{{ cat.name }}</span>
               <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button @click="promptEditCategory(cat)" class="text-blue-500 hover:bg-blue-50 p-1.5 rounded-md"><Edit class="w-4 h-4" /></button>
@@ -187,7 +187,7 @@
             </button>
           </div>
           <div v-if="customRequests.length > 0" class="space-y-3">
-            <div v-for="req in customRequests" :key="req._id" class="border border-gray-200 rounded-xl p-4 flex justify-between items-center">
+            <div v-for="req in customRequests" :key="req._id" class="border border-gray-25 rounded-xl p-4 flex justify-between items-center">
               <div>
                 <h4 class="font-bold text-gray-900">{{ req.itemName }}</h4>
                 <p class="text-sm text-gray-600 mb-1">{{ req.description }}</p>
@@ -215,7 +215,7 @@
             </button>
           </div>
           <div v-if="pendingPayments.length > 0" class="space-y-3">
-            <div v-for="order in pendingPayments" :key="order._id" class="border border-gray-200 rounded-xl p-4 flex justify-between items-center bg-yellow-50/30">
+            <div v-for="order in pendingPayments" :key="order._id" class="border border-gray-25 rounded-xl p-4 flex justify-between items-center bg-yellow-50/30">
               <div>
                 <h4 class="font-bold text-gray-900">Order #{{ order._id.slice(-6).toUpperCase() }}</h4>
                 <p class="text-sm text-gray-600 mb-1">{{ order.userId?.firstName }} {{ order.userId?.lastName }} ({{ order.userId?.email }})</p>
@@ -277,7 +277,7 @@
             
             <div class="space-y-6">
               <!-- Delivery Fee Configuration -->
-              <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-50">
                 <h4 class="font-bold text-sm text-gray-800 mb-3">Delivery Pricing</h4>
                 <div class="flex items-center gap-4 mb-4">
                   <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
@@ -298,7 +298,7 @@
               </div>
 
               <!-- Delivery Slots Configuration -->
-              <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-50">
                 <h4 class="font-bold text-sm text-gray-800 mb-3">Delivery Time Slots</h4>
                 <div class="space-y-2 mb-3">
                   <div v-for="(slot, index) in marketPoolConfig.slots" :key="index" class="flex gap-2 items-center">
@@ -326,7 +326,7 @@
     
 
     <div v-else-if="!loading" class="py-24 flex flex-col items-center justify-center text-center bg-white rounded-xl border border-dashed border-gray-200">
-      <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-gray-100">
+      <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-gray-50">
         <CalendarX class="w-10 h-10 text-gray-400" />
       </div>
       <h3 class="text-xl font-bold text-gray-900 tracking-tight">No Active Campaign</h3>
@@ -421,8 +421,8 @@
             <div v-if="uploadingImage" class="text-xs text-gray-500 mt-2">Uploading images...</div>
             <div class="flex gap-2 mt-3 max-md:overflow-x-auto md:overflow-visible pb-24 md:pb-0 pb-2">
               <div v-for="(img, idx) in [...(newItem.images || []), ...(localImagePreviews || [])]" :key="idx" class="relative group flex-shrink-0">
-                <img :src="(typeof img === 'string' && img !== '[object Object]') ? img : (img?.url || '')" class="w-24 h-24 object-cover rounded-xl border border-gray-200" />
-                <button @click="removeImage(idx, img)" class="absolute top-1 right-1 bg-white/90 rounded-full p-1 hover:bg-white text-red-500 shadow-sm border border-gray-100">
+                <img :src="(typeof img === 'string' && img !== '[object Object]') ? img : (img?.url || '')" class="w-24 h-24 object-cover rounded-xl border border-gray-25" />
+                <button @click="removeImage(idx, img)" class="absolute top-1 right-1 bg-white/90 rounded-full p-1 hover:bg-white text-red-500 shadow-sm border border-gray-50">
                   <X class="w-3 h-3" />
                 </button>
               </div>
@@ -502,7 +502,7 @@
           </button>
         </div>
         <div class="p-6 bg-gray-50 flex items-center justify-center min-h-[400px]">
-          <img v-if="selectedReceiptUrl" :src="selectedReceiptUrl" alt="Payment Proof" class="max-w-full max-h-[70vh] rounded-lg shadow-sm border border-gray-200 object-contain" />
+          <img v-if="selectedReceiptUrl" :src="selectedReceiptUrl" alt="Payment Proof" class="max-w-full max-h-[70vh] rounded-lg shadow-sm border border-gray-25 object-contain" />
           <div v-else class="text-gray-500 text-sm">No receipt image available</div>
         </div>
         <div class="p-4 border-t border-gray-100 flex justify-end">
@@ -524,7 +524,7 @@
           <div class="flex items-center gap-3 w-full">
             <button @click="showCloseModal = false" class="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">Cancel</button>
             <button @click="confirmClosePool" :disabled="closingCampaign" class="flex-1 px-4 py-2.5 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors disabled:opacity-50 flex justify-center items-center gap-2">
-              <span v-if="closingCampaign" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              <span v-if="closingCampaign" class="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin"></span>
               {{ closingCampaign ? 'Closing...' : 'Yes, Close Pool' }}
             </button>
           </div>

@@ -6,7 +6,7 @@
       <div class="w-full">
         <!-- Header -->
         <div class="text-center mb-10">
-          <div class="inline-flex items-center justify-center w-16 h-16 rounded-[1.5rem] bg-gray-900/10 text-gray-900 shadow-inner border border-gray-100">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-[1.5rem] bg-gray-900/10 text-gray-900 shadow-inner border border-gray-50">
             <img src="@/assets/img/erranders-icon-2048.png" class="h-12 w-auto" />
           </div>
           <h1 class="text-3xl font-medium text-gray-900 tracking-tight mb-2">Admin Login</h1>

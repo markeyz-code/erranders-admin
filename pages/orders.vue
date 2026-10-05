@@ -29,7 +29,7 @@
 
     <!-- Stats Grid (No Shadows) -->
     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-      <div class="bg-white p-4 rounded-[1.25rem] border border-gray-100/60 transition-all group overflow-visible relative shadow-none col-span-2 lg:col-span-1">
+      <div class="bg-white p-4 rounded-[1.25rem] border border-gray-50/60 transition-all group overflow-visible relative shadow-none col-span-2 lg:col-span-1">
         <div class="flex items-center justify-between mb-4 relative z-10">
           <div class="w-10 h-10 rounded-xl flex items-center justify-center border border-white/50 bg-blue-100 text-blue-600">
             <ShoppingBag class="w-4 h-4" />
@@ -41,7 +41,7 @@
         </div>
       </div>
       
-      <div v-if="hasModuleAccess('/finances')" class="bg-white p-4 rounded-[1.25rem] border border-gray-100/60 transition-all group overflow-visible relative shadow-none col-span-2 lg:col-span-2">
+      <div v-if="hasModuleAccess('/finances')" class="bg-white p-4 rounded-[1.25rem] border border-gray-50/60 transition-all group overflow-visible relative shadow-none col-span-2 lg:col-span-2">
         <div class="flex items-center justify-between mb-4 relative z-10">
           <div class="w-10 h-10 rounded-xl flex items-center justify-center border border-white/50 bg-emerald-100 text-emerald-600">
             <DollarSign class="w-4 h-4" />
@@ -53,7 +53,7 @@
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-[1.25rem] border border-gray-100/60 transition-all group overflow-visible relative shadow-none">
+      <div class="bg-white p-4 rounded-[1.25rem] border border-gray-50/60 transition-all group overflow-visible relative shadow-none">
         <div class="flex items-center justify-between mb-4 relative z-10">
           <div class="w-10 h-10 rounded-xl flex items-center justify-center border border-white/50 bg-amber-100 text-amber-600">
             <Clock class="w-4 h-4" />
@@ -65,7 +65,7 @@
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-[1.25rem] border border-gray-100/60 transition-all group overflow-visible relative shadow-none">
+      <div class="bg-white p-4 rounded-[1.25rem] border border-gray-50/60 transition-all group overflow-visible relative shadow-none">
         <div class="flex items-center justify-between mb-4 relative z-10">
           <div class="w-10 h-10 rounded-xl flex items-center justify-center border border-white/50 bg-purple-100 text-purple-600">
             <Loader2 class="w-4 h-4" />
@@ -77,7 +77,7 @@
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-[1.25rem] border border-gray-100/60 transition-all group overflow-visible relative shadow-none">
+      <div class="bg-white p-4 rounded-[1.25rem] border border-gray-50/60 transition-all group overflow-visible relative shadow-none">
         <div class="flex items-center justify-between mb-4 relative z-10">
           <div class="w-10 h-10 rounded-xl flex items-center justify-center border border-white/50 bg-teal-100 text-teal-600">
             <CheckCircle class="w-4 h-4" />
@@ -89,7 +89,7 @@
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-[1.25rem] border border-gray-100/60 transition-all group overflow-visible relative shadow-none">
+      <div class="bg-white p-4 rounded-[1.25rem] border border-gray-50/60 transition-all group overflow-visible relative shadow-none">
         <div class="flex items-center justify-between mb-4 relative z-10">
           <div class="w-10 h-10 rounded-xl flex items-center justify-center border border-white/50 bg-rose-100 text-rose-600">
             <XCircle class="w-4 h-4" />
@@ -115,9 +115,9 @@
           <div class="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0 flex items-center justify-center font-bold text-gray-500 overflow-hidden relative">
             <img v-if="errander.user?.avatar" :src="errander.user.avatar" class="w-full h-full object-cover" />
             <span v-else>{{ errander.user?.firstName?.charAt(0) || '?' }}</span>
-            <div v-if="index === 0" class="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center text-[8px] border-2 border-white">🥇</div>
-            <div v-if="index === 1" class="absolute -top-1 -right-1 w-4 h-4 bg-gray-300 rounded-full flex items-center justify-center text-[8px] border-2 border-white">🥈</div>
-            <div v-if="index === 2" class="absolute -top-1 -right-1 w-4 h-4 bg-amber-600 rounded-full flex items-center justify-center text-[8px] border-2 border-white">🥉</div>
+            <div v-if="index === 0" class="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center text-[8px] border border-white">🥇</div>
+            <div v-if="index === 1" class="absolute -top-1 -right-1 w-4 h-4 bg-gray-300 rounded-full flex items-center justify-center text-[8px] border border-white">🥈</div>
+            <div v-if="index === 2" class="absolute -top-1 -right-1 w-4 h-4 bg-amber-600 rounded-full flex items-center justify-center text-[8px] border border-white">🥉</div>
           </div>
           <div class="min-w-0 flex-1">
             <p class="text-xs font-bold text-gray-900 truncate">{{ errander.user?.firstName }} {{ errander.user?.lastName }}</p>
@@ -167,7 +167,7 @@
     </div>
 
     <!-- Table Section -->
-    <div class="bg-white rounded-[1.25rem] border border-gray-100/60 overflow-visible min-h-[400px] shadow-none">
+    <div class="bg-white rounded-[1.25rem] border border-gray-50/60 overflow-visible min-h-[400px] shadow-none">
       <div v-if="loading" class="p-10 space-y-6">
         <div v-for="i in 5" :key="`skeleton-${i}`" class="flex items-center gap-4 animate-pulse">
           <div class="w-12 h-12 rounded-full bg-gray-100" />
@@ -180,7 +180,7 @@
       </div>
 
       <div v-else-if="orders.length === 0" class="py-24 text-center bg-gray-50/30">
-        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100">
+        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-50">
           <ShoppingBag class="w-6 h-6 text-gray-400" />
         </div>
         <h4 class="font-bold text-gray-900 text-lg tracking-tight">No orders found</h4>
@@ -206,7 +206,7 @@
               <!-- Customer & Order -->
               <td class="px-4 py-2.5 align-top">
                 <div class="flex items-start gap-2.5">
-                  <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 text-gray-600 font-black text-xs uppercase border border-gray-200 mt-0.5">
+                  <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 text-gray-600 font-black text-xs uppercase border border-gray-25 mt-0.5">
                     {{ (order.customer || order.user)?.firstName?.charAt(0) || '?' }}
                   </div>
                   <div class="min-w-0">
@@ -309,7 +309,7 @@
                     <Activity class="w-3.5 h-3.5" /> {{ order.status?.replace('_', ' ') }}
                   </span>
                   
-                  <span v-if="order.status === 'delivered' && getDeliveryDuration(order)" class="text-[9px] font-bold text-gray-500 bg-gray-50 border border-gray-100 px-1.5 py-0.5 rounded mt-1 flex items-center gap-1" title="Time from acceptance to delivery">
+                  <span v-if="order.status === 'delivered' && getDeliveryDuration(order)" class="text-[9px] font-bold text-gray-500 bg-gray-50 border border-gray-50 px-1.5 py-0.5 rounded mt-1 flex items-center gap-1" title="Time from acceptance to delivery">
                     <Clock class="w-3 h-3" /> {{ getDeliveryDuration(order) }}
                   </span>
                 </div>
@@ -321,7 +321,7 @@
                   <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
                 
-                <div v-if="activeDropdown === order._id" class="absolute right-6 top-10 w-48 bg-white border border-gray-100 rounded-xl shadow-lg z-20 py-1.5 text-left animate-fade-in-up">
+                <div v-if="activeDropdown === order._id" class="absolute right-6 top-10 w-48 bg-white border border-gray-50 rounded-xl shadow-lg z-20 py-1.5 text-left animate-fade-in-up">
                   <button @click.stop="selectedOrder = order; activeDropdown = null" class="w-full px-4 py-2 text-[11px] font-bold text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 text-left transition-colors">
                     Profile
                   </button>
@@ -350,10 +350,10 @@
             Showing Page <span class="font-bold text-gray-900">{{ currentPage }}</span> of <span class="font-bold text-gray-900">{{ totalPages }}</span>
           </p>
           <div class="flex items-center gap-2">
-            <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 bg-white border border-gray-25 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
               Previous
             </button>
-            <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 bg-white border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 bg-white border border-gray-25 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
               Next
             </button>
           </div>
@@ -375,7 +375,7 @@
           <h3 class="text-lg font-semibold text-gray-900 font-heading">{{ selectedOrder.customer?.firstName || selectedOrder.user?.firstName }} {{ selectedOrder.customer?.lastName || selectedOrder.user?.lastName }}</h3>
           <p class="text-xs font-medium text-gray-500 mb-4">{{ selectedOrder.customer?.email || selectedOrder.user?.email }}</p>
           
-          <div class="flex items-center justify-between w-4/5 bg-white rounded-lg border border-gray-100 divide-x divide-gray-100">
+          <div class="flex items-center justify-between w-4/5 bg-white rounded-lg border border-gray-50 divide-x divide-gray-100">
             <div class="text-center flex-1 py-3">
               <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-0.5">Total</p>
               <p class="text-sm font-bold text-gray-900">₦{{ Number(selectedOrder.total || selectedOrder.totalAmount || 0).toLocaleString() }}</p>
@@ -416,10 +416,10 @@
                 <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-3">Order Timeline</span>
                 <div class="relative border-l border-gray-200 ml-2 space-y-4">
                   <div v-for="(history, index) in selectedOrder.statusHistory" :key="index" class="pl-4 relative">
-                    <div class="w-2.5 h-2.5 bg-[#FF5C1A] rounded-full absolute -left-[5px] top-1 border-2 border-white"></div>
+                    <div class="w-2.5 h-2.5 bg-[#FF5C1A] rounded-full absolute -left-[5px] top-1 border border-white"></div>
                     <p class="text-xs font-bold text-gray-900 capitalize">{{ history.status?.replace(/_/g, ' ') }}</p>
                     <p class="text-[10px] font-medium text-gray-500">{{ new Date(history.timestamp).toLocaleString() }}</p>
-                    <p v-if="history.note" class="text-[10px] text-gray-600 mt-1 italic">{{ history.note }}</p>
+                    <p v-if="history.note" class="text-[10px] text-gray-600 mt-1 ">{{ history.note }}</p>
                   </div>
                 </div>
               </div>
@@ -535,13 +535,13 @@
                   Attached Images
                 </p>
                 <div class="flex gap-2 flex-wrap">
-                  <a v-if="selectedOrder.customDetails.attachedImage" :href="selectedOrder.customDetails.attachedImage" target="_blank" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-200 block group relative">
+                  <a v-if="selectedOrder.customDetails.attachedImage" :href="selectedOrder.customDetails.attachedImage" target="_blank" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-25 block group relative">
                     <img :src="selectedOrder.customDetails.attachedImage" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
                     <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                       <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
                   </a>
-                  <a v-for="(img, idx) in selectedOrder.customDetails.attachedImages" :key="idx" :href="img" target="_blank" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-200 block group relative">
+                  <a v-for="(img, idx) in selectedOrder.customDetails.attachedImages" :key="idx" :href="img" target="_blank" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-25 block group relative">
                     <img :src="img" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
                     <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                       <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -558,7 +558,7 @@
             
             <!-- Render Packs -->
             <template v-else-if="selectedOrder.packs?.length">
-              <div v-for="pack in selectedOrder.packs" :key="pack.name" class="space-y-3 px-2 mb-4 bg-gray-50 p-3 rounded-xl border border-gray-100">
+              <div v-for="pack in selectedOrder.packs" :key="pack.name" class="space-y-3 px-2 mb-4 bg-gray-50 p-3 rounded-xl border border-gray-50">
                 <h5 class="text-[10px] font-bold text-[#FF5C1A] uppercase tracking-widest border-b border-gray-200 pb-1 mb-2">{{ pack.name }}</h5>
                 <div v-for="item in pack.items" :key="item.name" class="flex items-start justify-between mb-2 last:mb-0">
                   <div class="flex items-start gap-3">
@@ -664,7 +664,7 @@
             </button>
           </div>
         
-        <div class="bg-gray-50 border border-gray-100 rounded-xl p-4 space-y-3 mb-6">
+        <div class="bg-gray-50 border border-gray-50 rounded-xl p-4 space-y-3 mb-6">
           <div class="flex justify-between items-center">
              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Current Status</span>
              <span class="text-[11px] font-bold px-2 py-1 rounded bg-indigo-50 text-indigo-700 capitalize">{{ modalOrder?.status?.replace(/_/g, ' ') || 'Unknown' }}</span>
@@ -757,7 +757,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Reason for cancellation</label>
             <textarea
               v-model="cancelReasonInput"
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm resize-none h-24"
+              class="w-full px-4 py-3 rounded-xl border border-gray-25 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm resize-none h-24"
               placeholder="e.g. Customer requested cancellation..."
             ></textarea>
           </div>

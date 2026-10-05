@@ -44,7 +44,7 @@
     <!-- Content -->
     <div v-else-if="vendor" class="space-y-6">
       <!-- Profile Header Card -->
-      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-6">
+      <div class="bg-white p-6 rounded-2xl border border-gray-50 shadow-sm flex items-center gap-6">
         <div class="w-20 h-20 rounded-2xl bg-[#FF5C1A]/10 flex items-center justify-center text-[#FF5C1A] border border-[#FF5C1A]/20 shrink-0">
           <Store class="w-8 h-8" />
         </div>
@@ -80,7 +80,7 @@
       </div>
 
       <!-- Tabs Content -->
-      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 min-h-[300px]">
+      <div class="bg-white rounded-2xl border border-gray-50 shadow-sm p-6 min-h-[300px]">
         <!-- Overview Tab -->
         <div v-if="activeTab === 'overview'" class="space-y-8">
           
@@ -237,11 +237,11 @@
           <p class="text-sm text-gray-600">Use this to manually deduct funds if you've paid out the vendor directly outside of the system.</p>
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Amount (₦)</label>
-            <input v-model="debitAmount" type="number" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 5000">
+            <input v-model="debitAmount" type="number" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 5000">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Reason / Description</label>
-            <input v-model="debitReason" type="text" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. Manual payout">
+            <input v-model="debitReason" type="text" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. Manual payout">
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Proof of Transaction (Optional)</label>
@@ -252,7 +252,7 @@
             :disabled="!debitAmount || isSubmittingDebit"
             class="w-full py-3 bg-[#FF5C1A] text-white rounded-lg font-bold hover:bg-[#E54D12] transition-colors disabled:opacity-50 flex items-center justify-center"
           >
-            <span v-if="isSubmittingDebit" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+            <span v-if="isSubmittingDebit" class="w-5 h-5 border border-white/30 border-t-white rounded-full animate-spin"></span>
             <span v-else>Process Debit</span>
           </button>
         </div>

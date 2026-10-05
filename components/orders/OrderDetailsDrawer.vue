@@ -12,7 +12,7 @@
         <h3 class="text-lg font-semibold text-gray-900 font-heading">{{ order.customer?.firstName || order.user?.firstName }} {{ order.customer?.lastName || order.user?.lastName }}</h3>
         <p class="text-xs font-medium text-gray-500 mb-4">{{ order.customer?.email || order.user?.email }}</p>
         
-        <div class="flex items-center justify-between w-4/5 bg-white rounded-lg border border-gray-100 divide-x divide-gray-100">
+        <div class="flex items-center justify-between w-4/5 bg-white rounded-lg border border-gray-50 divide-x divide-gray-100">
           <div class="text-center flex-1 py-3">
             <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-0.5">Total</p>
             <p class="text-sm font-bold text-gray-900">₦{{ Number(order.total || order.totalAmount || 0).toLocaleString() }}</p>
@@ -53,10 +53,10 @@
               <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-3">Order Timeline</span>
               <div class="relative border-l border-gray-200 ml-2 space-y-4">
                 <div v-for="(history, index) in order.statusHistory" :key="index" class="pl-4 relative">
-                  <div class="w-2.5 h-2.5 bg-[#FF5C1A] rounded-full absolute -left-[5px] top-1 border-2 border-white"></div>
+                  <div class="w-2.5 h-2.5 bg-[#FF5C1A] rounded-full absolute -left-[5px] top-1 border border-white"></div>
                   <p class="text-xs font-bold text-gray-900 capitalize">{{ history.status?.replace(/_/g, ' ') }}</p>
                   <p class="text-[10px] font-medium text-gray-500">{{ new Date(history.timestamp).toLocaleString() }}</p>
-                  <p v-if="history.note" class="text-[10px] text-gray-600 mt-1 italic">{{ history.note }}</p>
+                  <p v-if="history.note" class="text-[10px] text-gray-600 mt-1 ">{{ history.note }}</p>
                 </div>
               </div>
             </div>
@@ -168,13 +168,13 @@
                 Attached Images
               </p>
               <div class="flex gap-2 flex-wrap">
-                <a v-if="order.customDetails.attachedImage" :href="order.customDetails.attachedImage" target="_blank" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-200 block group relative">
+                <a v-if="order.customDetails.attachedImage" :href="order.customDetails.attachedImage" target="_blank" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-25 block group relative">
                   <img :src="order.customDetails.attachedImage" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
                   <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                   </div>
                 </a>
-                <a v-for="(img, idx) in order.customDetails.attachedImages" :key="idx" :href="img" target="_blank" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-200 block group relative">
+                <a v-for="(img, idx) in order.customDetails.attachedImages" :key="idx" :href="img" target="_blank" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-25 block group relative">
                   <img :src="img" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
                   <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -194,7 +194,7 @@
               
               <div v-if="order.itemsPhoto" class="mb-4">
                 <p class="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-2">Proof of Purchase</p>
-                <a :href="order.itemsPhoto" target="_blank" class="w-full h-32 rounded-lg overflow-hidden border border-gray-200 block group relative">
+                <a :href="order.itemsPhoto" target="_blank" class="w-full h-32 rounded-lg overflow-hidden border border-gray-25 block group relative">
                   <img :src="order.itemsPhoto" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
                   <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -233,7 +233,7 @@
           
           <!-- Render Packs -->
           <template v-else-if="order.packs?.length">
-            <div v-for="pack in order.packs" :key="pack.name" class="space-y-3 px-2 mb-4 bg-gray-50 p-3 rounded-xl border border-gray-100">
+            <div v-for="pack in order.packs" :key="pack.name" class="space-y-3 px-2 mb-4 bg-gray-50 p-3 rounded-xl border border-gray-50">
               <h5 class="text-[10px] font-bold text-[#FF5C1A] uppercase tracking-widest border-b border-gray-200 pb-1 mb-2">{{ pack.name }}</h5>
               <div v-for="item in pack.items" :key="item.name" class="flex items-start justify-between mb-2 last:mb-0">
                 <div class="flex items-start gap-3">

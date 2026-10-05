@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col mt-6">
+  <div class="bg-white rounded-2xl border border-gray-50 shadow-sm overflow-hidden flex flex-col mt-6">
     <div class="p-6 border-b border-gray-100/60 bg-gray-50/30 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
@@ -21,7 +21,7 @@
             v-for="freq in ['manual', 'daily', 'weekly', 'monthly']" 
             :key="freq"
             @click="form.preference = freq"
-            class="flex items-center justify-between p-4 rounded-xl border-2 transition-all text-left"
+            class="flex items-center justify-between p-4 rounded-xl border transition-all text-left"
             :class="form.preference === freq ? 'border-blue-500 bg-blue-50/50' : 'border-gray-100 hover:border-blue-200'"
           >
             <div>
@@ -31,7 +31,7 @@
               </p>
             </div>
             <div 
-              class="w-5 h-5 rounded-full border-2 flex items-center justify-center"
+              class="w-5 h-5 rounded-full border flex items-center justify-center"
               :class="form.preference === freq ? 'border-blue-500' : 'border-gray-300'"
             >
               <div v-if="form.preference === freq" class="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
@@ -47,7 +47,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1.5">
               <label class="text-xs font-semibold text-gray-500">Select Bank</label>
-              <select v-model="form.bankDetails.bankCode" @change="onBankChange" class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none">
+              <select v-model="form.bankDetails.bankCode" @change="onBankChange" class="w-full px-4 py-3 bg-gray-50 border border-gray-50 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none">
                 <option value="" disabled>Choose a bank</option>
                 <option v-for="bank in banks" :key="bank.code" :value="bank.code">{{ bank.name }}</option>
               </select>
@@ -58,7 +58,7 @@
                 v-model="form.bankDetails.accountNumber" 
                 type="text" 
                 maxlength="10"
-                class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
+                class="w-full px-4 py-3 bg-gray-50 border border-gray-50 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none"
                 placeholder="10-digit account number"
               />
             </div>
@@ -70,7 +70,7 @@
               :disabled="resolving || form.bankDetails.accountNumber.length !== 10 || !form.bankDetails.bankCode"
               class="px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
-              <span v-if="resolving" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              <span v-if="resolving" class="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin"></span>
               Verify Account
             </button>
             <div v-if="isAccountVerified && form.bankDetails.accountName" class="flex items-center gap-2 text-emerald-600 bg-emerald-50 px-4 py-2.5 rounded-xl border border-emerald-100">
@@ -88,7 +88,7 @@
           :disabled="saving"
           class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-sm transition-colors disabled:opacity-50 flex items-center gap-2"
         >
-          <span v-if="saving" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+          <span v-if="saving" class="w-4 h-4 border border-white/30 border-t-white rounded-full animate-spin"></span>
           Save Configuration
         </button>
       </div>

@@ -8,7 +8,7 @@
     </div>
 
     <!-- Table Section -->
-    <div class="bg-white rounded-[1.25rem] border border-gray-100/60 overflow-visible min-h-[400px] shadow-none mt-6">
+    <div class="bg-white rounded-[1.25rem] border border-gray-50/60 overflow-visible min-h-[400px] shadow-none mt-6">
       <div v-if="loading" class="p-10 space-y-6">
         <div v-for="i in 5" :key="`skeleton-${i}`" class="flex items-center gap-4 animate-pulse">
           <div class="w-12 h-12 rounded-full bg-gray-100" />
@@ -20,7 +20,7 @@
       </div>
 
       <div v-else-if="orders.length === 0" class="py-24 text-center bg-gray-50/30">
-        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100">
+        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-50">
           <Package class="w-6 h-6 text-gray-400" />
         </div>
         <h4 class="font-bold text-gray-900 text-lg tracking-tight">No scheduled orders found</h4>
@@ -86,8 +86,8 @@
       <div v-if="totalPages > 1" class="p-4 border-t border-gray-100/50 bg-gray-50/20 flex items-center justify-between">
         <p class="text-xs font-medium text-gray-500">Showing page {{ currentPage }} of {{ totalPages }}</p>
         <div class="flex items-center gap-2">
-          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-1.5 text-xs font-bold bg-white border border-gray-200 rounded-lg hover:border-parentPrimary transition-colors disabled:opacity-50">Prev</button>
-          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-1.5 text-xs font-bold bg-white border border-gray-200 rounded-lg hover:border-parentPrimary transition-colors disabled:opacity-50">Next</button>
+          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-1.5 text-xs font-bold bg-white border border-gray-25 rounded-lg hover:border-parentPrimary transition-colors disabled:opacity-50">Prev</button>
+          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-1.5 text-xs font-bold bg-white border border-gray-25 rounded-lg hover:border-parentPrimary transition-colors disabled:opacity-50">Next</button>
         </div>
       </div>
     </div>

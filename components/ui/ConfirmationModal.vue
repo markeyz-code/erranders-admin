@@ -42,7 +42,7 @@
           <div class="flex gap-3 w-full pt-2">
             <button
               @click="$emit('cancel')"
-              class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-100"
+              class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-50"
             >
               {{ cancelText }}
             </button>

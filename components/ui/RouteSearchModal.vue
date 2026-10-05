@@ -23,7 +23,7 @@
       >
         <div
           v-if="isOpen"
-          class="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-gray-100"
+          class="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-gray-50"
         >
           <!-- Search Input -->
           <div class="relative border-b border-gray-100">

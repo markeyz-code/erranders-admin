@@ -223,7 +223,7 @@
                   @focus="($event.target as HTMLInputElement)?.select()" 
                   @click.stop 
                   maxlength="2"
-                  class="w-20 text-center text-4xl font-bold border border-gray-100 focus:border-[#033958] rounded-2xl py-4 focus:outline-none focus:ring-4 focus:ring-[#033958]/20 transition-all bg-gray-50"
+                  class="w-20 text-center text-4xl font-bold border border-gray-50 focus:border-[#033958] rounded-2xl py-4 focus:outline-none focus:ring-4 focus:ring-[#033958]/20 transition-all bg-gray-50"
                 />
                 <button type="button" @click.stop="decHour" class="p-3 hover:bg-gray-100 rounded-xl mt-3 transition-all group">
                   <ChevronDown :size="20" stroke-width="3" class="group-hover:scale-110 transition-transform" />
@@ -243,7 +243,7 @@
                   @focus="($event.target as HTMLInputElement)?.select()" 
                   @click.stop 
                   maxlength="2"
-                  class="w-20 text-center text-4xl font-bold border border-gray-100 focus:border-[#033958] rounded-2xl py-4 focus:outline-none focus:ring-4 focus:ring-[#033958]/20 transition-all bg-gray-50"
+                  class="w-20 text-center text-4xl font-bold border border-gray-50 focus:border-[#033958] rounded-2xl py-4 focus:outline-none focus:ring-4 focus:ring-[#033958]/20 transition-all bg-gray-50"
                 />
                 <button type="button" @click.stop="decMin" class="p-3 hover:bg-gray-100 rounded-xl mt-3 transition-all group">
                   <ChevronDown :size="20" stroke-width="3" class="group-hover:scale-110 transition-transform" />
@@ -392,7 +392,7 @@
                     @focus="($event.target as HTMLInputElement)?.select()" 
                     @click.stop 
                     maxlength="2"
-                    class="w-16 text-center text-3xl font-bold border border-gray-100 focus:border-[#033958] rounded-xl py-3 focus:outline-none bg-gray-50"
+                    class="w-16 text-center text-3xl font-bold border border-gray-50 focus:border-[#033958] rounded-xl py-3 focus:outline-none bg-gray-50"
                   />
                   <button type="button" @click.stop="decHour" class="p-2 hover:bg-gray-100 rounded-lg mt-2">
                     <ChevronDown :size="16" stroke-width="2.5" />
@@ -410,7 +410,7 @@
                     @focus="($event.target as HTMLInputElement)?.select()" 
                     @click.stop 
                     maxlength="2"
-                    class="w-16 text-center text-3xl font-bold border border-gray-100 focus:border-[#033958] rounded-xl py-3 focus:outline-none bg-gray-50"
+                    class="w-16 text-center text-3xl font-bold border border-gray-50 focus:border-[#033958] rounded-xl py-3 focus:outline-none bg-gray-50"
                   />
                   <button type="button" @click.stop="decMin" class="p-2 hover:bg-gray-100 rounded-lg mt-2">
                     <ChevronDown :size="16" stroke-width="2.5" />

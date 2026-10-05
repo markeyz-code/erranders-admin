@@ -3,7 +3,7 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- Total Earned -->
-      <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm relative overflow-hidden">
+      <div class="bg-white rounded-2xl p-6 border border-gray-50 shadow-sm relative overflow-hidden">
         <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-50 rounded-full opacity-50 pointer-events-none"></div>
         <div class="relative z-10 flex flex-col h-full">
           <div class="flex items-center justify-between mb-4">
@@ -22,7 +22,7 @@
       </div>
 
       <!-- Paid Out -->
-      <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm relative overflow-hidden">
+      <div class="bg-white rounded-2xl p-6 border border-gray-50 shadow-sm relative overflow-hidden">
         <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-50 rounded-full opacity-50 pointer-events-none"></div>
         <div class="relative z-10 flex flex-col h-full">
           <div class="flex items-center justify-between mb-4">
@@ -69,7 +69,7 @@
     />
 
     <!-- Payout History Table -->
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+    <div class="bg-white rounded-2xl border border-gray-50 shadow-sm overflow-hidden flex flex-col">
       <div class="p-6 border-b border-gray-100/60 bg-gray-50/30 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-[#FF5C1A]/10 flex items-center justify-center text-[#FF5C1A]">
@@ -87,7 +87,7 @@
       </div>
 
       <div v-else-if="transactions.length === 0" class="flex flex-col items-center justify-center py-16 text-center">
-        <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-gray-100">
+        <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-gray-50">
           <Receipt class="w-8 h-8 text-gray-300" />
         </div>
         <h3 class="text-lg font-bold text-gray-900 mb-1">No Transactions Found</h3>
@@ -160,7 +160,7 @@
         <button 
           @click="page > 1 && fetchTransactions(page - 1)"
           :disabled="page === 1"
-          class="px-4 py-2 text-sm font-semibold rounded-lg border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50 transition-colors"
+          class="px-4 py-2 text-sm font-semibold rounded-lg border border-gray-25 bg-white hover:bg-gray-50 disabled:opacity-50 transition-colors"
         >
           Previous
         </button>
@@ -168,7 +168,7 @@
         <button 
           @click="page < totalPages && fetchTransactions(page + 1)"
           :disabled="page === totalPages"
-          class="px-4 py-2 text-sm font-semibold rounded-lg border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50 transition-colors"
+          class="px-4 py-2 text-sm font-semibold rounded-lg border border-gray-25 bg-white hover:bg-gray-50 disabled:opacity-50 transition-colors"
         >
           Next
         </button>

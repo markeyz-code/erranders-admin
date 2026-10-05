@@ -13,7 +13,7 @@
     </div>
 
     <div v-else class="space-y-3">
-      <div v-for="tx in transactions" :key="tx._id" class="p-3 rounded-xl border border-gray-100 flex items-center justify-between hover:border-gray-200 transition-colors bg-white">
+      <div v-for="tx in transactions" :key="tx._id" class="p-3 rounded-xl border border-gray-50 flex items-center justify-between hover:border-gray-200 transition-colors bg-white">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
             :class="{

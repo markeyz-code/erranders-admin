@@ -22,19 +22,19 @@
       </div>
       
       <!-- Middle Row: Search, Status, Dates -->
-      <div class="flex items-center gap-3 flex-wrap bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+      <div class="flex items-center gap-3 flex-wrap bg-white p-3 rounded-2xl border border-gray-50 shadow-sm">
         <div class="relative flex-1 min-w-[250px]">
           <Search class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input 
             v-model="searchQuery" 
             type="text" 
             placeholder="Search reference or desc..." 
-            class="pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#FF5C1A] focus:ring-1 focus:ring-[#FF5C1A] w-full"
+            class="pl-9 pr-4 py-2.5 rounded-xl border border-gray-25 text-sm focus:outline-none focus:border-[#FF5C1A] focus:ring-1 focus:ring-[#FF5C1A] w-full"
             @keyup.enter="handleSearch"
           />
         </div>
         
-        <select v-model="statusFilter" @change="applyFilters" class="py-2.5 pl-3 pr-8 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-[#FF5C1A] appearance-none bg-white font-medium text-gray-700 min-w-[150px]">
+        <select v-model="statusFilter" @change="applyFilters" class="py-2.5 pl-3 pr-8 rounded-xl border border-gray-25 text-sm focus:outline-none focus:border-[#FF5C1A] appearance-none bg-white font-medium text-gray-700 min-w-[150px]">
           <option value="">All Statuses</option>
           <option value="completed">Completed</option>
           <option value="pending">Pending</option>
@@ -50,9 +50,9 @@
       </div>
 
       <!-- Bottom Row: Specific Users -->
-      <div class="flex items-center gap-3 flex-wrap bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+      <div class="flex items-center gap-3 flex-wrap bg-white p-3 rounded-2xl border border-gray-50 shadow-sm">
         <span class="text-xs font-bold text-gray-400 uppercase tracking-widest pl-2">Filter By User</span>
-        <div class="flex-1 min-w-[200px] border border-gray-200 rounded-xl hover:border-[#FF5C1A] transition-colors focus-within:border-[#FF5C1A] focus-within:ring-1 focus-within:ring-[#FF5C1A]">
+        <div class="flex-1 min-w-[200px] border border-gray-25 rounded-xl hover:border-[#FF5C1A] transition-colors focus-within:border-[#FF5C1A] focus-within:ring-1 focus-within:ring-[#FF5C1A]">
           <SelectInput 
             v-model="vendorFilter"
             label="Select Vendor"
@@ -61,7 +61,7 @@
             @update:modelValue="onVendorSelect"
           />
         </div>
-        <div class="flex-1 min-w-[200px] border border-gray-200 rounded-xl hover:border-[#FF5C1A] transition-colors focus-within:border-[#FF5C1A] focus-within:ring-1 focus-within:ring-[#FF5C1A]">
+        <div class="flex-1 min-w-[200px] border border-gray-25 rounded-xl hover:border-[#FF5C1A] transition-colors focus-within:border-[#FF5C1A] focus-within:ring-1 focus-within:ring-[#FF5C1A]">
           <SelectInput 
             v-model="erranderFilter"
             label="Select Errander"
@@ -70,7 +70,7 @@
             @update:modelValue="onErranderSelect"
           />
         </div>
-        <div class="flex-1 min-w-[200px] border border-gray-200 rounded-xl hover:border-[#FF5C1A] transition-colors focus-within:border-[#FF5C1A] focus-within:ring-1 focus-within:ring-[#FF5C1A]">
+        <div class="flex-1 min-w-[200px] border border-gray-25 rounded-xl hover:border-[#FF5C1A] transition-colors focus-within:border-[#FF5C1A] focus-within:ring-1 focus-within:ring-[#FF5C1A]">
           <SelectInput 
             v-model="studentFilter"
             label="Select Student"
@@ -83,7 +83,7 @@
     </div>
 
     <!-- Main Table Card -->
-    <div class="bg-white rounded-[1.25rem] border border-gray-100 shadow-sm overflow-visible">
+    <div class="bg-white rounded-[1.25rem] border border-gray-50 shadow-sm overflow-visible">
       <div class="max-md:overflow-x-auto md:overflow-visible pb-24 md:pb-0">
         <table class="w-full text-left border-collapse">
           <thead>
@@ -111,7 +111,7 @@
               <!-- User Details -->
               <td class="px-6 py-4">
                 <NuxtLink :to="getUserRoute(txn)" class="flex items-center gap-3 p-2 -m-2 rounded-xl hover:bg-gray-50 transition-colors group cursor-pointer" :class="{'pointer-events-none': getUserRoute(txn) === '#'}">
-                  <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600 text-xs shadow-sm border border-gray-200 group-hover:border-[#FF5C1A] group-hover:text-[#FF5C1A] transition-colors">
+                  <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600 text-xs shadow-sm border border-gray-25 group-hover:border-[#FF5C1A] group-hover:text-[#FF5C1A] transition-colors">
                     {{ getUserInitials(txn) }}
                   </div>
                   <div class="flex flex-col">
@@ -199,7 +199,7 @@
 
       <!-- Empty State -->
       <div v-if="!loading && transactions.length === 0" class="p-16 text-center">
-        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100">
+        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-50">
           <Banknote class="w-8 h-8 text-gray-400" />
         </div>
         <h3 class="text-base font-bold text-gray-900 mb-1">No transactions found</h3>
@@ -215,14 +215,14 @@
           <button 
             @click="prevPage" 
             :disabled="currentPage === 1"
-            class="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-white hover:text-gray-900 disabled:opacity-50 disabled:hover:bg-transparent transition-colors shadow-sm bg-white"
+            class="p-2 rounded-lg border border-gray-25 text-gray-600 hover:bg-white hover:text-gray-900 disabled:opacity-50 disabled:hover:bg-transparent transition-colors shadow-sm bg-white"
           >
             <ChevronLeft class="w-4 h-4" />
           </button>
           <button 
             @click="nextPage" 
             :disabled="currentPage === totalPages"
-            class="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-white hover:text-gray-900 disabled:opacity-50 disabled:hover:bg-transparent transition-colors shadow-sm bg-white"
+            class="p-2 rounded-lg border border-gray-25 text-gray-600 hover:bg-white hover:text-gray-900 disabled:opacity-50 disabled:hover:bg-transparent transition-colors shadow-sm bg-white"
           >
             <ChevronRight class="w-4 h-4" />
           </button>
@@ -254,7 +254,7 @@
         </div>
 
         <!-- Financial Summary Card -->
-        <div class="bg-gray-50 rounded-2xl p-6 border border-gray-200 relative overflow-hidden">
+        <div class="bg-gray-50 rounded-2xl p-6 border border-gray-25 relative overflow-hidden">
           <div class="absolute right-0 top-0 w-32 h-32 bg-white/40 rounded-bl-full -mr-16 -mt-16 border-l border-b border-white/60"></div>
           
           <span class="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-2 relative z-10">Amount</span>
@@ -283,8 +283,8 @@
         <!-- User Details Section -->
         <div>
           <span class="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-4">Involved User</span>
-          <div class="flex items-center gap-4 bg-white border border-gray-100 shadow-sm p-4 rounded-2xl">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center font-bold text-gray-700 text-lg shadow-inner border border-gray-200/60">
+          <div class="flex items-center gap-4 bg-white border border-gray-50 shadow-sm p-4 rounded-2xl">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center font-bold text-gray-700 text-lg shadow-inner border border-gray-25/60">
               {{ getUserInitials(selectedTransaction) }}
             </div>
             <div class="flex flex-col">
@@ -302,7 +302,7 @@
         <!-- Bank Details Section (if exists) -->
         <div v-if="selectedTransaction.wallet?.bankDetails">
           <span class="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-4">Payout Account</span>
-          <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-2xl flex flex-col gap-2">
+          <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-2">
             <div class="flex justify-between items-center">
               <span class="text-xs font-semibold text-gray-500">Bank Name</span>
               <span class="text-sm font-bold text-gray-900">{{ selectedTransaction.wallet.bankDetails.bankName }}</span>
@@ -322,11 +322,11 @@
         <div v-if="selectedTransaction.wallet">
           <span class="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-4">Wallet Snapshot</span>
           <div class="grid grid-cols-2 gap-4">
-            <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
+            <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
               <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Current Balance</span>
               <span class="text-lg font-mono font-black text-gray-900">₦{{ Number(selectedTransaction.wallet.balance || 0).toLocaleString() }}</span>
             </div>
-            <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
+            <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
               <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Earned</span>
               <span class="text-lg font-mono font-black text-emerald-600">₦{{ Number(selectedTransaction.wallet.totalEarned || 0).toLocaleString() }}</span>
             </div>
@@ -336,7 +336,7 @@
         <!-- Additional Context (Action Type, Proof) -->
         <div v-if="selectedTransaction.actionType || selectedTransaction.proofOfTransaction">
           <span class="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-4">Additional Info</span>
-          <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-2xl flex flex-col gap-4">
+          <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-4">
             <div class="flex justify-between items-center" v-if="selectedTransaction.actionType">
               <span class="text-xs font-semibold text-gray-500">Action Type</span>
               <span class="text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded bg-gray-100 text-gray-700">
@@ -345,7 +345,7 @@
             </div>
             <div v-if="selectedTransaction.proofOfTransaction" class="flex flex-col gap-2">
               <span class="text-xs font-semibold text-gray-500">Proof of Transaction</span>
-              <a :href="selectedTransaction.proofOfTransaction" target="_blank" class="block w-full overflow-hidden rounded-xl border border-gray-200 hover:border-[#FF5C1A] transition-colors relative group">
+              <a :href="selectedTransaction.proofOfTransaction" target="_blank" class="block w-full overflow-hidden rounded-xl border border-gray-25 hover:border-[#FF5C1A] transition-colors relative group">
                 <img :src="selectedTransaction.proofOfTransaction" alt="Proof" class="w-full h-32 object-cover object-top" />
                 <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <span class="text-white text-xs font-bold px-3 py-1.5 bg-black/50 rounded-lg">View Full Image</span>
@@ -357,11 +357,11 @@
 
         <!-- Meta Information -->
         <div class="grid grid-cols-2 gap-4">
-          <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
+          <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Transaction Date</span>
             <span class="text-sm font-semibold text-gray-900">{{ new Date(selectedTransaction.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) }}</span>
           </div>
-          <div class="bg-white border border-gray-100 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
+          <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Transaction Time</span>
             <span class="text-sm font-semibold text-gray-900">{{ new Date(selectedTransaction.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</span>
           </div>

@@ -20,7 +20,7 @@
         :class="[
           'px-5 py-3 rounded-2xl text-xs font-medium lowercase transition-all flex items-center gap-2 border',
           activeTab === tab.id
-            ? 'bg-gray-900 text-white border-gray-900 shadow-lg shadow-gray-200'
+            ? 'bg-gray-900 text-white border-gray-25shadow-lg shadow-gray-200'
             : 'bg-white text-gray-500 border-gray-100 hover:bg-gray-50 hover:text-gray-900'
         ]"
       >
@@ -35,7 +35,7 @@
     <div v-show="activeTab === 'pricing'" class="space-y-8">
 
       <!-- 1A: Delivery Fees -->
-      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
         <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
           <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
             <Truck class="w-5 h-5" />
@@ -58,7 +58,7 @@
             <input 
               v-model.number="form.roomDeliveryFee"
               type="number" required min="0"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
+              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
             />
             <p v-if="form.roomDeliveryFee !== originalForm.roomDeliveryFee" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
               <AlertTriangle class="w-3 h-3" />
@@ -83,7 +83,7 @@
             <input 
               v-model.number="form.dropoffServiceFee"
               type="number" required min="0"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
+              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
             />
             <p v-if="form.dropoffServiceFee !== originalForm.dropoffServiceFee" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
               <AlertTriangle class="w-3 h-3" />
@@ -99,7 +99,7 @@
       </div>
 
       <!-- 1B: Revenue & Commission -->
-      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
         <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
           <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center">
             <DollarSign class="w-5 h-5" />
@@ -122,7 +122,7 @@
             <input 
               v-model.number="form.convenienceFee"
               type="number" required min="0"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
+              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
             />
             <p v-if="form.convenienceFee !== originalForm.convenienceFee" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
               <AlertTriangle class="w-3 h-3" />
@@ -146,7 +146,7 @@
             <input 
               v-model.number="form.commissionFlatFee"
               type="number" required min="0"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
+              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
             />
             <p v-if="form.commissionFlatFee !== originalForm.commissionFlatFee" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
               <AlertTriangle class="w-3 h-3" />
@@ -168,7 +168,7 @@
                 <input 
                   type="number" 
                   v-model.number="form.minCampusEnvironsFee"
-                  class="w-full bg-white border border-gray-100 rounded-xl py-2 pl-8 pr-3 text-sm font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-1 focus:ring-[#FF5C1A] transition-colors"
+                  class="w-full bg-white border border-gray-50 rounded-xl py-2 pl-8 pr-3 text-sm font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-1 focus:ring-[#FF5C1A] transition-colors"
                 >
               </div>
             </div>
@@ -180,7 +180,7 @@
                 <input 
                   type="number" 
                   v-model.number="form.minOutsideCampusFee"
-                  class="w-full bg-white border border-gray-100 rounded-xl py-2 pl-8 pr-3 text-sm font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-1 focus:ring-[#FF5C1A] transition-colors"
+                  class="w-full bg-white border border-gray-50 rounded-xl py-2 pl-8 pr-3 text-sm font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-1 focus:ring-[#FF5C1A] transition-colors"
                 >
               </div>
             </div>
@@ -195,7 +195,7 @@
                 <input 
                   type="number" 
                   v-model.number="form.minCustomErrandFee"
-                  class="w-full bg-white border border-gray-100 rounded-xl py-2 pl-8 pr-3 text-sm font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-1 focus:ring-[#FF5C1A] transition-colors"
+                  class="w-full bg-white border border-gray-50 rounded-xl py-2 pl-8 pr-3 text-sm font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-1 focus:ring-[#FF5C1A] transition-colors"
                 >
               </div>
             </div>
@@ -209,7 +209,7 @@
             <input 
               v-model.number="form.customErrandCommissionPercentage"
               type="number" required min="0" max="100"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
+              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
             />
             <p v-if="form.customErrandCommissionPercentage !== originalForm.customErrandCommissionPercentage" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
               <AlertTriangle class="w-3 h-3" />
@@ -233,7 +233,7 @@
             <input 
               v-model.number="form.customErrandSafetyBufferPercentage"
               type="number" required min="0" max="100"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
+              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
             />
             <p v-if="form.customErrandSafetyBufferPercentage !== originalForm.customErrandSafetyBufferPercentage" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
               <AlertTriangle class="w-3 h-3" />
@@ -248,7 +248,7 @@
 
           <!-- Enable Transfer Fee Toggle -->
           <div class="space-y-2">
-            <div class="flex items-center justify-between p-4 bg-gray-50 border border-gray-100 rounded-2xl hover:bg-white hover:border-[#FF5C1A]/30 transition-all cursor-pointer" @click="form.enableTransferFee = !form.enableTransferFee">
+            <div class="flex items-center justify-between p-4 bg-gray-50 border border-gray-50 rounded-2xl hover:bg-white hover:border-[#FF5C1A]/30 transition-all cursor-pointer" @click="form.enableTransferFee = !form.enableTransferFee">
               <div>
                 <label class="text-sm font-medium text-gray-900 lowercase cursor-pointer">enable bank transfer fee</label>
                 <p class="text-xs text-gray-500 mt-1">charge customers for P2P bank transfers to erranders</p>
@@ -270,7 +270,7 @@
             <input 
               v-model.number="form.platformProcessingFee"
               type="number" required min="0"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
+              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
             />
             <p v-if="form.platformProcessingFee > 200" class="text-[10px] font-medium text-red-600 bg-red-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
               <AlertTriangle class="w-3 h-3" />
@@ -298,7 +298,7 @@
             <input 
               v-model.number="form.platformServiceFeePercentage"
               type="number" required min="0" max="100"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
+              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
             />
             <p v-if="form.platformServiceFeePercentage !== originalForm.platformServiceFeePercentage" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
               <AlertTriangle class="w-3 h-3" />
@@ -314,7 +314,7 @@
       </div>
 
       <!-- 1C: Food Markup -->
-      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
         <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
           <div class="w-10 h-10 rounded-xl bg-[#FF5C1A]/10 text-[#FF5C1A] flex items-center justify-center">
             <Tag class="w-5 h-5" />
@@ -335,7 +335,7 @@
           <input 
             v-model.number="form.foodMarkupPercentage"
             type="number" required min="0" max="100"
-            class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
+            class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
           />
           <div v-if="form.foodMarkupPercentage === 0" class="p-3 bg-emerald-50 text-emerald-800 rounded-xl text-[11px] font-medium leading-relaxed flex items-center gap-2 border border-emerald-100">
             <CheckCircle class="w-4 h-4 flex-shrink-0" />
@@ -404,7 +404,7 @@
     <!-- TAB 2: COMMUNICATIONS -->
     <!-- ═══════════════════════════════════════════════════════ -->
     <div v-show="activeTab === 'comms'" class="space-y-8">
-      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
         <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
           <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
             <Bell class="w-5 h-5" />
@@ -416,7 +416,7 @@
         </div>
 
         <!-- Email Toggle -->
-        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
+        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">email notifications</h4>
             <p class="text-xs text-gray-500 lowercase">order confirmations, receipts, OTPs, and marketing emails</p>
@@ -432,7 +432,7 @@
         </div>
 
         <!-- Push Toggle -->
-        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
+        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">push notifications</h4>
             <p class="text-xs text-gray-500 lowercase">real-time alerts on mobile and desktop via FCM</p>
@@ -465,7 +465,7 @@
     <!-- TAB 3: ADVERTS -->
     <!-- ═══════════════════════════════════════════════════════ -->
     <div v-show="activeTab === 'adverts'" class="space-y-8">
-      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
         <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
           <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center">
             <Megaphone class="w-5 h-5" />
@@ -477,7 +477,7 @@
         </div>
 
         <!-- Enabled Toggle -->
-        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
+        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">enable adverts</h4>
             <p class="text-xs text-gray-500 lowercase">show the promotional popup modal to students periodically</p>
@@ -499,7 +499,7 @@
             <input 
               v-model.number="advertForm.intervalMinutes"
               type="number" required min="1"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
+              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
             />
             <p v-if="advertForm.intervalMinutes < 5" class="text-[10px] font-medium text-red-600 bg-red-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
               <AlertTriangle class="w-3 h-3" />
@@ -517,7 +517,7 @@
             <input 
               v-model.number="advertForm.autoCloseSeconds"
               type="number" required min="0"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
+              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
             />
           </div>
         </div>
@@ -526,11 +526,11 @@
         <div class="space-y-2">
           <label class="text-xs font-medium text-gray-400 ml-1 lowercase">content type</label>
           <div class="flex gap-4">
-            <label class="flex-1 flex items-center gap-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl cursor-pointer hover:bg-gray-100 transition-colors">
+            <label class="flex-1 flex items-center gap-2 p-4 bg-gray-50 border border-gray-50 rounded-2xl cursor-pointer hover:bg-gray-100 transition-colors">
               <input type="radio" v-model="advertForm.contentType" value="dynamic" class="text-[#FF5C1A] focus:ring-[#FF5C1A]">
               <span class="text-sm font-medium lowercase">dynamic (random)</span>
             </label>
-            <label class="flex-1 flex items-center gap-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl cursor-pointer hover:bg-gray-100 transition-colors">
+            <label class="flex-1 flex items-center gap-2 p-4 bg-gray-50 border border-gray-50 rounded-2xl cursor-pointer hover:bg-gray-100 transition-colors">
               <input type="radio" v-model="advertForm.contentType" value="custom" class="text-[#FF5C1A] focus:ring-[#FF5C1A]">
               <span class="text-sm font-medium lowercase">custom ad</span>
             </label>
@@ -543,25 +543,25 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-2">
               <label class="text-xs font-medium text-gray-400 ml-1 lowercase">headline</label>
-              <input v-model="advertForm.customAd.title" type="text" placeholder="e.g. Back to School Promo!" class="w-full px-5 py-3 bg-gray-50 border border-gray-100 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
+              <input v-model="advertForm.customAd.title" type="text" placeholder="e.g. Back to School Promo!" class="w-full px-5 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
             </div>
             <div class="space-y-2">
               <label class="text-xs font-medium text-gray-400 ml-1 lowercase">image url</label>
-              <input v-model="advertForm.customAd.imageUrl" type="url" placeholder="https://example.com/image.png" class="w-full px-5 py-3 bg-gray-50 border border-gray-100 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
+              <input v-model="advertForm.customAd.imageUrl" type="url" placeholder="https://example.com/image.png" class="w-full px-5 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
             </div>
           </div>
           <div class="space-y-2">
             <label class="text-xs font-medium text-gray-400 ml-1 lowercase">description</label>
-            <textarea v-model="advertForm.customAd.description" rows="2" placeholder="Promo description..." class="w-full px-5 py-3 bg-gray-50 border border-gray-100 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all resize-none"></textarea>
+            <textarea v-model="advertForm.customAd.description" rows="2" placeholder="Promo description..." class="w-full px-5 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all resize-none"></textarea>
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-2">
               <label class="text-xs font-medium text-gray-400 ml-1 lowercase">button text</label>
-              <input v-model="advertForm.customAd.ctaText" type="text" placeholder="Shop Now" class="w-full px-5 py-3 bg-gray-50 border border-gray-100 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
+              <input v-model="advertForm.customAd.ctaText" type="text" placeholder="Shop Now" class="w-full px-5 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
             </div>
             <div class="space-y-2">
               <label class="text-xs font-medium text-gray-400 ml-1 lowercase">button link</label>
-              <input v-model="advertForm.customAd.ctaLink" type="text" placeholder="/errands/custom" class="w-full px-5 py-3 bg-gray-50 border border-gray-100 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
+              <input v-model="advertForm.customAd.ctaLink" type="text" placeholder="/errands/custom" class="w-full px-5 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
             </div>
           </div>
         </div>
@@ -584,7 +584,7 @@
     <!-- TAB 4: CAMPAIGNS -->
     <!-- ═══════════════════════════════════════════════════════ -->
     <div v-show="activeTab === 'campaigns'" class="space-y-8">
-      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
         <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
           <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center">
             <Moon class="w-5 h-5" />
@@ -595,7 +595,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
+        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">enable campaign</h4>
             <p class="text-xs text-gray-500 lowercase">activates free delivery (10pm-2am) and 10% group discounts</p>
@@ -631,7 +631,7 @@
     <!-- TAB 5: ERRANDERS -->
     <!-- ═══════════════════════════════════════════════════════ -->
     <div v-show="activeTab === 'erranders'" class="space-y-8">
-      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
         <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
           <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center">
             <Briefcase class="w-5 h-5" />
@@ -653,7 +653,7 @@
             <input 
               v-model.number="erranderForm.maxConcurrentOrders"
               type="number" required min="0"
-              class="w-full bg-gray-50 border border-gray-100 text-gray-900 text-sm rounded-2xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-5 py-3.5 transition-all outline-none" 
+              class="w-full bg-gray-50 border border-gray-50 text-gray-900 text-sm rounded-2xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-5 py-3.5 transition-all outline-none" 
             />
             
             <div v-if="activeInfo === 'maxConcurrentOrders'" class="bg-gray-900 text-white p-4 rounded-xl text-xs space-y-2 relative mt-2 animate-scale-in">
@@ -676,7 +676,7 @@
             <input 
               v-model.number="erranderForm.minimumPayout"
               type="number" required min="100" step="100"
-              class="w-full bg-gray-50 border border-gray-100 text-gray-900 text-sm rounded-2xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-5 py-3.5 transition-all outline-none" 
+              class="w-full bg-gray-50 border border-gray-50 text-gray-900 text-sm rounded-2xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-5 py-3.5 transition-all outline-none" 
             />
             
             <div v-if="activeInfo === 'minimumPayout'" class="bg-gray-900 text-white p-4 rounded-xl text-xs space-y-2 relative mt-2 animate-scale-in">
@@ -704,7 +704,7 @@
     <!-- TAB 6: PLATFORM STATUS -->
     <!-- ═══════════════════════════════════════════════════════ -->
     <div v-show="activeTab === 'platform'" class="space-y-8">
-      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
         <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
           <div class="w-10 h-10 rounded-xl bg-red-50 text-red-500 flex items-center justify-center">
             <Lock class="w-5 h-5" />
@@ -716,7 +716,7 @@
         </div>
 
         <!-- Student App Toggle -->
-        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
+        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">student app</h4>
             <p class="text-xs text-gray-500 lowercase">close the student-facing app for maintenance</p>
@@ -736,7 +736,7 @@
         </div>
 
         <!-- Vendor App Toggle -->
-        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
+        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">vendor app</h4>
             <p class="text-xs text-gray-500 lowercase">close the vendor/merchant app for maintenance</p>
@@ -756,7 +756,7 @@
         </div>
 
         <!-- Dispatch App Toggle -->
-        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
+        <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">dispatch app</h4>
             <p class="text-xs text-gray-500 lowercase">close the errand ninja / dispatch app for maintenance</p>
@@ -808,7 +808,7 @@
             </div>
 
             <!-- Change Summary -->
-            <div v-if="confirmModal.changes.length" class="bg-gray-50 rounded-2xl p-4 space-y-2 max-h-48 overflow-y-auto border border-gray-100">
+            <div v-if="confirmModal.changes.length" class="bg-gray-50 rounded-2xl p-4 space-y-2 max-h-48 overflow-y-auto border border-gray-50">
               <div v-for="(change, i) in confirmModal.changes" :key="i" class="text-xs font-medium text-gray-600 flex items-start gap-2">
                 <span class="text-amber-500 mt-0.5">•</span>
                 <span v-html="change"></span>

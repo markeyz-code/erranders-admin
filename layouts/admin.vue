@@ -78,7 +78,7 @@
            <div class="flex items-center gap-3">
              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#FF5C1A]/20 to-[#FF7A45]/20 border border-[#FF5C1A]/30 flex items-center justify-center text-[#FF5C1A] font-bold relative">
                {{ userInitials }}
-               <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-[#0F172A]"></div>
+               <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-[#0F172A]"></div>
              </div>
              <div class="flex flex-col">
                <span class="text-sm font-semibold text-white truncate max-w-[120px]">{{ userDisplayName }}</span>
@@ -111,7 +111,7 @@
         </div>
         <button
           @click="showMobileMenu = !showMobileMenu"
-          class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-900 hover:bg-gray-100 transition-colors border border-gray-200/50"
+          class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-900 hover:bg-gray-100 transition-colors border border-gray-25/50"
         >
           <Menu v-if="!showMobileMenu" class="w-5 h-5" />
           <X v-else class="w-5 h-5" />
@@ -141,7 +141,7 @@
           <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 mb-8 backdrop-blur-md">
             <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF5C1A]/20 to-[#FF7A45]/20 border border-[#FF5C1A]/30 flex items-center justify-center text-[#FF5C1A] font-bold text-lg relative">
               {{ userInitials }}
-              <div class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[#0F172A]"></div>
+              <div class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border border-[#0F172A]"></div>
             </div>
             <div class="flex flex-col min-w-0">
               <span class="text-sm font-semibold text-white leading-none truncate">{{ userDisplayName }}</span>
@@ -201,13 +201,13 @@
             <input
               type="text"
               placeholder="Search anything (⌘K)"
-              class="w-full pl-11 pr-14 py-3 bg-gray-50/50 border border-gray-200/80 rounded-2xl text-sm font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A]/50 focus:bg-white focus:ring-4 focus:ring-[#FF5C1A]/10 placeholder:text-gray-400 transition-all shadow-inner cursor-pointer"
+              class="w-full pl-11 pr-14 py-3 bg-gray-50/50 border border-gray-25/80 rounded-2xl text-sm font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A]/50 focus:bg-white focus:ring-4 focus:ring-[#FF5C1A]/10 placeholder:text-gray-400 transition-all shadow-inner cursor-pointer"
               readonly
               @click="searchModalOpen = true"
             />
             <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-              <span class="text-[10px] font-bold text-gray-500 bg-white px-1.5 py-1 rounded border border-gray-200 shadow-sm leading-none">⌘</span>
-              <span class="text-[10px] font-bold text-gray-500 bg-white px-1.5 py-1 rounded border border-gray-200 shadow-sm leading-none">K</span>
+              <span class="text-[10px] font-bold text-gray-500 bg-white px-1.5 py-1 rounded border border-gray-25 shadow-sm leading-none">⌘</span>
+              <span class="text-[10px] font-bold text-gray-500 bg-white px-1.5 py-1 rounded border border-gray-25 shadow-sm leading-none">K</span>
             </div>
           </div>
         </div>
@@ -215,11 +215,11 @@
         <!-- Right: Actions & Profile -->
         <div class="flex items-center gap-5 min-w-[250px] justify-end">
           <!-- <div class="flex items-center gap-3">
-             <button class="relative p-2.5 rounded-xl bg-gray-50 border border-gray-200/80 text-gray-500 hover:text-[#FF5C1A] hover:border-[#FF5C1A]/30 hover:bg-orange-50 transition-all shadow-sm">
+             <button class="relative p-2.5 rounded-xl bg-gray-50 border border-gray-25/80 text-gray-500 hover:text-[#FF5C1A] hover:border-[#FF5C1A]/30 hover:bg-orange-50 transition-all shadow-sm">
                 <Bell class="w-5 h-5" />
-                <span class="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
+                <span class="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
              </button>
-             <button class="p-2.5 rounded-xl bg-gray-50 border border-gray-200/80 text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all shadow-sm">
+             <button class="p-2.5 rounded-xl bg-gray-50 border border-gray-25/80 text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all shadow-sm">
                 <LayoutDashboard class="w-5 h-5" />
              </button>
           </div> -->
@@ -233,7 +233,7 @@
             </div>
             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#FF5C1A]/10 to-[#FF7A45]/5 border border-[#FF5C1A]/20 flex items-center justify-center text-[#FF5C1A] text-sm font-bold shadow-sm relative">
               {{ userInitials }}
-              <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white"></div>
+              <div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-white"></div>
             </div>
           </div>
         </div>
@@ -270,7 +270,7 @@
           >
             <div
               v-if="logoutModalOpen"
-              class="bg-white rounded-3xl border border-gray-100 max-w-sm w-full p-8 flex flex-col items-center text-center shadow-2xl relative overflow-hidden"
+              class="bg-white rounded-3xl border border-gray-50 max-w-sm w-full p-8 flex flex-col items-center text-center shadow-2xl relative overflow-hidden"
             >
               <div class="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay pointer-events-none"></div>
               

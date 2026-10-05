@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm w-full h-full flex flex-col">
+  <div class="bg-white p-5 rounded-xl border border-gray-50 shadow-sm w-full h-full flex flex-col">
     <div class="flex items-center justify-between mb-4 shrink-0">
       <div class="flex items-center gap-3">
         <div class="w-1.5 h-4 bg-[#FF5C1A] rounded-full"></div>
@@ -22,7 +22,7 @@
           :series="series"
         />
         <template #fallback>
-          <div class="w-full h-full flex flex-col gap-2 items-center justify-center bg-gray-50/50 rounded-xl border border-gray-100 border-dashed">
+          <div class="w-full h-full flex flex-col gap-2 items-center justify-center bg-gray-50/50 rounded-xl border border-gray-50 border-dashed">
             <Loader2 class="w-6 h-6 text-[#FF5C1A] animate-spin" />
             <span class="text-xs font-medium text-gray-500">Loading chart...</span>
           </div>

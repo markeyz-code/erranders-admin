@@ -11,8 +11,8 @@
  class="w-full pl-11 pr-14 py-2.5 bg-gray-50/70 hover:bg-gray-100 transition-colors border-none rounded-xl text-base font-medium focus:outline-none focus:bg-white focus:ring-2 focus:ring-parentPrimary/20"
  />
  <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
- <kbd class="px-1.5 py-0.5 text-sm font-bold bg-white text-gray-400 rounded-md border border-gray-100">⌘</kbd>
- <kbd class="px-1.5 py-0.5 text-sm font-bold bg-white text-gray-400 rounded-md border border-gray-100">K</kbd>
+ <kbd class="px-1.5 py-0.5 text-sm font-bold bg-white text-gray-400 rounded-md border border-gray-50">⌘</kbd>
+ <kbd class="px-1.5 py-0.5 text-sm font-bold bg-white text-gray-400 rounded-md border border-gray-50">K</kbd>
  </div>
  </div>
  <div class="flex items-center gap-4">
@@ -30,7 +30,7 @@
  </div>
  
  <div class="flex items-center gap-4">
- <button class="flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 transition-colors border border-gray-100">
+ <button class="flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 transition-colors border border-gray-50">
  <ListFilter class="w-4 h-4" />
  Filters
  </button>
@@ -115,7 +115,7 @@
  </div>
  <h3 class="text-lg font-bold text-gray-900 text-center px-4">{{ selectedReport.subject }}</h3>
  
- <div class="flex flex-col items-center justify-center w-full mt-6 bg-gray-50 p-6 rounded-xl border border-gray-100/50">
+ <div class="flex flex-col items-center justify-center w-full mt-6 bg-gray-50 p-6 rounded-xl border border-gray-50/50">
  <span :class="statusBadge(selectedReport.status)" class="text-[11px] font-bold  px-3 py-1.5 rounded-full border mb-3">
  {{ selectedReport.status }}
  </span>
@@ -126,7 +126,7 @@
 
  <div class="py-6 space-y-6">
  <div class="grid grid-cols-2 gap-4">
- <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
+ <div class="bg-gray-50 p-4 rounded-2xl border border-gray-50">
  <p class="text-sm font-bold  text-gray-400 mb-2">Reporter</p>
  <div class="flex items-center gap-2 mb-1">
  <div class="w-6 h-6 rounded-full bg-violet-600 flex items-center justify-center text-white text-sm font-bold shadow-sm">
@@ -137,7 +137,7 @@
  <p class="text-sm text-gray-500 truncate ml-8">{{ selectedReport.reporter?.email }}</p>
  </div>
  
- <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100" v-if="selectedReport.orderId">
+ <div class="bg-gray-50 p-4 rounded-2xl border border-gray-50" v-if="selectedReport.orderId">
  <p class="text-sm font-bold  text-gray-400 mb-2">Related Order</p>
  <p class="text-sm font-bold text-parentPrimary mb-1">#{{ selectedReport.orderId.slice(-8).toUpperCase() }}</p>
  <p class="text-sm text-gray-500 font-medium cursor-pointer hover:underline mb-1">View Transation</p>
@@ -146,7 +146,7 @@
 
  <div>
  <h4 class="text-sm font-bold  text-gray-400 mb-2">Description</h4>
- <div class="bg-white p-4 rounded-2xl border border-gray-100 text-sm font-medium text-gray-700 leading-relaxed shadow-sm">
+ <div class="bg-white p-4 rounded-2xl border border-gray-50 text-sm font-medium text-gray-700 leading-relaxed shadow-sm">
  {{ selectedReport.description }}
  </div>
  </div>
@@ -156,7 +156,7 @@
  <textarea 
  v-model="adminNote" 
  rows="3" 
- class="w-full p-4 text-base bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-parentPrimary/20 focus:bg-white transition-colors" 
+ class="w-full p-4 text-base bg-gray-50 border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-parentPrimary/20 focus:bg-white transition-colors" 
  placeholder="Add internal resolution note or response..."
  ></textarea>
  

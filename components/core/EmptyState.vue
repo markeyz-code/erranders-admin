@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center py-20 px-6 text-center animate-fade-in w-full h-[60vh] min-h-[400px]">
-    <div class="w-14 h-14 mb-5 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-500 border border-gray-100 shadow-sm">
+    <div class="w-14 h-14 mb-5 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-500 border border-gray-50 shadow-sm">
       <slot name="icon">
         <span v-if="!$slots.icon" class="text-xl">{{ icon || '📋' }}</span>
       </slot>
