@@ -3,7 +3,7 @@
   <div class="min-h-screen bg-[#F8FAFC] font-sans selection:bg-[#FF5C1A]/20 selection:text-[#FF5C1A]">
     
     <!-- Desktop Sidebar -->
-    <aside class="hidden lg:flex flex-col bg-black min-h-screen fixed left-0 top-0 z-50 transition-all duration-300 shadow-[4px_0_24px_rgba(0,0,0,0.05)] border-r border-white/5" :class="isSidebarMinimized ? 'w-20' : 'w-[280px]'">
+    <aside class="hidden lg:flex flex-col bg-black h-screen fixed left-0 top-0 z-50 transition-all duration-300 shadow-[4px_0_24px_rgba(0,0,0,0.05)] border-r border-white/5" :class="isSidebarMinimized ? 'w-20' : 'w-[280px]'">
       <!-- Logo Section -->
       <div class="h-20 flex items-center relative border-b border-white/10" :class="isSidebarMinimized ? 'justify-center px-0' : 'px-6'">
         <div class="flex items-center gap-3 group cursor-pointer w-full">
