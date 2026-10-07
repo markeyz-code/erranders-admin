@@ -4,17 +4,17 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
       <div class="space-y-1">
         <h1 class="text-2xl font-semibold text-gray-900 font-heading tracking-tight">Orders</h1>
-        <p class="text-xs font-medium text-gray-500">View and manage all customer orders.</p>
+        <p class="text-sm font-medium text-gray-500">View and manage all customer orders.</p>
       </div>
       <div class="flex flex-wrap items-center gap-3">
         <!-- Date Filters -->
         <DateRangePicker v-model:start="startDate" v-model:end="endDate" @update:start="fetchOrders" @update:end="fetchOrders" />
-        <button @click="clearFilters" v-if="startDate || endDate || selectedCustomer || selectedVendor" class="text-xs font-medium text-gray-500 hover:text-gray-900 underline underline-offset-2">Clear</button>
+        <button @click="clearFilters" v-if="startDate || endDate || selectedCustomer || selectedVendor" class="text-sm font-medium text-gray-500 hover:text-gray-900 underline underline-offset-2">Clear</button>
       </div>
     </div>
     
     <!-- Order Status Legend -->
-    <div class="bg-indigo-50/50 border border-indigo-100 rounded-[1.25rem] p-4 flex flex-col md:flex-row gap-4 items-start md:items-center text-xs text-indigo-900">
+    <div class="bg-indigo-50/50 border border-indigo-100 rounded-[1.25rem] p-4 flex flex-col md:flex-row gap-4 items-start md:items-center text-sm text-indigo-900">
       <div class="flex items-center gap-2 font-bold whitespace-nowrap">
         <Activity class="w-4 h-4 text-indigo-600" />
         Status Guide:
@@ -120,7 +120,7 @@
             <div v-if="index === 2" class="absolute -top-1 -right-1 w-4 h-4 bg-amber-600 rounded-full flex items-center justify-center text-[8px] border border-white">🥉</div>
           </div>
           <div class="min-w-0 flex-1">
-            <p class="text-xs font-bold text-gray-900 truncate">{{ errander.user?.firstName }} {{ errander.user?.lastName }}</p>
+            <p class="text-sm font-bold text-gray-900 truncate">{{ errander.user?.firstName }} {{ errander.user?.lastName }}</p>
             <p class="text-[10px] font-medium text-gray-500 truncate mt-0.5">Avg: <span class="font-bold text-indigo-600">{{ Math.floor(errander.averageDeliveryTimeMs / 60000) }}m</span> ({{ errander.totalDeliveries }} trips)</p>
           </div>
         </div>
@@ -206,7 +206,7 @@
               <!-- Customer & Order -->
               <td class="px-4 py-2.5 align-top">
                 <div class="flex items-start gap-2.5">
-                  <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 text-gray-600 font-black text-xs uppercase border border-gray-25 mt-0.5">
+                  <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 text-gray-600 font-black text-sm uppercase border border-gray-25 mt-0.5">
                     {{ (order.customer || order.user)?.firstName?.charAt(0) || '?' }}
                   </div>
                   <div class="min-w-0">
@@ -263,7 +263,7 @@
               
               <!-- Financials -->
               <td class="px-4 py-2.5 text-right align-top">
-                <p class="text-xs font-black text-gray-900 font-mono tracking-tight mt-0.5">₦{{ Number(order.total || order.totalAmount || 0).toLocaleString() }}</p>
+                <p class="text-sm font-black text-gray-900 font-mono tracking-tight mt-0.5">₦{{ Number(order.total || order.totalAmount || 0).toLocaleString() }}</p>
                 <div class="flex flex-col items-end gap-1 mt-1">
                   <span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded uppercase tracking-wide">Plat: ₦{{ Number(order.platformProcessingFee || order.serviceFee || 0).toLocaleString() }}</span>
                   <span class="text-[9px] font-bold text-gray-500">Del: ₦{{ Number(order.deliveryFee || 0).toLocaleString() }}</span>
@@ -273,7 +273,7 @@
               <!-- Date -->
               <td class="px-4 py-2.5 text-right align-top">
                 <div class="flex flex-col items-end mt-0.5">
-                  <span class="text-xs font-bold text-gray-900">{{ new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) }}</span>
+                  <span class="text-sm font-bold text-gray-900">{{ new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) }}</span>
                   <span class="text-[9px] font-medium text-gray-500">{{ new Date(order.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }}</span>
                   <span class="text-[10px] font-bold text-gray-400 mt-1">{{ formatTimeAgo(order.createdAt) }}</span>
                 </div>
@@ -346,14 +346,14 @@
         
         <!-- Pagination Controls -->
         <div class="flex items-center justify-between px-6 py-4 border-t border-gray-100/50 bg-gray-50/20 shadow-none" v-if="totalPages > 1">
-          <p class="text-xs font-medium text-gray-500">
+          <p class="text-sm font-medium text-gray-500">
             Showing Page <span class="font-bold text-gray-900">{{ currentPage }}</span> of <span class="font-bold text-gray-900">{{ totalPages }}</span>
           </p>
           <div class="flex items-center gap-2">
-            <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 bg-white border border-gray-25 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-1.5 rounded-lg text-sm font-bold text-gray-600 bg-white border border-gray-25 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
               Previous
             </button>
-            <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 bg-white border border-gray-25 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+            <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-1.5 rounded-lg text-sm font-bold text-gray-600 bg-white border border-gray-25 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
               Next
             </button>
           </div>
@@ -373,7 +373,7 @@
           </div>
           
           <h3 class="text-lg font-semibold text-gray-900 font-heading">{{ selectedOrder.customer?.firstName || selectedOrder.user?.firstName }} {{ selectedOrder.customer?.lastName || selectedOrder.user?.lastName }}</h3>
-          <p class="text-xs font-medium text-gray-500 mb-4">{{ selectedOrder.customer?.email || selectedOrder.user?.email }}</p>
+          <p class="text-sm font-medium text-gray-500 mb-4">{{ selectedOrder.customer?.email || selectedOrder.user?.email }}</p>
           
           <div class="flex items-center justify-between w-4/5 bg-white rounded-lg border border-gray-50 divide-x divide-gray-100">
             <div class="text-center flex-1 py-3">
@@ -382,7 +382,7 @@
             </div>
             <div class="text-center flex-1 py-3">
               <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-0.5">Date</p>
-              <p class="text-xs font-semibold text-gray-900">{{ new Date(selectedOrder.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}</p>
+              <p class="text-sm font-semibold text-gray-900">{{ new Date(selectedOrder.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}</p>
             </div>
           </div>
         </div>
@@ -398,26 +398,26 @@
             <div class="grid grid-cols-2 gap-y-4 gap-x-4 text-sm px-2">
               <div>
                 <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Order ID</span>
-                <span class="text-xs font-bold text-gray-900 font-mono">{{ selectedOrder.orderNumber || selectedOrder._id }}</span>
+                <span class="text-sm font-bold text-gray-900 font-mono">{{ selectedOrder.orderNumber || selectedOrder._id }}</span>
               </div>
               <div>
                 <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Order Type</span>
-                <span class="text-xs font-bold text-[#FF5C1A] uppercase tracking-wide">{{ selectedOrder.type?.replace('_', ' ') || 'standard' }}</span>
+                <span class="text-sm font-bold text-[#FF5C1A] uppercase tracking-wide">{{ selectedOrder.type?.replace('_', ' ') || 'standard' }}</span>
               </div>
               <div>
                 <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Current Status</span>
-                <div class="capitalize text-xs font-bold px-2 py-1 bg-gray-100 rounded inline-block">{{ selectedOrder.status }}</div>
+                <div class="capitalize text-sm font-bold px-2 py-1 bg-gray-100 rounded inline-block">{{ selectedOrder.status }}</div>
               </div>
               <div v-if="selectedOrder.uniqueCode">
                 <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Delivery PIN</span>
-                <span class="text-xs font-black text-[#FF5C1A] tracking-wider">{{ selectedOrder.uniqueCode }}</span>
+                <span class="text-sm font-black text-[#FF5C1A] tracking-wider">{{ selectedOrder.uniqueCode }}</span>
               </div>
               <div class="col-span-2 mt-2" v-if="selectedOrder.statusHistory?.length">
                 <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-3">Order Timeline</span>
                 <div class="relative border-l border-gray-200 ml-2 space-y-4">
                   <div v-for="(history, index) in selectedOrder.statusHistory" :key="index" class="pl-4 relative">
                     <div class="w-2.5 h-2.5 bg-[#FF5C1A] rounded-full absolute -left-[5px] top-1 border border-white"></div>
-                    <p class="text-xs font-bold text-gray-900 capitalize">{{ history.status?.replace(/_/g, ' ') }}</p>
+                    <p class="text-sm font-bold text-gray-900 capitalize">{{ history.status?.replace(/_/g, ' ') }}</p>
                     <p class="text-[10px] font-medium text-gray-500">{{ new Date(history.timestamp).toLocaleString() }}</p>
                     <p v-if="history.note" class="text-[10px] text-gray-600 mt-1 ">{{ history.note }}</p>
                   </div>
@@ -447,11 +447,11 @@
               </div>
               <div class="col-span-2" v-if="selectedOrder.type === 'custom_errand'">
                 <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Pickup Address</p>
-                <p class="text-xs font-medium text-gray-700 leading-relaxed">{{ selectedOrder.customDetails?.pickupLocation || 'No pickup address provided' }}</p>
+                <p class="text-sm font-medium text-gray-700 leading-relaxed">{{ selectedOrder.customDetails?.pickupLocation || 'No pickup address provided' }}</p>
               </div>
               <div class="col-span-2">
                 <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Delivery Address</p>
-                <p class="text-xs font-medium text-gray-700 leading-relaxed">{{ selectedOrder.deliveryAddress || selectedOrder.specificAddress || selectedOrder.shippingAddress || 'No address provided' }}</p>
+                <p class="text-sm font-medium text-gray-700 leading-relaxed">{{ selectedOrder.deliveryAddress || selectedOrder.specificAddress || selectedOrder.shippingAddress || 'No address provided' }}</p>
               </div>
             </div>
           </div>
@@ -473,11 +473,11 @@
               </div>
               <div class="col-span-2">
                 <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Vehicle</p>
-                <p class="text-xs font-medium text-gray-700 leading-relaxed capitalize">{{ selectedOrder.errander?.vehicleType?.replace('_', ' ') || 'Not specified' }} {{ selectedOrder.errander?.plateNumber ? `(${selectedOrder.errander.plateNumber})` : '' }}</p>
+                <p class="text-sm font-medium text-gray-700 leading-relaxed capitalize">{{ selectedOrder.errander?.vehicleType?.replace('_', ' ') || 'Not specified' }} {{ selectedOrder.errander?.plateNumber ? `(${selectedOrder.errander.plateNumber})` : '' }}</p>
               </div>
               <div v-if="selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed')" class="col-span-2">
                 <p class="text-[10px] font-semibold text-indigo-500 uppercase tracking-wide mb-1">💰 Payout (60%)</p>
-                <p class="text-xs font-black text-indigo-600">₦{{ Math.round((selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0) * 0.6).toLocaleString() }}</p>
+                <p class="text-sm font-black text-indigo-600">₦{{ Math.round((selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0) * 0.6).toLocaleString() }}</p>
               </div>
             </div>
 
@@ -495,11 +495,11 @@
                 </div>
                 <div>
                   <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Hand-off Point</p>
-                  <p class="text-xs font-medium text-gray-700">{{ selectedOrder.interception.point || 'N/A' }}</p>
+                  <p class="text-sm font-medium text-gray-700">{{ selectedOrder.interception.point || 'N/A' }}</p>
                 </div>
                 <div>
                   <p class="text-[10px] font-semibold text-purple-500 uppercase tracking-wide mb-1">💰 Payout (40%)</p>
-                  <p class="text-xs font-black text-purple-600">₦{{ Math.round((selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0) * 0.4).toLocaleString() }}</p>
+                  <p class="text-sm font-black text-purple-600">₦{{ Math.round((selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0) * 0.4).toLocaleString() }}</p>
                 </div>
               </div>
             </div>
@@ -515,7 +515,7 @@
             <div v-if="selectedOrder.type === 'custom_errand' && selectedOrder.customDetails" class="px-2 space-y-4">
               <div v-if="selectedOrder.customDetails.description">
                 <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Description</p>
-                <p class="text-xs text-gray-700 whitespace-pre-wrap leading-relaxed">{{ selectedOrder.customDetails.description }}</p>
+                <p class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{{ selectedOrder.customDetails.description }}</p>
               </div>
               
               <div v-if="selectedOrder.customDetails.attachedVoiceNote">
@@ -559,12 +559,12 @@
             <!-- Render Packs -->
             <template v-else-if="selectedOrder.packs?.length">
               <div v-for="pack in selectedOrder.packs" :key="pack.name" class="space-y-3 px-2 mb-4 bg-gray-50 p-3 rounded-xl border border-gray-50">
-                <h5 class="text-[10px] font-bold text-[#FF5C1A] uppercase tracking-widest border-b border-gray-200 pb-1 mb-2">{{ pack.name }}</h5>
+                <h5 class="text-[10px] font-bold text-[#FF5C1A] uppercase  border-b border-gray-200 pb-1 mb-2">{{ pack.name }}</h5>
                 <div v-for="item in pack.items" :key="item.name" class="flex items-start justify-between mb-2 last:mb-0">
                   <div class="flex items-start gap-3">
-                    <span class="text-xs font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded">{{ item.quantity }}x</span>
+                    <span class="text-sm font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded">{{ item.quantity }}x</span>
                     <div class="flex flex-col">
-                      <span class="text-xs font-bold text-gray-900">{{ item.name }}</span>
+                      <span class="text-sm font-bold text-gray-900">{{ item.name }}</span>
                       <div v-if="item.customizations?.length" class="mt-1 space-y-1">
                         <p v-for="(custom, idx) in item.customizations" :key="idx" class="text-[10px] font-medium text-gray-500 flex items-center gap-1">
                           <span class="text-gray-300">•</span> {{ custom.name }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
@@ -572,7 +572,7 @@
                       </div>
                     </div>
                   </div>
-                  <span class="text-xs font-black text-gray-900">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
+                  <span class="text-sm font-black text-gray-900">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
                 </div>
               </div>
             </template>
@@ -581,9 +581,9 @@
             <div v-else class="space-y-3 px-2">
               <div v-for="item in selectedOrder.items" :key="item._id" class="flex items-start justify-between">
                 <div class="flex items-start gap-3">
-                  <span class="text-xs font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded">{{ item.quantity }}x</span>
+                  <span class="text-sm font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded">{{ item.quantity }}x</span>
                   <div class="flex flex-col">
-                    <span class="text-xs font-bold text-gray-900">{{ item.name }}</span>
+                    <span class="text-sm font-bold text-gray-900">{{ item.name }}</span>
                     <div v-if="item.customizations?.length" class="mt-1 space-y-1">
                       <p v-for="(custom, idx) in item.customizations" :key="idx" class="text-[10px] font-medium text-gray-500 flex items-center gap-1">
                         <span class="text-gray-300">•</span> {{ custom.name }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
@@ -591,7 +591,7 @@
                     </div>
                   </div>
                 </div>
-                <span class="text-xs font-black text-gray-900">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
+                <span class="text-sm font-black text-gray-900">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
               </div>
             </div>
           </div>
@@ -604,39 +604,39 @@
             </h4>
             
             <div class="px-2 space-y-3">
-              <div class="flex justify-between items-center text-xs">
+              <div class="flex justify-between items-center text-sm">
                 <span class="text-gray-500 font-semibold uppercase tracking-wide text-[10px]">Items Subtotal</span>
                 <span class="text-gray-900 font-bold">₦{{ Number(selectedOrder.subtotal || 0).toLocaleString() }}</span>
               </div>
-              <div class="flex justify-between items-center text-xs" v-if="selectedOrder.packagingFee">
+              <div class="flex justify-between items-center text-sm" v-if="selectedOrder.packagingFee">
                 <span class="text-gray-500 font-semibold uppercase tracking-wide text-[10px]">Packaging</span>
                 <span class="text-gray-900 font-bold">₦{{ Number(selectedOrder.packagingFee || 0).toLocaleString() }}</span>
               </div>
               
               <div class="my-3 py-3 border-y border-gray-100 border-dashed space-y-3">
-                <div class="flex justify-between items-center text-xs">
+                <div class="flex justify-between items-center text-sm">
                   <span class="text-gray-500 font-bold uppercase tracking-wide text-[10px]">Total Delivery Charged</span>
                   <span class="text-gray-900 font-black">₦{{ Number(selectedOrder.deliveryFee || 0).toLocaleString() }}</span>
                 </div>
               </div>
 
               <div class="flex justify-between items-center pt-3 border-t border-gray-100">
-                <span class="text-xs font-black text-gray-900 uppercase">Total Paid</span>
+                <span class="text-sm font-black text-gray-900 uppercase">Total Paid</span>
                 <span class="text-lg font-black text-[#FF5C1A]">₦{{ Number(selectedOrder.total || selectedOrder.totalAmount || 0).toLocaleString() }}</span>
               </div>
 
               <!-- Interception Payout Split -->
               <div v-if="selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed')" class="mt-4 bg-purple-50 border border-purple-100 rounded-xl p-3 space-y-2">
                 <p class="text-[10px] font-bold text-purple-700 uppercase tracking-wider mb-2">🤝 Interception Payout Split</p>
-                <div class="flex justify-between items-center text-xs">
+                <div class="flex justify-between items-center text-sm">
                   <span class="text-gray-600 font-semibold">Errander Payout (Total)</span>
                   <span class="text-gray-900 font-black">₦{{ Number(selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0).toLocaleString() }}</span>
                 </div>
-                <div class="flex justify-between items-center text-xs">
+                <div class="flex justify-between items-center text-sm">
                   <span class="text-indigo-600 font-semibold">→ {{ selectedOrder.errander?.firstName || 'Primary' }} (60%)</span>
                   <span class="text-indigo-700 font-black">₦{{ Math.round((selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0) * 0.6).toLocaleString() }}</span>
                 </div>
-                <div class="flex justify-between items-center text-xs">
+                <div class="flex justify-between items-center text-sm">
                   <span class="text-purple-600 font-semibold">→ {{ selectedOrder.interception?.secondErrander?.firstName || 'Second' }} (40%)</span>
                   <span class="text-purple-700 font-black">₦{{ Math.round((selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0) * 0.4).toLocaleString() }}</span>
                 </div>
@@ -709,7 +709,7 @@
               </button>
             </div>
             
-            <div v-if="modalOrder?.errander && assigningErranderId" class="mt-4 p-3 bg-orange-50 border border-orange-100 rounded-lg text-xs text-orange-800">
+            <div v-if="modalOrder?.errander && assigningErranderId" class="mt-4 p-3 bg-orange-50 border border-orange-100 rounded-lg text-sm text-orange-800">
               <div class="font-bold flex items-center gap-1.5 mb-2 text-orange-700">
                 <AlertTriangle class="w-3.5 h-3.5" /> 
                 Reassignment Implications:
@@ -786,7 +786,7 @@
         <div class="p-6 border-b border-gray-100 flex items-center justify-between">
           <div>
             <h3 class="text-lg font-bold text-gray-900">Update Issues</h3>
-            <p class="text-xs text-gray-500 mt-1">Log missing items or complaints for support tracking</p>
+            <p class="text-sm text-gray-500 mt-1">Log missing items or complaints for support tracking</p>
           </div>
           <button @click="showIssueModal = false" class="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors">
             <X class="w-5 h-5" />

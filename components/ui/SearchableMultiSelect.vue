@@ -5,7 +5,7 @@
       class="w-full bg-white border border-gray-25 rounded-xl p-2 text-sm focus-within:border-parentPrimary focus-within:ring-1 focus-within:ring-parentPrimary min-h-[42px] flex flex-wrap gap-1 items-center cursor-text"
       @click="isOpen = true"
     >
-      <div v-for="item in selectedItems" :key="item.value" class="flex items-center gap-1 bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-xs">
+      <div v-for="item in selectedItems" :key="item.value" class="flex items-center gap-1 bg-gray-100 text-gray-700 px-2 py-1 rounded-md text-sm">
         <span class="truncate max-w-[120px]">{{ item.label }}</span>
         <button type="button" @click.stop="toggleItem(item)" class="hover:text-red-500 text-gray-500">
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -39,7 +39,7 @@
         >
         <div class="flex flex-col">
           <span class="text-sm text-gray-800 font-medium">{{ option.label }}</span>
-          <span v-if="option.sublabel" class="text-xs text-gray-500">{{ option.sublabel }}</span>
+          <span v-if="option.sublabel" class="text-sm text-gray-500">{{ option.sublabel }}</span>
         </div>
       </div>
     </div>

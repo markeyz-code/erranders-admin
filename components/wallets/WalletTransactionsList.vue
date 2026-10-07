@@ -9,7 +9,7 @@
         <Receipt class="w-6 h-6 text-gray-400" />
       </div>
       <p class="font-medium text-gray-900">No transactions found</p>
-      <p class="text-xs text-gray-500">This vendor's wallet has no activity yet.</p>
+      <p class="text-sm text-gray-500">This vendor's wallet has no activity yet.</p>
     </div>
 
     <div v-else class="space-y-3">
@@ -27,7 +27,7 @@
             <p class="text-sm font-bold text-gray-900 mb-0.5">
               {{ tx.type === 'credit' ? 'Credit' : 'Debit' }}
             </p>
-            <p class="text-xs text-gray-500 truncate max-w-[200px]" :title="tx.description || tx.metadata?.reason">{{ tx.description || tx.metadata?.reason || 'Wallet update' }}</p>
+            <p class="text-sm text-gray-500 truncate max-w-[200px]" :title="tx.description || tx.metadata?.reason">{{ tx.description || tx.metadata?.reason || 'Wallet update' }}</p>
             <p class="text-[10px] text-gray-400 mt-0.5">{{ new Date(tx.createdAt).toLocaleDateString() }} {{ new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</p>
           </div>
         </div>

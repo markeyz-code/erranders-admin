@@ -52,7 +52,7 @@
           </div>
           <div>
             <p class="text-sm font-semibold text-gray-700">No conversations</p>
-            <p class="text-xs mt-1">Active support chats will appear here.</p>
+            <p class="text-sm mt-1">Active support chats will appear here.</p>
           </div>
         </div>
         <div v-else class="flex flex-col p-2 space-y-1">
@@ -112,7 +112,7 @@
           <p class="text-sm font-medium text-gray-500 leading-relaxed">
             Select a conversation from the sidebar to start messaging with customers, vendors, and erranders.
           </p>
-          <div class="mt-8 flex items-center justify-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest px-4 py-2 bg-white rounded-full border border-gray-50 shadow-sm">
+          <div class="mt-8 flex items-center justify-center gap-2 text-sm font-bold text-gray-400 uppercase  px-4 py-2 bg-white rounded-full border border-gray-50 shadow-sm">
             <Lock class="w-3.5 h-3.5" />
             <span>End-to-end encrypted</span>
           </div>

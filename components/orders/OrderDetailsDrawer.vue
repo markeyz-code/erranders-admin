@@ -10,7 +10,7 @@
         </div>
         
         <h3 class="text-lg font-semibold text-gray-900 font-heading">{{ order.customer?.firstName || order.user?.firstName }} {{ order.customer?.lastName || order.user?.lastName }}</h3>
-        <p class="text-xs font-medium text-gray-500 mb-4">{{ order.customer?.email || order.user?.email }}</p>
+        <p class="text-sm font-medium text-gray-500 mb-4">{{ order.customer?.email || order.user?.email }}</p>
         
         <div class="flex items-center justify-between w-4/5 bg-white rounded-lg border border-gray-50 divide-x divide-gray-100">
           <div class="text-center flex-1 py-3">
@@ -19,7 +19,7 @@
           </div>
           <div class="text-center flex-1 py-3">
             <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-0.5">Date</p>
-            <p class="text-xs font-semibold text-gray-900">{{ new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}</p>
+            <p class="text-sm font-semibold text-gray-900">{{ new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}</p>
           </div>
         </div>
       </div>
@@ -35,26 +35,26 @@
           <div class="grid grid-cols-2 gap-y-4 gap-x-4 text-sm px-2">
             <div>
               <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Order ID</span>
-              <span class="text-xs font-bold text-gray-900 font-mono">{{ order.orderNumber || order._id }}</span>
+              <span class="text-sm font-bold text-gray-900 font-mono">{{ order.orderNumber || order._id }}</span>
             </div>
             <div>
               <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Order Type</span>
-              <span class="text-xs font-bold text-[#FF5C1A] uppercase tracking-wide">{{ order.type?.replace('_', ' ') || 'standard' }}</span>
+              <span class="text-sm font-bold text-[#FF5C1A] uppercase tracking-wide">{{ order.type?.replace('_', ' ') || 'standard' }}</span>
             </div>
             <div>
               <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Current Status</span>
-              <div class="capitalize text-xs font-bold px-2 py-1 bg-gray-100 rounded inline-block">{{ order.status }}</div>
+              <div class="capitalize text-sm font-bold px-2 py-1 bg-gray-100 rounded inline-block">{{ order.status }}</div>
             </div>
             <div v-if="order.uniqueCode">
               <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Delivery PIN</span>
-              <span class="text-xs font-black text-[#FF5C1A] tracking-wider">{{ order.uniqueCode }}</span>
+              <span class="text-sm font-black text-[#FF5C1A] tracking-wider">{{ order.uniqueCode }}</span>
             </div>
             <div class="col-span-2 mt-2" v-if="order.statusHistory?.length">
               <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-3">Order Timeline</span>
               <div class="relative border-l border-gray-200 ml-2 space-y-4">
                 <div v-for="(history, index) in order.statusHistory" :key="index" class="pl-4 relative">
                   <div class="w-2.5 h-2.5 bg-[#FF5C1A] rounded-full absolute -left-[5px] top-1 border border-white"></div>
-                  <p class="text-xs font-bold text-gray-900 capitalize">{{ history.status?.replace(/_/g, ' ') }}</p>
+                  <p class="text-sm font-bold text-gray-900 capitalize">{{ history.status?.replace(/_/g, ' ') }}</p>
                   <p class="text-[10px] font-medium text-gray-500">{{ new Date(history.timestamp).toLocaleString() }}</p>
                   <p v-if="history.note" class="text-[10px] text-gray-600 mt-1 ">{{ history.note }}</p>
                 </div>
@@ -84,7 +84,7 @@
             </div>
             <div class="col-span-2">
               <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Delivery Address</p>
-              <p class="text-xs font-medium text-gray-700 leading-relaxed">{{ order.deliveryAddress || order.specificAddress || order.shippingAddress || 'No address provided' }}</p>
+              <p class="text-sm font-medium text-gray-700 leading-relaxed">{{ order.deliveryAddress || order.specificAddress || order.shippingAddress || 'No address provided' }}</p>
             </div>
           </div>
         </div>
@@ -106,11 +106,11 @@
             </div>
             <div class="col-span-2">
               <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Vehicle</p>
-              <p class="text-xs font-medium text-gray-700 leading-relaxed capitalize">{{ order.errander?.vehicleType?.replace('_', ' ') || 'Not specified' }} {{ order.errander?.plateNumber ? `(${order.errander.plateNumber})` : '' }}</p>
+              <p class="text-sm font-medium text-gray-700 leading-relaxed capitalize">{{ order.errander?.vehicleType?.replace('_', ' ') || 'Not specified' }} {{ order.errander?.plateNumber ? `(${order.errander.plateNumber})` : '' }}</p>
             </div>
             <div v-if="order.interception && (order.interception.status === 'accepted' || order.interception.status === 'completed')" class="col-span-2">
               <p class="text-[10px] font-semibold text-indigo-500 uppercase tracking-wide mb-1">💰 Payout (60%)</p>
-              <p class="text-xs font-black text-indigo-600">₦{{ Math.round((order.erranderPayout || order.deliveryFee || 0) * 0.6).toLocaleString() }}</p>
+              <p class="text-sm font-black text-indigo-600">₦{{ Math.round((order.erranderPayout || order.deliveryFee || 0) * 0.6).toLocaleString() }}</p>
             </div>
           </div>
 
@@ -128,11 +128,11 @@
               </div>
               <div>
                 <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Hand-off Point</p>
-                <p class="text-xs font-medium text-gray-700">{{ order.interception.point || 'N/A' }}</p>
+                <p class="text-sm font-medium text-gray-700">{{ order.interception.point || 'N/A' }}</p>
               </div>
               <div>
                 <p class="text-[10px] font-semibold text-purple-500 uppercase tracking-wide mb-1">💰 Payout (40%)</p>
-                <p class="text-xs font-black text-purple-600">₦{{ Math.round((order.erranderPayout || order.deliveryFee || 0) * 0.4).toLocaleString() }}</p>
+                <p class="text-sm font-black text-purple-600">₦{{ Math.round((order.erranderPayout || order.deliveryFee || 0) * 0.4).toLocaleString() }}</p>
               </div>
             </div>
           </div>
@@ -148,7 +148,7 @@
           <div v-if="order.type === 'custom_errand' && order.customDetails" class="px-2 space-y-4">
             <div v-if="order.customDetails.description">
               <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Description</p>
-              <p class="text-xs text-gray-700 whitespace-pre-wrap leading-relaxed">{{ order.customDetails.description }}</p>
+              <p class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{{ order.customDetails.description }}</p>
             </div>
             
             <div v-if="order.customDetails.attachedVoiceNote">
@@ -209,15 +209,15 @@
                 </div>
                 <div class="col-span-2 border-t border-orange-100 pt-3">
                   <p class="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1">Account Name</p>
-                  <p class="text-xs font-bold text-gray-900">{{ order.vendorPaymentDetails.accountName }}</p>
+                  <p class="text-sm font-bold text-gray-900">{{ order.vendorPaymentDetails.accountName }}</p>
                 </div>
                 <div>
                   <p class="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1">Account Number</p>
-                  <p class="font-mono text-xs font-bold text-gray-900">{{ order.vendorPaymentDetails.accountNumber }}</p>
+                  <p class="font-mono text-sm font-bold text-gray-900">{{ order.vendorPaymentDetails.accountNumber }}</p>
                 </div>
                 <div>
                   <p class="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1">Bank Name</p>
-                  <p class="text-xs font-bold text-gray-900">{{ order.vendorPaymentDetails.bankName }}</p>
+                  <p class="text-sm font-bold text-gray-900">{{ order.vendorPaymentDetails.bankName }}</p>
                 </div>
                 <div class="col-span-2 pt-2">
                   <p class="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1">Transfer Reference</p>
@@ -234,12 +234,12 @@
           <!-- Render Packs -->
           <template v-else-if="order.packs?.length">
             <div v-for="pack in order.packs" :key="pack.name" class="space-y-3 px-2 mb-4 bg-gray-50 p-3 rounded-xl border border-gray-50">
-              <h5 class="text-[10px] font-bold text-[#FF5C1A] uppercase tracking-widest border-b border-gray-200 pb-1 mb-2">{{ pack.name }}</h5>
+              <h5 class="text-[10px] font-bold text-[#FF5C1A] uppercase  border-b border-gray-200 pb-1 mb-2">{{ pack.name }}</h5>
               <div v-for="item in pack.items" :key="item.name" class="flex items-start justify-between mb-2 last:mb-0">
                 <div class="flex items-start gap-3">
-                  <span class="text-xs font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded">{{ item.quantity }}x</span>
+                  <span class="text-sm font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded">{{ item.quantity }}x</span>
                   <div class="flex flex-col">
-                    <span class="text-xs font-bold text-gray-900">{{ item.name }}</span>
+                    <span class="text-sm font-bold text-gray-900">{{ item.name }}</span>
                     <div v-if="item.customizations?.length" class="mt-1 space-y-1">
                       <p v-for="(custom, idx) in item.customizations" :key="idx" class="text-[10px] font-medium text-gray-500 flex items-center gap-1">
                         <span class="text-gray-300">•</span> {{ custom.name }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
@@ -247,7 +247,7 @@
                     </div>
                   </div>
                 </div>
-                <span class="text-xs font-black text-gray-900">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
+                <span class="text-sm font-black text-gray-900">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
               </div>
             </div>
           </template>
@@ -256,9 +256,9 @@
           <div v-else class="space-y-3 px-2">
             <div v-for="item in order.items" :key="item._id" class="flex items-start justify-between">
               <div class="flex items-start gap-3">
-                <span class="text-xs font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded">{{ item.quantity }}x</span>
+                <span class="text-sm font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded">{{ item.quantity }}x</span>
                 <div class="flex flex-col">
-                  <span class="text-xs font-bold text-gray-900">{{ item.name }}</span>
+                  <span class="text-sm font-bold text-gray-900">{{ item.name }}</span>
                   <div v-if="item.customizations?.length" class="mt-1 space-y-1">
                     <p v-for="(custom, idx) in item.customizations" :key="idx" class="text-[10px] font-medium text-gray-500 flex items-center gap-1">
                       <span class="text-gray-300">•</span> {{ custom.name }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
@@ -266,7 +266,7 @@
                   </div>
                 </div>
               </div>
-              <span class="text-xs font-black text-gray-900">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
+              <span class="text-sm font-black text-gray-900">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
             </div>
           </div>
         </div>
@@ -279,39 +279,39 @@
           </h4>
           
           <div class="px-2 space-y-3">
-            <div class="flex justify-between items-center text-xs">
+            <div class="flex justify-between items-center text-sm">
               <span class="text-gray-500 font-semibold uppercase tracking-wide text-[10px]">Items Subtotal</span>
               <span class="text-gray-900 font-bold">₦{{ Number(order.subtotal || 0).toLocaleString() }}</span>
             </div>
-            <div class="flex justify-between items-center text-xs" v-if="order.packagingFee">
+            <div class="flex justify-between items-center text-sm" v-if="order.packagingFee">
               <span class="text-gray-500 font-semibold uppercase tracking-wide text-[10px]">Packaging</span>
               <span class="text-gray-900 font-bold">₦{{ Number(order.packagingFee || 0).toLocaleString() }}</span>
             </div>
             
             <div class="my-3 py-3 border-y border-gray-100 border-dashed space-y-3">
-              <div class="flex justify-between items-center text-xs">
+              <div class="flex justify-between items-center text-sm">
                 <span class="text-gray-500 font-bold uppercase tracking-wide text-[10px]">Total Delivery Charged</span>
                 <span class="text-gray-900 font-black">₦{{ Number(order.deliveryFee || 0).toLocaleString() }}</span>
               </div>
             </div>
 
             <div class="flex justify-between items-center pt-3 border-t border-gray-100">
-              <span class="text-xs font-black text-gray-900 uppercase">Total Paid</span>
+              <span class="text-sm font-black text-gray-900 uppercase">Total Paid</span>
               <span class="text-lg font-black text-[#FF5C1A]">₦{{ Number(order.total || order.totalAmount || 0).toLocaleString() }}</span>
             </div>
 
             <!-- Interception Payout Split -->
             <div v-if="order.interception && (order.interception.status === 'accepted' || order.interception.status === 'completed')" class="mt-4 bg-purple-50 border border-purple-100 rounded-xl p-3 space-y-2">
               <p class="text-[10px] font-bold text-purple-700 uppercase tracking-wider mb-2">🤝 Interception Payout Split</p>
-              <div class="flex justify-between items-center text-xs">
+              <div class="flex justify-between items-center text-sm">
                 <span class="text-gray-600 font-semibold">Errander Payout (Total)</span>
                 <span class="text-gray-900 font-black">₦{{ Number(order.erranderPayout || order.deliveryFee || 0).toLocaleString() }}</span>
               </div>
-              <div class="flex justify-between items-center text-xs">
+              <div class="flex justify-between items-center text-sm">
                 <span class="text-indigo-600 font-semibold">→ {{ order.errander?.firstName || 'Primary' }} (60%)</span>
                 <span class="text-indigo-700 font-black">₦{{ Math.round((order.erranderPayout || order.deliveryFee || 0) * 0.6).toLocaleString() }}</span>
               </div>
-              <div class="flex justify-between items-center text-xs">
+              <div class="flex justify-between items-center text-sm">
                 <span class="text-purple-600 font-semibold">→ {{ order.interception?.secondErrander?.firstName || 'Second' }} (40%)</span>
                 <span class="text-purple-700 font-black">₦{{ Math.round((order.erranderPayout || order.deliveryFee || 0) * 0.4).toLocaleString() }}</span>
               </div>

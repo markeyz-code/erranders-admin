@@ -4,12 +4,12 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div class="space-y-1">
         <h1 class="text-2xl font-semibold text-gray-900 font-heading tracking-tight">Facilitators Management</h1>
-        <p class="text-xs text-gray-500">Manage campus ambassadors and track referral growth</p>
+        <p class="text-sm text-gray-500">Manage campus ambassadors and track referral growth</p>
       </div>
       <div class="flex items-center gap-2">
         <DateRangePicker v-model:start="startDate" v-model:end="endDate" />
         <button @click="showAddModal = true"
-          class="flex items-center gap-2 px-4 h-[52px] bg-gray-900 text-white rounded-xl font-medium text-xs hover:bg-gray-800 transition-colors">
+          class="flex items-center gap-2 px-4 h-[52px] bg-gray-900 text-white rounded-xl font-medium text-sm hover:bg-gray-800 transition-colors">
           <UserPlus class="w-4 h-4" />
           Add Facilitator
         </button>
@@ -37,7 +37,7 @@
               <component :is="stat.icon" class="w-5 h-5" />
             </div>
           </div>
-          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 relative z-10">{{ stat.label }}</p>
+          <p class="text-[10px] font-bold text-gray-400 uppercase  mb-1 relative z-10">{{ stat.label }}</p>
           <h3 class="text-2xl font-black text-gray-900 font-heading relative z-10 tabular-nums">{{ stat.value }}</h3>
         </div>
       </template>
@@ -46,7 +46,7 @@
     <!-- Tabs -->
     <div class="flex items-center gap-1 bg-gray-50 p-1 rounded-lg w-fit border border-gray-50">
       <button v-for="tab in tabs" :key="tab.key" @click="activeTab = tab.key"
-        class="px-4 py-1.5 rounded-md text-xs font-medium transition-all"
+        class="px-4 py-1.5 rounded-md text-sm font-medium transition-all"
         :class="activeTab === tab.key ? 'bg-white text-gray-900 shadow-sm border border-gray-50/50' : 'text-gray-500 hover:text-gray-700'">
         {{ tab.label }}
       </button>
@@ -79,7 +79,7 @@
           <Users class="w-5 h-5 text-gray-400" />
         </div>
         <h3 class="text-sm font-semibold text-gray-900 mb-1">No Facilitators Found</h3>
-        <p class="text-xs text-gray-500">Add your first campus ambassador to get started.</p>
+        <p class="text-sm text-gray-500">Add your first campus ambassador to get started.</p>
       </div>
 
       <!-- Facilitator Cards -->
@@ -101,14 +101,14 @@
               </span>
               <span v-if="!fac.isActive" class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-red-50 text-red-600 border border-red-100 uppercase">Inactive</span>
             </div>
-            <p class="text-xs text-gray-500 truncate">{{ fac.email }}</p>
+            <p class="text-sm text-gray-500 truncate">{{ fac.email }}</p>
             <p v-if="fac.skill" class="text-[10px] text-gray-400 mt-0.5">{{ fac.skill }}</p>
           </div>
 
           <!-- Code -->
           <div class="hidden md:flex flex-col items-center gap-0.5 flex-shrink-0 w-24">
             <span class="text-[9px] font-medium text-gray-400 uppercase tracking-wide">Code</span>
-            <span class="text-xs font-semibold text-gray-700 bg-gray-100 px-2 py-0.5 rounded border border-gray-50 font-mono">{{ fac.referralCode }}</span>
+            <span class="text-sm font-semibold text-gray-700 bg-gray-100 px-2 py-0.5 rounded border border-gray-50 font-mono">{{ fac.referralCode }}</span>
           </div>
 
           <!-- Referral Count -->
@@ -142,7 +142,7 @@
     <div v-if="activeTab === 'referrals'" class="bg-white rounded-xl border border-gray-50 overflow-visible">
       <div class="p-4 border-b border-gray-100 flex items-center justify-between">
         <h3 class="font-semibold text-gray-900 text-sm">All Referrals</h3>
-        <span class="text-xs font-medium text-gray-500">{{ referralData?.total || 0 }} total</span>
+        <span class="text-sm font-medium text-gray-500">{{ referralData?.total || 0 }} total</span>
       </div>
 
       <!-- Loading -->
@@ -162,7 +162,7 @@
           <Gift class="w-5 h-5 text-gray-400" />
         </div>
         <h3 class="text-sm font-semibold text-gray-900 mb-1">No Referrals Yet</h3>
-        <p class="text-xs text-gray-500">When users sign up with referral codes, they'll appear here.</p>
+        <p class="text-sm text-gray-500">When users sign up with referral codes, they'll appear here.</p>
       </div>
 
       <!-- Referral List -->
@@ -178,7 +178,7 @@
 
           <!-- Info -->
           <div class="flex-1 min-w-0">
-            <p class="text-xs text-gray-900">
+            <p class="text-sm text-gray-900">
               <span class="font-semibold">{{ getReferrerName(ref) }}</span>
               <span class="text-gray-400 mx-1.5">→</span>
               <span class="font-semibold text-gray-700">{{ ref.referred?.firstName }} {{ ref.referred?.lastName }}</span>
@@ -198,7 +198,7 @@
           <div class="hidden md:flex items-center gap-4 flex-shrink-0">
             <div class="text-right">
               <p class="text-[9px] text-gray-400 font-medium uppercase tracking-wide">Awarded</p>
-              <p class="text-xs font-semibold text-gray-900">+{{ ref.referrerPointsAwarded + ref.referredPointsAwarded }} pts</p>
+              <p class="text-sm font-semibold text-gray-900">+{{ ref.referrerPointsAwarded + ref.referredPointsAwarded }} pts</p>
             </div>
             <span :class="statusBadgeClass(ref.status)" class="text-[10px] font-medium px-2 py-0.5 rounded border uppercase">
               {{ ref.status }}
@@ -210,7 +210,7 @@
       <!-- Pagination -->
       <div v-if="referralData?.pages > 1" class="p-3 border-t border-gray-100 flex items-center justify-center gap-1">
         <button v-for="p in referralData.pages" :key="p" @click="referralPage = p; fetchReferrals()"
-          class="w-7 h-7 rounded text-xs font-medium transition-colors"
+          class="w-7 h-7 rounded text-sm font-medium transition-colors"
           :class="referralPage === p ? 'bg-gray-900 text-white' : 'text-gray-500 hover:bg-gray-100'">
           {{ p }}
         </button>
@@ -238,14 +238,14 @@
           <Trophy class="w-5 h-5 text-gray-400" />
         </div>
         <h3 class="text-sm font-semibold text-gray-900 mb-1">Leaderboard Empty</h3>
-        <p class="text-xs text-gray-500">No referrals yet.</p>
+        <p class="text-sm text-gray-500">No referrals yet.</p>
       </div>
 
       <div v-else class="divide-y divide-gray-100">
         <div v-for="(entry, idx) in leaderboard" :key="entry.id"
           class="flex items-center gap-4 px-5 py-3 hover:bg-gray-50/50 transition-colors">
           <!-- Rank -->
-          <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-xs border"
+          <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-sm border"
             :class="idx === 0 ? 'bg-amber-50 text-amber-700 border-amber-200' : idx === 1 ? 'bg-gray-50 text-gray-600 border-gray-100' : idx === 2 ? 'bg-orange-50 text-orange-700 border-orange-200' : 'bg-white text-gray-500 border-gray-100'">
             {{ idx < 3 ? ['🥇', '🥈', '🥉'][idx] : idx + 1 }}
           </div>
@@ -295,28 +295,28 @@
           <div class="bg-white rounded-xl shadow-lg border border-gray-50 max-w-sm w-full p-6 space-y-5">
             <div>
               <h2 class="text-lg font-semibold text-gray-900">Add Facilitator</h2>
-              <p class="text-xs text-gray-500 mt-0.5">Register a new campus ambassador.</p>
+              <p class="text-sm text-gray-500 mt-0.5">Register a new campus ambassador.</p>
             </div>
 
             <form @submit.prevent="handleAddFacilitator" class="space-y-4">
               <div>
-                <label class="text-xs font-medium text-gray-700 block mb-1">Full Name *</label>
+                <label class="text-sm font-medium text-gray-700 block mb-1">Full Name *</label>
                 <input v-model="newFac.name" type="text" required
                   class="w-full px-3 py-2 bg-white border border-gray-50 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="e.g. John Doe" />
               </div>
               <div>
-                <label class="text-xs font-medium text-gray-700 block mb-1">Email *</label>
+                <label class="text-sm font-medium text-gray-700 block mb-1">Email *</label>
                 <input v-model="newFac.email" type="email" required
                   class="w-full px-3 py-2 bg-white border border-gray-50 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="john@example.com" />
               </div>
               <div class="grid grid-cols-2 gap-3">
                 <div>
-                  <label class="text-xs font-medium text-gray-700 block mb-1">Matric No.</label>
+                  <label class="text-sm font-medium text-gray-700 block mb-1">Matric No.</label>
                   <input v-model="newFac.matricNumber" type="text"
                     class="w-full px-3 py-2 bg-white border border-gray-50 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="Optional" />
                 </div>
                 <div>
-                  <label class="text-xs font-medium text-gray-700 block mb-1">Skill</label>
+                  <label class="text-sm font-medium text-gray-700 block mb-1">Skill</label>
                   <input v-model="newFac.skill" type="text"
                     class="w-full px-3 py-2 bg-white border border-gray-50 rounded-md text-base focus:outline-none focus:border-gray-400 transition-colors" placeholder="e.g. Design" />
                 </div>
@@ -325,20 +325,20 @@
               <div class="flex items-center gap-2 mt-2">
                 <input v-model="newFac.sendWelcomeEmail" type="checkbox" id="send-email"
                   class="w-3.5 h-3.5 accent-gray-900 rounded border-gray-300" />
-                <label for="send-email" class="text-xs font-medium text-gray-700 cursor-pointer">Send welcome email & referral code</label>
+                <label for="send-email" class="text-sm font-medium text-gray-700 cursor-pointer">Send welcome email & referral code</label>
               </div>
 
-              <div v-if="addError" class="p-2 bg-red-50 text-red-600 text-xs rounded border border-red-100">
+              <div v-if="addError" class="p-2 bg-red-50 text-red-600 text-sm rounded border border-red-100">
                 {{ addError }}
               </div>
 
               <div class="flex gap-2 pt-2">
                 <button type="button" @click="showAddModal = false"
-                  class="flex-1 py-2 bg-white border border-gray-50 text-gray-700 rounded-lg font-medium text-xs hover:bg-gray-50 transition-colors">
+                  class="flex-1 py-2 bg-white border border-gray-50 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors">
                   Cancel
                 </button>
                 <button type="submit" :disabled="addingFac"
-                  class="flex-1 py-2 bg-gray-900 text-white rounded-lg font-medium text-xs hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                  class="flex-1 py-2 bg-gray-900 text-white rounded-lg font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                   <Loader2 v-if="addingFac" class="w-3 h-3 animate-spin" />
                   {{ addingFac ? 'Creating...' : 'Create' }}
                 </button>
@@ -364,17 +364,17 @@
             </div>
             <div>
               <h3 class="text-lg font-semibold text-gray-900">Deactivate Facilitator</h3>
-              <p class="text-xs text-gray-500 mt-1">
+              <p class="text-sm text-gray-500 mt-1">
                 Are you sure you want to deactivate <span class="font-semibold text-gray-900">{{ facToDeactivate?.name }}</span>? Their referral code will stop working immediately.
               </p>
             </div>
             <div class="flex gap-2 pt-2">
               <button @click="showDeactivateModal = false"
-                class="flex-1 py-2 bg-white border border-gray-50 text-gray-700 rounded-lg font-medium text-xs hover:bg-gray-50 transition-colors">
+                class="flex-1 py-2 bg-white border border-gray-50 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors">
                 Cancel
               </button>
               <button @click="confirmDeactivate"
-                class="flex-1 py-2 bg-red-600 text-white rounded-lg font-medium text-xs hover:bg-red-700 transition-colors">
+                class="flex-1 py-2 bg-red-600 text-white rounded-lg font-medium text-sm hover:bg-red-700 transition-colors">
                 Yes, Deactivate
               </button>
             </div>
@@ -405,7 +405,7 @@
               <div class="bg-gray-50 p-3 rounded-lg border border-gray-50">
                 <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wide mb-1">Referred By</p>
                 <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600">
+                  <div class="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-600">
                     {{ getReferrerName(selectedReferral).charAt(0) }}
                   </div>
                   <div>
@@ -428,7 +428,7 @@
                 <div class="flex justify-between items-start">
                   <div>
                     <p class="text-sm font-semibold text-gray-900">{{ selectedReferral.referred?.firstName }} {{ selectedReferral.referred?.lastName }}</p>
-                    <p class="text-xs text-gray-500">{{ selectedReferral.referred?.email }}</p>
+                    <p class="text-sm text-gray-500">{{ selectedReferral.referred?.email }}</p>
                   </div>
                   <span class="text-[10px] font-medium px-1.5 py-0.5 rounded border capitalize"
                     :class="selectedReferral.referredType === 'vendor' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-blue-50 text-blue-600 border-blue-100'">
@@ -441,11 +441,11 @@
               <div class="grid grid-cols-2 gap-3 pt-2">
                 <div class="border border-gray-50 rounded-lg p-3 text-center">
                   <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Status</p>
-                  <p class="text-xs font-semibold capitalize mt-1" :class="{'text-emerald-600': selectedReferral.status === 'completed', 'text-amber-600': selectedReferral.status === 'pending'}">{{ selectedReferral.status }}</p>
+                  <p class="text-sm font-semibold capitalize mt-1" :class="{'text-emerald-600': selectedReferral.status === 'completed', 'text-amber-600': selectedReferral.status === 'pending'}">{{ selectedReferral.status }}</p>
                 </div>
                 <div class="border border-gray-50 rounded-lg p-3 text-center">
                   <p class="text-[10px] font-medium text-gray-400 uppercase tracking-wide">Points Earned</p>
-                  <p class="text-xs font-semibold text-gray-900 mt-1">{{ selectedReferral.referrerPointsAwarded }}</p>
+                  <p class="text-sm font-semibold text-gray-900 mt-1">{{ selectedReferral.referrerPointsAwarded }}</p>
                 </div>
               </div>
 
@@ -464,7 +464,7 @@
             {{ selectedFacilitator.name?.charAt(0)?.toUpperCase() }}
           </div>
           <h3 class="text-lg font-semibold text-gray-900">{{ selectedFacilitator.name }}</h3>
-          <p class="text-xs text-gray-500 mb-4">{{ selectedFacilitator.email }}</p>
+          <p class="text-sm text-gray-500 mb-4">{{ selectedFacilitator.email }}</p>
           
           <div class="flex items-center gap-4 text-center w-full px-6">
             <div class="flex-1 bg-gray-50 p-3 rounded-lg border border-gray-50">
@@ -490,7 +490,7 @@
             <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2 border border-gray-25">
                <Users class="w-4 h-4 text-gray-400" />
             </div>
-            <p class="text-xs text-gray-500 font-medium">No activity yet</p>
+            <p class="text-sm text-gray-500 font-medium">No activity yet</p>
           </div>
           
           <div v-else class="space-y-4 relative pl-4 before:content-[''] before:absolute before:left-[21px] before:top-4 before:bottom-4 before:w-px before:bg-gray-200">

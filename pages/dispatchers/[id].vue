@@ -79,15 +79,15 @@
                 </h3>
                 <div class="space-y-4">
                   <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase">School</p>
+                    <p class="text-sm font-semibold text-gray-400 uppercase">School</p>
                     <p class="font-bold text-gray-900 mt-1">{{ profile.school || 'N/A' }}</p>
                   </div>
                   <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase">Matric Number</p>
+                    <p class="text-sm font-semibold text-gray-400 uppercase">Matric Number</p>
                     <p class="font-bold text-gray-900 mt-1">{{ profile.matricNumber || 'N/A' }}</p>
                   </div>
                   <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase">NIN Number</p>
+                    <p class="text-sm font-semibold text-gray-400 uppercase">NIN Number</p>
                     <p class="font-bold text-gray-900 mt-1">{{ profile.ninNumber || 'N/A' }}</p>
                   </div>
                 </div>
@@ -113,7 +113,7 @@
                     </div>
                   </div>
                   <div v-if="profile.bankName || profile.accountNumber" class="bg-gray-50 rounded-lg p-4 border border-gray-50 mt-4">
-                    <p class="text-xs font-semibold text-gray-400 uppercase mb-2">Bank Details</p>
+                    <p class="text-sm font-semibold text-gray-400 uppercase mb-2">Bank Details</p>
                     <p class="font-bold text-gray-900">{{ profile.bankName || 'N/A' }}</p>
                     <p class="text-sm text-gray-600 font-mono mt-1">{{ profile.accountNumber || 'N/A' }} - {{ profile.accountName || 'N/A' }}</p>
                   </div>
@@ -129,11 +129,11 @@
                 </h3>
                 <div class="grid grid-cols-2 gap-y-6 gap-x-4">
                   <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase">Deliveries</p>
+                    <p class="text-sm font-semibold text-gray-400 uppercase">Deliveries</p>
                     <p class="text-2xl font-black text-gray-900 mt-1">{{ profile.totalDeliveries || 0 }}</p>
                   </div>
                   <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase">Rating</p>
+                    <p class="text-sm font-semibold text-gray-400 uppercase">Rating</p>
                     <div class="flex items-center gap-2 mt-1">
                       <p class="text-2xl font-black text-gray-900">{{ (profile.rating || 0).toFixed(1) }}</p>
                       <Star class="w-5 h-5 text-yellow-400 fill-yellow-400" />
@@ -141,11 +141,11 @@
                     </div>
                   </div>
                   <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase">Reward Points</p>
+                    <p class="text-sm font-semibold text-gray-400 uppercase">Reward Points</p>
                     <p class="text-lg font-bold text-gray-900 mt-1">{{ profile.user?.points || 0 }} pts</p>
                   </div>
                   <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase">Activity Streak</p>
+                    <p class="text-sm font-semibold text-gray-400 uppercase">Activity Streak</p>
                     <p class="text-lg font-bold text-gray-900 mt-1">{{ profile.user?.streakCount || 0 }} 🔥</p>
                   </div>
                 </div>
@@ -158,16 +158,16 @@
                 </h3>
                 <div class="space-y-4">
                   <div>
-                    <p class="text-xs font-semibold text-gray-400 uppercase">Guarantor Name</p>
+                    <p class="text-sm font-semibold text-gray-400 uppercase">Guarantor Name</p>
                     <p class="font-bold text-gray-900 mt-1">{{ profile.guarantorDetails.name || 'N/A' }}</p>
                   </div>
                   <div class="grid grid-cols-2 gap-4">
                     <div>
-                      <p class="text-xs font-semibold text-gray-400 uppercase">Phone</p>
+                      <p class="text-sm font-semibold text-gray-400 uppercase">Phone</p>
                       <p class="font-bold text-gray-900 mt-1">{{ profile.guarantorDetails.phone || 'N/A' }}</p>
                     </div>
                     <div>
-                      <p class="text-xs font-semibold text-gray-400 uppercase">Relationship</p>
+                      <p class="text-sm font-semibold text-gray-400 uppercase">Relationship</p>
                       <p class="font-bold text-gray-900 mt-1">{{ profile.guarantorDetails.relationship || 'N/A' }}</p>
                     </div>
                   </div>
@@ -186,7 +186,7 @@
               
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-gray-50 p-4 rounded-xl border border-gray-50">
-                  <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Device Status</p>
+                  <p class="text-sm font-semibold text-gray-500 uppercase mb-2">Device Status</p>
                   <div class="flex items-center gap-2">
                     <div class="w-3 h-3 rounded-full" :class="profile.status === 'online' ? 'bg-green-500' : 'bg-gray-400'"></div>
                     <p class="text-lg font-bold text-gray-900 capitalize">{{ profile.status || 'Offline' }}</p>
@@ -194,14 +194,14 @@
                 </div>
                 
                 <div class="bg-gray-50 p-4 rounded-xl border border-gray-50">
-                  <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Verification Tier</p>
+                  <p class="text-sm font-semibold text-gray-500 uppercase mb-2">Verification Tier</p>
                   <span class="inline-flex items-center font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-lg text-sm uppercase tracking-wider border border-[#FF5C1A]/20">
                     Tier {{ profile.verificationLevel || 1 }}
                   </span>
                 </div>
 
                 <div v-if="profile.rejectionReason" class="bg-red-50 p-4 rounded-xl border border-red-100 md:col-span-3">
-                  <p class="text-xs font-bold text-red-700 uppercase mb-2">Rejection Reason</p>
+                  <p class="text-sm font-bold text-red-700 uppercase mb-2">Rejection Reason</p>
                   <p class="text-sm text-red-600">{{ profile.rejectionReason }}</p>
                 </div>
               </div>
@@ -215,7 +215,7 @@
               
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div v-if="profile.idCardImage" class="space-y-2">
-                  <p class="text-xs font-bold text-gray-500 uppercase">ID Card</p>
+                  <p class="text-sm font-bold text-gray-500 uppercase">ID Card</p>
                   <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-100 border border-gray-25 cursor-pointer group" @click="viewImage(profile.idCardImage)">
                     <img :src="profile.idCardImage" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -225,7 +225,7 @@
                 </div>
                 
                 <div v-if="profile.selfieImage" class="space-y-2">
-                  <p class="text-xs font-bold text-gray-500 uppercase">Selfie</p>
+                  <p class="text-sm font-bold text-gray-500 uppercase">Selfie</p>
                   <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-100 border border-gray-25 cursor-pointer group" @click="viewImage(profile.selfieImage)">
                     <img :src="profile.selfieImage" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -235,7 +235,7 @@
                 </div>
 
                 <div v-if="profile.ninSlipImage" class="space-y-2">
-                  <p class="text-xs font-bold text-gray-500 uppercase">NIN Slip</p>
+                  <p class="text-sm font-bold text-gray-500 uppercase">NIN Slip</p>
                   <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-100 border border-gray-25 cursor-pointer group" @click="viewImage(profile.ninSlipImage)">
                     <img :src="profile.ninSlipImage" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -363,16 +363,16 @@
         <div class="p-6 space-y-4">
           <p class="text-sm text-gray-600">Use this to manually deduct funds if you've paid out the errander directly outside of the system.</p>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Amount (₦)</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Amount (₦)</label>
             <input v-model="debitAmount" type="number" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 5000">
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Reason (Optional)</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Reason (Optional)</label>
             <input v-model="debitReason" type="text" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. Manual payout">
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Proof of Withdrawal (Optional)</label>
-            <input type="file" @change="handleFileUpload" accept="image/*" class="w-full px-4 py-2 border border-gray-25 rounded-lg text-sm file:mr-4 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#FF5C1A]/10 file:text-[#FF5C1A] hover:file:bg-[#FF5C1A]/20 cursor-pointer">
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Proof of Withdrawal (Optional)</label>
+            <input type="file" @change="handleFileUpload" accept="image/*" class="w-full px-4 py-2 border border-gray-25 rounded-lg text-sm file:mr-4 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-[#FF5C1A]/10 file:text-[#FF5C1A] hover:file:bg-[#FF5C1A]/20 cursor-pointer">
           </div>
         </div>
         <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">

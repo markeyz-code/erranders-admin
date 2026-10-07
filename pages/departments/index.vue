@@ -43,11 +43,11 @@
           <table class="w-full text-left border-collapse">
             <thead>
               <tr class="border-b border-gray-100">
-                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider bg-white">Department Name</th>
-                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider bg-white">Description</th>
-                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider bg-white">Modules Access</th>
-                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider bg-white">Permissions</th>
-                <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider bg-white text-right">Actions</th>
+                <th class="px-6 py-4 text-sm font-bold text-gray-400 uppercase tracking-wider bg-white">Department Name</th>
+                <th class="px-6 py-4 text-sm font-bold text-gray-400 uppercase tracking-wider bg-white">Description</th>
+                <th class="px-6 py-4 text-sm font-bold text-gray-400 uppercase tracking-wider bg-white">Modules Access</th>
+                <th class="px-6 py-4 text-sm font-bold text-gray-400 uppercase tracking-wider bg-white">Permissions</th>
+                <th class="px-6 py-4 text-sm font-bold text-gray-400 uppercase tracking-wider bg-white text-right">Actions</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100/60">
@@ -59,12 +59,12 @@
                   <span class="text-sm text-gray-500">{{ dept.description || 'No description' }}</span>
                 </td>
                 <td class="px-6 py-4">
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                     {{ dept.modules?.length || 0 }} modules
                   </span>
                 </td>
                 <td class="px-6 py-4">
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
                     {{ dept.permissions?.length || 0 }} actions
                   </span>
                 </td>
@@ -110,12 +110,12 @@
                 </h3>
                 
                 <div>
-                  <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Department Name</label>
+                  <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Department Name</label>
                   <input v-model="formData.name" type="text" placeholder="e.g., Finance, Customer Support" class="w-full px-4 py-3 bg-gray-50/50 border border-gray-25/80 rounded-xl text-sm font-medium focus:ring-4 focus:ring-[#FF5C1A]/10 focus:border-[#FF5C1A]/50 transition-all" />
                 </div>
                 
                 <div>
-                  <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Description</label>
+                  <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Description</label>
                   <textarea v-model="formData.description" rows="2" placeholder="Briefly describe the role of this department" class="w-full px-4 py-3 bg-gray-50/50 border border-gray-25/80 rounded-xl text-sm font-medium focus:ring-4 focus:ring-[#FF5C1A]/10 focus:border-[#FF5C1A]/50 transition-all"></textarea>
                 </div>
               </div>
@@ -149,7 +149,7 @@
                 
                 <div class="space-y-6">
                   <div v-for="(group, groupName) in groupedPermissions" :key="groupName" class="space-y-3">
-                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest">{{ groupName }}</h4>
+                    <h4 class="text-sm font-bold text-gray-400 uppercase ">{{ groupName }}</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                       <label v-for="perm in group" :key="perm.id" class="flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all" :class="formData.permissions.includes(perm.id) ? 'border-purple-500 bg-purple-50/30 ring-1 ring-purple-500/20' : 'border-gray-100 hover:border-gray-200 bg-white'">
                         <input type="checkbox" :value="perm.id" v-model="formData.permissions" class="w-4 h-4 mt-0.5 border border-gray-300 rounded text-purple-600 focus:ring-purple-500 focus:ring-offset-0 transition-all cursor-pointer" />

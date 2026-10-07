@@ -8,7 +8,7 @@
             <Zap class="w-5 h-5 text-indigo-500" />
             Vendor-Wide Prepaid Promo
           </h3>
-          <p class="text-xs text-gray-500 mt-1 max-w-md">Students pick any items from this vendor's menu. The entire order payout goes to the platform instead of the vendor.</p>
+          <p class="text-sm text-gray-500 mt-1 max-w-md">Students pick any items from this vendor's menu. The entire order payout goes to the platform instead of the vendor.</p>
         </div>
         <label class="relative inline-flex items-center cursor-pointer">
           <input type="checkbox" v-model="promoForm.enabled" @change="savePromo" class="sr-only peer">
@@ -18,35 +18,35 @@
 
       <div v-if="promoForm.enabled" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
         <div>
-          <label class="text-xs font-semibold text-gray-600 block mb-1">Label</label>
+          <label class="text-sm font-semibold text-gray-600 block mb-1">Label</label>
           <input type="text" v-model="promoForm.label" @blur="savePromo" placeholder="e.g. Waris Combo" class="w-full border border-indigo-200 rounded-lg p-2 text-sm outline-none focus:border-indigo-400 bg-white" />
         </div>
         <div>
-          <label class="text-xs font-semibold text-gray-600 block mb-1">Budget/Order (₦)</label>
+          <label class="text-sm font-semibold text-gray-600 block mb-1">Budget/Order (₦)</label>
           <input type="number" v-model.number="promoForm.budgetPerOrder" @blur="savePromo" class="w-full border border-indigo-200 rounded-lg p-2 text-sm outline-none focus:border-indigo-400 bg-white" />
         </div>
         <div>
-          <label class="text-xs font-semibold text-gray-600 block mb-1">Discount Value (₦)</label>
+          <label class="text-sm font-semibold text-gray-600 block mb-1">Discount Value (₦)</label>
           <input type="number" v-model.number="promoForm.discountValue" @blur="savePromo" class="w-full border border-indigo-200 rounded-lg p-2 text-sm outline-none focus:border-indigo-400 bg-white" />
         </div>
         <div>
-          <label class="text-xs font-semibold text-gray-600 block mb-1">Total Slots</label>
+          <label class="text-sm font-semibold text-gray-600 block mb-1">Total Slots</label>
           <input type="number" v-model.number="promoForm.maxOrders" @blur="savePromo" class="w-full border border-indigo-200 rounded-lg p-2 text-sm outline-none focus:border-indigo-400 bg-white" />
         </div>
         <div>
-          <label class="text-xs font-semibold text-gray-600 block mb-1">Used</label>
+          <label class="text-sm font-semibold text-gray-600 block mb-1">Used</label>
           <div class="flex items-center gap-2 h-[38px]">
             <span class="text-lg font-bold" :class="promoForm.usedOrders >= promoForm.maxOrders ? 'text-red-500' : 'text-indigo-600'">{{ promoForm.usedOrders }}</span>
             <span class="text-sm text-gray-400">/ {{ promoForm.maxOrders }}</span>
-            <button @click="resetUsedOrders" class="ml-auto text-xs text-indigo-500 hover:underline font-medium">Reset</button>
+            <button @click="resetUsedOrders" class="ml-auto text-sm text-indigo-500 hover:underline font-medium">Reset</button>
           </div>
         </div>
         <div class="col-span-2 md:col-span-4">
-          <label class="text-xs font-semibold text-gray-600 block mb-1">Description (Optional)</label>
+          <label class="text-sm font-semibold text-gray-600 block mb-1">Description (Optional)</label>
           <input type="text" v-model="promoForm.description" @blur="savePromo" placeholder="e.g. Special promo combo for students..." class="w-full border border-indigo-200 rounded-lg p-2 text-sm outline-none focus:border-indigo-400 bg-white" />
         </div>
       </div>
-      <div v-if="promoForm.enabled && promoForm.usedOrders >= promoForm.maxOrders" class="mt-3 px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-xs text-red-600 font-medium">
+      <div v-if="promoForm.enabled && promoForm.usedOrders >= promoForm.maxOrders" class="mt-3 px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600 font-medium">
         ⚠️ All promo slots have been used. Students will now pay normally.
       </div>
     </div>
@@ -70,16 +70,16 @@
             <h4 class="font-bold text-gray-900 line-clamp-1 flex-1 pr-2">{{ pack.name }}</h4>
             <span class="font-semibold text-indigo-600">₦{{ pack.bundlePrice || pack.price || 0 }}</span>
           </div>
-          <p class="text-xs text-gray-500 line-clamp-2 mb-4 h-8">{{ pack.description || 'Combo Bundle' }}</p>
+          <p class="text-sm text-gray-500 line-clamp-2 mb-4 h-8">{{ pack.description || 'Combo Bundle' }}</p>
           
           <div class="flex justify-between items-center pt-3 border-t border-indigo-100">
-            <div class="text-xs font-medium text-gray-500">
+            <div class="text-sm font-medium text-gray-500">
               <span v-if="pack.trackStock" :class="pack.stockQuantity > 0 ? 'text-emerald-600' : 'text-red-500'">
                 Stock: {{ pack.stockQuantity }}
               </span>
               <span v-else>Unlimited Stock</span>
             </div>
-            <button @click="openEditModal(pack, true)" class="text-indigo-600 text-xs font-bold hover:underline">
+            <button @click="openEditModal(pack, true)" class="text-indigo-600 text-sm font-bold hover:underline">
               Edit Settings
             </button>
           </div>
@@ -121,16 +121,16 @@
             <h4 class="font-bold text-gray-900 line-clamp-1 flex-1 pr-2">{{ item.name }}</h4>
             <span class="font-semibold text-[#FF5C1A]">₦{{ item.pricePerPortion }}</span>
           </div>
-          <p class="text-xs text-gray-500 line-clamp-2 mb-4 h-8">{{ item.description || 'No description' }}</p>
+          <p class="text-sm text-gray-500 line-clamp-2 mb-4 h-8">{{ item.description || 'No description' }}</p>
           
           <div class="flex justify-between items-center pt-3 border-t border-gray-100">
-            <div class="text-xs font-medium text-gray-500">
+            <div class="text-sm font-medium text-gray-500">
               <span v-if="item.trackStock" :class="item.stockQuantity > 0 ? 'text-emerald-600' : 'text-red-500'">
                 Stock: {{ item.stockQuantity }}
               </span>
               <span v-else>Unlimited Stock</span>
             </div>
-            <button @click="openEditModal(item)" class="text-[#FF5C1A] text-xs font-bold hover:underline">
+            <button @click="openEditModal(item)" class="text-[#FF5C1A] text-sm font-bold hover:underline">
               Edit Settings
             </button>
           </div>
@@ -150,7 +150,7 @@
         <div class="p-5 space-y-5">
           <div class="bg-gray-50 p-3 rounded-lg border border-gray-50 mb-2">
             <p class="text-sm font-semibold text-gray-900">{{ selectedItem?.name }}</p>
-            <p class="text-xs text-gray-500 mt-1">Configure special behaviors like platform prepaid promotions.</p>
+            <p class="text-sm text-gray-500 mt-1">Configure special behaviors like platform prepaid promotions.</p>
           </div>
 
           <div class="flex items-center justify-between">
@@ -163,7 +163,7 @@
           <div class="flex items-center justify-between">
             <div>
               <label class="text-sm font-semibold text-gray-700 block">Prepaid by Platform (Promo)</label>
-              <p class="text-xs text-gray-500 max-w-[250px]">If true, 100% of vendor payouts for this item goes to the platform.</p>
+              <p class="text-sm text-gray-500 max-w-[250px]">If true, 100% of vendor payouts for this item goes to the platform.</p>
             </div>
             <label class="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" v-model="editForm.isPrepaidByPlatform" class="sr-only peer">
@@ -174,7 +174,7 @@
           <div class="flex items-center justify-between">
             <div>
               <label class="text-sm font-semibold text-gray-700 block">Track Stock Limits</label>
-              <p class="text-xs text-gray-500">Automatically blur out when sold out.</p>
+              <p class="text-sm text-gray-500">Automatically blur out when sold out.</p>
             </div>
             <label class="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" v-model="editForm.trackStock" class="sr-only peer">

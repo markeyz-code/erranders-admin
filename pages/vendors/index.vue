@@ -118,7 +118,7 @@
                   </div>
                   <div class="min-w-0">
                     <p class="text-sm font-bold text-gray-900 leading-none mb-1">{{ vendor.storeName }}</p>
-                    <p class="text-xs font-medium text-gray-500 truncate">ID: {{ vendor._id.slice(-8) }}</p>
+                    <p class="text-sm font-medium text-gray-500 truncate">ID: {{ vendor._id.slice(-8) }}</p>
                   </div>
                 </div>
               </td>
@@ -127,7 +127,7 @@
                   <span class="text-[10px] font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded uppercase tracking-wide">
                     {{ vendor.category?.replace('_', ' ') || 'Standard' }}
                   </span>
-                  <span class="text-xs font-semibold text-gray-500 capitalize">
+                  <span class="text-sm font-semibold text-gray-500 capitalize">
                     {{ vendor.businessType?.replace('_', ' ') || 'Store' }}
                   </span>
                 </div>
@@ -135,10 +135,10 @@
               <td class="py-4 px-4 whitespace-nowrap">
                 <div class="flex flex-col gap-1.5">
                   <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded-md">{{ vendor.totalOrders || 0 }} Orders</span>
+                    <span class="text-sm font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded-md">{{ vendor.totalOrders || 0 }} Orders</span>
                     <div class="flex items-center gap-1">
                       <Star class="w-3.5 h-3.5 text-amber-500 fill-current" />
-                      <span class="text-xs font-bold text-gray-900">{{ vendor.rating || 0 }}</span>
+                      <span class="text-sm font-bold text-gray-900">{{ vendor.rating || 0 }}</span>
                     </div>
                   </div>
                   <div v-if="vendor.prepaidPromo?.enabled" class="flex items-center gap-1.5 text-[10px] font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded-md w-fit border border-[#FF5C1A]/20">
@@ -168,7 +168,7 @@
                       <GraduationCap class="w-3 h-3" />
                     </span>
                   </div>
-                  <span class="text-xs font-medium text-gray-500 truncate max-w-[150px]" :title="vendor.owner?.email">{{ vendor.owner?.email }}</span>
+                  <span class="text-sm font-medium text-gray-500 truncate max-w-[150px]" :title="vendor.owner?.email">{{ vendor.owner?.email }}</span>
                 </div>
               </td>
               <td class="py-4 px-6 text-right">
@@ -279,13 +279,13 @@
         <div class="flex flex-col items-center justify-center pt-8 pb-6 border-b border-gray-100 bg-white">
           <img :src="selectedVendor.logo || 'https://via.placeholder.com/150'" alt="Store Logo" class="w-20 h-20 rounded-2xl object-cover shadow-sm mb-4 border border-gray-50" />
           <h3 class="text-xl font-semibold text-gray-900 font-heading mb-1">{{ selectedVendor.storeName }}</h3>
-          <p class="text-xs font-semibold text-[#FF5C1A] uppercase tracking-wide bg-[#FF5C1A]/10 px-3 py-1 rounded-full mb-4">{{ selectedVendor.category?.replace('_', ' ') || 'General' }}</p>
+          <p class="text-sm font-semibold text-[#FF5C1A] uppercase tracking-wide bg-[#FF5C1A]/10 px-3 py-1 rounded-full mb-4">{{ selectedVendor.category?.replace('_', ' ') || 'General' }}</p>
 
           <div class="flex space-x-2 mt-2 mb-4 w-5/6">
-            <button @click="activeDrawerTab = 'overview'" :class="activeDrawerTab === 'overview' ? 'bg-[#FF5C1A] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 py-2 text-xs font-semibold rounded-lg transition-colors">Overview</button>
-            <button @click="activeDrawerTab = 'menu'" :class="activeDrawerTab === 'menu' ? 'bg-[#FF5C1A] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 py-2 text-xs font-semibold rounded-lg transition-colors">Menu</button>
-            <button @click="activeDrawerTab = 'transactions'" :class="activeDrawerTab === 'transactions' ? 'bg-[#FF5C1A] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 py-2 text-xs font-semibold rounded-lg transition-colors">Transactions</button>
-            <button @click="enterEditMode" :class="activeDrawerTab === 'edit' ? 'bg-[#FF5C1A] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 py-2 text-xs font-semibold rounded-lg transition-colors">Edit</button>
+            <button @click="activeDrawerTab = 'overview'" :class="activeDrawerTab === 'overview' ? 'bg-[#FF5C1A] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-colors">Overview</button>
+            <button @click="activeDrawerTab = 'menu'" :class="activeDrawerTab === 'menu' ? 'bg-[#FF5C1A] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-colors">Menu</button>
+            <button @click="activeDrawerTab = 'transactions'" :class="activeDrawerTab === 'transactions' ? 'bg-[#FF5C1A] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-colors">Transactions</button>
+            <button @click="enterEditMode" :class="activeDrawerTab === 'edit' ? 'bg-[#FF5C1A] text-white' : 'bg-gray-100 text-gray-600'" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-colors">Edit</button>
           </div>
 
           <div class="flex items-center justify-between w-5/6 bg-white rounded-lg border border-gray-50 divide-x divide-gray-100 shadow-sm">
@@ -346,7 +346,7 @@
 
                 <div v-if="selectedVendor.isStudentBusiness" class="bg-blue-50/50 p-3 rounded-lg border-l-2 border-blue-500">
                   <p class="text-[10px] font-bold text-blue-800 uppercase tracking-wide">Student Vendor</p>
-                  <p class="text-xs font-semibold text-blue-900 mt-0.5">{{ selectedVendor.university || 'University Student' }} ({{ selectedVendor.matricNumber || 'N/A' }})</p>
+                  <p class="text-sm font-semibold text-blue-900 mt-0.5">{{ selectedVendor.university || 'University Student' }} ({{ selectedVendor.matricNumber || 'N/A' }})</p>
                 </div>
               </div>
             </div>
@@ -392,7 +392,7 @@
               </div>
               
               <div v-if="selectedVendor.preOrderOnly" class="mx-2 bg-amber-50/50 p-3 rounded-lg border-l-2 border-amber-500">
-                <p class="text-xs font-semibold text-amber-900 flex items-center gap-1.5"><AlertCircle class="w-4 h-4" /> Pre-order Only ({{ selectedVendor.preOrderLeadTime || selectedVendor.preOrderDays || 0 }}hrs lead time)</p>
+                <p class="text-sm font-semibold text-amber-900 flex items-center gap-1.5"><AlertCircle class="w-4 h-4" /> Pre-order Only ({{ selectedVendor.preOrderLeadTime || selectedVendor.preOrderDays || 0 }}hrs lead time)</p>
               </div>
             </div>
 
@@ -471,13 +471,13 @@
                 <div v-if="selectedVendor.businessHours?.length">
                   <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-2">Schedule</p>
                   <div class="grid grid-cols-2 gap-2">
-                    <div v-for="hours in selectedVendor.businessHours" :key="hours.day" class="text-xs flex items-center justify-between">
+                    <div v-for="hours in selectedVendor.businessHours" :key="hours.day" class="text-sm flex items-center justify-between">
                       <span class="font-semibold text-gray-500 capitalize">{{ hours.day }}</span>
                       <span v-if="hours.isClosed" class="text-rose-500 font-bold">Closed</span>
                       <span v-else class="text-gray-900 font-medium">{{ hours.open }} - {{ hours.close }}</span>
                     </div>
                   </div>
-                  <div v-if="selectedVendor.breakPeriod?.start" class="mt-2 text-xs text-amber-600">
+                  <div v-if="selectedVendor.breakPeriod?.start" class="mt-2 text-sm text-amber-600">
                     <span class="font-semibold">Break:</span> {{ selectedVendor.breakPeriod.start }} - {{ selectedVendor.breakPeriod.end }}
                   </div>
                 </div>
@@ -485,7 +485,7 @@
                 <div v-if="selectedVendor.offers?.length">
                   <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-2 mt-4">Active Offers</p>
                   <div class="space-y-1">
-                    <div v-for="(offer, idx) in selectedVendor.offers" :key="idx" class="text-xs font-bold text-[#FF5C1A]">
+                    <div v-for="(offer, idx) in selectedVendor.offers" :key="idx" class="text-sm font-bold text-[#FF5C1A]">
                       • {{ offer }}
                     </div>
                   </div>
@@ -504,23 +504,23 @@
             <form @submit.prevent="handleUpdateVendor" class="space-y-4">
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2 col-span-2">
-                  <label class="text-xs font-semibold text-gray-700">Store Name</label>
+                  <label class="text-sm font-semibold text-gray-700">Store Name</label>
                   <input v-model="editVendorPayload.storeName" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2 col-span-2">
-                  <label class="text-xs font-semibold text-gray-700">Description</label>
+                  <label class="text-sm font-semibold text-gray-700">Description</label>
                   <textarea v-model="editVendorPayload.description" rows="2" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20"></textarea>
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Subdomain</label>
+                  <label class="text-sm font-semibold text-gray-700">Subdomain</label>
                   <input v-model="editVendorPayload.subdomain" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Category</label>
+                  <label class="text-sm font-semibold text-gray-700">Category</label>
                   <input v-model="editVendorPayload.category" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Business Type</label>
+                  <label class="text-sm font-semibold text-gray-700">Business Type</label>
                   <select v-model="editVendorPayload.businessType" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option value="physical_product">Physical Product</option>
                     <option value="service_provider">Service Provider</option>
@@ -528,44 +528,44 @@
                   </select>
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Service Location</label>
+                  <label class="text-sm font-semibold text-gray-700">Service Location</label>
                   <input v-model="editVendorPayload.serviceLocation" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Base Delivery Fee</label>
+                  <label class="text-sm font-semibold text-gray-700">Base Delivery Fee</label>
                   <input v-model="editVendorPayload.baseDeliveryFee" type="number" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Packaging Fee</label>
+                  <label class="text-sm font-semibold text-gray-700">Packaging Fee</label>
                   <input v-model="editVendorPayload.packagingFee" type="number" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Min Order</label>
+                  <label class="text-sm font-semibold text-gray-700">Min Order</label>
                   <input v-model="editVendorPayload.minimumOrder" type="number" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Prep Time (mins)</label>
+                  <label class="text-sm font-semibold text-gray-700">Prep Time (mins)</label>
                   <input v-model="editVendorPayload.preparationTime" type="number" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
 
                 <!-- Owner Profile -->
                 <div class="col-span-2 space-y-4 pt-4 border-t border-gray-100">
-                  <h4 class="text-xs font-bold text-gray-900">Owner Profile</h4>
+                  <h4 class="text-sm font-bold text-gray-900">Owner Profile</h4>
                   <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
-                      <label class="text-xs font-semibold text-gray-700">First Name</label>
+                      <label class="text-sm font-semibold text-gray-700">First Name</label>
                       <input v-model="editVendorPayload.owner.firstName" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                     </div>
                     <div class="space-y-2">
-                      <label class="text-xs font-semibold text-gray-700">Last Name</label>
+                      <label class="text-sm font-semibold text-gray-700">Last Name</label>
                       <input v-model="editVendorPayload.owner.lastName" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                     </div>
                     <div class="space-y-2">
-                      <label class="text-xs font-semibold text-gray-700">Email</label>
+                      <label class="text-sm font-semibold text-gray-700">Email</label>
                       <input v-model="editVendorPayload.owner.email" type="email" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                     </div>
                     <div class="space-y-2">
-                      <label class="text-xs font-semibold text-gray-700">Phone</label>
+                      <label class="text-sm font-semibold text-gray-700">Phone</label>
                       <input v-model="editVendorPayload.owner.phone" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                     </div>
                   </div>
@@ -573,18 +573,18 @@
 
                 <!-- Payout Details -->
                 <div class="col-span-2 space-y-4 pt-4 border-t border-gray-100">
-                  <h4 class="text-xs font-bold text-gray-900">Payout Details</h4>
+                  <h4 class="text-sm font-bold text-gray-900">Payout Details</h4>
                   <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2 col-span-2">
-                      <label class="text-xs font-semibold text-gray-700">Bank Name</label>
+                      <label class="text-sm font-semibold text-gray-700">Bank Name</label>
                       <input v-model="editVendorPayload.bankDetails.bankName" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                     </div>
                     <div class="space-y-2">
-                      <label class="text-xs font-semibold text-gray-700">Account Number</label>
+                      <label class="text-sm font-semibold text-gray-700">Account Number</label>
                       <input v-model="editVendorPayload.bankDetails.accountNumber" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                     </div>
                     <div class="space-y-2">
-                      <label class="text-xs font-semibold text-gray-700">Account Name</label>
+                      <label class="text-sm font-semibold text-gray-700">Account Name</label>
                       <input v-model="editVendorPayload.bankDetails.accountName" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                     </div>
                   </div>
@@ -592,14 +592,14 @@
                 
                 <!-- Global Service Configuration -->
                 <div class="col-span-2 space-y-4 pt-4 border-t border-gray-100">
-                  <h4 class="text-xs font-bold text-gray-900">Service Configuration (Global)</h4>
+                  <h4 class="text-sm font-bold text-gray-900">Service Configuration (Global)</h4>
                   <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
-                      <label class="text-xs font-semibold text-gray-700">Opens At</label>
+                      <label class="text-sm font-semibold text-gray-700">Opens At</label>
                       <input v-model="editVendorPayload.openingTime" @change="syncHoursToWeeklyAdmin" type="time" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                     </div>
                     <div class="space-y-2">
-                      <label class="text-xs font-semibold text-gray-700">Closes At</label>
+                      <label class="text-sm font-semibold text-gray-700">Closes At</label>
                       <input v-model="editVendorPayload.closingTime" @change="syncHoursToWeeklyAdmin" type="time" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                     </div>
                   </div>
@@ -607,17 +607,17 @@
 
                 <!-- Business Hours Editor -->
                 <div class="col-span-2 space-y-4 pt-4 border-t border-gray-100">
-                  <h4 class="text-xs font-bold text-gray-900">Weekly Schedule</h4>
+                  <h4 class="text-sm font-bold text-gray-900">Weekly Schedule</h4>
                   <div class="space-y-2">
                     <div v-for="bh in editVendorPayload.businessHours" :key="bh.day" class="p-3 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3" :class="bh.isClosed ? 'border-transparent bg-gray-50' : 'border-gray-200 bg-white'">
                       <div class="flex items-center gap-3">
                         <input type="checkbox" :checked="!bh.isClosed" @change="bh.isClosed = !($event.target as HTMLInputElement).checked" class="w-4 h-4 rounded border-gray-300 text-[#FF5C1A] focus:ring-[#FF5C1A]" />
-                        <span class="text-xs font-bold text-gray-900 capitalize w-20">{{ bh.day }}</span>
+                        <span class="text-sm font-bold text-gray-900 capitalize w-20">{{ bh.day }}</span>
                       </div>
                       
                       <div class="flex items-center gap-2 transition-opacity duration-300" :class="bh.isClosed ? 'opacity-30 pointer-events-none' : 'opacity-100'">
                         <input type="time" v-model="bh.open" :disabled="bh.isClosed" class="text-sm font-bold px-3 py-2 bg-gray-50 rounded-lg border-transparent focus:bg-white focus:border-gray-200 focus:ring-0 outline-none w-28" />
-                        <span class="text-gray-400 font-bold text-xs">to</span>
+                        <span class="text-gray-400 font-bold text-sm">to</span>
                         <input type="time" v-model="bh.close" :disabled="bh.isClosed" class="text-sm font-bold px-3 py-2 bg-gray-50 rounded-lg border-transparent focus:bg-white focus:border-gray-200 focus:ring-0 outline-none w-28" />
                       </div>
                     </div>
@@ -625,7 +625,7 @@
                 </div>
 
                 <div class="col-span-2 pt-4">
-                  <label class="text-xs font-semibold text-gray-700">Status</label>
+                  <label class="text-sm font-semibold text-gray-700">Status</label>
                   <select v-model="editVendorPayload.status" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option value="pending">Pending</option>
                     <option value="approved">Approved</option>
@@ -646,7 +646,7 @@
           <button 
             v-if="selectedVendor.status === 'pending' || selectedVendor.status === 'suspended'"
             @click="initiateAction('approve', selectedVendor._id)"
-            class="flex-1 py-3 px-4 rounded-lg text-white font-semibold text-xs bg-emerald-600 hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
+            class="flex-1 py-3 px-4 rounded-lg text-white font-semibold text-sm bg-emerald-600 hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
           >
             <CheckCircle class="w-4 h-4" /> {{ selectedVendor.status === 'suspended' ? 'Restore Vendor' : 'Approve Vendor' }}
           </button>
@@ -654,7 +654,7 @@
           <button 
             v-if="selectedVendor.status !== 'suspended'"
             @click="initiateAction('reject', selectedVendor._id)"
-            class="flex-1 py-3 px-4 rounded-lg text-rose-600 font-semibold text-xs bg-rose-50 hover:bg-rose-100 border border-rose-100 transition-colors flex items-center justify-center gap-2"
+            class="flex-1 py-3 px-4 rounded-lg text-rose-600 font-semibold text-sm bg-rose-50 hover:bg-rose-100 border border-rose-100 transition-colors flex items-center justify-center gap-2"
           >
             <XCircle class="w-4 h-4" /> Suspend Vendor
           </button>
@@ -674,11 +674,11 @@
         <div class="p-6 space-y-4">
           <p class="text-sm text-gray-600">Manually add funds to the vendor's wallet (e.g. adjustments, bonuses).</p>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Amount (₦)</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Amount (₦)</label>
             <input v-model="creditAmount" type="number" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 5000">
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Reason / Description</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Reason / Description</label>
             <input v-model="creditReason" type="text" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. Bonus payout">
           </div>
           <button 
@@ -705,15 +705,15 @@
         <div class="p-6 space-y-4">
           <p class="text-sm text-gray-600">Use this to manually deduct funds if you've paid out the vendor directly outside of the system.</p>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Amount (₦)</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Amount (₦)</label>
             <input v-model="debitAmount" type="number" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 5000">
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Reason / Description</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Reason / Description</label>
             <input v-model="debitReason" type="text" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. Manual payout">
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Proof of Transaction (Optional)</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Proof of Transaction (Optional)</label>
             <input type="file" @change="handleFileUpload" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#FF5C1A]/10 file:text-[#FF5C1A] hover:file:bg-[#FF5C1A]/20">
           </div>
           <button 
@@ -739,7 +739,7 @@
         <div class="p-6 space-y-4">
           <p class="text-sm text-gray-600">Set the minimum wallet balance required before vendors and erranders can request payouts.</p>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Minimum Payout Amount (₦)</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Minimum Payout Amount (₦)</label>
             <input v-model.number="minimumPayoutAmount" type="number" step="100" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 1000">
           </div>
           <button 

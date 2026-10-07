@@ -55,10 +55,10 @@
           </div>
           <p class="text-sm text-gray-500 mb-3">{{ vendor.description || 'No description provided.' }}</p>
           <div class="flex items-center gap-4">
-            <span class="text-xs font-semibold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-lg border border-[#FF5C1A]/20 capitalize">
+            <span class="text-sm font-semibold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-lg border border-[#FF5C1A]/20 capitalize">
               Category: {{ vendor.category || 'Standard' }}
             </span>
-            <span class="text-xs font-medium text-gray-500 flex items-center gap-1">
+            <span class="text-sm font-medium text-gray-500 flex items-center gap-1">
               <Calendar class="w-3 h-3" />
               Applied {{ new Date(vendor.createdAt).toLocaleDateString() }}
             </span>
@@ -88,22 +88,22 @@
             <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">Store Information</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <p class="text-xs font-semibold text-gray-500 mb-1">Vendor ID</p>
+                <p class="text-sm font-semibold text-gray-500 mb-1">Vendor ID</p>
                 <div class="flex items-center gap-2">
                   <p class="text-sm font-medium text-gray-900 break-all">{{ vendor._id }}</p>
                   <Copy class="w-3.5 h-3.5 text-gray-400 cursor-pointer hover:text-gray-900" @click="copyToClipboard(vendor._id)" />
                 </div>
               </div>
               <div>
-                <p class="text-xs font-semibold text-gray-500 mb-1">Store Name</p>
+                <p class="text-sm font-semibold text-gray-500 mb-1">Store Name</p>
                 <p class="text-sm font-medium text-gray-900">{{ vendor.storeName }}</p>
               </div>
               <div v-if="vendor.businessRegistrationNumber">
-                <p class="text-xs font-semibold text-gray-500 mb-1">Business Reg. No.</p>
+                <p class="text-sm font-semibold text-gray-500 mb-1">Business Reg. No.</p>
                 <p class="text-sm font-medium text-gray-900">{{ vendor.businessRegistrationNumber }}</p>
               </div>
               <div v-if="vendor.address">
-                <p class="text-xs font-semibold text-gray-500 mb-1">Store Address</p>
+                <p class="text-sm font-semibold text-gray-500 mb-1">Store Address</p>
                 <p class="text-sm font-medium text-gray-900">{{ vendor.address }}</p>
               </div>
             </div>
@@ -113,15 +113,15 @@
             <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">Owner Information</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <p class="text-xs font-semibold text-gray-500 mb-1">Full Name</p>
+                <p class="text-sm font-semibold text-gray-500 mb-1">Full Name</p>
                 <p class="text-sm font-medium text-gray-900">{{ vendor.owner.firstName }} {{ vendor.owner.lastName }}</p>
               </div>
               <div>
-                <p class="text-xs font-semibold text-gray-500 mb-1">Email Address</p>
+                <p class="text-sm font-semibold text-gray-500 mb-1">Email Address</p>
                 <p class="text-sm font-medium text-gray-900">{{ vendor.owner.email }}</p>
               </div>
               <div v-if="vendor.owner.phone">
-                <p class="text-xs font-semibold text-gray-500 mb-1">Phone Number</p>
+                <p class="text-sm font-semibold text-gray-500 mb-1">Phone Number</p>
                 <p class="text-sm font-medium text-gray-900">{{ vendor.owner.phone }}</p>
               </div>
             </div>
@@ -236,15 +236,15 @@
         <div class="p-6 space-y-4">
           <p class="text-sm text-gray-600">Use this to manually deduct funds if you've paid out the vendor directly outside of the system.</p>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Amount (₦)</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Amount (₦)</label>
             <input v-model="debitAmount" type="number" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 5000">
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Reason / Description</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Reason / Description</label>
             <input v-model="debitReason" type="text" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. Manual payout">
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Proof of Transaction (Optional)</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Proof of Transaction (Optional)</label>
             <input type="file" @change="handleFileUpload" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#FF5C1A]/10 file:text-[#FF5C1A] hover:file:bg-[#FF5C1A]/20">
           </div>
           <button 

@@ -7,7 +7,7 @@
         <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-50 rounded-full opacity-50 pointer-events-none"></div>
         <div class="relative z-10 flex flex-col h-full">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Earned</h3>
+            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider">Total Earned</h3>
             <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
               <TrendingUp class="w-4 h-4" />
             </div>
@@ -26,7 +26,7 @@
         <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-50 rounded-full opacity-50 pointer-events-none"></div>
         <div class="relative z-10 flex flex-col h-full">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Paid Out</h3>
+            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider">Paid Out</h3>
             <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
               <Banknote class="w-4 h-4" />
             </div>
@@ -45,7 +45,7 @@
         <div class="absolute -right-4 -top-4 w-32 h-32 bg-white/10 rounded-full opacity-50 pointer-events-none"></div>
         <div class="relative z-10 flex flex-col h-full">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xs font-bold text-white/80 uppercase tracking-wider">Current Balance</h3>
+            <h3 class="text-sm font-bold text-white/80 uppercase tracking-wider">Current Balance</h3>
             <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center text-white backdrop-blur-sm">
               <Wallet class="w-4 h-4" />
             </div>
@@ -77,7 +77,7 @@
           </div>
           <div>
             <h3 class="text-base font-bold text-gray-900">Transaction History</h3>
-            <p class="text-xs text-gray-500 font-medium">All financial activities for this user.</p>
+            <p class="text-sm text-gray-500 font-medium">All financial activities for this user.</p>
           </div>
         </div>
       </div>
@@ -110,7 +110,7 @@
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex flex-col">
                   <span class="text-sm font-bold text-gray-900">{{ new Date(txn.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) }}</span>
-                  <span class="text-xs font-medium text-gray-500">{{ new Date(txn.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }}</span>
+                  <span class="text-sm font-medium text-gray-500">{{ new Date(txn.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }}</span>
                 </div>
               </td>
               

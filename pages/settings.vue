@@ -18,7 +18,7 @@
         :key="tab.id"
         @click="activeTab = tab.id"
         :class="[
-          'px-5 py-3 rounded-2xl text-xs font-medium lowercase transition-all flex items-center gap-2 border',
+          'px-5 py-3 rounded-2xl text-sm font-medium lowercase transition-all flex items-center gap-2 border',
           activeTab === tab.id
             ? 'bg-gray-900 text-white border-gray-25shadow-lg shadow-gray-200'
             : 'bg-white text-gray-500 border-gray-100 hover:bg-gray-50 hover:text-gray-900'
@@ -42,7 +42,7 @@
           </div>
           <div>
             <h3 class="text-sm font-medium text-gray-900 lowercase">delivery fees</h3>
-            <p class="text-xs font-bold text-gray-400 lowercase">base pricing students pay for delivery</p>
+            <p class="text-sm font-bold text-gray-400 lowercase">base pricing students pay for delivery</p>
           </div>
         </div>
 
@@ -50,7 +50,7 @@
           <!-- Room Delivery Fee -->
           <div class="space-y-2">
             <div class="flex items-center gap-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">room delivery fee (₦)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">room delivery fee (₦)</label>
               <button @click="showInfo('roomDeliveryFee')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
                 <Info class="w-3 h-3" />
               </button>
@@ -75,7 +75,7 @@
           <!-- Drop-off Service Fee -->
           <div class="space-y-2">
             <div class="flex items-center gap-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">drop-off service fee (₦)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">drop-off service fee (₦)</label>
               <button @click="showInfo('dropoffServiceFee')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
                 <Info class="w-3 h-3" />
               </button>
@@ -106,7 +106,7 @@
           </div>
           <div>
             <h3 class="text-sm font-medium text-gray-900 lowercase">revenue & commissions</h3>
-            <p class="text-xs font-bold text-gray-400 lowercase">how erranders earns money from each transaction</p>
+            <p class="text-sm font-bold text-gray-400 lowercase">how erranders earns money from each transaction</p>
           </div>
         </div>
 
@@ -114,7 +114,7 @@
           <!-- Buyer Convenience Fee -->
           <div class="space-y-2">
             <div class="flex items-center gap-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">buyer convenience fee (₦)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">buyer convenience fee (₦)</label>
               <button @click="showInfo('convenienceFee')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
                 <Info class="w-3 h-3" />
               </button>
@@ -138,7 +138,7 @@
           <!-- Runner Commission (Normal) -->
           <div class="space-y-2">
             <div class="flex items-center gap-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">runner commission (₦) [food/products]</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">runner commission (₦) [food/products]</label>
               <button @click="showInfo('commission')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
                 <Info class="w-3 h-3" />
               </button>
@@ -162,7 +162,7 @@
           <!-- Delivery Minimums -->
           <div class="space-y-2 grid grid-cols-2 gap-4">
             <div class="col-span-1">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">min campus environs fee (₦)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">min campus environs fee (₦)</label>
               <div class="mt-1.5 relative">
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₦</span>
                 <input 
@@ -174,7 +174,7 @@
             </div>
 
             <div class="col-span-1">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">min far off-campus fee (₦)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">min far off-campus fee (₦)</label>
               <div class="mt-1.5 relative">
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₦</span>
                 <input 
@@ -189,7 +189,7 @@
           <!-- Runner Commission (Custom) -->
           <div class="space-y-2">
             <div class="col-span-2 md:col-span-1">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">min custom errand fee (₦)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">min custom errand fee (₦)</label>
               <div class="mt-1.5 relative">
                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₦</span>
                 <input 
@@ -201,7 +201,7 @@
             </div>
 
             <div class="col-span-2 md:col-span-1">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">custom errand commission (%)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">custom errand commission (%)</label>
               <button @click="showInfo('customCommission')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
                 <Info class="w-3 h-3" />
               </button>
@@ -225,7 +225,7 @@
           <!-- Custom Errand Safety Buffer -->
           <div class="space-y-2 relative">
             <div class="col-span-2 md:col-span-1">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">safety buffer (%)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">safety buffer (%)</label>
               <button @click="showInfo('safetyBuffer')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
                 <Info class="w-3 h-3" />
               </button>
@@ -251,7 +251,7 @@
             <div class="flex items-center justify-between p-4 bg-gray-50 border border-gray-50 rounded-2xl hover:bg-white hover:border-[#FF5C1A]/30 transition-all cursor-pointer" @click="form.enableTransferFee = !form.enableTransferFee">
               <div>
                 <label class="text-sm font-medium text-gray-900 lowercase cursor-pointer">enable bank transfer fee</label>
-                <p class="text-xs text-gray-500 mt-1">charge customers for P2P bank transfers to erranders</p>
+                <p class="text-sm text-gray-500 mt-1">charge customers for P2P bank transfers to erranders</p>
               </div>
               <div class="relative w-11 h-6 bg-gray-200 rounded-full transition-colors" :class="{ 'bg-[#FF5C1A]': form.enableTransferFee }">
                 <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform" :class="{ 'translate-x-5': form.enableTransferFee }"></div>
@@ -262,7 +262,7 @@
           <!-- Platform Processing Fee -->
           <div class="space-y-2">
             <div class="flex items-center gap-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">platform processing fee (₦)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">platform processing fee (₦)</label>
               <button @click="showInfo('processingFee')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
                 <Info class="w-3 h-3" />
               </button>
@@ -290,7 +290,7 @@
           <!-- Platform Service Fee % -->
           <div class="space-y-2">
             <div class="flex items-center gap-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">platform service fee (%)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">platform service fee (%)</label>
               <button @click="showInfo('serviceFee')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
                 <Info class="w-3 h-3" />
               </button>
@@ -321,13 +321,13 @@
           </div>
           <div>
             <h3 class="text-sm font-medium text-gray-900 lowercase">menu pricing strategy</h3>
-            <p class="text-xs font-bold text-gray-400 lowercase">controls how menu item prices appear to students</p>
+            <p class="text-sm font-bold text-gray-400 lowercase">controls how menu item prices appear to students</p>
           </div>
         </div>
 
         <div class="sm:w-1/2 space-y-2">
           <div class="flex items-center gap-2">
-            <label class="text-xs font-medium text-gray-400 ml-1 lowercase">food markup (%)</label>
+            <label class="text-sm font-medium text-gray-400 ml-1 lowercase">food markup (%)</label>
             <button @click="showInfo('foodMarkup')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
               <Info class="w-3 h-3" />
             </button>
@@ -361,7 +361,7 @@
           </div>
           <div>
             <h3 class="text-sm font-medium lowercase">revenue impact calculator</h3>
-            <p class="text-xs text-gray-400 lowercase">estimated platform earnings per order based on current settings</p>
+            <p class="text-sm text-gray-400 lowercase">estimated platform earnings per order based on current settings</p>
           </div>
         </div>
 
@@ -391,7 +391,7 @@
         <button 
           @click="confirmSave('pricing')" 
           :disabled="saving"
-          class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-xs font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
+          class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-sm font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
         >
           <Loader2 v-if="saving" class="w-4 h-4 animate-spin" />
           <Save v-else class="w-4 h-4" />
@@ -411,7 +411,7 @@
           </div>
           <div>
             <h3 class="text-sm font-medium text-gray-900 lowercase">notification channels</h3>
-            <p class="text-xs font-bold text-gray-400 lowercase">control how the platform communicates with users</p>
+            <p class="text-sm font-bold text-gray-400 lowercase">control how the platform communicates with users</p>
           </div>
         </div>
 
@@ -419,7 +419,7 @@
         <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">email notifications</h4>
-            <p class="text-xs text-gray-500 lowercase">order confirmations, receipts, OTPs, and marketing emails</p>
+            <p class="text-sm text-gray-500 lowercase">order confirmations, receipts, OTPs, and marketing emails</p>
             <p v-if="!commsForm.emailsEnabled" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
               <AlertTriangle class="w-3 h-3" />
               disabling emails will stop all OTPs, receipts, and transactional emails. users may not be able to log in.
@@ -435,7 +435,7 @@
         <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">push notifications</h4>
-            <p class="text-xs text-gray-500 lowercase">real-time alerts on mobile and desktop via FCM</p>
+            <p class="text-sm text-gray-500 lowercase">real-time alerts on mobile and desktop via FCM</p>
             <p v-if="!commsForm.pushNotificationsEnabled" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
               <AlertTriangle class="w-3 h-3" />
               disabling push notifications means vendors and riders won't receive instant new order alerts.
@@ -451,7 +451,7 @@
           <button 
             @click="confirmSave('comms')" 
             :disabled="savingComms"
-            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-xs font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
+            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-sm font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
           >
             <Loader2 v-if="savingComms" class="w-4 h-4 animate-spin" />
             <Save v-else class="w-4 h-4" />
@@ -472,7 +472,7 @@
           </div>
           <div>
             <h3 class="text-sm font-medium text-gray-900 lowercase">advert popup configuration</h3>
-            <p class="text-xs font-bold text-gray-400 lowercase">control the in-app promotional popup that students see</p>
+            <p class="text-sm font-bold text-gray-400 lowercase">control the in-app promotional popup that students see</p>
           </div>
         </div>
 
@@ -480,7 +480,7 @@
         <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">enable adverts</h4>
-            <p class="text-xs text-gray-500 lowercase">show the promotional popup modal to students periodically</p>
+            <p class="text-sm text-gray-500 lowercase">show the promotional popup modal to students periodically</p>
           </div>
           <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" v-model="advertForm.enabled" class="sr-only peer">
@@ -491,7 +491,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="space-y-2">
             <div class="flex items-center gap-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">interval (minutes)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">interval (minutes)</label>
               <button @click="showInfo('advertInterval')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
                 <Info class="w-3 h-3" />
               </button>
@@ -513,7 +513,7 @@
           </div>
 
           <div class="space-y-2">
-            <label class="text-xs font-medium text-gray-400 ml-1 lowercase">auto-close (seconds, 0 = manual close)</label>
+            <label class="text-sm font-medium text-gray-400 ml-1 lowercase">auto-close (seconds, 0 = manual close)</label>
             <input 
               v-model.number="advertForm.autoCloseSeconds"
               type="number" required min="0"
@@ -524,7 +524,7 @@
 
         <!-- Content Type -->
         <div class="space-y-2">
-          <label class="text-xs font-medium text-gray-400 ml-1 lowercase">content type</label>
+          <label class="text-sm font-medium text-gray-400 ml-1 lowercase">content type</label>
           <div class="flex gap-4">
             <label class="flex-1 flex items-center gap-2 p-4 bg-gray-50 border border-gray-50 rounded-2xl cursor-pointer hover:bg-gray-100 transition-colors">
               <input type="radio" v-model="advertForm.contentType" value="dynamic" class="text-[#FF5C1A] focus:ring-[#FF5C1A]">
@@ -542,25 +542,25 @@
           <h4 class="text-sm font-medium text-gray-900 lowercase border-b border-gray-50 pb-2">custom ad details</h4>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">headline</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">headline</label>
               <input v-model="advertForm.customAd.title" type="text" placeholder="e.g. Back to School Promo!" class="w-full px-5 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
             </div>
             <div class="space-y-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">image url</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">image url</label>
               <input v-model="advertForm.customAd.imageUrl" type="url" placeholder="https://example.com/image.png" class="w-full px-5 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
             </div>
           </div>
           <div class="space-y-2">
-            <label class="text-xs font-medium text-gray-400 ml-1 lowercase">description</label>
+            <label class="text-sm font-medium text-gray-400 ml-1 lowercase">description</label>
             <textarea v-model="advertForm.customAd.description" rows="2" placeholder="Promo description..." class="w-full px-5 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all resize-none"></textarea>
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">button text</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">button text</label>
               <input v-model="advertForm.customAd.ctaText" type="text" placeholder="Shop Now" class="w-full px-5 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
             </div>
             <div class="space-y-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">button link</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">button link</label>
               <input v-model="advertForm.customAd.ctaLink" type="text" placeholder="/errands/custom" class="w-full px-5 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all" />
             </div>
           </div>
@@ -570,7 +570,7 @@
           <button 
             @click="confirmSave('adverts')" 
             :disabled="savingAdvert"
-            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-xs font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
+            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-sm font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
           >
             <Loader2 v-if="savingAdvert" class="w-4 h-4 animate-spin" />
             <Save v-else class="w-4 h-4" />
@@ -591,14 +591,14 @@
           </div>
           <div>
             <h3 class="text-sm font-medium text-gray-900 lowercase">exam brethren campaign</h3>
-            <p class="text-xs font-bold text-gray-400 lowercase">night owl free delivery and brethren split discounts</p>
+            <p class="text-sm font-bold text-gray-400 lowercase">night owl free delivery and brethren split discounts</p>
           </div>
         </div>
 
         <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">enable campaign</h4>
-            <p class="text-xs text-gray-500 lowercase">activates free delivery (10pm-2am) and 10% group discounts</p>
+            <p class="text-sm text-gray-500 lowercase">activates free delivery (10pm-2am) and 10% group discounts</p>
             <p v-if="examBrethrenForm.isActive" class="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
               <CheckCircle class="w-3 h-3" />
               active — students ordering between 10pm and 2am get free delivery. this boosts late-night orders but absorbs delivery costs.
@@ -617,7 +617,7 @@
           <button 
             @click="confirmSave('campaigns')" 
             :disabled="savingExamBrethren"
-            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-xs font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
+            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-sm font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
           >
             <Loader2 v-if="savingExamBrethren" class="w-4 h-4 animate-spin" />
             <Save v-else class="w-4 h-4" />
@@ -638,14 +638,14 @@
           </div>
           <div>
             <h3 class="text-sm font-medium text-gray-900 lowercase">errander operations</h3>
-            <p class="text-xs font-bold text-gray-400 lowercase">configure errander operational limits</p>
+            <p class="text-sm font-bold text-gray-400 lowercase">configure errander operational limits</p>
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="space-y-2">
             <div class="flex items-center gap-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">max concurrent orders</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">max concurrent orders</label>
               <button @click="showInfo('maxConcurrentOrders')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
                 <Info class="w-3 h-3" />
               </button>
@@ -656,7 +656,7 @@
               class="w-full bg-gray-50 border border-gray-50 text-gray-900 text-sm rounded-2xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-5 py-3.5 transition-all outline-none" 
             />
             
-            <div v-if="activeInfo === 'maxConcurrentOrders'" class="bg-gray-900 text-white p-4 rounded-xl text-xs space-y-2 relative mt-2 animate-scale-in">
+            <div v-if="activeInfo === 'maxConcurrentOrders'" class="bg-gray-900 text-white p-4 rounded-xl text-sm space-y-2 relative mt-2 animate-scale-in">
               <div class="absolute -top-1.5 left-10 w-3 h-3 bg-gray-900 rotate-45"></div>
               <p>the maximum number of orders an errander can accept at the same time.</p>
               <ul class="list-disc pl-4 space-y-1 text-gray-300">
@@ -668,7 +668,7 @@
 
           <div class="space-y-2">
             <div class="flex items-center gap-2">
-              <label class="text-xs font-medium text-gray-400 ml-1 lowercase">minimum payout (₦)</label>
+              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">minimum payout (₦)</label>
               <button @click="showInfo('minimumPayout')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
                 <Info class="w-3 h-3" />
               </button>
@@ -679,7 +679,7 @@
               class="w-full bg-gray-50 border border-gray-50 text-gray-900 text-sm rounded-2xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-5 py-3.5 transition-all outline-none" 
             />
             
-            <div v-if="activeInfo === 'minimumPayout'" class="bg-gray-900 text-white p-4 rounded-xl text-xs space-y-2 relative mt-2 animate-scale-in">
+            <div v-if="activeInfo === 'minimumPayout'" class="bg-gray-900 text-white p-4 rounded-xl text-sm space-y-2 relative mt-2 animate-scale-in">
               <div class="absolute -top-1.5 left-10 w-3 h-3 bg-gray-900 rotate-45"></div>
               <p>the minimum amount (in naira) an errander must have in their wallet before they can withdraw funds.</p>
             </div>
@@ -690,7 +690,7 @@
           <button 
             @click="confirmSave('erranders')" 
             :disabled="savingErrander"
-            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-xs font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
+            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-sm font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
           >
             <Loader2 v-if="savingErrander" class="w-4 h-4 animate-spin" />
             <Save v-else class="w-4 h-4" />
@@ -711,7 +711,7 @@
           </div>
           <div>
             <h3 class="text-sm font-medium text-gray-900 lowercase">platform access</h3>
-            <p class="text-xs font-bold text-gray-400 lowercase">close the platform for maintenance</p>
+            <p class="text-sm font-bold text-gray-400 lowercase">close the platform for maintenance</p>
           </div>
         </div>
 
@@ -719,7 +719,7 @@
         <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">student app</h4>
-            <p class="text-xs text-gray-500 lowercase">close the student-facing app for maintenance</p>
+            <p class="text-sm text-gray-500 lowercase">close the student-facing app for maintenance</p>
             <p v-if="platformForm.isStudentAppClosed" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
               <AlertTriangle class="w-3 h-3" />
               student app is closed. students will see a maintenance screen.
@@ -739,7 +739,7 @@
         <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">vendor app</h4>
-            <p class="text-xs text-gray-500 lowercase">close the vendor/merchant app for maintenance</p>
+            <p class="text-sm text-gray-500 lowercase">close the vendor/merchant app for maintenance</p>
             <p v-if="platformForm.isVendorAppClosed" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
               <AlertTriangle class="w-3 h-3" />
               vendor app is closed. vendors will see a maintenance screen.
@@ -759,7 +759,7 @@
         <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">dispatch app</h4>
-            <p class="text-xs text-gray-500 lowercase">close the errand ninja / dispatch app for maintenance</p>
+            <p class="text-sm text-gray-500 lowercase">close the errand ninja / dispatch app for maintenance</p>
             <p v-if="platformForm.isDispatchAppClosed" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
               <AlertTriangle class="w-3 h-3" />
               dispatch app is closed. riders will see a maintenance screen.
@@ -779,7 +779,7 @@
           <button 
             @click="confirmSave('platform')" 
             :disabled="savingPlatform"
-            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-xs font-medium lowercase hover:bg-red-500 transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
+            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-sm font-medium lowercase hover:bg-red-500 transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
           >
             <Loader2 v-if="savingPlatform" class="w-4 h-4 animate-spin" />
             <Save v-else class="w-4 h-4" />
@@ -809,7 +809,7 @@
 
             <!-- Change Summary -->
             <div v-if="confirmModal.changes.length" class="bg-gray-50 rounded-2xl p-4 space-y-2 max-h-48 overflow-y-auto border border-gray-50">
-              <div v-for="(change, i) in confirmModal.changes" :key="i" class="text-xs font-medium text-gray-600 flex items-start gap-2">
+              <div v-for="(change, i) in confirmModal.changes" :key="i" class="text-sm font-medium text-gray-600 flex items-start gap-2">
                 <span class="text-amber-500 mt-0.5">•</span>
                 <span v-html="change"></span>
               </div>

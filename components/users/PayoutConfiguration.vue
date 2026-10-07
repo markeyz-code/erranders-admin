@@ -7,7 +7,7 @@
         </div>
         <div>
           <h3 class="text-base font-bold text-gray-900">Payout Configuration</h3>
-          <p class="text-xs text-gray-500 font-medium">Manage this user's payout frequency and bank details.</p>
+          <p class="text-sm text-gray-500 font-medium">Manage this user's payout frequency and bank details.</p>
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@
           >
             <div>
               <p class="text-sm font-bold capitalize" :class="form.preference === freq ? 'text-blue-700' : 'text-gray-900'">{{ freq }} Payouts</p>
-              <p class="text-xs mt-1" :class="form.preference === freq ? 'text-blue-600/80' : 'text-gray-500'">
+              <p class="text-sm mt-1" :class="form.preference === freq ? 'text-blue-600/80' : 'text-gray-500'">
                 {{ freq === 'manual' ? 'When requested' : freq === 'daily' ? 'Next day processing' : freq === 'weekly' ? 'Every Friday' : '1st of every month' }}
               </p>
             </div>
@@ -46,14 +46,14 @@
         <div class="space-y-4 max-w-2xl">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1.5">
-              <label class="text-xs font-semibold text-gray-500">Select Bank</label>
+              <label class="text-sm font-semibold text-gray-500">Select Bank</label>
               <select v-model="form.bankDetails.bankCode" @change="onBankChange" class="w-full px-4 py-3 bg-gray-50 border border-gray-50 rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none">
                 <option value="" disabled>Choose a bank</option>
                 <option v-for="bank in banks" :key="bank.code" :value="bank.code">{{ bank.name }}</option>
               </select>
             </div>
             <div class="space-y-1.5">
-              <label class="text-xs font-semibold text-gray-500">Account Number</label>
+              <label class="text-sm font-semibold text-gray-500">Account Number</label>
               <input 
                 v-model="form.bankDetails.accountNumber" 
                 type="text" 

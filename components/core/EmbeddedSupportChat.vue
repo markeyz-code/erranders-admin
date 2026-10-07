@@ -13,7 +13,7 @@
         </div>
         <div class="flex-1 min-w-0">
           <h3 class="text-base font-bold truncate leading-tight text-gray-900 font-heading">{{ receiverName || 'Support Chat' }}</h3>
-          <p class="text-xs text-gray-500 font-medium truncate mt-0.5 flex items-center gap-1.5">
+          <p class="text-sm text-gray-500 font-medium truncate mt-0.5 flex items-center gap-1.5">
             <span class="w-1.5 h-1.5 rounded-full" :class="isTyping ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'"></span>
             {{ isTyping ? 'Typing...' : 'Online' }}
           </p>
@@ -30,7 +30,7 @@
         <div class="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay pointer-events-none"></div>
         
         <div class="flex justify-center mb-8 sticky top-4 z-10">
-          <span class="px-4 py-1.5 bg-white/80 backdrop-blur-md text-gray-500 text-[10px] font-bold rounded-full shadow-sm border border-gray-50/50 uppercase tracking-widest">
+          <span class="px-4 py-1.5 bg-white/80 backdrop-blur-md text-gray-500 text-[10px] font-bold rounded-full shadow-sm border border-gray-50/50 uppercase ">
             Today
           </span>
         </div>
@@ -45,7 +45,7 @@
               <MessageSquare class="w-6 h-6 text-gray-400" />
             </div>
             <p class="text-sm text-gray-900 font-semibold mb-1">Start a conversation</p>
-            <p class="text-xs text-gray-500 font-medium leading-relaxed">
+            <p class="text-sm text-gray-500 font-medium leading-relaxed">
               Send a message to begin the support session.
             </p>
           </div>
@@ -62,7 +62,7 @@
               : 'bg-white text-gray-900 rounded-3xl rounded-tl-sm border-gray-100'
           ]">
             <!-- Sender name -->
-            <p v-if="!isMe(msg)" class="text-xs font-bold text-[#FF5C1A] mb-1.5">
+            <p v-if="!isMe(msg)" class="text-sm font-bold text-[#FF5C1A] mb-1.5">
               {{ getDisplayName(msg) }}
             </p>
 

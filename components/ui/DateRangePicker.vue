@@ -32,7 +32,7 @@
           
           <!-- Days Header -->
           <div class="grid grid-cols-7 mb-2">
-            <div v-for="day in ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']" :key="day" class="text-center text-xs font-semibold text-gray-400 py-1">
+            <div v-for="day in ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']" :key="day" class="text-center text-sm font-semibold text-gray-400 py-1">
               {{ day }}
             </div>
           </div>
@@ -73,7 +73,7 @@
           
           <!-- Days Header -->
           <div class="grid grid-cols-7 mb-2">
-            <div v-for="day in ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']" :key="day" class="text-center text-xs font-semibold text-gray-400 py-1">
+            <div v-for="day in ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']" :key="day" class="text-center text-sm font-semibold text-gray-400 py-1">
               {{ day }}
             </div>
           </div>
@@ -108,7 +108,7 @@
       <div class="flex items-center justify-between mb-4">
         <div>
           <h4 class="text-sm font-bold text-gray-900">Customize by hours</h4>
-          <p class="text-xs text-gray-500">The default closing interval is set like full day</p>
+          <p class="text-sm text-gray-500">The default closing interval is set like full day</p>
         </div>
         <button class="w-10 h-6 bg-gray-900 rounded-full relative">
           <div class="w-4 h-4 bg-white rounded-full absolute right-1 top-1"></div>

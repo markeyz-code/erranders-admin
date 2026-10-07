@@ -5,10 +5,10 @@
         <div class="w-1.5 h-4 bg-[#FF5C1A] rounded-full"></div>
         <div>
           <h3 class="font-bold text-gray-900 text-sm">Revenue Overview</h3>
-          <p class="text-xs font-medium text-gray-500">Past 30 days platform earnings</p>
+          <p class="text-sm font-medium text-gray-500">Past 30 days platform earnings</p>
         </div>
       </div>
-      <div class="text-xs font-semibold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1.5 rounded-lg border border-[#FF5C1A]/20">
+      <div class="text-sm font-semibold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1.5 rounded-lg border border-[#FF5C1A]/20">
         Last 30 Days
       </div>
     </div>
@@ -24,7 +24,7 @@
         <template #fallback>
           <div class="w-full h-full flex flex-col gap-2 items-center justify-center bg-gray-50/50 rounded-xl border border-gray-50 border-dashed">
             <Loader2 class="w-6 h-6 text-[#FF5C1A] animate-spin" />
-            <span class="text-xs font-medium text-gray-500">Loading chart...</span>
+            <span class="text-sm font-medium text-gray-500">Loading chart...</span>
           </div>
         </template>
       </ClientOnly>

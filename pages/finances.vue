@@ -23,7 +23,7 @@
     <div class="space-y-4">
       <div class="space-y-1">
         <h1 class="text-2xl font-semibold text-gray-900 font-heading tracking-tight">Finances</h1>
-        <p class="text-xs font-medium text-gray-500">Track revenue, commissions, and all platform transactions.</p>
+        <p class="text-sm font-medium text-gray-500">Track revenue, commissions, and all platform transactions.</p>
       </div>
 
       <!-- Dashboard Grid -->
@@ -45,22 +45,22 @@
               <div class="absolute -right-12 -top-12 w-48 h-48 bg-emerald-50 rounded-full blur-3xl opacity-50"></div>
               
               <div class="flex-1 space-y-1 z-10 w-full">
-                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5"><Calendar class="w-3.5 h-3.5"/> Today's Revenue</p>
+                <p class="text-sm font-bold text-gray-500 uppercase  flex items-center gap-1.5"><Calendar class="w-3.5 h-3.5"/> Today's Revenue</p>
                 <div class="flex items-baseline gap-3">
                   <h2 class="text-4xl font-black text-gray-900 tabular-nums font-heading tracking-tight">₦{{ (stats?.todaysRevenue || 0).toLocaleString() }}</h2>
                   
-                  <div class="flex items-center gap-1 px-2.5 py-1 rounded-full border text-xs font-bold"
+                  <div class="flex items-center gap-1 px-2.5 py-1 rounded-full border text-sm font-bold"
                        :class="revenueGrowth >= 0 ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'">
                     <TrendingUp v-if="revenueGrowth >= 0" class="w-3.5 h-3.5" />
                     <TrendingDown v-else class="w-3.5 h-3.5" />
                     {{ Math.abs(revenueGrowth).toFixed(1) }}%
                   </div>
                 </div>
-                <p class="text-xs font-medium text-gray-500 mt-2">Yesterday: ₦{{ (stats?.yesterdaysRevenue || 0).toLocaleString() }}</p>
+                <p class="text-sm font-medium text-gray-500 mt-2">Yesterday: ₦{{ (stats?.yesterdaysRevenue || 0).toLocaleString() }}</p>
               </div>
 
               <div class="w-full md:w-auto shrink-0 z-10 flex gap-2">
-                <button class="flex-1 md:flex-none px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-xl text-xs font-bold transition-colors shadow-sm">View Report</button>
+                <button class="flex-1 md:flex-none px-4 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-xl text-sm font-bold transition-colors shadow-sm">View Report</button>
               </div>
             </div>
 
@@ -73,7 +73,7 @@
                   <TrendingUp class="w-5 h-5 text-[#FF5C1A]" />
                 </div>
                 <div class="flex items-center gap-1.5 mb-1 relative group/tooltip w-fit">
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Platform Share (Net Profit)</p>
+                  <p class="text-[10px] font-bold text-gray-400 uppercase ">Total Platform Share (Net Profit)</p>
                   <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
                   <div class="absolute left-0 bottom-full mb-2 hidden group-hover/tooltip:block w-48 bg-gray-900 text-white text-[10px] p-2.5 rounded-lg shadow-xl z-20 font-medium leading-relaxed">
                     Total net profit retained by the platform from all revenue streams.
@@ -90,7 +90,7 @@
                   <Package class="w-5 h-5 text-[#FF5C1A]" />
                 </div>
                 <div class="flex items-center gap-1.5 mb-1 relative group/tooltip w-fit">
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Marketplace Fees</p>
+                  <p class="text-[10px] font-bold text-gray-400 uppercase ">Marketplace Fees</p>
                   <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
                   <div class="absolute left-0 bottom-full mb-2 hidden group-hover/tooltip:block w-48 bg-gray-900 text-white text-[10px] p-2.5 rounded-lg shadow-xl z-20 font-medium leading-relaxed">
                     Platform's accumulated share from marketplace food orders (Service Fees + N50 Delivery Cut + Markups).
@@ -107,7 +107,7 @@
                   <Sparkles class="w-5 h-5 text-[#FF5C1A]" />
                 </div>
                 <div class="flex items-center gap-1.5 mb-1 relative group/tooltip w-fit">
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Custom Errand Fees</p>
+                  <p class="text-[10px] font-bold text-gray-400 uppercase ">Custom Errand Fees</p>
                   <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
                   <div class="absolute left-0 bottom-full mb-2 hidden group-hover/tooltip:block w-48 bg-gray-900 text-white text-[10px] p-2.5 rounded-lg shadow-xl z-20 font-medium leading-relaxed">
                     Platform's accumulated share specifically from Custom Errands percentage fees.
@@ -124,7 +124,7 @@
                   <Store class="w-5 h-5 text-emerald-600" />
                 </div>
                 <div class="flex items-center gap-1.5 mb-1 relative group/tooltip w-fit">
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Vendor Earnings</p>
+                  <p class="text-[10px] font-bold text-gray-400 uppercase ">Vendor Earnings</p>
                   <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
                   <div class="absolute left-0 bottom-full mb-2 hidden group-hover/tooltip:block w-48 bg-gray-900 text-white text-[10px] p-2.5 rounded-lg shadow-xl z-20 font-medium leading-relaxed">
                     Total lifetime earnings accrued directly to all vendor wallets from successful orders.
@@ -141,7 +141,7 @@
                   <Truck class="w-5 h-5 text-indigo-600" />
                 </div>
                 <div class="flex items-center gap-1.5 mb-1 relative group/tooltip w-fit">
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Dispatcher Earnings</p>
+                  <p class="text-[10px] font-bold text-gray-400 uppercase ">Dispatcher Earnings</p>
                   <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
                   <div class="absolute left-0 bottom-full mb-2 hidden group-hover/tooltip:block w-48 bg-gray-900 text-white text-[10px] p-2.5 rounded-lg shadow-xl z-20 font-medium leading-relaxed">
                     Total lifetime earnings accrued directly to all dispatcher/errander wallets from completed deliveries.
@@ -158,7 +158,7 @@
                   <ArrowUpRight class="w-5 h-5 text-amber-600" />
                 </div>
                 <div class="flex items-center gap-1.5 mb-1 relative group/tooltip w-fit">
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Vendor Payouts</p>
+                  <p class="text-[10px] font-bold text-gray-400 uppercase ">Vendor Payouts</p>
                   <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
                   <div class="absolute left-0 bottom-full mb-2 hidden group-hover/tooltip:block w-48 bg-gray-900 text-white text-[10px] p-2.5 rounded-lg shadow-xl z-20 font-medium leading-relaxed">
                     Total amount of money successfully withdrawn and paid out to vendors.
@@ -175,7 +175,7 @@
                   <ArrowUpRight class="w-5 h-5 text-fuchsia-600" />
                 </div>
                 <div class="flex items-center gap-1.5 mb-1 relative group/tooltip w-fit">
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Dispatcher Payouts</p>
+                  <p class="text-[10px] font-bold text-gray-400 uppercase ">Dispatcher Payouts</p>
                   <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
                   <div class="absolute left-0 bottom-full mb-2 hidden group-hover/tooltip:block w-48 bg-gray-900 text-white text-[10px] p-2.5 rounded-lg shadow-xl z-20 font-medium leading-relaxed">
                     Total amount of money successfully withdrawn and paid out to dispatchers.
@@ -192,7 +192,7 @@
                   <Wallet class="w-5 h-5 text-blue-600" />
                 </div>
                 <div class="flex items-center gap-1.5 mb-1 relative group/tooltip w-fit">
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Student Funding</p>
+                  <p class="text-[10px] font-bold text-gray-400 uppercase ">Student Funding</p>
                   <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
                   <div class="absolute left-0 bottom-full mb-2 hidden group-hover/tooltip:block w-48 bg-gray-900 text-white text-[10px] p-2.5 rounded-lg shadow-xl z-20 font-medium leading-relaxed">
                     Total amount of money deposited/funded into student wallets via Paystack or direct top-ups.
@@ -209,7 +209,7 @@
                   <CreditCard class="w-5 h-5 text-rose-600" />
                 </div>
                 <div class="flex items-center gap-1.5 mb-1 relative group/tooltip w-fit">
-                  <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Wallet Usage</p>
+                  <p class="text-[10px] font-bold text-gray-400 uppercase ">Wallet Usage</p>
                   <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
                   <div class="absolute left-0 bottom-full mb-2 hidden group-hover/tooltip:block w-48 bg-gray-900 text-white text-[10px] p-2.5 rounded-lg shadow-xl z-20 font-medium leading-relaxed">
                     Total amount of money spent by students from their wallets to pay for orders and services.
@@ -248,7 +248,7 @@
                     <div class="mt-0.5"><TrendingDown class="w-4 h-4 text-rose-400" /></div>
                     <div class="flex flex-col h-full justify-between">
                       <div>
-                        <p class="text-xs font-bold text-rose-200 mb-1 group-hover:text-rose-100">Revenue is down {{ Math.abs(revenueGrowth).toFixed(1) }}%</p>
+                        <p class="text-sm font-bold text-rose-200 mb-1 group-hover:text-rose-100">Revenue is down {{ Math.abs(revenueGrowth).toFixed(1) }}%</p>
                         <p class="text-[10px] font-medium text-rose-300/80 leading-relaxed">Consider launching a targeted push campaign to inactive users to boost order volume today.</p>
                       </div>
                       <button class="mt-3 w-fit text-[10px] font-bold text-white bg-rose-500/20 px-3 py-1.5 rounded-lg border border-rose-500/30 hover:bg-rose-500/40 transition-colors">Create Campaign</button>
@@ -261,7 +261,7 @@
                     <div class="mt-0.5"><TrendingUp class="w-4 h-4 text-emerald-400" /></div>
                     <div class="flex flex-col h-full justify-between">
                       <div>
-                        <p class="text-xs font-bold text-emerald-200 mb-1 group-hover:text-emerald-100">Strong Momentum (+{{ revenueGrowth.toFixed(1) }}%)</p>
+                        <p class="text-sm font-bold text-emerald-200 mb-1 group-hover:text-emerald-100">Strong Momentum (+{{ revenueGrowth.toFixed(1) }}%)</p>
                         <p class="text-[10px] font-medium text-emerald-300/80 leading-relaxed">Great job! Consider adjusting vendor commission rates slightly to capitalize on high volume.</p>
                       </div>
                       <button class="mt-3 w-fit text-[10px] font-bold text-white bg-emerald-500/20 px-3 py-1.5 rounded-lg border border-emerald-500/30 hover:bg-emerald-500/40 transition-colors">Review Rates</button>
@@ -274,7 +274,7 @@
                     <div class="mt-0.5"><Users class="w-4 h-4 text-amber-400" /></div>
                     <div class="flex flex-col h-full justify-between">
                       <div>
-                        <p class="text-xs font-bold text-amber-200 mb-1 group-hover:text-amber-100">Acquisition Strategy</p>
+                        <p class="text-sm font-bold text-amber-200 mb-1 group-hover:text-amber-100">Acquisition Strategy</p>
                         <p class="text-[10px] font-medium text-amber-300/80 leading-relaxed">Top spender is highly active. Create a referral code for them to invite more high-value peers.</p>
                       </div>
                     </div>
@@ -294,7 +294,7 @@
           </div>
           <div>
             <h3 class="text-lg font-bold text-gray-900 font-heading tracking-tight">Top Performers</h3>
-            <p class="text-[10px] font-medium text-gray-500 uppercase tracking-widest">Platform Hall of Fame</p>
+            <p class="text-[10px] font-medium text-gray-500 uppercase ">Platform Hall of Fame</p>
           </div>
         </div>
         
@@ -304,10 +304,10 @@
             <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
             <div class="flex items-start justify-between mb-3">
               <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Top Spender</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase ">Top Spender</p>
                 <h4 class="font-bold text-gray-900 truncate mt-1 max-w-[150px]">{{ stats?.highestPurchaseUser?.owner?.firstName }} {{ stats?.highestPurchaseUser?.owner?.lastName }}</h4>
               </div>
-              <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xs font-black border border-blue-100">
+              <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-sm font-black border border-blue-100">
                 {{ stats?.highestPurchaseUser?.owner?.firstName?.charAt(0) || '?' }}
               </div>
             </div>
@@ -325,10 +325,10 @@
             <div class="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
             <div class="flex items-start justify-between mb-3">
               <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Highest Points</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase ">Highest Points</p>
                 <h4 class="font-bold text-gray-900 truncate mt-1 max-w-[150px]">{{ stats?.highestPointsUser?.firstName }} {{ stats?.highestPointsUser?.lastName }}</h4>
               </div>
-              <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-xs font-black border border-amber-100">
+              <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-sm font-black border border-amber-100">
                 {{ stats?.highestPointsUser?.firstName?.charAt(0) || '?' }}
               </div>
             </div>
@@ -346,10 +346,10 @@
             <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
             <div class="flex items-start justify-between mb-3">
               <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Top Vendor</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase ">Top Vendor</p>
                 <h4 class="font-bold text-gray-900 truncate mt-1 max-w-[150px]">{{ stats?.topVendor?.owner?.firstName }} {{ stats?.topVendor?.owner?.lastName }}</h4>
               </div>
-              <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs font-black border border-emerald-100">
+              <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm font-black border border-emerald-100">
                 {{ stats?.topVendor?.owner?.firstName?.charAt(0) || '?' }}
               </div>
             </div>
@@ -367,10 +367,10 @@
             <div class="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
             <div class="flex items-start justify-between mb-3">
               <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Top Dispatcher</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase ">Top Dispatcher</p>
                 <h4 class="font-bold text-gray-900 truncate mt-1 max-w-[150px]">{{ stats?.topErrander?.owner?.firstName }} {{ stats?.topErrander?.owner?.lastName }}</h4>
               </div>
-              <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-black border border-indigo-100">
+              <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm font-black border border-indigo-100">
                 {{ stats?.topErrander?.owner?.firstName?.charAt(0) || '?' }}
               </div>
             </div>
@@ -399,7 +399,7 @@
               <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
             </button>
           </div>
-          <button class="mb-4 flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-md text-xs font-semibold text-gray-600 border border-gray-50 hover:bg-gray-50 transition-colors shadow-sm">
+          <button class="mb-4 flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-md text-sm font-semibold text-gray-600 border border-gray-50 hover:bg-gray-50 transition-colors shadow-sm">
             <ListFilter class="w-3 h-3" />
             Filter
           </button>
@@ -418,35 +418,35 @@
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-black text-white border-b border-gray-800">
-              <th @click="sortBy('createdAt')" class="py-4 px-6 font-bold text-gray-300 text-[10px] uppercase tracking-widest whitespace-nowrap cursor-pointer hover:text-white transition-colors group">
+              <th @click="sortBy('createdAt')" class="py-4 px-6 font-bold text-gray-300 text-[10px] uppercase  whitespace-nowrap cursor-pointer hover:text-white transition-colors group">
                 <div class="flex items-center gap-1">Date <ArrowUp v-if="sortKey === 'createdAt' && sortOrder === 'asc'" class="w-3 h-3"/><ArrowDown v-if="sortKey === 'createdAt' && sortOrder === 'desc'" class="w-3 h-3"/></div>
               </th>
-              <th @click="sortBy('user')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase tracking-widest whitespace-nowrap cursor-pointer hover:text-white transition-colors">
+              <th @click="sortBy('user')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase  whitespace-nowrap cursor-pointer hover:text-white transition-colors">
                 <div class="flex items-center gap-1">User <ArrowUp v-if="sortKey === 'user' && sortOrder === 'asc'" class="w-3 h-3"/><ArrowDown v-if="sortKey === 'user' && sortOrder === 'desc'" class="w-3 h-3"/></div>
               </th>
-              <th @click="sortBy('amount')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase tracking-widest whitespace-nowrap cursor-pointer hover:text-white transition-colors">
+              <th @click="sortBy('amount')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase  whitespace-nowrap cursor-pointer hover:text-white transition-colors">
                 <div class="flex items-center gap-1">Amount <ArrowUp v-if="sortKey === 'amount' && sortOrder === 'asc'" class="w-3 h-3"/><ArrowDown v-if="sortKey === 'amount' && sortOrder === 'desc'" class="w-3 h-3"/></div>
               </th>
-              <th @click="sortBy('type')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase tracking-widest whitespace-nowrap text-center cursor-pointer hover:text-white transition-colors">
+              <th @click="sortBy('type')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase  whitespace-nowrap text-center cursor-pointer hover:text-white transition-colors">
                 <div class="flex items-center justify-center gap-1">Type <ArrowUp v-if="sortKey === 'type' && sortOrder === 'asc'" class="w-3 h-3"/><ArrowDown v-if="sortKey === 'type' && sortOrder === 'desc'" class="w-3 h-3"/></div>
               </th>
-              <th @click="sortBy('status')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase tracking-widest whitespace-nowrap text-center cursor-pointer hover:text-white transition-colors">
+              <th @click="sortBy('status')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase  whitespace-nowrap text-center cursor-pointer hover:text-white transition-colors">
                 <div class="flex items-center justify-center gap-1">Status <ArrowUp v-if="sortKey === 'status' && sortOrder === 'asc'" class="w-3 h-3"/><ArrowDown v-if="sortKey === 'status' && sortOrder === 'desc'" class="w-3 h-3"/></div>
               </th>
-              <th @click="sortBy('description')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase tracking-widest whitespace-nowrap cursor-pointer hover:text-white transition-colors">
+              <th @click="sortBy('description')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase  whitespace-nowrap cursor-pointer hover:text-white transition-colors">
                 <div class="flex items-center gap-1">Description <ArrowUp v-if="sortKey === 'description' && sortOrder === 'asc'" class="w-3 h-3"/><ArrowDown v-if="sortKey === 'description' && sortOrder === 'desc'" class="w-3 h-3"/></div>
               </th>
-              <th @click="sortBy('reference')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase tracking-widest whitespace-nowrap cursor-pointer hover:text-white transition-colors">
+              <th @click="sortBy('reference')" class="py-4 px-5 font-bold text-gray-300 text-[10px] uppercase  whitespace-nowrap cursor-pointer hover:text-white transition-colors">
                 <div class="flex items-center gap-1">Reference <ArrowUp v-if="sortKey === 'reference' && sortOrder === 'asc'" class="w-3 h-3"/><ArrowDown v-if="sortKey === 'reference' && sortOrder === 'desc'" class="w-3 h-3"/></div>
               </th>
-              <th class="py-4 px-6 font-bold text-gray-300 text-[10px] uppercase tracking-widest whitespace-nowrap text-right">Details</th>
+              <th class="py-4 px-6 font-bold text-gray-300 text-[10px] uppercase  whitespace-nowrap text-right">Details</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
             <tr v-for="tx in filteredTransactions" :key="tx._id" class="hover:bg-[#FF5C1A]/5 transition-colors group cursor-pointer border-b border-gray-50 last:border-0" @click="selectedTransaction = tx">
               <td class="py-4 px-6 whitespace-nowrap">
                 <div class="flex flex-col">
-                  <span class="text-xs font-bold text-gray-900">{{ new Date(tx.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}</span>
+                  <span class="text-sm font-bold text-gray-900">{{ new Date(tx.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}</span>
                   <span class="text-[10px] font-semibold text-gray-500">{{ new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</span>
                 </div>
               </td>
@@ -456,7 +456,7 @@
                     {{ tx.wallet?.owner?.firstName?.[0] || 'U' }}
                   </div>
                   <div class="min-w-0">
-                    <p class="text-xs font-bold text-gray-900 leading-tight mb-0.5 truncate">{{ tx.wallet?.owner?.firstName }} {{ tx.wallet?.owner?.lastName }}</p>
+                    <p class="text-sm font-bold text-gray-900 leading-tight mb-0.5 truncate">{{ tx.wallet?.owner?.firstName }} {{ tx.wallet?.owner?.lastName }}</p>
                     <p class="text-[10px] font-semibold text-gray-500 truncate">{{ tx.wallet?.owner?.email }}</p>
                   </div>
                 </div>
@@ -513,7 +513,7 @@
 
       <!-- Pagination -->
       <div v-if="totalPages > 1 && !loading" class="flex flex-col sm:flex-row items-center justify-between px-6 py-4 border-t border-gray-100 bg-gray-50/50 gap-4">
-        <div class="text-xs font-medium text-gray-500">
+        <div class="text-sm font-medium text-gray-500">
           Showing <span class="font-bold text-gray-900">{{ ((currentPage - 1) * 50) + 1 }}</span> to <span class="font-bold text-gray-900">{{ Math.min(currentPage * 50, totalTransactions) }}</span> of <span class="font-bold text-gray-900">{{ totalTransactions }}</span> transactions
         </div>
         <div class="flex items-center gap-1.5">
@@ -530,11 +530,11 @@
                 v-if="page !== '...'"
                 @click="handlePageChange(page as number)"
                 :class="page === currentPage ? 'bg-[#FF5C1A] text-white border-[#FF5C1A] shadow-md shadow-[#FF5C1A]/20' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300 shadow-sm'"
-                class="w-8 h-8 rounded-lg border text-xs font-bold transition-all flex items-center justify-center"
+                class="w-8 h-8 rounded-lg border text-sm font-bold transition-all flex items-center justify-center"
               >
                 {{ page }}
               </button>
-              <span v-else class="w-8 h-8 flex items-center justify-center text-gray-400 text-xs font-bold">...</span>
+              <span v-else class="w-8 h-8 flex items-center justify-center text-gray-400 text-sm font-bold">...</span>
             </template>
           </div>
           <button 
@@ -577,7 +577,7 @@
           <div class="w-full px-4">
             <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-4 text-center shadow-lg relative overflow-hidden">
               <div class="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
-              <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-1 relative z-10">Amount</p>
+              <p class="text-[10px] font-semibold text-gray-400 uppercase  mb-1 relative z-10">Amount</p>
               <p :class="selectedTransaction.type === 'credit' ? 'text-emerald-400' : 'text-rose-400'" class="text-2xl font-black mb-0.5 tabular-nums tracking-tight relative z-10">
                 {{ selectedTransaction.type === 'credit' ? '+' : '-' }}₦{{ (selectedTransaction.amount || 0).toLocaleString() }}
               </p>
@@ -587,7 +587,7 @@
 
         <div class="p-4 space-y-4 pb-24 bg-gray-50/50">
           <div class="space-y-2">
-            <h4 class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-200 pb-1.5">
+            <h4 class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase  border-b border-gray-200 pb-1.5">
               <FileText class="w-3.5 h-3.5" />
               Transaction Details
             </h4>
@@ -613,7 +613,7 @@
               
               <div class="p-3 bg-gray-50/50">
                 <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wide block mb-0.5">Description</span>
-                <p class="text-xs font-semibold text-gray-800 leading-snug">{{ selectedTransaction.description }}</p>
+                <p class="text-sm font-semibold text-gray-800 leading-snug">{{ selectedTransaction.description }}</p>
               </div>
 
               <div v-if="selectedTransaction.actionType" class="flex items-center justify-between p-3 border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
@@ -628,7 +628,7 @@
 
               <div v-if="selectedTransaction.proofOfTransaction" class="p-3 border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
                 <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wide block mb-2">Proof of Transaction</span>
-                <a :href="selectedTransaction.proofOfTransaction" target="_blank" class="flex items-center justify-center gap-2 w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-bold transition-colors">
+                <a :href="selectedTransaction.proofOfTransaction" target="_blank" class="flex items-center justify-center gap-2 w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-bold transition-colors">
                   <ExternalLink class="w-3.5 h-3.5" />
                   View Receipt
                 </a>
@@ -637,7 +637,7 @@
           </div>
 
           <div class="space-y-2" v-if="selectedTransaction.order || selectedTransaction.reference">
-            <h4 class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-200 pb-1.5">
+            <h4 class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase  border-b border-gray-200 pb-1.5">
               <Package class="w-3.5 h-3.5" />
               Related Records
             </h4>
@@ -650,7 +650,7 @@
                   </div>
                   <div>
                     <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">Linked Order</span>
-                    <span class="text-xs font-black text-gray-900 font-mono">#{{ selectedTransaction.order.slice(-10) }}</span>
+                    <span class="text-sm font-black text-gray-900 font-mono">#{{ selectedTransaction.order.slice(-10) }}</span>
                   </div>
                 </div>
                 <div class="w-7 h-7 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-black group-hover:text-white text-gray-400 transition-colors">
@@ -674,7 +674,7 @@
 
           <!-- Payout Details & Metadata -->
           <div class="space-y-2" v-if="selectedTransaction.metadata && Object.keys(selectedTransaction.metadata).length > 0">
-            <h4 class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-200 pb-1.5">
+            <h4 class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase  border-b border-gray-200 pb-1.5">
               <Sparkles class="w-3.5 h-3.5" />
               Metadata
             </h4>

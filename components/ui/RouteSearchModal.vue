@@ -39,7 +39,7 @@
               @keydown.enter.prevent="navigate"
               @keydown.esc.prevent="closeModal"
             />
-            <button @click="closeModal" class="absolute right-4 top-1/2 -translate-y-1/2 p-1 bg-gray-100 text-gray-500 rounded-md text-[10px] font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors">
+            <button @click="closeModal" class="absolute right-4 top-1/2 -translate-y-1/2 p-1 bg-gray-100 text-gray-500 rounded-md text-[10px] font-bold uppercase  hover:bg-gray-200 transition-colors">
               ESC
             </button>
           </div>

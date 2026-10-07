@@ -86,17 +86,17 @@
                   </div>
                   <div>
                     <h4 class="font-bold text-gray-900 text-sm">{{ errander.user?.firstName }} {{ errander.user?.lastName }}</h4>
-                    <p class="text-xs text-gray-500 mt-0.5">{{ errander.user?.email }}</p>
-                    <p class="text-xs text-gray-500">{{ errander.user?.phone }}</p>
+                    <p class="text-sm text-gray-500 mt-0.5">{{ errander.user?.email }}</p>
+                    <p class="text-sm text-gray-500">{{ errander.user?.phone }}</p>
                   </div>
                 </div>
               </td>
               <td class="px-6 py-4">
                 <p class="text-sm font-bold text-gray-900">{{ errander.school || 'Not specified' }}</p>
-                <p class="text-xs text-gray-500 mt-0.5">{{ errander.matricNumber || 'Not specified' }}</p>
+                <p class="text-sm text-gray-500 mt-0.5">{{ errander.matricNumber || 'Not specified' }}</p>
               </td>
               <td class="px-6 py-4">
-                <span class="px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-bold rounded-lg">Tier {{ errander.verificationLevel || 1 }}</span>
+                <span class="px-2.5 py-1 bg-gray-100 text-gray-700 text-sm font-bold rounded-lg">Tier {{ errander.verificationLevel || 1 }}</span>
               </td>
               <td class="px-6 py-4 text-center">
                 <button v-if="errander.idCardImage" @click="viewImage(errander.idCardImage)" class="inline-flex w-16 h-12 bg-gray-100 rounded-lg overflow-hidden border border-gray-50 hover:border-[#FF5C1A] transition-colors relative group">
@@ -105,7 +105,7 @@
                     <span class="text-[10px] text-white font-bold">View</span>
                   </div>
                 </button>
-                <span v-else class="text-xs text-gray-400">No Image</span>
+                <span v-else class="text-sm text-gray-400">No Image</span>
               </td>
               <td class="px-6 py-4 text-center">
                 <button v-if="errander.selfieImage" @click="viewImage(errander.selfieImage)" class="inline-flex w-12 h-12 bg-gray-100 rounded-full overflow-hidden border border-gray-50 hover:border-[#FF5C1A] transition-colors relative group">
@@ -114,7 +114,7 @@
                     <span class="text-[10px] text-white font-bold">View</span>
                   </div>
                 </button>
-                <span v-else class="text-xs text-gray-400">No Image</span>
+                <span v-else class="text-sm text-gray-400">No Image</span>
               </td>
               <td class="px-6 py-4 text-center">
                 <button v-if="errander.ninSlipImage" @click="viewImage(errander.ninSlipImage)" class="inline-flex w-16 h-12 bg-gray-100 rounded-lg overflow-hidden border border-gray-50 hover:border-[#FF5C1A] transition-colors relative group">
@@ -123,8 +123,8 @@
                     <span class="text-[10px] text-white font-bold">View</span>
                   </div>
                 </button>
-                <span v-else-if="errander.ninNumber" class="text-xs font-bold text-gray-900 border border-gray-50 px-2 py-1 rounded bg-gray-50">{{ errander.ninNumber }}</span>
-                <span v-else class="text-xs text-gray-400">N/A</span>
+                <span v-else-if="errander.ninNumber" class="text-sm font-bold text-gray-900 border border-gray-50 px-2 py-1 rounded bg-gray-50">{{ errander.ninNumber }}</span>
+                <span v-else class="text-sm text-gray-400">N/A</span>
               </td>
               <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-2">
@@ -290,40 +290,40 @@
                     </div>
                     <div>
                       <h4 class="font-bold text-gray-900 text-sm">{{ errander.user?.firstName }} {{ errander.user?.lastName }}</h4>
-                      <p class="text-xs text-gray-500 mt-0.5">{{ errander.user?.email }}</p>
-                      <p class="text-xs text-gray-500">{{ errander.user?.phone }}</p>
+                      <p class="text-sm text-gray-500 mt-0.5">{{ errander.user?.email }}</p>
+                      <p class="text-sm text-gray-500">{{ errander.user?.phone }}</p>
                     </div>
                   </div>
                 </td>
                 <td class="px-6 py-4">
                   <p class="text-sm font-bold text-gray-900">{{ errander.school || 'Not specified' }}</p>
-                  <p class="text-xs text-gray-500 mt-0.5">{{ errander.matricNumber || 'Not specified' }}</p>
+                  <p class="text-sm text-gray-500 mt-0.5">{{ errander.matricNumber || 'Not specified' }}</p>
                 </td>
                 <td class="px-6 py-4">
-                  <span v-if="errander.isApproved" class="px-2.5 py-1 bg-[#FF5C1A]/10 border border-[#FF5C1A]/20 text-[#FF5C1A] text-xs font-bold rounded-lg shadow-sm">Approved (Tier {{ errander.verificationLevel || 1 }})</span>
-                  <span v-else class="px-2.5 py-1 bg-amber-50 border border-amber-100 text-amber-700 text-xs font-bold rounded-lg shadow-sm">Pending (Tier {{ errander.verificationLevel || 1 }})</span>
+                  <span v-if="errander.isApproved" class="px-2.5 py-1 bg-[#FF5C1A]/10 border border-[#FF5C1A]/20 text-[#FF5C1A] text-sm font-bold rounded-lg shadow-sm">Approved (Tier {{ errander.verificationLevel || 1 }})</span>
+                  <span v-else class="px-2.5 py-1 bg-amber-50 border border-amber-100 text-amber-700 text-sm font-bold rounded-lg shadow-sm">Pending (Tier {{ errander.verificationLevel || 1 }})</span>
                 </td>
                 <td class="px-6 py-4 text-center">
                   <span class="font-bold text-gray-900 bg-gray-100 px-2.5 py-1 rounded-md">{{ errander.totalDeliveries || 0 }}</span>
                 </td>
                 <td class="px-6 py-4 text-center">
                   <div class="flex flex-col items-center justify-center gap-1">
-                    <span class="font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2.5 py-1 rounded-md border border-[#FF5C1A]/20 text-xs" title="Wallet Balance">
+                    <span class="font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2.5 py-1 rounded-md border border-[#FF5C1A]/20 text-sm" title="Wallet Balance">
                       ₦{{ Number(errander.user?.walletBalance || 0).toLocaleString() }}
                     </span>
                   </div>
                 </td>
                 <td class="px-6 py-4 text-center">
                   <div class="flex flex-col items-center justify-center gap-1">
-                    <span class="font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100 text-xs" title="Total Earnings">
+                    <span class="font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100 text-sm" title="Total Earnings">
                       ₦{{ Number(errander.totalEarnings || 0).toLocaleString() }}
                     </span>
                   </div>
                 </td>
                 <td class="px-6 py-4 text-center">
-                  <span v-if="errander.status === 'online'" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-1 rounded-full"><div class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A]/100 animate-pulse"></div>Online</span>
-                  <span v-else-if="errander.status === 'busy'" class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-full"><div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div>Busy</span>
-                  <span v-else class="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded-full"><div class="w-1.5 h-1.5 rounded-full bg-gray-400"></div>Offline</span>
+                  <span v-if="errander.status === 'online'" class="inline-flex items-center gap-1.5 text-sm font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-1 rounded-full"><div class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A]/100 animate-pulse"></div>Online</span>
+                  <span v-else-if="errander.status === 'busy'" class="inline-flex items-center gap-1.5 text-sm font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-full"><div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div>Busy</span>
+                  <span v-else class="inline-flex items-center gap-1.5 text-sm font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded-full"><div class="w-1.5 h-1.5 rounded-full bg-gray-400"></div>Offline</span>
                 </td>
                 <td class="px-6 py-4 text-right">
                   <div class="flex items-center justify-end gap-2 relative">
@@ -413,7 +413,7 @@
         <p class="text-sm text-gray-500 mb-4">Are you sure you want to approve <span class="font-bold text-gray-900">{{ selectedDispatcher?.user?.firstName }} {{ selectedDispatcher?.user?.lastName }}</span>? They will gain full access to deliveries.</p>
         
         <div class="mb-6 text-left bg-gray-50 p-4 rounded-xl border border-gray-50">
-          <label class="block text-xs font-bold text-gray-700 mb-2">Select Tier to Grant</label>
+          <label class="block text-sm font-bold text-gray-700 mb-2">Select Tier to Grant</label>
           <select v-model="selectedTier" class="w-full px-3 py-2 bg-white border border-gray-50 rounded-lg text-base focus:ring-1 focus:ring-emerald-500 outline-none">
             <option :value="1">Tier 1 (Window Shopper)</option>
             <option :value="2">Tier 2 (Basic)</option>
@@ -438,7 +438,7 @@
         <p class="text-sm text-gray-500 mb-4 text-center">Rejecting <span class="font-bold text-gray-900">{{ selectedDispatcher?.user?.firstName }} {{ selectedDispatcher?.user?.lastName }}</span> will block their access.</p>
         
         <div class="mb-6">
-          <label class="block text-xs font-bold text-gray-700 mb-2">Reason for rejection (Optional)</label>
+          <label class="block text-sm font-bold text-gray-700 mb-2">Reason for rejection (Optional)</label>
           <textarea v-model="rejectionReason" placeholder="e.g. ID card is blurry..." class="w-full px-4 py-3 bg-gray-50 border border-gray-50 rounded-xl text-base focus:ring-1 focus:ring-red-500 focus:border-red-500 outline-none transition-all shadow-sm resize-none h-24"></textarea>
         </div>
 
@@ -469,19 +469,19 @@
             <div class="flex-1">
               <h3 class="font-bold text-xl text-gray-900">{{ selectedProfile.user?.firstName }} {{ selectedProfile.user?.lastName }}</h3>
               <p class="text-sm text-gray-500">{{ selectedProfile.user?.email }}</p>
-              <span v-if="selectedProfile.isApproved" class="inline-flex items-center gap-1 mt-2 px-2 py-0.5 bg-[#FF5C1A]/10 text-[#FF5C1A] text-xs font-bold rounded-md">
+              <span v-if="selectedProfile.isApproved" class="inline-flex items-center gap-1 mt-2 px-2 py-0.5 bg-[#FF5C1A]/10 text-[#FF5C1A] text-sm font-bold rounded-md">
                 <div class="w-1.5 h-1.5 rounded-full bg-[#FF5C1A]/100"></div> Active
               </span>
-              <span v-else class="inline-flex items-center gap-1 mt-2 px-2 py-0.5 bg-red-50 text-red-700 text-xs font-bold rounded-md">
+              <span v-else class="inline-flex items-center gap-1 mt-2 px-2 py-0.5 bg-red-50 text-red-700 text-sm font-bold rounded-md">
                 <div class="w-1.5 h-1.5 rounded-full bg-red-500"></div> Suspended
               </span>
             </div>
           </div>
 
           <div class="flex space-x-2 mt-2 mb-4 w-full">
-            <button @click="activeDrawerTab = 'overview'" :class="activeDrawerTab === 'overview' ? 'bg-[#FF5C1A] text-white border-[#FF5C1A]/20' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="flex-1 py-2 text-xs font-semibold rounded-lg transition-colors shadow-sm border border-transparent">Overview</button>
-            <button @click="activeDrawerTab = 'errands'" :class="activeDrawerTab === 'errands' ? 'bg-[#FF5C1A] text-white border-[#FF5C1A]/20' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="flex-1 py-2 text-xs font-semibold rounded-lg transition-colors shadow-sm border border-transparent">Errands</button>
-            <button @click="enterEditMode" :class="activeDrawerTab === 'edit' ? 'bg-[#FF5C1A] text-white border-[#FF5C1A]/20' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="flex-1 py-2 text-xs font-semibold rounded-lg transition-colors shadow-sm border border-transparent">Edit</button>
+            <button @click="activeDrawerTab = 'overview'" :class="activeDrawerTab === 'overview' ? 'bg-[#FF5C1A] text-white border-[#FF5C1A]/20' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-colors shadow-sm border border-transparent">Overview</button>
+            <button @click="activeDrawerTab = 'errands'" :class="activeDrawerTab === 'errands' ? 'bg-[#FF5C1A] text-white border-[#FF5C1A]/20' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-colors shadow-sm border border-transparent">Errands</button>
+            <button @click="enterEditMode" :class="activeDrawerTab === 'edit' ? 'bg-[#FF5C1A] text-white border-[#FF5C1A]/20' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'" class="flex-1 py-2 text-sm font-semibold rounded-lg transition-colors shadow-sm border border-transparent">Edit</button>
           </div>
 
           <template v-if="activeDrawerTab === 'overview'">
@@ -563,7 +563,7 @@
                   <div class="flex items-center gap-1.5">
                     <p class="text-xl font-black text-gray-900">{{ (selectedProfile.rating || 0).toFixed(1) }}</p>
                     <Star class="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                    <span class="text-xs text-gray-400">({{ selectedProfile.totalRatings || 0 }})</span>
+                    <span class="text-sm text-gray-400">({{ selectedProfile.totalRatings || 0 }})</span>
                   </div>
                 </div>
                 <div>
@@ -591,12 +591,12 @@
                 <div>
                   <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Verification Tier</p>
                   <div class="flex items-center gap-2">
-                    <span class="font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded text-xs uppercase tracking-wider">Tier {{ selectedProfile.verificationLevel || 1 }}</span>
+                    <span class="font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded text-sm uppercase tracking-wider">Tier {{ selectedProfile.verificationLevel || 1 }}</span>
                   </div>
                 </div>
                 <div v-if="selectedProfile.currentOrder">
                   <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Active Order</p>
-                  <p class="font-bold text-gray-900 font-mono text-xs">{{ typeof selectedProfile.currentOrder === 'string' ? selectedProfile.currentOrder : selectedProfile.currentOrder._id }}</p>
+                  <p class="font-bold text-gray-900 font-mono text-sm">{{ typeof selectedProfile.currentOrder === 'string' ? selectedProfile.currentOrder : selectedProfile.currentOrder._id }}</p>
                 </div>
                 <div v-if="selectedProfile.batchOrders?.length">
                   <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Batched Orders</p>
@@ -605,7 +605,7 @@
                 <div class="col-span-2" v-if="selectedProfile.rejectionReason">
                   <div class="bg-red-50 text-red-700 p-3 rounded-lg border border-red-100">
                     <p class="text-[10px] font-bold uppercase tracking-wider mb-1">Rejection Reason</p>
-                    <p class="text-xs">{{ selectedProfile.rejectionReason }}</p>
+                    <p class="text-sm">{{ selectedProfile.rejectionReason }}</p>
                   </div>
                 </div>
               </div>
@@ -652,10 +652,10 @@
                 <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2 mb-4">Current Active Batch Orders</h4>
                 <div v-for="order in selectedProfile.batchOrders" :key="order._id || order" class="bg-gray-50 p-4 rounded-xl border border-gray-50/60 hover:border-[#FF5C1A]/30 transition-colors shadow-sm">
                   <div class="flex items-center justify-between mb-2">
-                    <span class="font-mono text-xs font-bold text-gray-900">#{{ typeof order === 'string' ? order.slice(-6).toUpperCase() : (order._id?.slice(-6).toUpperCase() || 'UNKNOWN') }}</span>
+                    <span class="font-mono text-sm font-bold text-gray-900">#{{ typeof order === 'string' ? order.slice(-6).toUpperCase() : (order._id?.slice(-6).toUpperCase() || 'UNKNOWN') }}</span>
                     <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider rounded">Batched Order</span>
                   </div>
-                  <div class="text-xs text-gray-500">
+                  <div class="text-sm text-gray-500">
                     <p class="font-medium flex items-center gap-1.5"><Bike class="w-3 h-3"/> Assigned Errand</p>
                     <p class="mt-1 flex items-center gap-1.5" v-if="typeof order !== 'string' && order.status">
                       Status: <span class="font-bold text-gray-700">{{ order.status }}</span>
@@ -671,7 +671,7 @@
             <form @submit.prevent="handleUpdateDispatcher" class="space-y-4">
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">School</label>
+                  <label class="text-sm font-semibold text-gray-700">School</label>
                   <select v-model="editDispatcherPayload.school" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option value="UNILAG">UNILAG</option>
                     <option value="CMUL">CMUL</option>
@@ -679,15 +679,15 @@
                   </select>
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Matric Number</label>
+                  <label class="text-sm font-semibold text-gray-700">Matric Number</label>
                   <input v-model="editDispatcherPayload.matricNumber" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">NIN Number</label>
+                  <label class="text-sm font-semibold text-gray-700">NIN Number</label>
                   <input v-model="editDispatcherPayload.ninNumber" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Verification Level</label>
+                  <label class="text-sm font-semibold text-gray-700">Verification Level</label>
                   <select v-model="editDispatcherPayload.verificationLevel" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option :value="1">Tier 1</option>
                     <option :value="2">Tier 2</option>
@@ -695,7 +695,7 @@
                   </select>
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Verification Status</label>
+                  <label class="text-sm font-semibold text-gray-700">Verification Status</label>
                   <select v-model="editDispatcherPayload.verificationStatus" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option value="pending">Pending</option>
                     <option value="approved">Approved</option>
@@ -703,7 +703,7 @@
                   </select>
                 </div>
                 <div class="space-y-2">
-                  <label class="text-xs font-semibold text-gray-700">Status</label>
+                  <label class="text-sm font-semibold text-gray-700">Status</label>
                   <select v-model="editDispatcherPayload.status" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
                     <option value="offline">Offline</option>
                     <option value="online">Online</option>
@@ -750,7 +750,7 @@
                 <span class="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
               </button>
             </div>
-            <p class="text-xs text-gray-500 mt-3 text-center">Suspending a dispatcher prevents them from accepting new deliveries or going online.</p>
+            <p class="text-sm text-gray-500 mt-3 text-center">Suspending a dispatcher prevents them from accepting new deliveries or going online.</p>
           </div>
         </div>
       </div>
@@ -785,7 +785,7 @@
       <div class="p-6 space-y-4">
         <p class="text-sm text-gray-600">Set the minimum wallet balance required before vendors and erranders can request payouts.</p>
         <div>
-          <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Minimum Payout Amount (₦)</label>
+          <label class="block text-sm font-bold text-gray-700 uppercase mb-1">Minimum Payout Amount (₦)</label>
           <input v-model.number="minimumPayoutAmount" type="number" step="100" class="w-full px-4 py-2 border border-gray-25 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A]" placeholder="e.g. 1000">
         </div>
         <button 

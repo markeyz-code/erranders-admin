@@ -50,7 +50,7 @@
                 <div class="flex flex-col items-center justify-center text-gray-400">
                   <Tag class="w-12 h-12 mb-3 opacity-20" />
                   <p class="text-sm font-medium text-gray-900">No promo codes found</p>
-                  <p class="text-xs">Create a new promo code to get started.</p>
+                  <p class="text-sm">Create a new promo code to get started.</p>
                 </div>
               </td>
             </tr>
@@ -74,7 +74,7 @@
                   <div class="w-full bg-gray-100 rounded-full h-1.5 max-w-[60px]">
                     <div class="bg-parentPrimary h-1.5 rounded-full" :style="{ width: getUsagePercentage(promo) + '%' }"></div>
                   </div>
-                  <span class="text-xs font-medium text-gray-600">
+                  <span class="text-sm font-medium text-gray-600">
                     {{ promo.usageCount }}{{ promo.maxUsageCount ? '/' + promo.maxUsageCount : '' }}
                   </span>
                 </div>
@@ -102,7 +102,7 @@
                     {{ promo.applicableUsers.length }} User(s)
                   </span>
 
-                  <span v-if="!promo.minOrderAmount && !promo.expiresAt && !promo.appliesToDeliveryFeeOnly && !promo.applicableOrderTypes?.length && !promo.applicableVendors?.length && !promo.applicableUsers?.length" class="text-xs text-gray-400">No limits</span>
+                  <span v-if="!promo.minOrderAmount && !promo.expiresAt && !promo.appliesToDeliveryFeeOnly && !promo.applicableOrderTypes?.length && !promo.applicableVendors?.length && !promo.applicableUsers?.length" class="text-sm text-gray-400">No limits</span>
                 </div>
               </td>
               <td class="px-6 py-4">
@@ -138,20 +138,20 @@
       <div class="space-y-6">
         <div>
           <h2 class="text-lg font-bold text-gray-900">{{ isEditing ? 'Edit Promo Code' : 'Create Promo Code' }}</h2>
-          <p class="text-xs text-gray-500">Configure robust discounts and restrictions.</p>
+          <p class="text-sm text-gray-500">Configure robust discounts and restrictions.</p>
         </div>
 
         <form @submit.prevent="submitForm" class="space-y-5">
           <!-- Code -->
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Promo Code *</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-1">Promo Code *</label>
             <input v-model="form.code" type="text" required placeholder="e.g. SUMMER50" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm font-mono uppercase focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <!-- Type -->
             <div>
-              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Discount Type *</label>
+              <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-1">Discount Type *</label>
               <select v-model="form.discountType" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
                 <option value="percentage">Percentage (%)</option>
                 <option value="flat">Flat Amount (₦)</option>
@@ -160,34 +160,34 @@
             
             <!-- Value -->
             <div>
-              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Value *</label>
+              <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-1">Value *</label>
               <input v-model.number="form.value" type="number" required min="1" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
             </div>
           </div>
 
           <!-- Max Discount (Percentage Only) -->
           <div v-if="form.discountType === 'percentage'">
-            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Max Discount Cap (₦)</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-1">Max Discount Cap (₦)</label>
             <input v-model.number="form.maxDiscountAmount" type="number" min="0" placeholder="e.g. 1000 (0 for no limit)" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <!-- Min Order -->
             <div>
-              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Min Order Amount (₦)</label>
+              <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-1">Min Order Amount (₦)</label>
               <input v-model.number="form.minOrderAmount" type="number" min="0" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
             </div>
             
             <!-- Max Usage -->
             <div>
-              <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Max Global Usage</label>
+              <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-1">Max Global Usage</label>
               <input v-model.number="form.maxUsageCount" type="number" min="0" placeholder="e.g. 100" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
             </div>
           </div>
 
           <!-- Expiry -->
           <div>
-            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Expiry Date</label>
+            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-1">Expiry Date</label>
             <input v-model="form.expiresAt" type="datetime-local" class="w-full bg-gray-50 border border-gray-25 rounded-xl py-2 px-3 text-sm focus:outline-none focus:border-parentPrimary focus:ring-1 focus:ring-parentPrimary">
           </div>
 
@@ -197,7 +197,7 @@
             <div class="flex flex-col gap-4 mt-6">
               <!-- Order Type Restrictions -->
               <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Applicable Order Types</label>
+                <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Applicable Order Types</label>
                 <div class="flex flex-wrap gap-4 bg-gray-50 p-3 rounded-xl border border-gray-25">
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" value="inside_campus" v-model="form.applicableOrderTypes" class="w-4 h-4 text-parentPrimary rounded border-gray-300">
@@ -221,7 +221,7 @@
 
               <!-- Vendor Restrictions -->
               <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Restrict to Vendors</label>
+                <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-1">Restrict to Vendors</label>
                 <SearchableMultiSelect 
                   v-model="form.applicableVendors"
                   :options="vendorOptions"
@@ -231,7 +231,7 @@
 
               <!-- User Restrictions -->
               <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Restrict to Users</label>
+                <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-1">Restrict to Users</label>
                 <SearchableMultiSelect 
                   v-model="form.applicableUsers"
                   :options="userOptions"

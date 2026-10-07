@@ -48,10 +48,10 @@
           </div>
           <p class="text-sm text-gray-500 mb-3">{{ user.email }}</p>
           <div class="flex items-center gap-4">
-            <span class="text-xs font-semibold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-lg border border-[#FF5C1A]/20 capitalize">
+            <span class="text-sm font-semibold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-lg border border-[#FF5C1A]/20 capitalize">
               Role: {{ user.role }}
             </span>
-            <span class="text-xs font-medium text-gray-500 flex items-center gap-1">
+            <span class="text-sm font-medium text-gray-500 flex items-center gap-1">
               <Calendar class="w-3 h-3" />
               Joined {{ new Date(user.createdAt).toLocaleDateString() }}
             </span>
@@ -79,30 +79,30 @@
           <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">Account Information</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <p class="text-xs font-semibold text-gray-500 mb-1">User ID</p>
+              <p class="text-sm font-semibold text-gray-500 mb-1">User ID</p>
               <div class="flex items-center gap-2">
                 <p class="text-sm font-medium text-gray-900 break-all">{{ user._id }}</p>
                 <Copy class="w-3.5 h-3.5 text-gray-400 cursor-pointer hover:text-gray-900" @click="copyToClipboard(user._id)" />
               </div>
             </div>
             <div>
-              <p class="text-xs font-semibold text-gray-500 mb-1">Email Address</p>
+              <p class="text-sm font-semibold text-gray-500 mb-1">Email Address</p>
               <p class="text-sm font-medium text-gray-900">{{ user.email }}</p>
             </div>
             <div>
-              <p class="text-xs font-semibold text-gray-500 mb-1">First Name</p>
+              <p class="text-sm font-semibold text-gray-500 mb-1">First Name</p>
               <p class="text-sm font-medium text-gray-900">{{ user.firstName }}</p>
             </div>
             <div>
-              <p class="text-xs font-semibold text-gray-500 mb-1">Last Name</p>
+              <p class="text-sm font-semibold text-gray-500 mb-1">Last Name</p>
               <p class="text-sm font-medium text-gray-900">{{ user.lastName }}</p>
             </div>
             <div>
-              <p class="text-xs font-semibold text-gray-500 mb-1">Account Status</p>
+              <p class="text-sm font-semibold text-gray-500 mb-1">Account Status</p>
               <p class="text-sm font-medium text-gray-900">{{ user.isActive ? 'Active' : 'Suspended' }}</p>
             </div>
             <div>
-              <p class="text-xs font-semibold text-gray-500 mb-1">Last Updated</p>
+              <p class="text-sm font-semibold text-gray-500 mb-1">Last Updated</p>
               <p class="text-sm font-medium text-gray-900">{{ new Date(user.updatedAt).toLocaleString() }}</p>
             </div>
           </div>

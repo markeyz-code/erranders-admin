@@ -4,7 +4,7 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div class="space-y-1">
         <h1 class="text-2xl font-semibold text-gray-900 font-heading tracking-tight">Reports</h1>
-        <p class="text-xs font-medium text-gray-500">Review user complaints and manage dispute resolutions.</p>
+        <p class="text-sm font-medium text-gray-500">Review user complaints and manage dispute resolutions.</p>
       </div>
 
       <div class="flex items-center gap-1 p-1 bg-gray-50 border border-gray-50 rounded-lg max-md:overflow-x-auto md:overflow-visible pb-24 md:pb-0 max-w-full">
@@ -12,7 +12,7 @@
           v-for="tab in tabs"
           :key="tab.key"
           @click="activeTab = tab.key"
-          class="text-xs py-1.5 px-4 rounded-md transition-all font-medium whitespace-nowrap"
+          class="text-sm py-1.5 px-4 rounded-md transition-all font-medium whitespace-nowrap"
           :class="activeTab === tab.key ? 'bg-white text-gray-900 shadow-sm border border-gray-50/50' : 'text-gray-500 hover:text-gray-700'"
         >
           {{ tab.label }}
@@ -24,22 +24,22 @@
     <div v-if="!loading" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
       <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md transition-all duration-300">
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-gray-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest relative z-10">Total</p>
+        <p class="text-[10px] font-bold text-gray-400 uppercase  relative z-10">Total</p>
         <p class="text-3xl font-black text-gray-900 mt-2 font-heading relative z-10 tabular-nums">{{ total }}</p>
       </div>
       <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-amber-200 transition-all duration-300">
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-amber-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <p class="text-[10px] font-bold text-amber-500 uppercase tracking-widest relative z-10">Open</p>
+        <p class="text-[10px] font-bold text-amber-500 uppercase  relative z-10">Open</p>
         <p class="text-3xl font-black text-amber-700 mt-2 font-heading relative z-10 tabular-nums">{{ stats.pending }}</p>
       </div>
       <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-blue-200 transition-all duration-300">
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-blue-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest relative z-10">Reviewing</p>
+        <p class="text-[10px] font-bold text-blue-500 uppercase  relative z-10">Reviewing</p>
         <p class="text-3xl font-black text-blue-700 mt-2 font-heading relative z-10 tabular-nums">{{ stats.investigating }}</p>
       </div>
       <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl border border-gray-50 shadow-sm relative overflow-hidden group hover:shadow-md hover:border-emerald-200 transition-all duration-300">
         <div class="absolute -right-6 -top-6 w-24 h-24 bg-emerald-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <p class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest relative z-10">Resolved</p>
+        <p class="text-[10px] font-bold text-emerald-500 uppercase  relative z-10">Resolved</p>
         <p class="text-3xl font-black text-emerald-700 mt-2 font-heading relative z-10 tabular-nums">{{ stats.resolved }}</p>
       </div>
     </div>
@@ -92,14 +92,14 @@
           <StatusBadge :status="report.status" class="shrink-0 ml-2 scale-75 origin-top-right" />
         </div>
         
-        <p class="text-xs text-gray-500 line-clamp-2 mb-4 font-medium leading-relaxed flex-1">{{ report.description }}</p>
+        <p class="text-sm text-gray-500 line-clamp-2 mb-4 font-medium leading-relaxed flex-1">{{ report.description }}</p>
         
         <div class="flex items-center justify-between pt-4 border-t border-gray-100">
           <div class="flex items-center gap-2">
             <div class="w-6 h-6 rounded flex items-center justify-center bg-gray-100 text-gray-600 text-[10px] font-bold border border-gray-50">
               {{ report.reporter?.firstName?.[0] || 'U' }}
             </div>
-            <span class="text-xs font-semibold text-gray-600">{{ report.reporter?.firstName }} {{ report.reporter?.lastName }}</span>
+            <span class="text-sm font-semibold text-gray-600">{{ report.reporter?.firstName }} {{ report.reporter?.lastName }}</span>
           </div>
           <div class="flex items-center gap-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
             <Clock class="w-3 h-3" />
@@ -133,7 +133,7 @@
           <div class="overflow-y-auto p-5 space-y-6 flex-1 custom-scrollbar bg-gray-50/30">
             <div class="space-y-2">
               <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Description</h4>
-              <div class="text-xs text-gray-700 leading-relaxed font-medium bg-white p-4 rounded-xl border border-gray-50 shadow-sm">
+              <div class="text-sm text-gray-700 leading-relaxed font-medium bg-white p-4 rounded-xl border border-gray-50 shadow-sm">
                 {{ selectedReport.description }}
               </div>
             </div>
@@ -143,7 +143,7 @@
               <div class="space-y-3">
                 <div v-for="msg in selectedReport.thread" :key="msg.timestamp" class="flex flex-col" :class="msg.isAdmin ? 'items-end' : 'items-start'">
                   <div :class="msg.isAdmin ? 'bg-gray-900 text-white rounded-tr-sm shadow-sm' : 'bg-white text-gray-900 rounded-tl-sm border border-gray-50 shadow-sm'" class="max-w-[85%] px-4 py-2.5 rounded-xl">
-                    <p class="text-xs font-medium leading-relaxed">{{ msg.message }}</p>
+                    <p class="text-sm font-medium leading-relaxed">{{ msg.message }}</p>
                   </div>
                   <div class="flex items-center gap-1.5 mt-1 px-1">
                     <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">{{ msg.isAdmin ? 'Admin' : 'User' }}</span>
@@ -166,14 +166,14 @@
               <button 
                 @click="handleReply" 
                 :disabled="!adminMessage.trim()"
-                class="flex-1 py-2.5 bg-gray-900 text-white rounded-lg font-semibold text-xs hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                class="flex-1 py-2.5 bg-gray-900 text-white rounded-lg font-semibold text-sm hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-1.5 shadow-sm"
               >
                 <Send class="w-3.5 h-3.5" /> Send Reply
               </button>
               <button 
                 v-if="selectedReport.status !== 'resolved'"
                 @click="handleResolve('resolved')" 
-                class="px-6 py-2.5 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-lg font-semibold text-xs hover:bg-emerald-100 transition-colors shadow-sm"
+                class="px-6 py-2.5 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-lg font-semibold text-sm hover:bg-emerald-100 transition-colors shadow-sm"
               >
                 Resolve
               </button>

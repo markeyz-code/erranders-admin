@@ -51,7 +51,7 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="bg-gray-50 border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500">
+            <tr class="bg-gray-50 border-b border-gray-100 text-sm uppercase tracking-wider text-gray-500">
               <th class="p-4 font-bold">Order ID</th>
               <th class="p-4 font-bold">Customer</th>
               <th class="p-4 font-bold">Type</th>
@@ -68,7 +68,7 @@
                     <Receipt class="w-6 h-6 text-gray-400" />
                   </div>
                   <p class="font-medium">No transactions found</p>
-                  <p class="text-xs text-gray-400">Try adjusting your filters</p>
+                  <p class="text-sm text-gray-400">Try adjusting your filters</p>
                 </div>
               </td>
             </tr>
@@ -78,13 +78,13 @@
               </td>
               <td class="p-4">
                 <p class="font-bold text-gray-900">{{ order.customer?.firstName }} {{ order.customer?.lastName }}</p>
-                <p class="text-xs text-gray-500">{{ order.customer?.phone }}</p>
+                <p class="text-sm text-gray-500">{{ order.customer?.phone }}</p>
               </td>
               <td class="p-4">
                 <span class="inline-flex text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wide bg-gray-100 text-gray-600">
                   {{ order.type === 'custom_errand' ? 'Custom Errand' : 'Marketplace' }}
                 </span>
-                <p v-if="order.vendor?.storeName" class="text-xs text-gray-500 mt-1 truncate max-w-[150px]">
+                <p v-if="order.vendor?.storeName" class="text-sm text-gray-500 mt-1 truncate max-w-[150px]">
                   {{ order.vendor.storeName }}
                 </p>
               </td>
@@ -113,21 +113,21 @@
 
       <!-- Pagination -->
       <div class="p-4 border-t border-gray-100 flex items-center justify-between bg-gray-50" v-if="totalPages > 0">
-        <p class="text-xs text-gray-500 font-medium">
+        <p class="text-sm text-gray-500 font-medium">
           Showing page {{ page }} of {{ totalPages }}
         </p>
         <div class="flex items-center gap-2">
           <button 
             @click="page--" 
             :disabled="page === 1"
-            class="px-3 py-1.5 text-xs font-bold text-gray-700 bg-white border border-gray-25 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="px-3 py-1.5 text-sm font-bold text-gray-700 bg-white border border-gray-25 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Previous
           </button>
           <button 
             @click="page++" 
             :disabled="page >= totalPages"
-            class="px-3 py-1.5 text-xs font-bold text-gray-700 bg-white border border-gray-25 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="px-3 py-1.5 text-sm font-bold text-gray-700 bg-white border border-gray-25 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Next
           </button>

@@ -11,7 +11,7 @@
           <div v-else class="flex items-center gap-3 w-full">
             <div class="w-8 h-8 bg-gradient-to-br from-[#FF5C1A] to-[#FF7A45] rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-[#FF5C1A]/20">E</div>
             <span class="text-white font-heading font-bold text-xl tracking-tight group-hover:text-[#FF5C1A] transition-colors">Errander</span>
-            <span class="ml-auto text-[9px] font-bold tracking-widest text-[#FF5C1A] bg-[#FF5C1A]/10 px-1.5 py-0.5 rounded border border-[#FF5C1A]/20 uppercase">Admin</span>
+            <span class="ml-auto text-[9px] font-bold  text-[#FF5C1A] bg-[#FF5C1A]/10 px-1.5 py-0.5 rounded border border-[#FF5C1A]/20 uppercase">Admin</span>
           </div>
         </div>
 
@@ -28,7 +28,7 @@
       <!-- System Status (Expanded only) -->
       <div v-if="!isSidebarMinimized" class="px-6 py-4 border-b border-white/5 bg-white/[0.02]">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">System Status</span>
+          <span class="text-[10px] font-bold text-gray-500 uppercase ">System Status</span>
           <div class="flex items-center gap-1.5 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span class="text-[9px] font-bold text-emerald-400 uppercase">Operational</span>
@@ -43,7 +43,7 @@
       <div class="flex-1 overflow-y-auto custom-scrollbar py-6" :class="isSidebarMinimized ? 'px-3' : 'px-4'">
         <nav class="space-y-1">
           <div class="px-3 mb-3 mt-2 flex items-center justify-between" v-if="!isSidebarMinimized">
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Main Menu</p>
+            <p class="text-[10px] font-bold text-gray-500 uppercase ">Main Menu</p>
           </div>
           <NuxtLink
             v-for="item in navItems"
@@ -64,7 +64,7 @@
             </div>
             
             <!-- Tooltip for minimized -->
-            <div v-if="isSidebarMinimized" class="absolute left-full ml-4 px-3 py-1.5 bg-gray-900 text-white text-xs font-semibold rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-xl z-50 border border-gray-800">
+            <div v-if="isSidebarMinimized" class="absolute left-full ml-4 px-3 py-1.5 bg-gray-900 text-white text-sm font-semibold rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-xl z-50 border border-gray-800">
               {{ item.label }}
               <div class="absolute top-1/2 -left-1 -translate-y-1/2 border-y-4 border-y-transparent border-r-4 border-r-gray-900"></div>
             </div>
@@ -184,9 +184,9 @@
           </div>
           <div>
             <div class="flex items-center gap-2 mb-1">
-               <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Errander Admin</span>
+               <span class="text-[10px] font-bold text-gray-400 uppercase ">Errander Admin</span>
                <span class="text-gray-300 text-[10px]">•</span>
-               <span class="text-[10px] font-bold text-[#FF5C1A] uppercase tracking-widest">{{ new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}</span>
+               <span class="text-[10px] font-bold text-[#FF5C1A] uppercase ">{{ new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}</span>
             </div>
             <h1 class="text-2xl font-bold text-gray-900 font-heading tracking-tight leading-none">{{ pageTitle }}</h1>
           </div>

@@ -11,7 +11,7 @@
             v-for="filter in typeFilters" 
             :key="filter.value"
             @click="typeFilter = filter.value"
-            class="px-4 py-2 rounded-full text-xs font-bold transition-colors whitespace-nowrap border"
+            class="px-4 py-2 rounded-full text-sm font-bold transition-colors whitespace-nowrap border"
             :class="typeFilter === filter.value 
               ? 'bg-[#FF5C1A] text-white border-[#FF5C1A] shadow-md shadow-[#FF5C1A]/20' 
               : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'"
@@ -51,7 +51,7 @@
 
       <!-- Bottom Row: Specific Users -->
       <div class="flex items-center gap-3 flex-wrap bg-white p-3 rounded-2xl border border-gray-50 shadow-sm">
-        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest pl-2">Filter By User</span>
+        <span class="text-sm font-bold text-gray-400 uppercase  pl-2">Filter By User</span>
         <div class="flex-1 min-w-[200px] border border-gray-25 rounded-xl hover:border-[#FF5C1A] transition-colors focus-within:border-[#FF5C1A] focus-within:ring-1 focus-within:ring-[#FF5C1A]">
           <SelectInput 
             v-model="vendorFilter"
@@ -103,7 +103,7 @@
               <!-- Date & Time -->
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex flex-col">
-                  <span class="text-xs font-bold text-gray-900">{{ new Date(txn.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) }}</span>
+                  <span class="text-sm font-bold text-gray-900">{{ new Date(txn.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) }}</span>
                   <span class="text-[10px] font-medium text-gray-500">{{ new Date(txn.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }}</span>
                 </div>
               </td>
@@ -111,7 +111,7 @@
               <!-- User Details -->
               <td class="px-6 py-4">
                 <NuxtLink :to="getUserRoute(txn)" class="flex items-center gap-3 p-2 -m-2 rounded-xl hover:bg-gray-50 transition-colors group cursor-pointer" :class="{'pointer-events-none': getUserRoute(txn) === '#'}">
-                  <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600 text-xs shadow-sm border border-gray-25 group-hover:border-[#FF5C1A] group-hover:text-[#FF5C1A] transition-colors">
+                  <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-600 text-sm shadow-sm border border-gray-25 group-hover:border-[#FF5C1A] group-hover:text-[#FF5C1A] transition-colors">
                     {{ getUserInitials(txn) }}
                   </div>
                   <div class="flex flex-col">
@@ -142,7 +142,7 @@
                       {{ txn.reference || 'N/A' }}
                     </span>
                   </div>
-                  <span class="text-xs font-medium text-gray-600 mt-1 truncate max-w-[250px]" :title="txn.description">{{ txn.description || 'No description' }}</span>
+                  <span class="text-sm font-medium text-gray-600 mt-1 truncate max-w-[250px]" :title="txn.description">{{ txn.description || 'No description' }}</span>
                 </div>
               </td>
               
@@ -208,7 +208,7 @@
 
       <!-- Pagination -->
       <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between bg-gray-50/50" v-if="totalPages > 1">
-        <span class="text-xs font-semibold text-gray-500">
+        <span class="text-sm font-semibold text-gray-500">
           Showing <span class="text-gray-900">{{ (currentPage - 1) * 20 + 1 }}</span> to <span class="text-gray-900">{{ Math.min(currentPage * 20, totalTransactions) }}</span> of <span class="text-gray-900">{{ totalTransactions }}</span> entries
         </span>
         <div class="flex items-center gap-2">
@@ -237,7 +237,7 @@
         <!-- Header / Status -->
         <div class="flex items-start justify-between">
           <div class="flex flex-col gap-1">
-            <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Transaction Reference</span>
+            <span class="text-sm font-bold text-gray-500 uppercase ">Transaction Reference</span>
             <span class="text-lg font-mono font-bold text-gray-900">{{ selectedTransaction.reference || 'N/A' }}</span>
           </div>
           <span 
@@ -257,7 +257,7 @@
         <div class="bg-gray-50 rounded-2xl p-6 border border-gray-25 relative overflow-hidden">
           <div class="absolute right-0 top-0 w-32 h-32 bg-white/40 rounded-bl-full -mr-16 -mt-16 border-l border-b border-white/60"></div>
           
-          <span class="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-2 relative z-10">Amount</span>
+          <span class="text-sm font-bold text-gray-500 uppercase  block mb-2 relative z-10">Amount</span>
           <div class="flex items-end gap-3 relative z-10">
             <span 
               class="text-3xl font-black font-mono tracking-tight"
@@ -282,14 +282,14 @@
 
         <!-- User Details Section -->
         <div>
-          <span class="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-4">Involved User</span>
+          <span class="text-sm font-bold text-gray-500 uppercase  block mb-4">Involved User</span>
           <div class="flex items-center gap-4 bg-white border border-gray-50 shadow-sm p-4 rounded-2xl">
             <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center font-bold text-gray-700 text-lg shadow-inner border border-gray-25/60">
               {{ getUserInitials(selectedTransaction) }}
             </div>
             <div class="flex flex-col">
               <span class="text-sm font-bold text-gray-900">{{ getUserName(selectedTransaction) }}</span>
-              <span class="text-xs font-medium text-gray-500">{{ getUserEmail(selectedTransaction) }}</span>
+              <span class="text-sm font-medium text-gray-500">{{ getUserEmail(selectedTransaction) }}</span>
             </div>
             <div class="ml-auto">
               <span class="text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-lg" :class="getRoleBadgeClass(selectedTransaction)">
@@ -301,33 +301,33 @@
 
         <!-- Bank Details Section (if exists) -->
         <div v-if="selectedTransaction.wallet?.bankDetails">
-          <span class="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-4">Payout Account</span>
+          <span class="text-sm font-bold text-gray-500 uppercase  block mb-4">Payout Account</span>
           <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-2">
             <div class="flex justify-between items-center">
-              <span class="text-xs font-semibold text-gray-500">Bank Name</span>
+              <span class="text-sm font-semibold text-gray-500">Bank Name</span>
               <span class="text-sm font-bold text-gray-900">{{ selectedTransaction.wallet.bankDetails.bankName }}</span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-xs font-semibold text-gray-500">Account Number</span>
+              <span class="text-sm font-semibold text-gray-500">Account Number</span>
               <span class="text-sm font-mono font-bold text-gray-900">{{ selectedTransaction.wallet.bankDetails.accountNumber }}</span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-xs font-semibold text-gray-500">Account Name</span>
-              <span class="text-xs font-bold text-gray-900">{{ selectedTransaction.wallet.bankDetails.accountName }}</span>
+              <span class="text-sm font-semibold text-gray-500">Account Name</span>
+              <span class="text-sm font-bold text-gray-900">{{ selectedTransaction.wallet.bankDetails.accountName }}</span>
             </div>
           </div>
         </div>
 
         <!-- Wallet Context Section -->
         <div v-if="selectedTransaction.wallet">
-          <span class="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-4">Wallet Snapshot</span>
+          <span class="text-sm font-bold text-gray-500 uppercase  block mb-4">Wallet Snapshot</span>
           <div class="grid grid-cols-2 gap-4">
             <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
-              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Current Balance</span>
+              <span class="text-[10px] font-bold text-gray-400 uppercase ">Current Balance</span>
               <span class="text-lg font-mono font-black text-gray-900">₦{{ Number(selectedTransaction.wallet.balance || 0).toLocaleString() }}</span>
             </div>
             <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
-              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Earned</span>
+              <span class="text-[10px] font-bold text-gray-400 uppercase ">Total Earned</span>
               <span class="text-lg font-mono font-black text-emerald-600">₦{{ Number(selectedTransaction.wallet.totalEarned || 0).toLocaleString() }}</span>
             </div>
           </div>
@@ -335,20 +335,20 @@
 
         <!-- Additional Context (Action Type, Proof) -->
         <div v-if="selectedTransaction.actionType || selectedTransaction.proofOfTransaction">
-          <span class="text-xs font-bold text-gray-500 uppercase tracking-widest block mb-4">Additional Info</span>
+          <span class="text-sm font-bold text-gray-500 uppercase  block mb-4">Additional Info</span>
           <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-4">
             <div class="flex justify-between items-center" v-if="selectedTransaction.actionType">
-              <span class="text-xs font-semibold text-gray-500">Action Type</span>
+              <span class="text-sm font-semibold text-gray-500">Action Type</span>
               <span class="text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded bg-gray-100 text-gray-700">
                 {{ selectedTransaction.actionType }}
               </span>
             </div>
             <div v-if="selectedTransaction.proofOfTransaction" class="flex flex-col gap-2">
-              <span class="text-xs font-semibold text-gray-500">Proof of Transaction</span>
+              <span class="text-sm font-semibold text-gray-500">Proof of Transaction</span>
               <a :href="selectedTransaction.proofOfTransaction" target="_blank" class="block w-full overflow-hidden rounded-xl border border-gray-25 hover:border-[#FF5C1A] transition-colors relative group">
                 <img :src="selectedTransaction.proofOfTransaction" alt="Proof" class="w-full h-32 object-cover object-top" />
                 <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span class="text-white text-xs font-bold px-3 py-1.5 bg-black/50 rounded-lg">View Full Image</span>
+                  <span class="text-white text-sm font-bold px-3 py-1.5 bg-black/50 rounded-lg">View Full Image</span>
                 </div>
               </a>
             </div>
@@ -358,11 +358,11 @@
         <!-- Meta Information -->
         <div class="grid grid-cols-2 gap-4">
           <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
-            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Transaction Date</span>
+            <span class="text-[10px] font-bold text-gray-400 uppercase ">Transaction Date</span>
             <span class="text-sm font-semibold text-gray-900">{{ new Date(selectedTransaction.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) }}</span>
           </div>
           <div class="bg-white border border-gray-50 shadow-sm p-4 rounded-2xl flex flex-col gap-1.5">
-            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Transaction Time</span>
+            <span class="text-[10px] font-bold text-gray-400 uppercase ">Transaction Time</span>
             <span class="text-sm font-semibold text-gray-900">{{ new Date(selectedTransaction.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</span>
           </div>
         </div>

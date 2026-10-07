@@ -10,11 +10,11 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-50 rounded-lg shadow-sm text-xs font-medium text-gray-600">
+        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-50 rounded-lg shadow-sm text-sm font-medium text-gray-600">
           <div class="w-2 h-2 rounded-full bg-parentPrimary"></div>
           Live Data
         </div>
-        <button class="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-xl text-xs font-bold hover:bg-gray-800 transition-colors shadow-md">
+        <button class="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-gray-800 transition-colors shadow-md">
           <Filter class="w-3.5 h-3.5" />
           Filter Data
         </button>
@@ -70,7 +70,7 @@
               <p class="text-[11px] font-bold uppercase tracking-wider" :class="stat.alert ? 'text-rose-500' : 'text-gray-500'">{{ stat.label }}</p>
               <h3 class="text-xl font-black tracking-tight" :class="stat.alert ? 'text-rose-700' : 'text-gray-900'">
                 {{ stat.value }}
-                <span v-if="stat.alert" class="text-xs font-semibold text-rose-500 ml-1 bg-rose-100 px-2 py-0.5 rounded-full">Requires Attention</span>
+                <span v-if="stat.alert" class="text-sm font-semibold text-rose-500 ml-1 bg-rose-100 px-2 py-0.5 rounded-full">Requires Attention</span>
               </h3>
             </div>
           </div>
@@ -87,7 +87,7 @@
             <Activity class="w-5 h-5 text-[#FF5C1A]" />
             Revenue Overview
           </h2>
-          <p class="text-xs font-medium text-gray-400 mt-0.5">Last 30 days performance</p>
+          <p class="text-sm font-medium text-gray-400 mt-0.5">Last 30 days performance</p>
         </div>
         <div class="flex items-center bg-gray-800/50 rounded-lg p-1 border border-gray-700/50 backdrop-blur-md">
           <button class="px-3 py-1.5 text-[10px] font-bold rounded-md text-white bg-gray-700 shadow-sm transition-colors">30D</button>
@@ -109,10 +109,10 @@
             <div class="w-1.5 h-4 bg-[#FF5C1A] rounded-full"></div>
             <div>
               <h3 class="font-bold text-gray-900 text-sm">Recent Orders</h3>
-              <p class="text-xs font-medium text-gray-500">Latest customer purchases</p>
+              <p class="text-sm font-medium text-gray-500">Latest customer purchases</p>
             </div>
           </div>
-          <NuxtLink to="/orders" class="text-xs font-bold text-[#FF5C1A] hover:bg-[#FF5C1A]/10 px-3 py-1.5 rounded-lg transition-colors border border-transparent hover:border-[#FF5C1A]/20 flex items-center gap-1">
+          <NuxtLink to="/orders" class="text-sm font-bold text-[#FF5C1A] hover:bg-[#FF5C1A]/10 px-3 py-1.5 rounded-lg transition-colors border border-transparent hover:border-[#FF5C1A]/20 flex items-center gap-1">
             View All
           </NuxtLink>
         </div>
@@ -135,7 +135,7 @@
               <ShoppingBag class="w-6 h-6 text-gray-400" />
             </div>
             <h3 class="text-sm font-bold text-gray-900 mb-1">No Orders Yet</h3>
-            <p class="text-xs text-gray-500">When customers place orders, they will appear here.</p>
+            <p class="text-sm text-gray-500">When customers place orders, they will appear here.</p>
           </div>
 
           <!-- High-Density Order Grid -->
@@ -154,7 +154,7 @@
                   <!-- Customer & Order -->
                   <td class="px-5 py-4">
                     <div class="flex items-start gap-3">
-                      <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 text-gray-500 font-bold text-xs uppercase shadow-sm border border-gray-25">
+                      <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 text-gray-500 font-bold text-sm uppercase shadow-sm border border-gray-25">
                         {{ activity.customerName.charAt(0) }}
                       </div>
                       <div class="min-w-0">
@@ -171,11 +171,11 @@
                   <!-- Logistics -->
                   <td class="px-5 py-4">
                     <div class="flex flex-col gap-1.5">
-                      <div class="flex items-center gap-2 text-xs">
+                      <div class="flex items-center gap-2 text-sm">
                         <Store class="w-3 h-3 text-amber-500" />
                         <span class="font-semibold text-gray-700 truncate max-w-[120px]">{{ activity.vendorName }}</span>
                       </div>
-                      <div class="flex items-center gap-2 text-xs">
+                      <div class="flex items-center gap-2 text-sm">
                         <Truck class="w-3 h-3 text-indigo-500" />
                         <span class="font-semibold text-gray-600 truncate max-w-[120px]">{{ activity.erranderName }}</span>
                       </div>
@@ -228,8 +228,8 @@
               Action Required
               <span class="px-2 py-0.5 bg-white text-rose-600 rounded-full text-[10px] font-black">{{ stats.pendingVendors }}</span>
             </h3>
-            <p class="text-rose-100 text-xs font-medium leading-relaxed mb-4">You have vendors waiting for approval to join the platform.</p>
-            <button class="flex items-center gap-2 text-xs font-bold text-white hover:underline underline-offset-4">
+            <p class="text-rose-100 text-sm font-medium leading-relaxed mb-4">You have vendors waiting for approval to join the platform.</p>
+            <button class="flex items-center gap-2 text-sm font-bold text-white hover:underline underline-offset-4">
               Review Vendors
               <ArrowRight class="w-3.5 h-3.5" />
             </button>
@@ -249,7 +249,7 @@
             <div v-for="service in services" :key="service.name" class="flex items-center justify-between cursor-default group">
               <div class="flex items-center gap-3">
                 <div :class="service.status === 'online' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]'" class="w-2 h-2 rounded-full transition-colors" />
-                <span class="text-xs font-bold text-gray-700 group-hover:text-gray-900 transition-colors">{{ service.name }}</span>
+                <span class="text-sm font-bold text-gray-700 group-hover:text-gray-900 transition-colors">{{ service.name }}</span>
               </div>
               <div :class="service.status === 'online' ? 'bg-emerald-50 text-emerald-600 border-emerald-100/50' : 'bg-amber-50 text-amber-600 border-amber-100/50'" class="px-2 py-0.5 rounded-md border text-[9px] font-black uppercase tracking-wider shadow-sm">
                 {{ service.status === 'online' ? 'Operational' : 'Degraded' }}
@@ -268,8 +268,8 @@
               </div>
             </div>
             <h3 class="text-base font-bold mb-1.5 tracking-tight text-white">Platform Settings</h3>
-            <p class="text-gray-400 text-xs font-medium leading-relaxed mb-5">Manage platform configurations, fees, and operational hours.</p>
-            <NuxtLink to="/settings" class="block text-center w-full py-3 bg-[#FF5C1A] text-white rounded-xl font-bold text-xs hover:bg-[#E54D12] transition-all shadow-md shadow-[#FF5C1A]/20 active:scale-95">
+            <p class="text-gray-400 text-sm font-medium leading-relaxed mb-5">Manage platform configurations, fees, and operational hours.</p>
+            <NuxtLink to="/settings" class="block text-center w-full py-3 bg-[#FF5C1A] text-white rounded-xl font-bold text-sm hover:bg-[#E54D12] transition-all shadow-md shadow-[#FF5C1A]/20 active:scale-95">
               Manage Settings
             </NuxtLink>
           </div>

@@ -121,17 +121,17 @@
                     </div>
                     <div class="min-w-0">
                       <p class="text-sm font-bold text-gray-900 leading-none mb-1">{{ user.firstName }} {{ user.lastName }}</p>
-                      <p class="text-xs font-medium text-gray-500 truncate">{{ user.email }}</p>
+                      <p class="text-sm font-medium text-gray-500 truncate">{{ user.email }}</p>
                     </div>
                   </div>
                 </td>
                 <td class="py-4 px-4 text-center">
-                  <span class="text-xs font-semibold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-lg border border-[#FF5C1A]/20 capitalize">
+                  <span class="text-sm font-semibold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-lg border border-[#FF5C1A]/20 capitalize">
                     {{ user.role }}
                   </span>
                 </td>
                 <td class="py-4 px-4 text-center">
-                  <span class="text-xs font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded-md">
+                  <span class="text-sm font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded-md">
                     ₦{{ (user.walletBalance || 0).toLocaleString() }}
                   </span>
                 </td>
@@ -141,7 +141,7 @@
                   </div>
                 </td>
                 <td class="py-4 px-4">
-                  <p class="text-xs font-medium text-gray-600">{{ new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}</p>
+                  <p class="text-sm font-medium text-gray-600">{{ new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}</p>
                 </td>
                 <td class="py-4 px-6 text-right">
                   <div class="flex justify-end gap-2">
@@ -210,7 +210,7 @@
             <h3 class="text-xl font-bold text-gray-900">{{ selectedUser.firstName }} {{ selectedUser.lastName }}</h3>
             <p class="text-sm font-medium text-gray-500 mb-4">{{ selectedUser.email }}</p>
             <div class="flex items-center gap-3">
-              <span class="text-xs font-semibold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-lg border border-[#FF5C1A]/20 capitalize">{{ selectedUser.role }}</span>
+              <span class="text-sm font-semibold text-[#FF5C1A] bg-[#FF5C1A]/10 px-3 py-1 rounded-lg border border-[#FF5C1A]/20 capitalize">{{ selectedUser.role }}</span>
               <StatusBadge :status="selectedUser.isActive ? 'active' : 'suspended'" class="scale-90" />
             </div>
 
@@ -222,7 +222,7 @@
               </div>
               <div class="text-center flex-1 py-3">
                 <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-0.5">Joined</p>
-                <p class="text-xs font-semibold text-gray-900">{{ new Date(selectedUser.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) }}</p>
+                <p class="text-sm font-semibold text-gray-900">{{ new Date(selectedUser.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) }}</p>
               </div>
             </div>
           </div>
@@ -280,11 +280,11 @@
                   <div class="grid grid-cols-2 gap-y-4 gap-x-4 text-sm px-2">
                     <div>
                       <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Reward Points</p>
-                      <p class="text-xl font-black text-gray-900">{{ selectedUser.points || 0 }} <span class="text-xs text-gray-400 font-medium">pts</span></p>
+                      <p class="text-xl font-black text-gray-900">{{ selectedUser.points || 0 }} <span class="text-sm text-gray-400 font-medium">pts</span></p>
                     </div>
                     <div>
                       <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Active Streak</p>
-                      <p class="text-xl font-black text-gray-900">{{ selectedUser.streakCount || 0 }} <span class="text-xs">🔥</span></p>
+                      <p class="text-xl font-black text-gray-900">{{ selectedUser.streakCount || 0 }} <span class="text-sm">🔥</span></p>
                     </div>
                     <div>
                       <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Referral Code</p>
@@ -310,7 +310,7 @@
                   <div class="grid grid-cols-2 gap-y-4 gap-x-4 text-sm px-2">
                     <div>
                       <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">User ID</p>
-                      <p class="font-mono text-xs font-bold text-gray-700 bg-gray-50 px-2 py-1 rounded inline-block">{{ selectedUser._id }}</p>
+                      <p class="font-mono text-sm font-bold text-gray-700 bg-gray-50 px-2 py-1 rounded inline-block">{{ selectedUser._id }}</p>
                     </div>
                     <div>
                       <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Joined Date</p>
@@ -341,7 +341,7 @@
                           <MapPin class="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
                           <div>
                             <p class="text-[10px] font-bold text-gray-900 uppercase tracking-wide mb-0.5">{{ addr.label || 'Saved Address' }} <span v-if="addr.isDefault" class="ml-1 text-[8px] bg-[#FF5C1A]/10 text-[#FF5C1A] px-1 py-0.5 rounded uppercase">Default</span></p>
-                            <p class="text-xs font-medium text-gray-600 leading-relaxed">{{ addr.address || addr.street }}</p>
+                            <p class="text-sm font-medium text-gray-600 leading-relaxed">{{ addr.address || addr.street }}</p>
                             <p class="text-[10px] text-gray-500 mt-1" v-if="addr.city || addr.state">{{ addr.city }}, {{ addr.state }}</p>
                           </div>
                         </div>
@@ -350,11 +350,11 @@
                     <template v-else-if="selectedUser.address || selectedUser.location">
                       <div class="bg-gray-50 p-3 rounded-lg flex items-start gap-3">
                         <MapPin class="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
-                        <p class="text-xs font-medium text-gray-600 leading-relaxed">{{ selectedUser.address || selectedUser.location }}</p>
+                        <p class="text-sm font-medium text-gray-600 leading-relaxed">{{ selectedUser.address || selectedUser.location }}</p>
                       </div>
                     </template>
                     <template v-else>
-                      <p class="text-xs font-medium text-gray-400 ">No addresses saved</p>
+                      <p class="text-sm font-medium text-gray-400 ">No addresses saved</p>
                     </template>
                   </div>
                 </div>
@@ -394,7 +394,7 @@
                     <div class="w-6 h-6 border border-[#FF5C1A] border-t-transparent rounded-full animate-spin"></div>
                   </div>
                   <div v-else-if="walletTransactions.length === 0" class="text-center py-6">
-                    <p class="text-xs text-gray-500">No wallet transactions found.</p>
+                    <p class="text-sm text-gray-500">No wallet transactions found.</p>
                   </div>
                   <div v-else class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -509,7 +509,7 @@
             </div>
             <div>
               <p class="text-sm font-bold text-gray-900">{{ fundModal.user?.firstName }} {{ fundModal.user?.lastName }}</p>
-              <p class="text-xs text-gray-500">{{ fundModal.user?.email }}</p>
+              <p class="text-sm text-gray-500">{{ fundModal.user?.email }}</p>
             </div>
           </div>
           <div>
@@ -568,7 +568,7 @@
             </div>
             <div>
               <p class="text-sm font-bold text-gray-900">{{ debitModal.user?.firstName }} {{ debitModal.user?.lastName }}</p>
-              <p class="text-xs text-gray-500">{{ debitModal.user?.email }}</p>
+              <p class="text-sm text-gray-500">{{ debitModal.user?.email }}</p>
             </div>
           </div>
           <div>

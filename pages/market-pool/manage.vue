@@ -26,15 +26,15 @@
       <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50/50">
         <div>
           <h2 class="text-lg font-bold text-gray-900">{{ campaign.title }}</h2>
-          <p class="text-xs text-gray-500">
+          <p class="text-sm text-gray-500">
             {{ new Date(campaign.startDate).toLocaleDateString() }} - {{ new Date(campaign.endDate).toLocaleDateString() }}
           </p>
         </div>
       <div class="flex items-center gap-3">
-        <span :class="['px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full', campaign.status === 'open' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700']">
+        <span :class="['px-3 py-1 text-sm font-bold uppercase tracking-wider rounded-full', campaign.status === 'open' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700']">
           {{ campaign.status }}
         </span>
-        <button v-if="campaign.status === 'open'" @click="promptClosePool(campaign._id)" :disabled="closingCampaign" class="text-xs bg-red-100 text-red-600 hover:bg-red-200 px-3 py-1 font-bold rounded-full transition-colors disabled:opacity-50">
+        <button v-if="campaign.status === 'open'" @click="promptClosePool(campaign._id)" :disabled="closingCampaign" class="text-sm bg-red-100 text-red-600 hover:bg-red-200 px-3 py-1 font-bold rounded-full transition-colors disabled:opacity-50">
           {{ closingCampaign ? 'Closing...' : 'Close Pool' }}
         </button>
       </div>
@@ -75,7 +75,7 @@
           
           <div v-else-if="aggregation.length > 0" class="max-md:overflow-x-auto md:overflow-visible pb-24 md:pb-0">
           <table class="w-full text-left text-sm">
-            <thead class="bg-gray-50 text-gray-600 uppercase text-xs">
+            <thead class="bg-gray-50 text-gray-600 uppercase text-sm">
               <tr>
                 <th class="px-4 py-3 font-semibold rounded-tl-lg">Item</th>
                 <th class="px-4 py-3 font-semibold">Total Qty (Student)</th>
@@ -99,17 +99,17 @@
                 </td>
                 <td class="px-4 py-3">
                   <span class="font-bold text-lg text-primary">{{ row.totalQuantity }}</span>
-                  <span class="text-xs text-gray-500 ml-1">x {{ row.item.studentQuantity }}</span>
+                  <span class="text-sm text-gray-500 ml-1">x {{ row.item.studentQuantity }}</span>
                 </td>
                 <td class="px-4 py-3 text-gray-600">
-                  <span class="inline-flex items-center px-2 py-1 bg-gray-100 rounded text-xs">
+                  <span class="inline-flex items-center px-2 py-1 bg-gray-100 rounded text-sm">
                     {{ calculateBulk(row.totalQuantity, row.item.studentQuantity) }}
                   </span>
                 </td>
                 <td class="px-4 py-3 text-right">
                   <button 
                     @click="triggerRefund(row.item._id, row.item.name)"
-                    class="text-xs px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 font-medium rounded transition-colors"
+                    class="text-sm px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 font-medium rounded transition-colors"
                   >
                     Trigger Refund
                   </button>
@@ -148,7 +148,7 @@
                     <span>&bull;</span>
                     <span>Target: {{ item.targetQuantity || 0 }}</span>
                   </div>
-                  <p class="text-xs text-gray-400">Buffer Price: <span class="font-bold text-primary text-sm">₦{{ item.appPrice.toLocaleString() }}</span></p>
+                  <p class="text-sm text-gray-400">Buffer Price: <span class="font-bold text-primary text-sm">₦{{ item.appPrice.toLocaleString() }}</span></p>
                 </div>
               </div>
               <button @click="editItem(item)" class="text-sm bg-white border border-gray-25 shadow-sm hover:bg-gray-50 text-gray-700 px-5 py-2 font-semibold rounded-xl transition-colors">Edit</button>
@@ -191,7 +191,7 @@
               <div>
                 <h4 class="font-bold text-gray-900">{{ req.itemName }}</h4>
                 <p class="text-sm text-gray-600 mb-1">{{ req.description }}</p>
-                <div class="flex gap-3 text-xs text-gray-500">
+                <div class="flex gap-3 text-sm text-gray-500">
                   <span class="font-medium bg-gray-100 px-2 py-0.5 rounded">Qty: {{ req.desiredQuantity }}</span>
                   <span>Requested by: {{ req.userId?.name }} ({{ req.userId?.phone }})</span>
                 </div>
@@ -219,7 +219,7 @@
               <div>
                 <h4 class="font-bold text-gray-900">Order #{{ order._id.slice(-6).toUpperCase() }}</h4>
                 <p class="text-sm text-gray-600 mb-1">{{ order.userId?.firstName }} {{ order.userId?.lastName }} ({{ order.userId?.email }})</p>
-                <div class="flex gap-3 text-xs text-gray-500">
+                <div class="flex gap-3 text-sm text-gray-500">
                   <span class="font-medium bg-gray-100 px-2 py-0.5 rounded">Total: ₦{{ (order.totalItemCost + order.deliveryFee).toLocaleString() }}</span>
                   <span class="font-medium bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">Verifying Proof</span>
                 </div>
@@ -342,7 +342,7 @@
         <div class="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
           <div>
             <h3 class="text-lg font-bold text-gray-900">Create New Campaign</h3>
-            <p class="text-xs text-gray-500 mt-1">Set up a new market pool run</p>
+            <p class="text-sm text-gray-500 mt-1">Set up a new market pool run</p>
           </div>
           <button @click="showCreateModal = false" class="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-colors">
             <X class="w-5 h-5" />
@@ -381,7 +381,7 @@
             </div>
             <div class="flex flex-col">
               <label for="autoPopulate" class="text-sm font-bold text-gray-700 cursor-pointer">Auto-populate Standard Catalog</label>
-              <p class="text-xs text-gray-500 mt-0.5">Automatically adds staples (Rice, Beans, Garri, Eggs, Indomie) to the pool</p>
+              <p class="text-sm text-gray-500 mt-0.5">Automatically adds staples (Rice, Beans, Garri, Eggs, Indomie) to the pool</p>
             </div>
           </div>
         </div>
@@ -407,7 +407,7 @@
         <div class="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
           <div>
             <h3 class="text-lg font-bold text-gray-900">{{ newItem._id ? 'Edit' : 'Add' }} Catalog Item</h3>
-            <p class="text-xs text-gray-500 mt-1">Upload an image and define measurement units.</p>
+            <p class="text-sm text-gray-500 mt-1">Upload an image and define measurement units.</p>
           </div>
           <button @click="showAddItemModal = false" class="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-colors">
             <X class="w-5 h-5" />
@@ -418,7 +418,7 @@
           <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1.5">Item Images</label>
             <input type="file" multiple @change="handleImageUpload" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer">
-            <div v-if="uploadingImage" class="text-xs text-gray-500 mt-2">Uploading images...</div>
+            <div v-if="uploadingImage" class="text-sm text-gray-500 mt-2">Uploading images...</div>
             <div class="flex gap-2 mt-3 max-md:overflow-x-auto md:overflow-visible pb-24 md:pb-0 pb-2">
               <div v-for="(img, idx) in [...(newItem.images || []), ...(localImagePreviews || [])]" :key="idx" class="relative group flex-shrink-0">
                 <img :src="(typeof img === 'string' && img !== '[object Object]') ? img : (img?.url || '')" class="w-24 h-24 object-cover rounded-xl border border-gray-25" />
@@ -442,7 +442,7 @@
           <div>
             <div class="flex items-center justify-between mb-1.5">
               <label class="block text-sm font-semibold text-gray-700">Category</label>
-              <button @click="showCategoryInput = !showCategoryInput" class="text-xs text-primary font-medium hover:underline">{{ showCategoryInput ? 'Cancel' : '+ New Category' }}</button>
+              <button @click="showCategoryInput = !showCategoryInput" class="text-sm text-primary font-medium hover:underline">{{ showCategoryInput ? 'Cancel' : '+ New Category' }}</button>
             </div>
             
             <div v-if="showCategoryInput" class="flex gap-2">

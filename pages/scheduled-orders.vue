@@ -3,7 +3,7 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
       <div class="space-y-1">
         <h1 class="text-2xl font-semibold text-gray-900 font-heading tracking-tight">Scheduled Orders</h1>
-        <p class="text-xs font-medium text-gray-500">Manage Meal Autopilot schedules across the platform.</p>
+        <p class="text-sm font-medium text-gray-500">Manage Meal Autopilot schedules across the platform.</p>
       </div>
     </div>
 
@@ -47,7 +47,7 @@
                   </div>
                   <div class="min-w-0">
                     <p class="font-bold text-gray-900 truncate">{{ order.customer?.firstName }} {{ order.customer?.lastName }}</p>
-                    <p class="text-xs text-gray-500 truncate">{{ order.customer?.email }}</p>
+                    <p class="text-sm text-gray-500 truncate">{{ order.customer?.email }}</p>
                     <p class="text-[10px] text-gray-400 font-medium">{{ order.customer?.phone }}</p>
                   </div>
                 </div>
@@ -56,7 +56,7 @@
                 <p class="font-bold text-gray-900">{{ order.vendor?.storeName || order.vendor?.businessName }}</p>
               </td>
               <td class="px-4 py-4">
-                <div v-for="sched in order.schedules" :key="sched.day" class="text-xs">
+                <div v-for="sched in order.schedules" :key="sched.day" class="text-sm">
                   <span class="font-bold capitalize">{{ sched.day }}</span>
                   <span class="text-gray-500"> — {{ sched.exactTime || sched.timeWindow }}</span>
                 </div>
@@ -84,10 +84,10 @@
       
       <!-- Pagination -->
       <div v-if="totalPages > 1" class="p-4 border-t border-gray-100/50 bg-gray-50/20 flex items-center justify-between">
-        <p class="text-xs font-medium text-gray-500">Showing page {{ currentPage }} of {{ totalPages }}</p>
+        <p class="text-sm font-medium text-gray-500">Showing page {{ currentPage }} of {{ totalPages }}</p>
         <div class="flex items-center gap-2">
-          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-1.5 text-xs font-bold bg-white border border-gray-25 rounded-lg hover:border-parentPrimary transition-colors disabled:opacity-50">Prev</button>
-          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-1.5 text-xs font-bold bg-white border border-gray-25 rounded-lg hover:border-parentPrimary transition-colors disabled:opacity-50">Next</button>
+          <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-1.5 text-sm font-bold bg-white border border-gray-25 rounded-lg hover:border-parentPrimary transition-colors disabled:opacity-50">Prev</button>
+          <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-1.5 text-sm font-bold bg-white border border-gray-25 rounded-lg hover:border-parentPrimary transition-colors disabled:opacity-50">Next</button>
         </div>
       </div>
     </div>

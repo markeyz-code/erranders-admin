@@ -35,18 +35,18 @@
             <tr v-for="c in campaigns" :key="c._id" class="hover:bg-gray-50/50 transition-colors group">
               <td class="py-4 px-6">
                 <p class="font-bold text-gray-900">{{ c.title }}</p>
-                <p class="text-xs text-gray-500 mt-1 line-clamp-1 max-w-xs">{{ c.body }}</p>
+                <p class="text-sm text-gray-500 mt-1 line-clamp-1 max-w-xs">{{ c.body }}</p>
               </td>
               <td class="py-4 px-6">
-                <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold uppercase tracking-wider">
+                <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-semibold uppercase tracking-wider">
                   {{ c.targetAudience }}
                 </span>
               </td>
               <td class="py-4 px-6">
                 <div class="flex flex-wrap gap-2">
-                  <span v-if="c.sendPush !== false" class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-xs font-semibold">Push</span>
-                  <span v-if="c.sendEmail" class="px-2 py-1 bg-orange-50 text-[#FF5C1A] rounded text-xs font-semibold">Email</span>
-                  <span v-if="c.sendPush === false && !c.sendEmail" class="px-2 py-1 bg-gray-100 text-gray-500 rounded text-xs font-semibold">None</span>
+                  <span v-if="c.sendPush !== false" class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-sm font-semibold">Push</span>
+                  <span v-if="c.sendEmail" class="px-2 py-1 bg-orange-50 text-[#FF5C1A] rounded text-sm font-semibold">Email</span>
+                  <span v-if="c.sendPush === false && !c.sendEmail" class="px-2 py-1 bg-gray-100 text-gray-500 rounded text-sm font-semibold">None</span>
                 </div>
               </td>
               <td class="py-4 px-6">
@@ -56,10 +56,10 @@
                 </div>
               </td>
               <td class="py-4 px-6">
-                <span v-if="c.isActive" class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold flex items-center w-max gap-1">
+                <span v-if="c.isActive" class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-bold flex items-center w-max gap-1">
                   <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Active
                 </span>
-                <span v-else class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-bold flex items-center w-max gap-1">
+                <span v-else class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm font-bold flex items-center w-max gap-1">
                   Inactive
                 </span>
               </td>
