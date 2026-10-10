@@ -221,7 +221,7 @@
                     <p class="text-[11px] font-medium text-gray-500 truncate mb-1.5">{{ (order.customer || order.user)?.email || 'No email' }}</p>
                     <div class="flex items-center gap-2">
                       <span class="text-[9px] font-black bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-mono">{{ order.orderNumber || order._id.slice(-8).toUpperCase() }}</span>
-                      <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wide">• {{ order.isGroupOrder ? 'Group Order' : (order.type === 'custom_errand' ? 'Custom Errand' : ((order.items?.length || 0) + ' items')) }}</span>
+                      <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wide">• {{ order.isGroupOrder ? 'Group Order' : (order.isAutopilot ? 'Auto-Pilot' : (order.isPooledErrand ? 'Pooled Errand' : (order.type === 'custom_errand' ? 'Custom Errand' : ((order.items?.length || 0) + ' items')))) }}</span>
                     </div>
                   </div>
                 </div>
@@ -596,6 +596,39 @@
             </div>
           </div>
 
+          <!-- Negotiation Bids -->
+          <div class="space-y-4 mt-6" v-if="selectedOrder.type === 'custom_errand' && selectedOrder.bids?.length > 0">
+            <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2 flex items-center justify-between">
+              Negotiation Bids
+              <span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full text-[9px]">{{ selectedOrder.bids.length }} Bids</span>
+            </h4>
+            <div class="space-y-2">
+              <div v-for="bid in selectedOrder.bids" :key="bid._id" class="p-3 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
+                    <img v-if="bid.errander?.avatar" :src="bid.errander.avatar" class="w-full h-full object-cover" />
+                    <div v-else class="w-full h-full flex items-center justify-center text-gray-500 font-bold text-xs">{{ bid.errander?.firstName?.charAt(0) }}</div>
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-gray-900">{{ bid.errander?.firstName }} {{ bid.errander?.lastName }}</p>
+                    <p class="text-[10px] text-gray-500">{{ new Date(bid.createdAt).toLocaleString() }}</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-sm font-black text-emerald-600">₦{{ Number(bid.amount).toLocaleString() }}</p>
+                  <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" 
+                        :class="{
+                          'bg-amber-100 text-amber-700': bid.status === 'pending',
+                          'bg-emerald-100 text-emerald-700': bid.status === 'accepted',
+                          'bg-red-100 text-red-700': bid.status === 'rejected'
+                        }">
+                    {{ bid.status }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Payment & Billing -->
           <div class="space-y-4 mt-6">
             <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2 flex justify-between items-center">
@@ -886,7 +919,8 @@ const typeOptions = [
   { label: 'Custom Errand', value: 'custom_errand' },
   { label: 'Package Delivery', value: 'package_delivery' },
   { label: 'Group Orders', value: 'group' },
-  { label: 'Pooled Errands', value: 'pooled' }
+  { label: 'Pooled Errands', value: 'pooled' },
+  { label: 'Auto-Pilot Orders', value: 'auto_pilot' }
 ];
 
 const updateStatuses = ['pending', 'confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'delivered', 'cancelled'];
