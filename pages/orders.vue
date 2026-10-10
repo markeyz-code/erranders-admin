@@ -221,7 +221,7 @@
                     <p class="text-[11px] font-medium text-gray-500 truncate mb-1.5">{{ (order.customer || order.user)?.email || 'No email' }}</p>
                     <div class="flex items-center gap-2">
                       <span class="text-[9px] font-black bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-mono">{{ order.orderNumber || order._id.slice(-8).toUpperCase() }}</span>
-                      <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wide">• {{ order.type === 'custom_errand' ? 'Custom Errand' : ((order.items?.length || 0) + ' items') }}</span>
+                      <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wide">• {{ order.isGroupOrder ? 'Group Order' : (order.type === 'custom_errand' ? 'Custom Errand' : ((order.items?.length || 0) + ' items')) }}</span>
                     </div>
                   </div>
                 </div>
@@ -884,7 +884,9 @@ const typeOptions = [
   { label: 'All Types', value: 'all' },
   { label: 'Food Delivery', value: 'food_delivery' },
   { label: 'Custom Errand', value: 'custom_errand' },
-  { label: 'Package Delivery', value: 'package_delivery' }
+  { label: 'Package Delivery', value: 'package_delivery' },
+  { label: 'Group Orders', value: 'group' },
+  { label: 'Pooled Errands', value: 'pooled' }
 ];
 
 const updateStatuses = ['pending', 'confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'delivered', 'cancelled'];
