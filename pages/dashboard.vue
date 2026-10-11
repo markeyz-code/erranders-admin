@@ -162,7 +162,7 @@
                         <p class="text-[10px] text-gray-500 truncate mb-1">{{ activity.customerEmail }}</p>
                         <div class="flex items-center gap-2">
                           <span class="text-[9px] font-black bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-mono">{{ activity.orderNumber }}</span>
-                          <span class="text-[9px] font-bold text-gray-400">• {{ activity.itemCount }} items</span>
+                          <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wide">• {{ activity.orderTypeLabel }}</span>
                         </div>
                       </div>
                     </div>
@@ -409,7 +409,8 @@ const recentActivity = computed(() => {
       address: order.deliveryAddress || order.specificAddress || 'No address provided',
       time: formatTimeAgo(order.createdAt),
       status: order.status || 'completed',
-      itemCount: order.items?.length || 0
+      itemCount: order.items?.length || 0,
+      orderTypeLabel: order.isGroupOrder ? 'Group Order' : (order.isAutopilot ? 'Auto-Pilot' : (order.isPooledErrand ? 'Pooled Errand' : (order.type === 'custom_errand' ? 'Custom Errand' : ((order.items?.length || 0) + ' items'))))
     };
   });
 })
