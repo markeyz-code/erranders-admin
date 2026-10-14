@@ -1292,9 +1292,9 @@ const form = reactive({
   expressFee: 850,
   roomDeliveryFee: 350,
   dropoffServiceFee: 300,
-  platformFee: 50,
-  convenienceFee: 50,
-  commissionFlatFee: 50,
+  platformFee: 100,
+  convenienceFee: 100,
+  commissionFlatFee: 100,
   customErrandCommissionPercentage: 20,
   customErrandSafetyBufferPercentage: 20,
   minCustomErrandFee: 400,
@@ -1561,9 +1561,9 @@ const loadSettings = async () => {
       form.expressFee = errandSettings.expressFee || 850;
       form.roomDeliveryFee = errandSettings.roomDeliveryFee || 350;
       form.dropoffServiceFee = errandSettings.dropoffServiceFee || 300;
-      form.platformFee = errandSettings.platformFee || 50;
-      form.convenienceFee = errandSettings.convenienceFee ?? 50;
-      form.commissionFlatFee = errandSettings.commissionFlatFee ?? 50;
+      form.platformFee = errandSettings.platformFee || errandSettings.convenienceFee || 100;
+      form.convenienceFee = errandSettings.convenienceFee ?? errandSettings.platformFee ?? 100;
+      form.commissionFlatFee = errandSettings.commissionFlatFee ?? errandSettings.platformFee ?? 100;
       form.customErrandCommissionPercentage = Number(errandSettings.customErrandCommissionPercentage) || 20;
       form.customErrandSafetyBufferPercentage = Number(errandSettings.customErrandSafetyBufferPercentage) || 20;
       form.minCustomErrandFee = Number(errandSettings.minCustomErrandFee) || 400;
@@ -1625,9 +1625,9 @@ const saveSettings = async () => {
       expressFee: Number(form.expressFee),
       roomDeliveryFee: Number(form.roomDeliveryFee),
       dropoffServiceFee: Number(form.dropoffServiceFee),
-      platformFee: Number(form.platformFee),
-      convenienceFee: Number(form.convenienceFee),
-      commissionFlatFee: Number(form.commissionFlatFee),
+      platformFee: Number(form.platformFee || form.convenienceFee || 100),
+      convenienceFee: Number(form.convenienceFee || form.platformFee || 100),
+      commissionFlatFee: Number(form.commissionFlatFee || form.platformFee || 100),
       customErrandCommissionPercentage: Number(form.customErrandCommissionPercentage),
       customErrandSafetyBufferPercentage: Number(form.customErrandSafetyBufferPercentage),
       minCustomErrandFee: Number(form.minCustomErrandFee),
