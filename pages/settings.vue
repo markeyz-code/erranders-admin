@@ -1014,6 +1014,7 @@
           </div>
         </div>
       </Transition>
+    </Teleport>
     <!-- ═══════════════════════════════════════════════════════ -->
     <!-- CREATE / EDIT ADVERT MODAL -->
     <!-- ═══════════════════════════════════════════════════════ -->
@@ -1294,7 +1295,7 @@ const form = reactive({
   dropoffServiceFee: 300,
   platformFee: 100,
   convenienceFee: 100,
-  commissionFlatFee: 100,
+  commissionFlatFee: 50,
   customErrandCommissionPercentage: 20,
   customErrandSafetyBufferPercentage: 20,
   minCustomErrandFee: 300,
@@ -1563,7 +1564,7 @@ const loadSettings = async () => {
       form.dropoffServiceFee = errandSettings.dropoffServiceFee || 300;
       form.platformFee = errandSettings.platformFee || errandSettings.convenienceFee || 100;
       form.convenienceFee = errandSettings.convenienceFee ?? errandSettings.platformFee ?? 100;
-      form.commissionFlatFee = errandSettings.commissionFlatFee ?? errandSettings.platformFee ?? 100;
+      form.commissionFlatFee = errandSettings.commissionFlatFee ?? 50;
       form.customErrandCommissionPercentage = Number(errandSettings.customErrandCommissionPercentage) || 20;
       form.customErrandSafetyBufferPercentage = Number(errandSettings.customErrandSafetyBufferPercentage) || 20;
       form.minCustomErrandFee = errandSettings.minCustomErrandFee != null ? Number(errandSettings.minCustomErrandFee) : 300;
@@ -1627,7 +1628,7 @@ const saveSettings = async () => {
       dropoffServiceFee: Number(form.dropoffServiceFee),
       platformFee: Number(form.platformFee || form.convenienceFee || 100),
       convenienceFee: Number(form.convenienceFee || form.platformFee || 100),
-      commissionFlatFee: Number(form.commissionFlatFee || form.platformFee || 100),
+      commissionFlatFee: Number(form.commissionFlatFee !== undefined && form.commissionFlatFee !== null ? form.commissionFlatFee : 50),
       customErrandCommissionPercentage: Number(form.customErrandCommissionPercentage),
       customErrandSafetyBufferPercentage: Number(form.customErrandSafetyBufferPercentage),
       minCustomErrandFee: Number(form.minCustomErrandFee),
