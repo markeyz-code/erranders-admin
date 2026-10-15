@@ -1297,7 +1297,7 @@ const form = reactive({
   commissionFlatFee: 100,
   customErrandCommissionPercentage: 20,
   customErrandSafetyBufferPercentage: 20,
-  minCustomErrandFee: 400,
+  minCustomErrandFee: 300,
   enableTransferFee: false,
   minOutsideCampusFee: 450,
   minCampusEnvironsFee: 350,
@@ -1566,7 +1566,7 @@ const loadSettings = async () => {
       form.commissionFlatFee = errandSettings.commissionFlatFee ?? errandSettings.platformFee ?? 100;
       form.customErrandCommissionPercentage = Number(errandSettings.customErrandCommissionPercentage) || 20;
       form.customErrandSafetyBufferPercentage = Number(errandSettings.customErrandSafetyBufferPercentage) || 20;
-      form.minCustomErrandFee = Number(errandSettings.minCustomErrandFee) || 400;
+      form.minCustomErrandFee = errandSettings.minCustomErrandFee != null ? Number(errandSettings.minCustomErrandFee) : 300;
       form.enableTransferFee = errandSettings.enableTransferFee ?? false;
       form.minOutsideCampusFee = Number(errandSettings.minOutsideCampusFee) || 450;
       form.minCampusEnvironsFee = Number(errandSettings.minCampusEnvironsFee) || 350;
