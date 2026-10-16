@@ -20,7 +20,13 @@ export const useRealtimeSocket = () => {
     if (!process.client) return
     if (socket.value && (socket.value.connected || isConnecting.value)) return
 
-    const rawUrl = (import.meta.env.VITE_BASE_URL || '') as string
+    let rawUrl = 'https://api.erranders.org'
+    try {
+      const config = useRuntimeConfig()
+      rawUrl = (config.public.wsBase as string) || (config.public.baseUrl as string) || rawUrl
+    } catch {
+      rawUrl = (import.meta.env?.VITE_WS_URL || import.meta.env?.VITE_BASE_URL || import.meta.env?.VITE_API_BASE_URL || rawUrl) as string
+    }
     const baseUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl
     isConnecting.value = true
 
@@ -34,7 +40,9 @@ export const useRealtimeSocket = () => {
 
     socket.value = io(`${baseUrl}/realtime`, {
       path: '/socket.io/',
-      transports: ['websocket', 'polling'],
+      transports: ['polling'],
+      reconnectionAttempts: 5,
+      timeout: 10000,
       auth: authPayload,
     })
 
