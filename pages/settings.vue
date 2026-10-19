@@ -1994,20 +1994,20 @@ const erranderForm = reactive({
 const form = reactive({
   baseFee: 450,
   expressFee: 850,
-  roomDeliveryFee: 350,
+  roomDeliveryFee: 300,
   dropoffServiceFee: 300,
-  platformFee: 100,
-  convenienceFee: 100,
-  commissionFlatFee: 50,
+  platformFee: 150,
+  convenienceFee: 150,
+  commissionFlatFee: 0,
   customErrandCommissionPercentage: 20,
-  customErrandSafetyBufferPercentage: 20,
-  minCustomErrandFee: 300,
-  enableTransferFee: false,
+  customErrandSafetyBufferPercentage: 0,
+  minCustomErrandFee: 400,
+  enableTransferFee: true,
   minOutsideCampusFee: 450,
-  minCampusEnvironsFee: 350,
-  platformProcessingFee: 500,
-  platformServiceFeePercentage: 5,
-  foodMarkupPercentage: 5,
+  minCampusEnvironsFee: 450,
+  platformProcessingFee: 0,
+  platformServiceFeePercentage: 0,
+  foodMarkupPercentage: 0,
   interceptionEnabled: true,
   interceptionFirstErranderPercentage: 60,
   interceptionSecondErranderPercentage: 40,
@@ -2340,7 +2340,7 @@ const executeConfirmedSave = async () => {
 // ─── Load Settings ────────────────
 const loadSettings = async () => {
   try {
-    const [errandRes, commsRes, advertRes, examBrethrenRes, erranderSettingsRes, payoutRes, platformRes] = await Promise.all([
+    const results = await Promise.allSettled([
       admin_api.getCustomErrandSettings(),
       admin_api.getCommunicationsSettings(),
       admin_api.getAdvertSettings(),
@@ -2350,63 +2350,91 @@ const loadSettings = async () => {
       admin_api.getPlatformStatus()
     ]);
     
-    if (errandRes.data) {
-      const errandSettings = errandRes.data;
-      form.baseFee = errandSettings.baseFee ?? 450;
-      form.expressFee = errandSettings.expressFee ?? 850;
-      form.roomDeliveryFee = errandSettings.roomDeliveryFee ?? 350;
-      form.dropoffServiceFee = errandSettings.dropoffServiceFee ?? 300;
-      form.platformFee = errandSettings.convenienceFee ?? errandSettings.platformFee ?? 50;
-      form.convenienceFee = errandSettings.convenienceFee ?? errandSettings.platformFee ?? 50;
-      form.commissionFlatFee = Math.min(Number(errandSettings.commissionFlatFee ?? 50), 50);
-      form.customErrandCommissionPercentage = Number(errandSettings.customErrandCommissionPercentage) || 20;
-      form.customErrandSafetyBufferPercentage = Number(errandSettings.customErrandSafetyBufferPercentage) || 20;
-      form.minCustomErrandFee = errandSettings.minCustomErrandFee != null ? Number(errandSettings.minCustomErrandFee) : 300;
-      form.enableTransferFee = errandSettings.enableTransferFee ?? false;
-      form.minOutsideCampusFee = Number(errandSettings.minOutsideCampusFee) || 450;
-      form.minCampusEnvironsFee = Number(errandSettings.minCampusEnvironsFee) || 350;
-      form.platformProcessingFee = errandSettings.platformProcessingFee !== undefined && errandSettings.platformProcessingFee !== null ? Number(errandSettings.platformProcessingFee) : 0;
-      form.platformServiceFeePercentage = errandSettings.platformServiceFeePercentage !== undefined ? Number(errandSettings.platformServiceFeePercentage) : 5;
-      form.foodMarkupPercentage = errandSettings.foodMarkupPercentage !== undefined ? Number(errandSettings.foodMarkupPercentage) : 0;
+    const [errandSettled, commsSettled, advertSettled, examBrethrenSettled, erranderSettingsSettled, payoutSettled, platformSettled] = results;
+
+    if (errandSettled.status === 'fulfilled' && errandSettled.value?.data) {
+      const errandSettings = errandSettled.value.data;
+      form.baseFee = errandSettings.baseFee != null && !isNaN(Number(errandSettings.baseFee)) ? Number(errandSettings.baseFee) : 450;
+      form.expressFee = errandSettings.expressFee != null && !isNaN(Number(errandSettings.expressFee)) ? Number(errandSettings.expressFee) : 850;
+      form.roomDeliveryFee = errandSettings.roomDeliveryFee != null && !isNaN(Number(errandSettings.roomDeliveryFee)) ? Number(errandSettings.roomDeliveryFee) : 300;
+      form.dropoffServiceFee = errandSettings.dropoffServiceFee != null && !isNaN(Number(errandSettings.dropoffServiceFee)) ? Number(errandSettings.dropoffServiceFee) : 300;
+      form.platformFee = errandSettings.convenienceFee != null && !isNaN(Number(errandSettings.convenienceFee))
+        ? Number(errandSettings.convenienceFee)
+        : (errandSettings.platformFee != null && !isNaN(Number(errandSettings.platformFee)) ? Number(errandSettings.platformFee) : 150);
+      form.convenienceFee = form.platformFee;
+      form.commissionFlatFee = errandSettings.commissionFlatFee != null && !isNaN(Number(errandSettings.commissionFlatFee))
+        ? Math.max(0, Math.min(50, Number(errandSettings.commissionFlatFee)))
+        : 0;
+      form.customErrandCommissionPercentage = errandSettings.customErrandCommissionPercentage != null && !isNaN(Number(errandSettings.customErrandCommissionPercentage))
+        ? Number(errandSettings.customErrandCommissionPercentage)
+        : 20;
+      form.customErrandSafetyBufferPercentage = errandSettings.customErrandSafetyBufferPercentage != null && !isNaN(Number(errandSettings.customErrandSafetyBufferPercentage))
+        ? Number(errandSettings.customErrandSafetyBufferPercentage)
+        : 0;
+      form.minCustomErrandFee = errandSettings.minCustomErrandFee != null && !isNaN(Number(errandSettings.minCustomErrandFee))
+        ? Number(errandSettings.minCustomErrandFee)
+        : 400;
+      form.enableTransferFee = Boolean(errandSettings.enableTransferFee);
+      form.minOutsideCampusFee = errandSettings.minOutsideCampusFee != null && !isNaN(Number(errandSettings.minOutsideCampusFee))
+        ? Number(errandSettings.minOutsideCampusFee)
+        : 450;
+      form.minCampusEnvironsFee = errandSettings.minCampusEnvironsFee != null && !isNaN(Number(errandSettings.minCampusEnvironsFee))
+        ? Number(errandSettings.minCampusEnvironsFee)
+        : 450;
+      form.platformProcessingFee = errandSettings.platformProcessingFee != null && !isNaN(Number(errandSettings.platformProcessingFee))
+        ? Number(errandSettings.platformProcessingFee)
+        : 0;
+      form.platformServiceFeePercentage = errandSettings.platformServiceFeePercentage != null && !isNaN(Number(errandSettings.platformServiceFeePercentage))
+        ? Number(errandSettings.platformServiceFeePercentage)
+        : 0;
+      form.foodMarkupPercentage = errandSettings.foodMarkupPercentage != null && !isNaN(Number(errandSettings.foodMarkupPercentage))
+        ? Number(errandSettings.foodMarkupPercentage)
+        : 0;
       form.interceptionEnabled = errandSettings.interceptionEnabled !== undefined ? Boolean(errandSettings.interceptionEnabled) : true;
-      form.interceptionFirstErranderPercentage = Number(errandSettings.interceptionFirstErranderPercentage ?? 60);
-      form.interceptionSecondErranderPercentage = Number(errandSettings.interceptionSecondErranderPercentage ?? 40);
+      form.interceptionFirstErranderPercentage = errandSettings.interceptionFirstErranderPercentage != null && !isNaN(Number(errandSettings.interceptionFirstErranderPercentage))
+        ? Number(errandSettings.interceptionFirstErranderPercentage)
+        : 60;
+      form.interceptionSecondErranderPercentage = errandSettings.interceptionSecondErranderPercentage != null && !isNaN(Number(errandSettings.interceptionSecondErranderPercentage))
+        ? Number(errandSettings.interceptionSecondErranderPercentage)
+        : 40;
       // Snapshot the originals for change detection
       Object.assign(originalForm, { ...form });
     }
 
-    if (commsRes.data) {
-      commsForm.emailsEnabled = commsRes.data.emailsEnabled ?? true;
-      commsForm.pushNotificationsEnabled = commsRes.data.pushNotificationsEnabled ?? true;
+    if (commsSettled.status === 'fulfilled' && commsSettled.value?.data) {
+      commsForm.emailsEnabled = commsSettled.value.data.emailsEnabled ?? true;
+      commsForm.pushNotificationsEnabled = commsSettled.value.data.pushNotificationsEnabled ?? true;
     }
 
-    if (advertRes.data) {
-      advertForm.enabled = advertRes.data.enabled ?? true;
-      advertForm.intervalMinutes = advertRes.data.intervalMinutes ?? 15;
-      advertForm.autoCloseSeconds = advertRes.data.autoCloseSeconds ?? 0;
-      advertForm.contentType = advertRes.data.contentType || 'custom';
-      advertForm.customAds = Array.isArray(advertRes.data.customAds) ? advertRes.data.customAds : [];
-      if (advertRes.data.customAd) {
-        advertForm.customAd = { ...advertForm.customAd, ...advertRes.data.customAd };
+    if (advertSettled.status === 'fulfilled' && advertSettled.value?.data) {
+      const aData = advertSettled.value.data;
+      advertForm.enabled = aData.enabled ?? true;
+      advertForm.intervalMinutes = aData.intervalMinutes ?? 15;
+      advertForm.autoCloseSeconds = aData.autoCloseSeconds ?? 0;
+      advertForm.contentType = aData.contentType || 'custom';
+      advertForm.customAds = Array.isArray(aData.customAds) ? aData.customAds : [];
+      if (aData.customAd) {
+        advertForm.customAd = { ...advertForm.customAd, ...aData.customAd };
       }
     }
     
-    if (examBrethrenRes.data) {
-      examBrethrenForm.isActive = examBrethrenRes.data.isActive ?? false;
+    if (examBrethrenSettled.status === 'fulfilled' && examBrethrenSettled.value?.data) {
+      examBrethrenForm.isActive = examBrethrenSettled.value.data.isActive ?? false;
     }
 
-    if (erranderSettingsRes.data) {
-      erranderForm.maxConcurrentOrders = erranderSettingsRes.data.maxConcurrentOrders ?? 0;
+    if (erranderSettingsSettled.status === 'fulfilled' && erranderSettingsSettled.value?.data) {
+      erranderForm.maxConcurrentOrders = erranderSettingsSettled.value.data.maxConcurrentOrders ?? 0;
     }
 
-    if (payoutRes.data) {
-      erranderForm.minimumPayout = payoutRes.data.amount ?? 1000;
+    if (payoutSettled.status === 'fulfilled' && payoutSettled.value?.data) {
+      erranderForm.minimumPayout = payoutSettled.value.data.amount ?? 1000;
     }
 
-    if (platformRes.data) {
-      platformForm.isStudentAppClosed = platformRes.data.isStudentAppClosed ?? platformRes.data.isClosed ?? false;
-      platformForm.isVendorAppClosed = platformRes.data.isVendorAppClosed ?? platformRes.data.isClosed ?? false;
-      platformForm.isDispatchAppClosed = platformRes.data.isDispatchAppClosed ?? platformRes.data.isClosed ?? false;
+    if (platformSettled.status === 'fulfilled' && platformSettled.value?.data) {
+      const pData = platformSettled.value.data;
+      platformForm.isStudentAppClosed = pData.isStudentAppClosed ?? pData.isClosed ?? false;
+      platformForm.isVendorAppClosed = pData.isVendorAppClosed ?? pData.isClosed ?? false;
+      platformForm.isDispatchAppClosed = pData.isDispatchAppClosed ?? pData.isClosed ?? false;
     }
   } catch (e: any) {
     console.error('Failed to load settings:', e);
@@ -2418,31 +2446,80 @@ const loadSettings = async () => {
 const saveSettings = async () => {
   saving.value = true;
   try {
-    const resolvedOrderServiceFee = form.convenienceFee !== undefined && form.convenienceFee !== null ? Number(form.convenienceFee) : (form.platformFee !== undefined ? Number(form.platformFee) : 50);
+    const resolvedOrderServiceFee = form.convenienceFee != null && form.convenienceFee !== '' && !isNaN(Number(form.convenienceFee))
+      ? Number(form.convenienceFee)
+      : (form.platformFee != null && form.platformFee !== '' && !isNaN(Number(form.platformFee)) ? Number(form.platformFee) : 150);
     form.convenienceFee = resolvedOrderServiceFee;
     form.platformFee = resolvedOrderServiceFee;
 
-    await admin_api.updateCustomErrandSettings({
-      baseFee: Number(form.baseFee || 450),
-      expressFee: Number(form.expressFee || 850),
-      roomDeliveryFee: Number(form.roomDeliveryFee || 350),
-      dropoffServiceFee: Number(form.dropoffServiceFee || 300),
+    const payload = {
+      baseFee: form.baseFee != null && form.baseFee !== '' && !isNaN(Number(form.baseFee)) ? Number(form.baseFee) : 450,
+      expressFee: form.expressFee != null && form.expressFee !== '' && !isNaN(Number(form.expressFee)) ? Number(form.expressFee) : 850,
+      roomDeliveryFee: form.roomDeliveryFee != null && form.roomDeliveryFee !== '' && !isNaN(Number(form.roomDeliveryFee)) ? Number(form.roomDeliveryFee) : 300,
+      dropoffServiceFee: form.dropoffServiceFee != null && form.dropoffServiceFee !== '' && !isNaN(Number(form.dropoffServiceFee)) ? Number(form.dropoffServiceFee) : 300,
       platformFee: resolvedOrderServiceFee,
       convenienceFee: resolvedOrderServiceFee,
-      commissionFlatFee: Math.min(Number(form.commissionFlatFee !== undefined && form.commissionFlatFee !== null ? form.commissionFlatFee : 50), 50),
-      customErrandCommissionPercentage: Number(form.customErrandCommissionPercentage ?? 20),
-      customErrandSafetyBufferPercentage: Number(form.customErrandSafetyBufferPercentage ?? 20),
-      minCustomErrandFee: Number(form.minCustomErrandFee ?? 300),
-      minCampusEnvironsFee: Number(form.minCampusEnvironsFee ?? 350),
-      minOutsideCampusFee: Number(form.minOutsideCampusFee ?? 450),
+      commissionFlatFee: form.commissionFlatFee != null && form.commissionFlatFee !== '' && !isNaN(Number(form.commissionFlatFee))
+        ? Math.max(0, Math.min(50, Number(form.commissionFlatFee)))
+        : 0,
+      customErrandCommissionPercentage: form.customErrandCommissionPercentage != null && form.customErrandCommissionPercentage !== '' && !isNaN(Number(form.customErrandCommissionPercentage))
+        ? Number(form.customErrandCommissionPercentage)
+        : 20,
+      customErrandSafetyBufferPercentage: form.customErrandSafetyBufferPercentage != null && form.customErrandSafetyBufferPercentage !== '' && !isNaN(Number(form.customErrandSafetyBufferPercentage))
+        ? Number(form.customErrandSafetyBufferPercentage)
+        : 0,
+      minCustomErrandFee: form.minCustomErrandFee != null && form.minCustomErrandFee !== '' && !isNaN(Number(form.minCustomErrandFee))
+        ? Number(form.minCustomErrandFee)
+        : 400,
+      minCampusEnvironsFee: form.minCampusEnvironsFee != null && form.minCampusEnvironsFee !== '' && !isNaN(Number(form.minCampusEnvironsFee))
+        ? Number(form.minCampusEnvironsFee)
+        : 450,
+      minOutsideCampusFee: form.minOutsideCampusFee != null && form.minOutsideCampusFee !== '' && !isNaN(Number(form.minOutsideCampusFee))
+        ? Number(form.minOutsideCampusFee)
+        : 450,
       enableTransferFee: Boolean(form.enableTransferFee),
-      platformProcessingFee: Number(form.platformProcessingFee ?? 0),
-      platformServiceFeePercentage: Number(form.platformServiceFeePercentage ?? 5),
-      foodMarkupPercentage: Number(form.foodMarkupPercentage ?? 0),
+      platformProcessingFee: form.platformProcessingFee != null && form.platformProcessingFee !== '' && !isNaN(Number(form.platformProcessingFee))
+        ? Number(form.platformProcessingFee)
+        : 0,
+      platformServiceFeePercentage: form.platformServiceFeePercentage != null && form.platformServiceFeePercentage !== '' && !isNaN(Number(form.platformServiceFeePercentage))
+        ? Number(form.platformServiceFeePercentage)
+        : 0,
+      foodMarkupPercentage: form.foodMarkupPercentage != null && form.foodMarkupPercentage !== '' && !isNaN(Number(form.foodMarkupPercentage))
+        ? Number(form.foodMarkupPercentage)
+        : 0,
       interceptionEnabled: Boolean(form.interceptionEnabled),
-      interceptionFirstErranderPercentage: Number(form.interceptionFirstErranderPercentage ?? 60),
-      interceptionSecondErranderPercentage: Number(form.interceptionSecondErranderPercentage ?? 40),
-    });
+      interceptionFirstErranderPercentage: form.interceptionFirstErranderPercentage != null && form.interceptionFirstErranderPercentage !== '' && !isNaN(Number(form.interceptionFirstErranderPercentage))
+        ? Number(form.interceptionFirstErranderPercentage)
+        : 60,
+      interceptionSecondErranderPercentage: form.interceptionSecondErranderPercentage != null && form.interceptionSecondErranderPercentage !== '' && !isNaN(Number(form.interceptionSecondErranderPercentage))
+        ? Number(form.interceptionSecondErranderPercentage)
+        : 40,
+    };
+
+    const res = await admin_api.updateCustomErrandSettings(payload);
+    if (res.data) {
+      Object.assign(form, {
+        baseFee: res.data.baseFee ?? form.baseFee,
+        expressFee: res.data.expressFee ?? form.expressFee,
+        roomDeliveryFee: res.data.roomDeliveryFee ?? form.roomDeliveryFee,
+        dropoffServiceFee: res.data.dropoffServiceFee ?? form.dropoffServiceFee,
+        platformFee: res.data.convenienceFee ?? res.data.platformFee ?? form.platformFee,
+        convenienceFee: res.data.convenienceFee ?? res.data.platformFee ?? form.convenienceFee,
+        commissionFlatFee: res.data.commissionFlatFee ?? form.commissionFlatFee,
+        customErrandCommissionPercentage: res.data.customErrandCommissionPercentage ?? form.customErrandCommissionPercentage,
+        customErrandSafetyBufferPercentage: res.data.customErrandSafetyBufferPercentage ?? form.customErrandSafetyBufferPercentage,
+        minCustomErrandFee: res.data.minCustomErrandFee ?? form.minCustomErrandFee,
+        enableTransferFee: res.data.enableTransferFee ?? form.enableTransferFee,
+        minOutsideCampusFee: res.data.minOutsideCampusFee ?? form.minOutsideCampusFee,
+        minCampusEnvironsFee: res.data.minCampusEnvironsFee ?? form.minCampusEnvironsFee,
+        platformProcessingFee: res.data.platformProcessingFee ?? form.platformProcessingFee,
+        platformServiceFeePercentage: res.data.platformServiceFeePercentage ?? form.platformServiceFeePercentage,
+        foodMarkupPercentage: res.data.foodMarkupPercentage ?? form.foodMarkupPercentage,
+        interceptionEnabled: res.data.interceptionEnabled ?? form.interceptionEnabled,
+        interceptionFirstErranderPercentage: res.data.interceptionFirstErranderPercentage ?? form.interceptionFirstErranderPercentage,
+        interceptionSecondErranderPercentage: res.data.interceptionSecondErranderPercentage ?? form.interceptionSecondErranderPercentage,
+      });
+    }
     Object.assign(originalForm, { ...form });
     showToast({ title: 'success', message: 'pricing and revenue settings saved successfully!', toastType: 'success' });
   } catch (e: any) {
