@@ -34,369 +34,911 @@
     <!-- ═══════════════════════════════════════════════════════ -->
     <div v-show="activeTab === 'pricing'" class="space-y-8">
 
-      <!-- 1A: Delivery Fees -->
-      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
-        <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
-          <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
-            <Truck class="w-5 h-5" />
+      <!-- CLARIFICATION & ARCHITECTURE GUIDE BANNER -->
+      <div class="bg-gradient-to-r from-orange-500/10 via-amber-500/5 to-transparent border border-[#FF5C1A]/20 rounded-[2rem] p-6 sm:p-7 backdrop-blur-sm relative overflow-hidden">
+        <div class="flex items-start gap-4 relative z-10">
+          <div class="w-12 h-12 rounded-2xl bg-[#FF5C1A] text-white flex items-center justify-center shrink-0 shadow-lg shadow-[#FF5C1A]/25">
+            <Sparkles class="w-6 h-6" />
           </div>
-          <div>
-            <h3 class="text-sm font-medium text-gray-900 lowercase">delivery fees</h3>
-            <p class="text-sm font-bold text-gray-400 lowercase">base pricing students pay for delivery</p>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <!-- Room Delivery Fee -->
           <div class="space-y-2">
-            <div class="flex items-center gap-2">
-              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">room delivery fee (₦)</label>
-              <button @click="showInfo('roomDeliveryFee')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
-                <Info class="w-3 h-3" />
-              </button>
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 class="text-base font-bold text-gray-900 tracking-tight lowercase">platform fee classification guide</h3>
+              <span class="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FF5C1A]/10 text-[#FF5C1A]">clarity cheat-sheet</span>
             </div>
-            <input 
-              v-model.number="form.roomDeliveryFee"
-              type="number" required min="0"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
-            />
-            <p v-if="form.roomDeliveryFee !== originalForm.roomDeliveryFee" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
-              <AlertTriangle class="w-3 h-3" />
-              changing from ₦{{ originalForm.roomDeliveryFee }} → ₦{{ form.roomDeliveryFee }}.
+            <p class="text-xs text-gray-600 leading-relaxed font-medium">
+              to eliminate confusion when setting order fees, pricing is classified into 4 distinct operational tiers:
             </p>
-            <!-- Info Tooltip -->
-            <div v-if="activeInfo === 'roomDeliveryFee'" class="p-3 bg-blue-50 text-blue-800 rounded-xl text-[11px] font-medium leading-relaxed space-y-1 border border-blue-100">
-              <p class="font-semibold">what is this?</p>
-              <p>the total delivery fee students pay for room delivery. the errander's profit is this fee minus the platform fee.</p>
-              <button @click="activeInfo = ''" class="text-blue-500 underline">dismiss</button>
-            </div>
-          </div>
-
-          <!-- Drop-off Service Fee -->
-          <div class="space-y-2">
-            <div class="flex items-center gap-2">
-              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">drop-off service fee (₦)</label>
-              <button @click="showInfo('dropoffServiceFee')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
-                <Info class="w-3 h-3" />
-              </button>
-            </div>
-            <input 
-              v-model.number="form.dropoffServiceFee"
-              type="number" required min="0"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
-            />
-            <p v-if="form.dropoffServiceFee !== originalForm.dropoffServiceFee" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
-              <AlertTriangle class="w-3 h-3" />
-              changing from ₦{{ originalForm.dropoffServiceFee }} → ₦{{ form.dropoffServiceFee }}.
-            </p>
-            <div v-if="activeInfo === 'dropoffServiceFee'" class="p-3 bg-blue-50 text-blue-800 rounded-xl text-[11px] font-medium leading-relaxed space-y-1 border border-blue-100">
-              <p class="font-semibold">what is this?</p>
-              <p>the total delivery fee students pay for a generic drop-off (non-doorstep). the errander's profit is this fee minus the platform fee.</p>
-              <button @click="activeInfo = ''" class="text-blue-500 underline">dismiss</button>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+              <div class="p-3 bg-white/80 rounded-xl border border-gray-100 shadow-2xs space-y-1">
+                <span class="text-[10px] font-bold uppercase text-orange-600 tracking-wider">1. order service fee (₦)</span>
+                <p class="text-[11px] text-gray-600 leading-snug">flat fee added to student cart at checkout (e.g. ₦50). platform revenue.</p>
+              </div>
+              <div class="p-3 bg-white/80 rounded-xl border border-gray-100 shadow-2xs space-y-1">
+                <span class="text-[10px] font-bold uppercase text-blue-600 tracking-wider">2. delivery fees (₦)</span>
+                <p class="text-[11px] text-gray-600 leading-snug">room delivery (₦350) vs drop-off point (₦300). runner earns fee minus commission.</p>
+              </div>
+              <div class="p-3 bg-white/80 rounded-xl border border-gray-100 shadow-2xs space-y-1">
+                <span class="text-[10px] font-bold uppercase text-emerald-600 tracking-wider">3. vendor commission (%)</span>
+                <p class="text-[11px] text-gray-600 leading-snug">percentage deducted from vendor's food subtotal before payout (e.g. 10%).</p>
+              </div>
+              <div class="p-3 bg-white/80 rounded-xl border border-gray-100 shadow-2xs space-y-1">
+                <span class="text-[10px] font-bold uppercase text-purple-600 tracking-wider">4. custom errands</span>
+                <p class="text-[11px] text-gray-600 leading-snug">p2p student errands with minimum floor rates (₦300–₦450) and purchase safety buffer.</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 1B: Revenue & Commission -->
-      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
-        <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
-          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center">
-            <DollarSign class="w-5 h-5" />
-          </div>
-          <div>
-            <h3 class="text-sm font-medium text-gray-900 lowercase">revenue & commissions</h3>
-            <p class="text-sm font-bold text-gray-400 lowercase">how erranders earns money from each transaction</p>
+      <!-- SECTION 1: CUSTOMER ORDER & CHECKOUT FEES -->
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-orange-50 text-[#FF5C1A] flex items-center justify-center">
+              <ShoppingBag class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-gray-900 lowercase">customer order & checkout fees</h3>
+                <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-orange-50 text-orange-600">buyer checkout</span>
+              </div>
+              <p class="text-xs text-gray-500 lowercase mt-0.5">fees added directly to the student's cart total upon ordering</p>
+            </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <!-- Buyer Convenience Fee -->
-          <div class="space-y-2">
-            <div class="flex items-center gap-2">
-              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">buyer convenience fee (₦)</label>
-              <button @click="showInfo('convenienceFee')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
-                <Info class="w-3 h-3" />
-              </button>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Order Service Fee (Buyer Convenience Fee) -->
+          <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100 transition-all hover:bg-white hover:border-[#FF5C1A]/30">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <label class="text-sm font-bold text-gray-800 lowercase">order service fee (₦)</label>
+                  <button @click="showInfo('orderServiceFee')" type="button" class="w-5 h-5 rounded-full bg-gray-200/70 text-gray-600 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
+                    <Info class="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                <p class="text-[11px] text-gray-500 mt-0.5">the flat service fee displayed to students in their checkout summary</p>
+              </div>
+              <span class="text-[10px] font-bold text-[#FF5C1A] bg-orange-100/60 px-2.5 py-1 rounded-lg shrink-0">
+                cart receipt fee
+              </span>
             </div>
-            <input 
-              v-model.number="form.convenienceFee"
-              type="number" required min="0"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
-            />
-            <p v-if="form.convenienceFee !== originalForm.convenienceFee" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
-              <AlertTriangle class="w-3 h-3" />
-              changing from ₦{{ originalForm.convenienceFee }} → ₦{{ form.convenienceFee }}. this flat fee goes directly to the platform on every order.
+
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-base">₦</span>
+              <input 
+                v-model.number="form.convenienceFee"
+                type="number" required min="0" step="10"
+                class="w-full pl-9 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none transition-all"
+              />
+            </div>
+
+            <!-- Customer preview pill -->
+            <div class="flex items-center justify-between text-[11px] bg-white px-3 py-2 rounded-xl border border-gray-100">
+              <span class="text-gray-500">student checkout label:</span>
+              <span class="font-bold text-gray-800">service fee: ₦{{ form.convenienceFee || 0 }}</span>
+            </div>
+
+            <p v-if="form.convenienceFee !== originalForm.convenienceFee" class="text-[11px] font-medium text-amber-700 bg-amber-50 px-3 py-2 rounded-xl flex items-center gap-1.5 border border-amber-200/60">
+              <AlertTriangle class="w-3.5 h-3.5 shrink-0 text-amber-600" />
+              <span>changing from ₦{{ originalForm.convenienceFee }} → ₦{{ form.convenienceFee }}. flat platform revenue on every order.</span>
             </p>
-            <div v-if="activeInfo === 'convenienceFee'" class="p-3 bg-blue-50 text-blue-800 rounded-xl text-[11px] font-medium leading-relaxed space-y-1 border border-blue-100">
-              <p class="font-semibold">what is this?</p>
-              <p>a small flat fee added to every order that goes 100% to erranders as platform revenue. students see this as a "convenience" or "service" charge. keep it low (₦50-₦200) so it doesn't discourage orders.</p>
-              <button @click="activeInfo = ''" class="text-blue-500 underline">dismiss</button>
+
+            <!-- Info Tooltip -->
+            <div v-if="activeInfo === 'orderServiceFee'" class="p-3.5 bg-blue-50 text-blue-900 rounded-xl text-xs font-medium leading-relaxed space-y-1.5 border border-blue-100">
+              <p class="font-bold text-blue-950 flex items-center gap-1">
+                <HelpCircle class="w-3.5 h-3.5" /> what is the order service fee?
+              </p>
+              <p>this is the flat fee charged to students on every food and product order. on the student checkout screen, it is displayed as "service fee". it goes 100% to erranders as platform revenue. keeping it between ₦50 – ₦100 keeps orders attractive while ensuring guaranteed platform income.</p>
+              <button @click="activeInfo = ''" class="text-blue-600 hover:text-blue-800 underline text-[11px] font-bold">dismiss</button>
             </div>
           </div>
 
-          <!-- Runner Commission (Normal) -->
-          <div class="space-y-2">
-            <div class="flex items-center gap-2">
-              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">runner commission (₦) [food/products]</label>
-              <button @click="showInfo('commission')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
-                <Info class="w-3 h-3" />
-              </button>
+          <!-- Payment Gateway Processing Fee -->
+          <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100 transition-all hover:bg-white hover:border-[#FF5C1A]/30">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <label class="text-sm font-bold text-gray-800 lowercase">payment processing fee (₦)</label>
+                  <button @click="showInfo('processingFee')" type="button" class="w-5 h-5 rounded-full bg-gray-200/70 text-gray-600 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
+                    <Info class="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                <p class="text-[11px] text-gray-500 mt-0.5">flat surcharge to offset paystack online transaction charges</p>
+              </div>
+              <span class="text-[10px] font-bold text-blue-600 bg-blue-100/60 px-2.5 py-1 rounded-lg shrink-0">
+                paystack gateway
+              </span>
             </div>
-            <input 
-              v-model.number="form.commissionFlatFee"
-              type="number" required min="0"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
-            />
-            <p v-if="form.commissionFlatFee !== originalForm.commissionFlatFee" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
-              <AlertTriangle class="w-3 h-3" />
-              changing from ₦{{ originalForm.commissionFlatFee }} → ₦{{ form.commissionFlatFee }}. at ₦{{ form.commissionFlatFee }}, a ₦{{ form.baseFee }} delivery earns erranders ₦{{ form.commissionFlatFee }} and the rider keeps ₦{{ form.baseFee - form.commissionFlatFee }}.
+
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-base">₦</span>
+              <input 
+                v-model.number="form.platformProcessingFee"
+                type="number" required min="0" step="10"
+                class="w-full pl-9 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 outline-none transition-all"
+              />
+            </div>
+
+            <p v-if="form.platformProcessingFee > 200" class="text-[11px] font-medium text-red-700 bg-red-50 px-3 py-2 rounded-xl flex items-center gap-1.5 border border-red-200/60">
+              <AlertTriangle class="w-3.5 h-3.5 shrink-0 text-red-600" />
+              <span>high processing fee (₦{{ form.platformProcessingFee }}) may cause cart abandonment. recommended: ₦0 – ₦100.</span>
             </p>
-            <div v-if="activeInfo === 'commission'" class="p-3 bg-blue-50 text-blue-800 rounded-xl text-[11px] font-medium leading-relaxed space-y-1 border border-blue-100">
-              <p class="font-semibold">what is this?</p>
-              <p>the flat fee that erranders takes as commission for standard vendor orders. the rest goes to the rider.</p>
-              <button @click="activeInfo = ''" class="text-blue-500 underline">dismiss</button>
+            <p v-else-if="form.platformProcessingFee !== originalForm.platformProcessingFee" class="text-[11px] font-medium text-amber-700 bg-amber-50 px-3 py-2 rounded-xl flex items-center gap-1.5 border border-amber-200/60">
+              <AlertTriangle class="w-3.5 h-3.5 shrink-0 text-amber-600" />
+              <span>changing from ₦{{ originalForm.platformProcessingFee }} → ₦{{ form.platformProcessingFee }}.</span>
+            </p>
+            <div v-else class="text-[11px] text-gray-400 italic px-1">
+              tip: set to ₦0 to eliminate checkout friction and absorb paystack costs into the order service fee.
+            </div>
+
+            <!-- Info Tooltip -->
+            <div v-if="activeInfo === 'processingFee'" class="p-3.5 bg-blue-50 text-blue-900 rounded-xl text-xs font-medium leading-relaxed space-y-1.5 border border-blue-100">
+              <p class="font-bold text-blue-950 flex items-center gap-1">
+                <HelpCircle class="w-3.5 h-3.5" /> what is payment processing fee?
+              </p>
+              <p>a flat checkout fee that offsets paystack gateway charges (paystack charges ~1.5% + ₦100). high amounts cause cart abandonment at checkout. recommended: keep at ₦0 or ₦50.</p>
+              <button @click="activeInfo = ''" class="text-blue-600 hover:text-blue-800 underline text-[11px] font-bold">dismiss</button>
             </div>
           </div>
 
-          <!-- Delivery Minimums -->
-          <div class="space-y-2 grid grid-cols-2 gap-4">
-            <div class="col-span-1">
-              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">min campus environs fee (₦)</label>
-              <div class="mt-1.5 relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₦</span>
-                <input 
-                  type="number" 
-                  v-model.number="form.minCampusEnvironsFee"
-                  class="w-full bg-white border border-gray-50 rounded-xl py-2 pl-8 pr-3 text-sm font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-1 focus:ring-[#FF5C1A] transition-colors"
-                >
+          <!-- Enable Bank Transfer Fee Toggle (Full Width) -->
+          <div class="md:col-span-2">
+            <div 
+              class="flex items-center justify-between p-4 sm:p-5 bg-gray-50/70 border border-gray-100 rounded-2xl hover:bg-white hover:border-[#FF5C1A]/30 transition-all cursor-pointer"
+              @click="form.enableTransferFee = !form.enableTransferFee"
+            >
+              <div class="flex items-center gap-3.5">
+                <div class="w-9 h-9 rounded-xl bg-gray-200/70 flex items-center justify-center text-gray-700">
+                  <CreditCard class="w-4 h-4" />
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <label class="text-sm font-bold text-gray-900 lowercase cursor-pointer">enable bank transfer fee</label>
+                    <span :class="form.enableTransferFee ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-200 text-gray-600'" class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+                      {{ form.enableTransferFee ? 'active' : 'disabled' }}
+                    </span>
+                  </div>
+                  <p class="text-xs text-gray-500 mt-0.5">charge students an extra fee when paying via manual peer-to-peer bank transfers</p>
+                </div>
+              </div>
+
+              <div class="relative w-12 h-6 bg-gray-200 rounded-full transition-colors shrink-0" :class="{ 'bg-[#FF5C1A]': form.enableTransferFee }">
+                <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform" :class="{ 'translate-x-6': form.enableTransferFee }"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: MARKETPLACE DELIVERY PRICING & RIDER EARNINGS -->
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+              <Truck class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-gray-900 lowercase">marketplace delivery pricing & rider earnings</h3>
+                <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">food & stores</span>
+              </div>
+              <p class="text-xs text-gray-500 lowercase mt-0.5">standard vendor delivery pricing and the platform's cut from runner delivery fees</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Room Delivery Fee -->
+          <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100 transition-all hover:bg-white hover:border-blue-400/40">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <label class="text-sm font-bold text-gray-800 lowercase">room delivery fee (₦)</label>
+                  <button @click="showInfo('roomDeliveryFee')" type="button" class="w-5 h-5 rounded-full bg-gray-200/70 text-gray-600 flex items-center justify-center hover:bg-blue-100 hover:text-blue-600 transition-colors">
+                    <Info class="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                <p class="text-[11px] text-gray-500 mt-0.5">doorstep delivery directly to student's hostel room</p>
+              </div>
+              <span class="text-[10px] font-bold text-blue-700 bg-blue-100/70 px-2 py-0.5 rounded-lg shrink-0">
+                doorstep
+              </span>
+            </div>
+
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-base">₦</span>
+              <input 
+                v-model.number="form.roomDeliveryFee"
+                type="number" required min="0" step="50"
+                class="w-full pl-9 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+              />
+            </div>
+
+            <div class="text-[11px] bg-blue-50/60 text-blue-900 p-2.5 rounded-xl border border-blue-100/60 flex items-center justify-between">
+              <span>rider keeps:</span>
+              <span class="font-bold">₦{{ Math.max(0, form.roomDeliveryFee - form.commissionFlatFee) }}</span>
+            </div>
+
+            <p v-if="form.roomDeliveryFee !== originalForm.roomDeliveryFee" class="text-[11px] font-medium text-amber-700 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-amber-200/60">
+              <AlertTriangle class="w-3.5 h-3.5 shrink-0 text-amber-600" />
+              <span>changing from ₦{{ originalForm.roomDeliveryFee }} → ₦{{ form.roomDeliveryFee }}.</span>
+            </p>
+
+            <div v-if="activeInfo === 'roomDeliveryFee'" class="p-3 bg-blue-50 text-blue-900 rounded-xl text-xs font-medium leading-relaxed space-y-1 border border-blue-100">
+              <p class="font-bold text-blue-950">what is room delivery fee?</p>
+              <p>the standard delivery fee charged when students request food brought directly to their hostel room doorstep. rider keeps this minus the delivery commission.</p>
+              <button @click="activeInfo = ''" class="text-blue-600 hover:text-blue-800 underline text-[11px] font-bold">dismiss</button>
+            </div>
+          </div>
+
+          <!-- Drop-off Point Delivery Fee (Renamed from Drop-off Service Fee to avoid confusion!) -->
+          <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100 transition-all hover:bg-white hover:border-blue-400/40">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <label class="text-sm font-bold text-gray-800 lowercase">drop-off point fee (₦)</label>
+                  <button @click="showInfo('dropoffServiceFee')" type="button" class="w-5 h-5 rounded-full bg-gray-200/70 text-gray-600 flex items-center justify-center hover:bg-blue-100 hover:text-blue-600 transition-colors">
+                    <Info class="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                <p class="text-[11px] text-gray-500 mt-0.5">student meets rider at hostel gate / pickup point</p>
+              </div>
+              <span class="text-[10px] font-bold text-teal-700 bg-teal-100/70 px-2 py-0.5 rounded-lg shrink-0">
+                gate / station
+              </span>
+            </div>
+
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-base">₦</span>
+              <input 
+                v-model.number="form.dropoffServiceFee"
+                type="number" required min="0" step="50"
+                class="w-full pl-9 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+              />
+            </div>
+
+            <div class="text-[11px] bg-teal-50/60 text-teal-900 p-2.5 rounded-xl border border-teal-100/60 flex items-center justify-between">
+              <span>rider keeps:</span>
+              <span class="font-bold">₦{{ Math.max(0, form.dropoffServiceFee - form.commissionFlatFee) }}</span>
+            </div>
+
+            <p v-if="form.dropoffServiceFee !== originalForm.dropoffServiceFee" class="text-[11px] font-medium text-amber-700 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-amber-200/60">
+              <AlertTriangle class="w-3.5 h-3.5 shrink-0 text-amber-600" />
+              <span>changing from ₦{{ originalForm.dropoffServiceFee }} → ₦{{ form.dropoffServiceFee }}.</span>
+            </p>
+
+            <div v-if="activeInfo === 'dropoffServiceFee'" class="p-3 bg-blue-50 text-blue-900 rounded-xl text-xs font-medium leading-relaxed space-y-1 border border-blue-100">
+              <p class="font-bold text-blue-950">what is drop-off point fee?</p>
+              <p>this was formerly called "drop-off service fee". it is a discounted delivery option where the student walks down to the hostel gate to meet the rider. it is NOT an order service charge.</p>
+              <button @click="activeInfo = ''" class="text-blue-600 hover:text-blue-800 underline text-[11px] font-bold">dismiss</button>
+            </div>
+          </div>
+
+          <!-- Platform Delivery Commission -->
+          <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100 transition-all hover:bg-white hover:border-blue-400/40">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <label class="text-sm font-bold text-gray-800 lowercase">delivery commission (₦)</label>
+                  <button @click="showInfo('commission')" type="button" class="w-5 h-5 rounded-full bg-gray-200/70 text-gray-600 flex items-center justify-center hover:bg-blue-100 hover:text-blue-600 transition-colors">
+                    <Info class="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                <p class="text-[11px] text-gray-500 mt-0.5">platform cut deducted from each delivery fee (max ₦50)</p>
+              </div>
+              <span class="text-[10px] font-bold text-indigo-700 bg-indigo-100/70 px-2 py-0.5 rounded-lg shrink-0">
+                platform cut
+              </span>
+            </div>
+
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-base">₦</span>
+              <input 
+                v-model.number="form.commissionFlatFee"
+                type="number" required min="0" max="50" step="5"
+                class="w-full pl-9 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+              />
+            </div>
+
+            <div class="text-[11px] bg-indigo-50/60 text-indigo-900 p-2.5 rounded-xl border border-indigo-100/60 flex items-center justify-between">
+              <span>erranders earns:</span>
+              <span class="font-bold">₦{{ form.commissionFlatFee }} / delivery</span>
+            </div>
+
+            <p v-if="form.commissionFlatFee !== originalForm.commissionFlatFee" class="text-[11px] font-medium text-amber-700 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-amber-200/60">
+              <AlertTriangle class="w-3.5 h-3.5 shrink-0 text-amber-600" />
+              <span>changing from ₦{{ originalForm.commissionFlatFee }} → ₦{{ form.commissionFlatFee }}.</span>
+            </p>
+
+            <div v-if="activeInfo === 'commission'" class="p-3 bg-blue-50 text-blue-900 rounded-xl text-xs font-medium leading-relaxed space-y-1 border border-blue-100">
+              <p class="font-bold text-blue-950">what is delivery commission?</p>
+              <p>the flat commission that erranders retains from the delivery fee on marketplace food/product deliveries. capped at ₦50 to guarantee riders always earn a healthy payout.</p>
+              <button @click="activeInfo = ''" class="text-blue-600 hover:text-blue-800 underline text-[11px] font-bold">dismiss</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Visual Delivery Payout Simulator Box -->
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-blue-50/70 via-indigo-50/40 to-blue-50/70 border border-blue-100 space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-blue-900">live delivery split breakdown</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-white/90 p-4 rounded-xl border border-blue-100 shadow-2xs space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-gray-800">room delivery (₦{{ form.roomDeliveryFee }})</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-700">doorstep</span>
+              </div>
+              <div class="flex items-center justify-between text-xs pt-1 border-t border-gray-100">
+                <span class="text-gray-600">rider take-home:</span>
+                <span class="font-extrabold text-emerald-600">₦{{ Math.max(0, form.roomDeliveryFee - form.commissionFlatFee) }}</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-gray-600">platform keeps:</span>
+                <span class="font-extrabold text-indigo-600">₦{{ form.commissionFlatFee }}</span>
               </div>
             </div>
 
-            <div class="col-span-1">
-              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">min far off-campus fee (₦)</label>
-              <div class="mt-1.5 relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₦</span>
-                <input 
-                  type="number" 
-                  v-model.number="form.minOutsideCampusFee"
-                  class="w-full bg-white border border-gray-50 rounded-xl py-2 pl-8 pr-3 text-sm font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-1 focus:ring-[#FF5C1A] transition-colors"
-                >
+            <div class="bg-white/90 p-4 rounded-xl border border-blue-100 shadow-2xs space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-gray-800">drop-off point (₦{{ form.dropoffServiceFee }})</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-700">station</span>
+              </div>
+              <div class="flex items-center justify-between text-xs pt-1 border-t border-gray-100">
+                <span class="text-gray-600">rider take-home:</span>
+                <span class="font-extrabold text-emerald-600">₦{{ Math.max(0, form.dropoffServiceFee - form.commissionFlatFee) }}</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-gray-600">platform keeps:</span>
+                <span class="font-extrabold text-indigo-600">₦{{ form.commissionFlatFee }}</span>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <!-- Runner Commission (Custom) -->
-          <div class="space-y-2">
-            <div class="col-span-2 md:col-span-1">
-              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">min custom errand fee (₦)</label>
-              <div class="mt-1.5 relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₦</span>
+      <!-- SECTION 3: VENDOR TAKE-RATE & MENU PRICING -->
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <Store class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-gray-900 lowercase">vendor commission & menu pricing</h3>
+                <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">vendor take-rate</span>
+              </div>
+              <p class="text-xs text-gray-500 lowercase mt-0.5">how erranders earns from partner restaurants, eateries, and stores</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Vendor Commission / Platform Service Fee % -->
+          <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100 transition-all hover:bg-white hover:border-emerald-400/40">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <label class="text-sm font-bold text-gray-800 lowercase">vendor commission / service fee (%)</label>
+                  <button @click="showInfo('vendorServiceFee')" type="button" class="w-5 h-5 rounded-full bg-gray-200/70 text-gray-600 flex items-center justify-center hover:bg-emerald-100 hover:text-emerald-600 transition-colors">
+                    <Info class="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                <p class="text-[11px] text-gray-500 mt-0.5">percentage deducted from vendor's food subtotal before settlement</p>
+              </div>
+              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-lg shrink-0">
+                silent revenue
+              </span>
+            </div>
+
+            <div class="relative">
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-base">%</span>
+              <input 
+                v-model.number="form.platformServiceFeePercentage"
+                type="number" required min="0" max="100" step="1"
+                class="w-full px-4 pr-10 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+              />
+            </div>
+
+            <!-- Calculation Example -->
+            <div class="text-[11px] bg-emerald-50/70 text-emerald-950 p-3 rounded-xl border border-emerald-100/70 space-y-1">
+              <span class="font-bold block">example on ₦5,000 food order:</span>
+              <div class="flex justify-between text-gray-700">
+                <span>vendor payout:</span>
+                <span class="font-bold text-gray-900">₦{{ (5000 - Math.round(5000 * (form.platformServiceFeePercentage || 0) / 100)).toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between text-emerald-800">
+                <span>erranders retains:</span>
+                <span class="font-extrabold text-emerald-600">+₦{{ Math.round(5000 * (form.platformServiceFeePercentage || 0) / 100).toLocaleString() }} ({{ form.platformServiceFeePercentage }}%)</span>
+              </div>
+            </div>
+
+            <p v-if="form.platformServiceFeePercentage !== originalForm.platformServiceFeePercentage" class="text-[11px] font-medium text-amber-700 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-amber-200/60">
+              <AlertTriangle class="w-3.5 h-3.5 shrink-0 text-amber-600" />
+              <span>changing from {{ originalForm.platformServiceFeePercentage }}% → {{ form.platformServiceFeePercentage }}%.</span>
+            </p>
+
+            <div v-if="activeInfo === 'vendorServiceFee'" class="p-3.5 bg-blue-50 text-blue-900 rounded-xl text-xs font-medium leading-relaxed space-y-1.5 border border-blue-100">
+              <p class="font-bold text-blue-950">what is vendor commission (service fee %)?</p>
+              <p>this is the percentage take-rate that erranders deducts from restaurants before paying them out for their food sales. industry standard is 5%–20%. this is your largest silent revenue driver.</p>
+              <button @click="activeInfo = ''" class="text-blue-600 hover:text-blue-800 underline text-[11px] font-bold">dismiss</button>
+            </div>
+          </div>
+
+          <!-- Food Markup % -->
+          <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100 transition-all hover:bg-white hover:border-emerald-400/40">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <label class="text-sm font-bold text-gray-800 lowercase">food menu markup (%)</label>
+                  <button @click="showInfo('foodMarkup')" type="button" class="w-5 h-5 rounded-full bg-gray-200/70 text-gray-600 flex items-center justify-center hover:bg-emerald-100 hover:text-emerald-600 transition-colors">
+                    <Info class="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                <p class="text-[11px] text-gray-500 mt-0.5">inflates vendor menu prices shown on the student app</p>
+              </div>
+              <span class="text-[10px] font-bold text-purple-700 bg-purple-100/70 px-2 py-0.5 rounded-lg shrink-0">
+                menu inflation
+              </span>
+            </div>
+
+            <div class="relative">
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-base">%</span>
+              <input 
+                v-model.number="form.foodMarkupPercentage"
+                type="number" required min="0" max="100" step="1"
+                class="w-full px-4 pr-10 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+              />
+            </div>
+
+            <div v-if="form.foodMarkupPercentage === 0" class="p-3 bg-emerald-50 text-emerald-800 rounded-xl text-[11px] font-medium leading-relaxed flex items-start gap-2 border border-emerald-100">
+              <CheckCircle class="w-4 h-4 shrink-0 text-emerald-600 mt-0.5" />
+              <span><strong>0% markup (recommended)</strong>: students pay exact in-store vendor prices. builds maximum campus trust and word-of-mouth adoption.</span>
+            </div>
+            <div v-else class="p-3 bg-purple-50 text-purple-900 rounded-xl text-[11px] font-medium leading-relaxed border border-purple-100 space-y-1">
+              <span class="font-bold block">markup active ({{ form.foodMarkupPercentage }}%):</span>
+              <p>a vendor item priced at ₦2,000 will display as <strong>₦{{ Math.round(2000 * (1 + form.foodMarkupPercentage / 100)).toLocaleString() }}</strong> on the student app.</p>
+            </div>
+
+            <p v-if="form.foodMarkupPercentage !== originalForm.foodMarkupPercentage" class="text-[11px] font-medium text-amber-700 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1.5 border border-amber-200/60">
+              <AlertTriangle class="w-3.5 h-3.5 shrink-0 text-amber-600" />
+              <span>changing from {{ originalForm.foodMarkupPercentage }}% → {{ form.foodMarkupPercentage }}%.</span>
+            </p>
+
+            <div v-if="activeInfo === 'foodMarkup'" class="p-3.5 bg-blue-50 text-blue-900 rounded-xl text-xs font-medium leading-relaxed space-y-1.5 border border-blue-100">
+              <p class="font-bold text-blue-950">what is food markup?</p>
+              <p>inflates vendor menu prices by this percentage on the student app. the extra amount goes to erranders. set to 0% for "same as in-store" pricing (highly recommended for building trust with university students).</p>
+              <button @click="activeInfo = ''" class="text-blue-600 hover:text-blue-800 underline text-[11px] font-bold">dismiss</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: CUSTOM ERRANDS & PEER-TO-PEER TASKS -->
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+              <Zap class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-gray-900 lowercase">custom errands & peer-to-peer tasks</h3>
+                <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-50 text-purple-600">p2p errands</span>
+              </div>
+              <p class="text-xs text-gray-500 lowercase mt-0.5">pricing floor limits, suggested rates, and safety margin for on-demand errands</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-block A: Minimum Runner Fees & Suggested Rates -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-gray-700 uppercase tracking-wider">A. errand runner fee floors & suggested rates (₦)</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Min Custom Errand Fee -->
+            <div class="space-y-2 p-4 rounded-2xl bg-gray-50/70 border border-gray-100">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-gray-800 lowercase">min base custom fee</label>
+                <button @click="showInfo('minCustomErrandFee')" type="button" class="w-4 h-4 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center hover:text-[#FF5C1A]">
+                  <Info class="w-3 h-3" />
+                </button>
+              </div>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">₦</span>
                 <input 
                   type="number" 
                   v-model.number="form.minCustomErrandFee"
-                  class="w-full bg-white border border-gray-50 rounded-xl py-2 pl-8 pr-3 text-sm font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-1 focus:ring-[#FF5C1A] transition-colors"
+                  min="0" step="50"
+                  class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-8 pr-3 text-sm font-bold text-gray-900 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none"
                 >
               </div>
-            </div>
-
-            <div class="col-span-2 md:col-span-1">
-              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">custom errand commission (%)</label>
-              <button @click="showInfo('customCommission')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
-                <Info class="w-3 h-3" />
-              </button>
-            </div>
-            <input 
-              v-model.number="form.customErrandCommissionPercentage"
-              type="number" required min="0" max="100"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
-            />
-            <p v-if="form.customErrandCommissionPercentage !== originalForm.customErrandCommissionPercentage" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
-              <AlertTriangle class="w-3 h-3" />
-              changing from {{ originalForm.customErrandCommissionPercentage }}% → {{ form.customErrandCommissionPercentage }}%.
-            </p>
-            <div v-if="activeInfo === 'customCommission'" class="p-3 bg-blue-50 text-blue-800 rounded-xl text-[11px] font-medium leading-relaxed space-y-1 border border-blue-100">
-              <p class="font-semibold">what is this?</p>
-              <p>the percentage of the delivery fee that erranders takes as commission specifically for Custom Errands. the rest goes to the rider.</p>
-              <button @click="activeInfo = ''" class="text-blue-500 underline">dismiss</button>
-            </div>
-          </div>
-
-          <!-- Custom Errand Safety Buffer -->
-          <div class="space-y-2 relative">
-            <div class="col-span-2 md:col-span-1">
-              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">safety buffer (%)</label>
-              <button @click="showInfo('safetyBuffer')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
-                <Info class="w-3 h-3" />
-              </button>
-            </div>
-            <input 
-              v-model.number="form.customErrandSafetyBufferPercentage"
-              type="number" required min="0" max="100"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
-            />
-            <p v-if="form.customErrandSafetyBufferPercentage !== originalForm.customErrandSafetyBufferPercentage" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
-              <AlertTriangle class="w-3 h-3" />
-              changing from {{ originalForm.customErrandSafetyBufferPercentage }}% → {{ form.customErrandSafetyBufferPercentage }}%.
-            </p>
-            <div v-if="activeInfo === 'safetyBuffer'" class="p-3 bg-blue-50 text-blue-800 rounded-xl text-[11px] font-medium leading-relaxed space-y-1 border border-blue-100">
-              <p class="font-semibold">what is this?</p>
-              <p>the percentage added to a custom errand's estimated item cost as a safety buffer for when actual prices exceed the estimate.</p>
-              <button @click="activeInfo = ''" class="text-blue-500 underline">dismiss</button>
-            </div>
-          </div>
-
-          <!-- Enable Transfer Fee Toggle -->
-          <div class="space-y-2">
-            <div class="flex items-center justify-between p-4 bg-gray-50 border border-gray-50 rounded-2xl hover:bg-white hover:border-[#FF5C1A]/30 transition-all cursor-pointer" @click="form.enableTransferFee = !form.enableTransferFee">
-              <div>
-                <label class="text-sm font-medium text-gray-900 lowercase cursor-pointer">enable bank transfer fee</label>
-                <p class="text-sm text-gray-500 mt-1">charge customers for P2P bank transfers to erranders</p>
-              </div>
-              <div class="relative w-11 h-6 bg-gray-200 rounded-full transition-colors" :class="{ 'bg-[#FF5C1A]': form.enableTransferFee }">
-                <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform" :class="{ 'translate-x-5': form.enableTransferFee }"></div>
+              <p class="text-[10px] text-gray-500 leading-tight">absolute minimum runner fee allowed for any task</p>
+              <div v-if="activeInfo === 'minCustomErrandFee'" class="p-2.5 bg-blue-50 text-blue-900 rounded-lg text-[11px] leading-snug border border-blue-100">
+                the baseline minimum fee students must offer runners for custom errands.
               </div>
             </div>
-          </div>
 
-          <!-- Platform Processing Fee -->
-          <div class="space-y-2">
-            <div class="flex items-center gap-2">
-              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">platform processing fee (₦)</label>
-              <button @click="showInfo('processingFee')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
-                <Info class="w-3 h-3" />
-              </button>
+            <!-- Min Campus Environs Fee -->
+            <div class="space-y-2 p-4 rounded-2xl bg-gray-50/70 border border-gray-100">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-gray-800 lowercase">min campus environs fee</label>
+                <button @click="showInfo('minCampusEnvironsFee')" type="button" class="w-4 h-4 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center hover:text-[#FF5C1A]">
+                  <Info class="w-3 h-3" />
+                </button>
+              </div>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">₦</span>
+                <input 
+                  type="number" 
+                  v-model.number="form.minCampusEnvironsFee"
+                  min="0" step="50"
+                  class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-8 pr-3 text-sm font-bold text-gray-900 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none"
+                >
+              </div>
+              <p class="text-[10px] text-gray-500 leading-tight">minimum fee for tasks around campus periphery</p>
+              <div v-if="activeInfo === 'minCampusEnvironsFee'" class="p-2.5 bg-blue-50 text-blue-900 rounded-lg text-[11px] leading-snug border border-blue-100">
+                minimum runner fee enforced for errands located around the campus gate and nearby student hubs.
+              </div>
             </div>
-            <input 
-              v-model.number="form.platformProcessingFee"
-              type="number" required min="0"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
-            />
-            <p v-if="form.platformProcessingFee > 200" class="text-[10px] font-medium text-red-600 bg-red-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
-              <AlertTriangle class="w-3 h-3" />
-              ⚠️ warning: a high processing fee (₦{{ form.platformProcessingFee }}) may cause students to abandon their orders at checkout. recommended: ₦0 – ₦100.
-            </p>
-            <p v-else-if="form.platformProcessingFee !== originalForm.platformProcessingFee" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
-              <AlertTriangle class="w-3 h-3" />
-              changing from ₦{{ originalForm.platformProcessingFee }} → ₦{{ form.platformProcessingFee }}.
-            </p>
-            <div v-if="activeInfo === 'processingFee'" class="p-3 bg-blue-50 text-blue-800 rounded-xl text-[11px] font-medium leading-relaxed space-y-1 border border-blue-100">
-              <p class="font-semibold">what is this?</p>
-              <p>a flat fee added at checkout to cover payment gateway costs (paystack charges ~1.5% + ₦100). high values (₦300+) cause "checkout shock" and abandoned carts. recommended: keep at ₦0 and absorb gateway costs into the convenience fee instead.</p>
-              <button @click="activeInfo = ''" class="text-blue-500 underline">dismiss</button>
-            </div>
-          </div>
 
-          <!-- Platform Service Fee % -->
-          <div class="space-y-2">
-            <div class="flex items-center gap-2">
-              <label class="text-sm font-medium text-gray-400 ml-1 lowercase">platform service fee (%)</label>
-              <button @click="showInfo('serviceFee')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
-                <Info class="w-3 h-3" />
-              </button>
+            <!-- Min Far Off-Campus Fee -->
+            <div class="space-y-2 p-4 rounded-2xl bg-gray-50/70 border border-gray-100">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-gray-800 lowercase">min far off-campus fee</label>
+                <button @click="showInfo('minOutsideCampusFee')" type="button" class="w-4 h-4 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center hover:text-[#FF5C1A]">
+                  <Info class="w-3 h-3" />
+                </button>
+              </div>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">₦</span>
+                <input 
+                  type="number" 
+                  v-model.number="form.minOutsideCampusFee"
+                  min="0" step="50"
+                  class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-8 pr-3 text-sm font-bold text-gray-900 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none"
+                >
+              </div>
+              <p class="text-[10px] text-gray-500 leading-tight">minimum fee for long distances outside campus</p>
+              <div v-if="activeInfo === 'minOutsideCampusFee'" class="p-2.5 bg-blue-50 text-blue-900 rounded-lg text-[11px] leading-snug border border-blue-100">
+                enforces a higher minimum floor for errands traveling off-campus to city markets and town centres.
+              </div>
             </div>
-            <input 
-              v-model.number="form.platformServiceFeePercentage"
-              type="number" required min="0" max="100"
-              class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
-            />
-            <p v-if="form.platformServiceFeePercentage !== originalForm.platformServiceFeePercentage" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
-              <AlertTriangle class="w-3 h-3" />
-              changing from {{ originalForm.platformServiceFeePercentage }}% → {{ form.platformServiceFeePercentage }}%. on a ₦5,000 order, erranders earns ₦{{ Math.round(5000 * form.platformServiceFeePercentage / 100) }} as service fee.
-            </p>
-            <div v-if="activeInfo === 'serviceFee'" class="p-3 bg-blue-50 text-blue-800 rounded-xl text-[11px] font-medium leading-relaxed space-y-1 border border-blue-100">
-              <p class="font-semibold">what is this?</p>
-              <p>a percentage of the total order value taken by the platform. this is essentially the vendor commission — the percentage erranders deducts before paying out the vendor. industry standard is 10%–30%. this is your biggest silent revenue driver.</p>
-              <button @click="activeInfo = ''" class="text-blue-500 underline">dismiss</button>
+
+            <!-- Suggested Standard Base Fee -->
+            <div class="space-y-2 p-4 rounded-2xl bg-gray-50/70 border border-gray-100">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-gray-800 lowercase">suggested standard fee</label>
+                <button @click="showInfo('baseFee')" type="button" class="w-4 h-4 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center hover:text-[#FF5C1A]">
+                  <Info class="w-3 h-3" />
+                </button>
+              </div>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">₦</span>
+                <input 
+                  type="number" 
+                  v-model.number="form.baseFee"
+                  min="0" step="50"
+                  class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-8 pr-3 text-sm font-bold text-gray-900 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none"
+                >
+              </div>
+              <p class="text-[10px] text-gray-500 leading-tight">default recommended fee in student errand creator</p>
+              <div v-if="activeInfo === 'baseFee'" class="p-2.5 bg-blue-50 text-blue-900 rounded-lg text-[11px] leading-snug border border-blue-100">
+                pre-filled default fee suggested to students when creating normal custom errands.
+              </div>
+            </div>
+
+            <!-- Suggested Express Fee -->
+            <div class="space-y-2 p-4 rounded-2xl bg-gray-50/70 border border-gray-100">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-gray-800 lowercase">suggested express fee</label>
+                <button @click="showInfo('expressFee')" type="button" class="w-4 h-4 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center hover:text-[#FF5C1A]">
+                  <Info class="w-3 h-3" />
+                </button>
+              </div>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">₦</span>
+                <input 
+                  type="number" 
+                  v-model.number="form.expressFee"
+                  min="0" step="50"
+                  class="w-full bg-white border border-gray-200 rounded-xl py-2.5 pl-8 pr-3 text-sm font-bold text-gray-900 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none"
+                >
+              </div>
+              <p class="text-[10px] text-gray-500 leading-tight">recommended fee when student toggles express delivery</p>
+              <div v-if="activeInfo === 'expressFee'" class="p-2.5 bg-blue-50 text-blue-900 rounded-lg text-[11px] leading-snug border border-blue-100">
+                recommended runner fee suggested when an errand is marked urgent or priority.
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- 1C: Food Markup -->
-      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
-        <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
-          <div class="w-10 h-10 rounded-xl bg-[#FF5C1A]/10 text-[#FF5C1A] flex items-center justify-center">
-            <Tag class="w-5 h-5" />
-          </div>
-          <div>
-            <h3 class="text-sm font-medium text-gray-900 lowercase">menu pricing strategy</h3>
-            <p class="text-sm font-bold text-gray-400 lowercase">controls how menu item prices appear to students</p>
-          </div>
-        </div>
-
-        <div class="sm:w-1/2 space-y-2">
+        <!-- Sub-block B: Custom Errand Margin & Safety Buffer -->
+        <div class="pt-4 border-t border-gray-100 space-y-4">
           <div class="flex items-center gap-2">
-            <label class="text-sm font-medium text-gray-400 ml-1 lowercase">food markup (%)</label>
-            <button @click="showInfo('foodMarkup')" class="w-4 h-4 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition-colors">
-              <Info class="w-3 h-3" />
-            </button>
+            <span class="text-xs font-bold text-gray-700 uppercase tracking-wider">B. platform take-rate & purchase protection (%)</span>
           </div>
-          <input 
-            v-model.number="form.foodMarkupPercentage"
-            type="number" required min="0" max="100"
-            class="w-full px-5 py-4 bg-gray-50 border border-gray-50 rounded-2xl text-base font-medium focus:bg-white focus:border-[#FF5C1A]/30 outline-none transition-all"
-          />
-          <div v-if="form.foodMarkupPercentage === 0" class="p-3 bg-emerald-50 text-emerald-800 rounded-xl text-[11px] font-medium leading-relaxed flex items-center gap-2 border border-emerald-100">
-            <CheckCircle class="w-4 h-4 flex-shrink-0" />
-            <span>0% markup = students pay exactly what the vendor charges. this builds maximum trust and drives adoption, but you must compensate with strong service fees and commissions.</span>
-          </div>
-          <p v-else-if="form.foodMarkupPercentage !== originalForm.foodMarkupPercentage" class="text-[10px] font-medium text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl flex items-center gap-1">
-            <AlertTriangle class="w-3 h-3" />
-            changing from {{ originalForm.foodMarkupPercentage }}% → {{ form.foodMarkupPercentage }}%. a ₦2,000 item will now show as ₦{{ Math.round(2000 * (1 + form.foodMarkupPercentage / 100)) }} on the app.
-          </p>
-          <div v-if="activeInfo === 'foodMarkup'" class="p-3 bg-blue-50 text-blue-800 rounded-xl text-[11px] font-medium leading-relaxed space-y-1 border border-blue-100">
-            <p class="font-semibold">what is this?</p>
-            <p>inflates vendor menu prices by this percentage on the student app. e.g. at 15%, a ₦2,000 item becomes ₦2,300. the extra ₦300 goes to erranders. set to 0% for "same as in-store" pricing (recommended for trust-building).</p>
-            <button @click="activeInfo = ''" class="text-blue-500 underline">dismiss</button>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <!-- Custom Errand Commission % -->
+            <div class="space-y-3 p-5 rounded-2xl bg-gray-50/70 border border-gray-100">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <label class="text-sm font-bold text-gray-800 lowercase">custom errand commission (%)</label>
+                    <button @click="showInfo('customCommission')" type="button" class="w-4 h-4 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center hover:text-[#FF5C1A]">
+                      <Info class="w-3 h-3" />
+                    </button>
+                  </div>
+                  <p class="text-[11px] text-gray-500 mt-0.5">percentage erranders takes from runner's custom delivery fee</p>
+                </div>
+                <span class="text-[10px] font-bold text-purple-700 bg-purple-100 px-2 py-0.5 rounded">p2p cut</span>
+              </div>
+              <div class="relative">
+                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">%</span>
+                <input 
+                  v-model.number="form.customErrandCommissionPercentage"
+                  type="number" required min="0" max="100"
+                  class="w-full px-4 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-purple-500 outline-none"
+                />
+              </div>
+              <div class="text-[11px] text-gray-600 bg-white p-2.5 rounded-lg border border-gray-100">
+                on a ₦1,000 runner fee, Erranders keeps <strong>₦{{ Math.round(1000 * (form.customErrandCommissionPercentage || 0) / 100) }}</strong> and runner receives <strong>₦{{ 1000 - Math.round(1000 * (form.customErrandCommissionPercentage || 0) / 100) }}</strong>.
+              </div>
+              <div v-if="activeInfo === 'customCommission'" class="p-2.5 bg-blue-50 text-blue-900 rounded-lg text-xs leading-relaxed border border-blue-100">
+                the platform's cut on custom errands. deducted from the runner fee that the student sets.
+              </div>
+            </div>
+
+            <!-- Safety Buffer % -->
+            <div class="space-y-3 p-5 rounded-2xl bg-gray-50/70 border border-gray-100">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <label class="text-sm font-bold text-gray-800 lowercase">item cost safety buffer (%)</label>
+                    <button @click="showInfo('safetyBuffer')" type="button" class="w-4 h-4 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center hover:text-[#FF5C1A]">
+                      <Info class="w-3 h-3" />
+                    </button>
+                  </div>
+                  <p class="text-[11px] text-gray-500 mt-0.5">buffer added to estimated item costs for purchasing errands</p>
+                </div>
+                <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">price protection</span>
+              </div>
+              <div class="relative">
+                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">%</span>
+                <input 
+                  v-model.number="form.customErrandSafetyBufferPercentage"
+                  type="number" required min="0" max="100"
+                  class="w-full px-4 pr-10 py-3 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-purple-500 outline-none"
+                />
+              </div>
+              <div class="text-[11px] text-gray-600 bg-white p-2.5 rounded-lg border border-gray-100">
+                protects runner if market price is higher than student's estimate. unused funds are refunded.
+              </div>
+              <div v-if="activeInfo === 'safetyBuffer'" class="p-2.5 bg-blue-50 text-blue-900 rounded-lg text-xs leading-relaxed border border-blue-100">
+                percentage added to estimated item purchase price. held in escrow and reconciled after receipt upload.
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Revenue Impact Calculator -->
-      <div class="bg-gradient-to-br from-gray-900 to-gray-800 p-6 sm:p-8 rounded-[2rem] text-white space-y-4 border border-gray-700">
+      <!-- SECTION 5: REAL-TIME ORDER ECONOMICS & REVENUE SIMULATOR -->
+      <div class="bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 p-6 sm:p-8 rounded-[2rem] text-white space-y-6 border border-gray-800 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-[#FF5C1A]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-5 relative z-10">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-white/10 flex items-center justify-center shrink-0">
+              <Calculator class="w-5 h-5 text-[#FF5C1A]" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base font-bold tracking-tight lowercase">real-time order economics simulator</h3>
+                <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FF5C1A]/20 text-[#FF5C1A]">interactive test</span>
+              </div>
+              <p class="text-xs text-gray-400 lowercase mt-0.5">simulate an order using your active settings to inspect the exact cash flow</p>
+            </div>
+          </div>
+
+          <!-- Interactive Simulator Controls -->
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center bg-white/5 p-1 rounded-xl border border-white/10">
+              <button 
+                type="button"
+                @click="simDeliveryType = 'room'"
+                :class="simDeliveryType === 'room' ? 'bg-[#FF5C1A] text-white' : 'text-gray-400 hover:text-white'"
+                class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
+              >
+                room delivery
+              </button>
+              <button 
+                type="button"
+                @click="simDeliveryType = 'dropoff'"
+                :class="simDeliveryType === 'dropoff' ? 'bg-[#FF5C1A] text-white' : 'text-gray-400 hover:text-white'"
+                class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
+              >
+                drop-off point
+              </button>
+            </div>
+
+            <!-- Quick Subtotal Presets -->
+            <div class="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-xl border border-white/10 text-xs">
+              <span class="text-gray-400 text-[11px] mr-1">food:</span>
+              <button 
+                v-for="preset in [2000, 3500, 5000, 8000]" 
+                :key="preset"
+                type="button"
+                @click="simFoodSubtotal = preset"
+                :class="simFoodSubtotal === preset ? 'bg-white/20 text-white font-bold' : 'text-gray-400 hover:text-white'"
+                class="px-2 py-1 rounded-lg transition-all"
+              >
+                ₦{{ (preset / 1000).toFixed(0) }}k
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3-Way Financial Settlement Breakdown -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative z-10">
+          <!-- Card 1: What Customer Pays -->
+          <div class="bg-white/5 rounded-2xl p-5 border border-white/10 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">1. student checkout</span>
+              <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+            </div>
+            <div>
+              <p class="text-2xl font-bold tracking-tight text-white">₦{{ simCustomerTotal.toLocaleString() }}</p>
+              <p class="text-[11px] text-gray-400 mt-0.5">total charged at checkout</p>
+            </div>
+            <div class="text-[11px] space-y-1.5 pt-2 border-t border-white/10 text-gray-300">
+              <div class="flex justify-between">
+                <span>food subtotal:</span>
+                <span class="font-medium text-white">₦{{ simFoodSubtotal.toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span>delivery ({{ simDeliveryType }}):</span>
+                <span class="font-medium text-white">₦{{ simDeliveryFee.toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between text-orange-300">
+                <span>order service fee:</span>
+                <span class="font-bold">₦{{ (form.convenienceFee || 0).toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between text-gray-400">
+                <span>processing fee:</span>
+                <span>₦{{ (form.platformProcessingFee || 0).toLocaleString() }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Vendor Receives -->
+          <div class="bg-white/5 rounded-2xl p-5 border border-white/10 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-emerald-400 uppercase tracking-wider font-bold">2. vendor payout</span>
+              <Store class="w-4 h-4 text-emerald-400" />
+            </div>
+            <div>
+              <p class="text-2xl font-bold tracking-tight text-emerald-400">₦{{ simVendorPayout.toLocaleString() }}</p>
+              <p class="text-[11px] text-gray-400 mt-0.5">sent to restaurant bank account</p>
+            </div>
+            <div class="text-[11px] space-y-1.5 pt-2 border-t border-white/10 text-gray-300">
+              <div class="flex justify-between">
+                <span>food subtotal:</span>
+                <span class="font-medium text-white">₦{{ simFoodSubtotal.toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between text-emerald-400">
+                <span>vendor cut ({{ form.platformServiceFeePercentage }}%):</span>
+                <span class="font-bold">-₦{{ simVendorCut.toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between text-[10px] text-gray-400 pt-1">
+                <span>net share:</span>
+                <span>{{ 100 - (form.platformServiceFeePercentage || 0) }}% of food</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Rider Receives -->
+          <div class="bg-white/5 rounded-2xl p-5 border border-white/10 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-blue-400 uppercase tracking-wider font-bold">3. rider payout</span>
+              <Truck class="w-4 h-4 text-blue-400" />
+            </div>
+            <div>
+              <p class="text-2xl font-bold tracking-tight text-blue-400">₦{{ simRunnerPayout.toLocaleString() }}</p>
+              <p class="text-[11px] text-gray-400 mt-0.5">credited to rider wallet</p>
+            </div>
+            <div class="text-[11px] space-y-1.5 pt-2 border-t border-white/10 text-gray-300">
+              <div class="flex justify-between">
+                <span>gross delivery fee:</span>
+                <span class="font-medium text-white">₦{{ simDeliveryFee.toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between text-blue-400">
+                <span>delivery commission:</span>
+                <span class="font-bold">-₦{{ simDeliveryCommission.toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between text-[10px] text-gray-400 pt-1">
+                <span>rider guarantee:</span>
+                <span>fair wage floor guaranteed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Platform Net Earnings -->
+          <div class="bg-gradient-to-b from-[#FF5C1A]/20 to-[#FF5C1A]/10 rounded-2xl p-5 border border-[#FF5C1A]/40 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-[#FF5C1A] uppercase tracking-wider font-bold">4. erranders profit</span>
+              <Sparkles class="w-4 h-4 text-[#FF5C1A]" />
+            </div>
+            <div>
+              <p class="text-2xl font-bold tracking-tight text-[#FF5C1A]">₦{{ simPlatformTotal.toLocaleString() }}</p>
+              <p class="text-[11px] text-orange-200 mt-0.5">gross platform income on this order</p>
+            </div>
+            <div class="text-[11px] space-y-1.5 pt-2 border-t border-white/10 text-orange-100">
+              <div class="flex justify-between">
+                <span>order service fee:</span>
+                <span class="font-bold">₦{{ (form.convenienceFee || 0).toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span>vendor commission:</span>
+                <span class="font-bold">₦{{ simVendorCut.toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span>delivery commission:</span>
+                <span class="font-bold">₦{{ simDeliveryCommission.toLocaleString() }}</span>
+              </div>
+              <div v-if="form.platformProcessingFee > 0" class="flex justify-between text-gray-300">
+                <span>processing fee:</span>
+                <span>₦{{ (form.platformProcessingFee || 0).toLocaleString() }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explanatory note -->
+        <p class="text-xs text-gray-400 leading-relaxed pt-2 border-t border-gray-800">
+          💡 <strong class="text-white">how erranders makes money:</strong> on each order, the platform earns from three simultaneous streams: the <strong>order service fee</strong> paid by the student (₦{{ form.convenienceFee }}), the <strong>vendor commission</strong> retained from the food sale (₦{{ simVendorCut }}), and the <strong>delivery commission</strong> from the delivery fee (₦{{ simDeliveryCommission }}).
+        </p>
+      </div>
+
+      <!-- SAVE SETTINGS BAR -->
+      <div class="sticky bottom-6 z-20 bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-            <Calculator class="w-5 h-5" />
+          <div :class="pricingChangesCount > 0 ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'" class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0">
+            <AlertTriangle v-if="pricingChangesCount > 0" class="w-4 h-4" />
+            <CheckCircle v-else class="w-4 h-4" />
           </div>
           <div>
-            <h3 class="text-sm font-medium lowercase">revenue impact calculator</h3>
-            <p class="text-sm text-gray-400 lowercase">estimated platform earnings per order based on current settings</p>
+            <p class="text-sm font-bold text-gray-900 lowercase">
+              {{ pricingChangesCount > 0 ? `${pricingChangesCount} pricing changes pending` : 'all pricing settings up to date' }}
+            </p>
+            <p class="text-xs text-gray-500 lowercase">changes take effect immediately for all subsequent customer orders</p>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
-            <p class="text-[10px] text-gray-400 uppercase tracking-wider">convenience fee</p>
-            <p class="text-xl font-semibold mt-1">₦{{ form.convenienceFee }}</p>
-          </div>
-          <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
-            <p class="text-[10px] text-gray-400 uppercase tracking-wider">delivery commission</p>
-            <p class="text-xl font-semibold mt-1">₦{{ form.commissionFlatFee }}</p>
-          </div>
-          <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
-            <p class="text-[10px] text-gray-400 uppercase tracking-wider">processing fee</p>
-            <p class="text-xl font-semibold mt-1">₦{{ form.platformProcessingFee }}</p>
-          </div>
-          <div class="bg-[#FF5C1A]/20 rounded-2xl p-4 border border-[#FF5C1A]/30">
-            <p class="text-[10px] text-[#FF5C1A] uppercase tracking-wider font-semibold">est. revenue / order</p>
-            <p class="text-xl font-semibold mt-1 text-[#FF5C1A]">₦{{ estimatedRevenue }}</p>
-          </div>
+        <div class="flex items-center gap-3">
+          <button 
+            v-if="pricingChangesCount > 0"
+            @click="Object.assign(form, { ...originalForm })"
+            type="button"
+            class="px-5 py-3 rounded-xl text-xs font-bold text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all"
+          >
+            reset changes
+          </button>
+          <button 
+            @click="confirmSave('pricing')" 
+            :disabled="saving"
+            class="px-8 py-3.5 bg-gray-900 text-white rounded-xl text-sm font-bold lowercase hover:bg-[#FF5C1A] transition-all shadow-lg shadow-gray-200 disabled:opacity-50 flex items-center gap-2"
+          >
+            <Loader2 v-if="saving" class="w-4 h-4 animate-spin" />
+            <Save v-else class="w-4 h-4" />
+            <span>{{ saving ? 'saving...' : 'save pricing settings' }}</span>
+          </button>
         </div>
-        <p class="text-[10px] text-gray-500 lowercase">* excludes platform service fee ({{ form.platformServiceFeePercentage }}% of food value) which varies per order size. on a ₦5,000 food order, add ₦{{ Math.round(5000 * form.platformServiceFeePercentage / 100) }}.</p>
-      </div>
-
-      <!-- Save Button -->
-      <div class="flex justify-end">
-        <button 
-          @click="confirmSave('pricing')" 
-          :disabled="saving"
-          class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-sm font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
-        >
-          <Loader2 v-if="saving" class="w-4 h-4 animate-spin" />
-          <Save v-else class="w-4 h-4" />
-          <span>{{ saving ? 'saving...' : 'save pricing settings' }}</span>
-        </button>
       </div>
     </div>
 
@@ -1244,7 +1786,7 @@ import { useRoute } from 'vue-router';
 import { 
   Zap, Loader2, Truck, DollarSign, Tag, Bell, Megaphone, Moon, Info, AlertTriangle, 
   CheckCircle, Calculator, Save, ShieldAlert, Briefcase, Lock, Plus, Trash2, Edit3, 
-  Eye, X, ExternalLink, BarChart2, Sparkles, Check, ArrowRight 
+  Eye, X, ExternalLink, BarChart2, Sparkles, Check, ArrowRight, ShoppingBag, Store, CreditCard, HelpCircle 
 } from 'lucide-vue-next';
 import { admin_api } from '@/api_factory/modules/admin';
 import { useCustomToast } from '@/composables/core/useCustomToast';
@@ -1471,9 +2013,69 @@ const platformForm = reactive({
   isDispatchAppClosed: false,
 });
 
-// ─── Revenue Calculator ────────────────
+// ─── Revenue & Order Economics Simulator ────────────────
+const simFoodSubtotal = ref(3500);
+const simDeliveryType = ref<'room' | 'dropoff'>('room');
+
+const simDeliveryFee = computed(() => {
+  return simDeliveryType.value === 'room' ? (Number(form.roomDeliveryFee) || 350) : (Number(form.dropoffServiceFee) || 300);
+});
+
+const simDeliveryCommission = computed(() => {
+  return Math.min(Number(form.commissionFlatFee) || 0, simDeliveryFee.value);
+});
+
+const simRunnerPayout = computed(() => {
+  return Math.max(0, simDeliveryFee.value - simDeliveryCommission.value);
+});
+
+const simVendorCut = computed(() => {
+  const pct = Number(form.platformServiceFeePercentage) || 0;
+  return Math.round((simFoodSubtotal.value * pct) / 100);
+});
+
+const simVendorPayout = computed(() => {
+  return Math.max(0, simFoodSubtotal.value - simVendorCut.value);
+});
+
+const simOrderServiceFee = computed(() => {
+  return Number(form.convenienceFee) || 0;
+});
+
+const simProcessingFee = computed(() => {
+  return Number(form.platformProcessingFee) || 0;
+});
+
+const simCustomerTotal = computed(() => {
+  return simFoodSubtotal.value + simDeliveryFee.value + simOrderServiceFee.value + simProcessingFee.value;
+});
+
+const simPlatformTotal = computed(() => {
+  return simOrderServiceFee.value + simProcessingFee.value + simDeliveryCommission.value + simVendorCut.value;
+});
+
 const estimatedRevenue = computed(() => {
   return form.convenienceFee + form.commissionFlatFee + form.platformProcessingFee;
+});
+
+const pricingChangesCount = computed(() => {
+  let count = 0;
+  if (form.convenienceFee !== originalForm.convenienceFee) count++;
+  if (form.platformProcessingFee !== originalForm.platformProcessingFee) count++;
+  if (form.enableTransferFee !== originalForm.enableTransferFee) count++;
+  if (form.roomDeliveryFee !== originalForm.roomDeliveryFee) count++;
+  if (form.dropoffServiceFee !== originalForm.dropoffServiceFee) count++;
+  if (form.commissionFlatFee !== originalForm.commissionFlatFee) count++;
+  if (form.platformServiceFeePercentage !== originalForm.platformServiceFeePercentage) count++;
+  if (form.foodMarkupPercentage !== originalForm.foodMarkupPercentage) count++;
+  if (form.minCustomErrandFee !== originalForm.minCustomErrandFee) count++;
+  if (form.minCampusEnvironsFee !== originalForm.minCampusEnvironsFee) count++;
+  if (form.minOutsideCampusFee !== originalForm.minOutsideCampusFee) count++;
+  if (form.baseFee !== originalForm.baseFee) count++;
+  if (form.expressFee !== originalForm.expressFee) count++;
+  if (form.customErrandCommissionPercentage !== originalForm.customErrandCommissionPercentage) count++;
+  if (form.customErrandSafetyBufferPercentage !== originalForm.customErrandSafetyBufferPercentage) count++;
+  return count;
 });
 
 // ─── Confirmation Modal ────────────────
@@ -1490,16 +2092,21 @@ const confirmSave = (type: string) => {
 
   if (type === 'pricing') {
     confirmModal.message = 'you are about to update the platform pricing and revenue settings. these changes take effect immediately for all new orders.';
-    if (form.baseFee !== originalForm.baseFee) confirmModal.changes.push(`standard base fee: <strong>₦${originalForm.baseFee}</strong> → <strong>₦${form.baseFee}</strong>`);
-    if (form.expressFee !== originalForm.expressFee) confirmModal.changes.push(`express base fee: <strong>₦${originalForm.expressFee}</strong> → <strong>₦${form.expressFee}</strong>`);
-    if (form.convenienceFee !== originalForm.convenienceFee) confirmModal.changes.push(`convenience fee: <strong>₦${originalForm.convenienceFee}</strong> → <strong>₦${form.convenienceFee}</strong>`);
-    if (form.commissionFlatFee !== originalForm.commissionFlatFee) confirmModal.changes.push(`runner commission (food): <strong>₦${originalForm.commissionFlatFee}</strong> → <strong>₦${form.commissionFlatFee}</strong>`);
-    if (form.customErrandCommissionPercentage !== originalForm.customErrandCommissionPercentage) confirmModal.changes.push(`runner commission (custom): <strong>${originalForm.customErrandCommissionPercentage}%</strong> → <strong>${form.customErrandCommissionPercentage}%</strong>`);
+    if (form.convenienceFee !== originalForm.convenienceFee) confirmModal.changes.push(`order service fee (cart): <strong>₦${originalForm.convenienceFee}</strong> → <strong>₦${form.convenienceFee}</strong>`);
+    if (form.platformProcessingFee !== originalForm.platformProcessingFee) confirmModal.changes.push(`payment processing fee: <strong>₦${originalForm.platformProcessingFee}</strong> → <strong>₦${form.platformProcessingFee}</strong>`);
+    if (form.enableTransferFee !== originalForm.enableTransferFee) confirmModal.changes.push(`bank transfer fee: <strong>${originalForm.enableTransferFee ? 'enabled' : 'disabled'}</strong> → <strong>${form.enableTransferFee ? 'enabled' : 'disabled'}</strong>`);
+    if (form.roomDeliveryFee !== originalForm.roomDeliveryFee) confirmModal.changes.push(`room delivery fee: <strong>₦${originalForm.roomDeliveryFee}</strong> → <strong>₦${form.roomDeliveryFee}</strong>`);
+    if (form.dropoffServiceFee !== originalForm.dropoffServiceFee) confirmModal.changes.push(`drop-off point fee: <strong>₦${originalForm.dropoffServiceFee}</strong> → <strong>₦${form.dropoffServiceFee}</strong>`);
+    if (form.commissionFlatFee !== originalForm.commissionFlatFee) confirmModal.changes.push(`delivery commission: <strong>₦${originalForm.commissionFlatFee}</strong> → <strong>₦${form.commissionFlatFee}</strong>`);
+    if (form.platformServiceFeePercentage !== originalForm.platformServiceFeePercentage) confirmModal.changes.push(`vendor commission (service fee): <strong>${originalForm.platformServiceFeePercentage}%</strong> → <strong>${form.platformServiceFeePercentage}%</strong>`);
+    if (form.foodMarkupPercentage !== originalForm.foodMarkupPercentage) confirmModal.changes.push(`menu price markup: <strong>${originalForm.foodMarkupPercentage}%</strong> → <strong>${form.foodMarkupPercentage}%</strong>`);
     if (form.minCustomErrandFee !== originalForm.minCustomErrandFee) confirmModal.changes.push(`min custom errand fee: <strong>₦${originalForm.minCustomErrandFee}</strong> → <strong>₦${form.minCustomErrandFee}</strong>`);
-    if (form.enableTransferFee !== originalForm.enableTransferFee) confirmModal.changes.push(`enable transfer fee: <strong>${originalForm.enableTransferFee}</strong> → <strong>${form.enableTransferFee}</strong>`);
-    if (form.platformProcessingFee !== originalForm.platformProcessingFee) confirmModal.changes.push(`processing fee: <strong>₦${originalForm.platformProcessingFee}</strong> → <strong>₦${form.platformProcessingFee}</strong>`);
-    if (form.platformServiceFeePercentage !== originalForm.platformServiceFeePercentage) confirmModal.changes.push(`service fee: <strong>${originalForm.platformServiceFeePercentage}%</strong> → <strong>${form.platformServiceFeePercentage}%</strong>`);
-    if (form.foodMarkupPercentage !== originalForm.foodMarkupPercentage) confirmModal.changes.push(`food markup: <strong>${originalForm.foodMarkupPercentage}%</strong> → <strong>${form.foodMarkupPercentage}%</strong>`);
+    if (form.minCampusEnvironsFee !== originalForm.minCampusEnvironsFee) confirmModal.changes.push(`min campus environs fee: <strong>₦${originalForm.minCampusEnvironsFee}</strong> → <strong>₦${form.minCampusEnvironsFee}</strong>`);
+    if (form.minOutsideCampusFee !== originalForm.minOutsideCampusFee) confirmModal.changes.push(`min far off-campus fee: <strong>₦${originalForm.minOutsideCampusFee}</strong> → <strong>₦${form.minOutsideCampusFee}</strong>`);
+    if (form.baseFee !== originalForm.baseFee) confirmModal.changes.push(`suggested standard errand fee: <strong>₦${originalForm.baseFee}</strong> → <strong>₦${form.baseFee}</strong>`);
+    if (form.expressFee !== originalForm.expressFee) confirmModal.changes.push(`suggested express errand fee: <strong>₦${originalForm.expressFee}</strong> → <strong>₦${form.expressFee}</strong>`);
+    if (form.customErrandCommissionPercentage !== originalForm.customErrandCommissionPercentage) confirmModal.changes.push(`custom errand commission: <strong>${originalForm.customErrandCommissionPercentage}%</strong> → <strong>${form.customErrandCommissionPercentage}%</strong>`);
+    if (form.customErrandSafetyBufferPercentage !== originalForm.customErrandSafetyBufferPercentage) confirmModal.changes.push(`custom errand safety buffer: <strong>${originalForm.customErrandSafetyBufferPercentage}%</strong> → <strong>${form.customErrandSafetyBufferPercentage}%</strong>`);
     if (confirmModal.changes.length === 0) confirmModal.changes.push('no changes detected — saving current values.');
   } else if (type === 'comms') {
     confirmModal.message = 'you are about to update communication channel settings. this controls whether users receive emails and push notifications.';
@@ -1557,13 +2164,12 @@ const loadSettings = async () => {
     ]);
     
     if (errandRes.data) {
-      const errandSettings = errandRes.data;
-      form.baseFee = errandSettings.baseFee || 450;
-      form.expressFee = errandSettings.expressFee || 850;
-      form.roomDeliveryFee = errandSettings.roomDeliveryFee || 350;
-      form.dropoffServiceFee = errandSettings.dropoffServiceFee || 300;
-      form.platformFee = errandSettings.platformFee || errandSettings.convenienceFee || 100;
-      form.convenienceFee = errandSettings.convenienceFee ?? errandSettings.platformFee ?? 100;
+      form.baseFee = errandSettings.baseFee ?? 450;
+      form.expressFee = errandSettings.expressFee ?? 850;
+      form.roomDeliveryFee = errandSettings.roomDeliveryFee ?? 350;
+      form.dropoffServiceFee = errandSettings.dropoffServiceFee ?? 300;
+      form.platformFee = errandSettings.convenienceFee ?? errandSettings.platformFee ?? 50;
+      form.convenienceFee = errandSettings.convenienceFee ?? errandSettings.platformFee ?? 50;
       form.commissionFlatFee = Math.min(Number(errandSettings.commissionFlatFee ?? 50), 50);
       form.customErrandCommissionPercentage = Number(errandSettings.customErrandCommissionPercentage) || 20;
       form.customErrandSafetyBufferPercentage = Number(errandSettings.customErrandSafetyBufferPercentage) || 20;
@@ -1571,9 +2177,9 @@ const loadSettings = async () => {
       form.enableTransferFee = errandSettings.enableTransferFee ?? false;
       form.minOutsideCampusFee = Number(errandSettings.minOutsideCampusFee) || 450;
       form.minCampusEnvironsFee = Number(errandSettings.minCampusEnvironsFee) || 350;
-      form.platformProcessingFee = Number(errandSettings.platformProcessingFee) || 500;
-      form.platformServiceFeePercentage = errandSettings.platformServiceFeePercentage ?? 5;
-      form.foodMarkupPercentage = errandSettings.foodMarkupPercentage ?? 5;
+      form.platformProcessingFee = errandSettings.platformProcessingFee !== undefined && errandSettings.platformProcessingFee !== null ? Number(errandSettings.platformProcessingFee) : 0;
+      form.platformServiceFeePercentage = errandSettings.platformServiceFeePercentage !== undefined ? Number(errandSettings.platformServiceFeePercentage) : 5;
+      form.foodMarkupPercentage = errandSettings.foodMarkupPercentage !== undefined ? Number(errandSettings.foodMarkupPercentage) : 0;
       // Snapshot the originals for change detection
       Object.assign(originalForm, { ...form });
     }
@@ -1621,24 +2227,30 @@ const loadSettings = async () => {
 const saveSettings = async () => {
   saving.value = true;
   try {
+    const resolvedOrderServiceFee = form.convenienceFee !== undefined && form.convenienceFee !== null ? Number(form.convenienceFee) : (form.platformFee !== undefined ? Number(form.platformFee) : 50);
+    form.convenienceFee = resolvedOrderServiceFee;
+    form.platformFee = resolvedOrderServiceFee;
+
     await admin_api.updateCustomErrandSettings({
-      baseFee: Number(form.baseFee),
-      expressFee: Number(form.expressFee),
-      roomDeliveryFee: Number(form.roomDeliveryFee),
-      dropoffServiceFee: Number(form.dropoffServiceFee),
-      platformFee: Number(form.platformFee || form.convenienceFee || 100),
-      convenienceFee: Number(form.convenienceFee || form.platformFee || 100),
+      baseFee: Number(form.baseFee || 450),
+      expressFee: Number(form.expressFee || 850),
+      roomDeliveryFee: Number(form.roomDeliveryFee || 350),
+      dropoffServiceFee: Number(form.dropoffServiceFee || 300),
+      platformFee: resolvedOrderServiceFee,
+      convenienceFee: resolvedOrderServiceFee,
       commissionFlatFee: Math.min(Number(form.commissionFlatFee !== undefined && form.commissionFlatFee !== null ? form.commissionFlatFee : 50), 50),
-      customErrandCommissionPercentage: Number(form.customErrandCommissionPercentage),
-      customErrandSafetyBufferPercentage: Number(form.customErrandSafetyBufferPercentage),
-      minCustomErrandFee: Number(form.minCustomErrandFee),
-      enableTransferFee: form.enableTransferFee,
-      platformProcessingFee: Number(form.platformProcessingFee),
-      platformServiceFeePercentage: Number(form.platformServiceFeePercentage),
-      foodMarkupPercentage: Number(form.foodMarkupPercentage),
+      customErrandCommissionPercentage: Number(form.customErrandCommissionPercentage ?? 20),
+      customErrandSafetyBufferPercentage: Number(form.customErrandSafetyBufferPercentage ?? 20),
+      minCustomErrandFee: Number(form.minCustomErrandFee ?? 300),
+      minCampusEnvironsFee: Number(form.minCampusEnvironsFee ?? 350),
+      minOutsideCampusFee: Number(form.minOutsideCampusFee ?? 450),
+      enableTransferFee: Boolean(form.enableTransferFee),
+      platformProcessingFee: Number(form.platformProcessingFee ?? 0),
+      platformServiceFeePercentage: Number(form.platformServiceFeePercentage ?? 5),
+      foodMarkupPercentage: Number(form.foodMarkupPercentage ?? 0),
     });
     Object.assign(originalForm, { ...form });
-    showToast({ title: 'success', message: 'pricing settings saved successfully!', toastType: 'success' });
+    showToast({ title: 'success', message: 'pricing and revenue settings saved successfully!', toastType: 'success' });
   } catch (e: any) {
     console.error('Failed to save settings:', e);
     showToast({ title: 'error', message: e.response?.data?.message || 'failed to save settings.', toastType: 'error' });
