@@ -148,9 +148,16 @@
                 <p class="text-sm text-gray-500 mb-6">Assign specific actions that users in this department can perform.</p>
                 
                 <div class="space-y-6">
-                  <div v-for="(group, groupName) in groupedPermissions" :key="groupName" class="space-y-3">
-                    <h4 class="text-sm font-bold text-gray-400 uppercase ">{{ groupName }}</h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div v-for="(group, groupName) in groupedPermissions" :key="groupName" class="space-y-3 p-4 rounded-2xl bg-gray-50/50 border border-gray-100">
+                    <div class="flex items-center justify-between pb-2 border-b border-gray-100">
+                      <h4 class="text-xs font-bold text-gray-600 uppercase tracking-wider">{{ groupName }}</h4>
+                      <div class="flex items-center gap-2">
+                        <button type="button" @click="selectAllInGroup(group)" class="text-[11px] font-bold text-purple-600 hover:text-purple-800 transition-colors">select all</button>
+                        <span class="text-gray-300">·</span>
+                        <button type="button" @click="deselectAllInGroup(group)" class="text-[11px] font-bold text-gray-400 hover:text-gray-600 transition-colors">clear</button>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
                       <label v-for="perm in group" :key="perm.id" class="flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all" :class="formData.permissions.includes(perm.id) ? 'border-purple-500 bg-purple-50/30 ring-1 ring-purple-500/20' : 'border-gray-100 hover:border-gray-200 bg-white'">
                         <input type="checkbox" :value="perm.id" v-model="formData.permissions" class="w-4 h-4 mt-0.5 border border-gray-300 rounded text-purple-600 focus:ring-purple-500 focus:ring-offset-0 transition-all cursor-pointer" />
                         <div>
@@ -219,22 +226,55 @@ const availableModules = [
 ]
 
 const groupedPermissions = {
-  'User Management': [
-    { id: 'can_create_admin', label: 'Create Admins', description: 'Can create new admin users' },
-    { id: 'can_suspend_user', label: 'Suspend Users', description: 'Can suspend or block users' },
-    { id: 'can_view_user_pii', label: 'View PII', description: 'Can view Personally Identifiable Information' }
+  'Vendor Operations': [
+    { id: 'can_view_vendors', label: 'View Vendors', description: 'Can browse vendor directory, profiles, and basic status' },
+    { id: 'can_approve_vendor', label: 'Approve / Restore Vendor', description: 'Can approve new vendor applications or restore suspended stores' },
+    { id: 'can_suspend_vendor', label: 'Suspend Vendor', description: 'Can suspend or block active vendor stores' },
+    { id: 'can_delete_vendor', label: 'Delete Vendor', description: 'Can permanently delete vendor stores and records' },
+    { id: 'can_edit_vendor', label: 'Edit Vendor Details', description: 'Can update vendor details, store names, categories, and settings' },
+    { id: 'can_manage_vendor_menu', label: 'Manage Vendor Menu', description: 'Can create, edit, price, and delete vendor menu products' },
+    { id: 'can_toggle_vendor_visibility', label: 'Toggle Visibility', description: 'Can show or hide vendors from student marketplace' },
+    { id: 'can_toggle_vendor_online', label: 'Toggle Online Status', description: 'Can force vendor online or offline' },
+    { id: 'can_credit_vendor_wallet', label: 'Credit Vendor Wallet', description: 'Can manually deposit funds into vendor balance' },
+    { id: 'can_debit_vendor_wallet', label: 'Debit Vendor Wallet', description: 'Can manually deduct funds or issue payouts from vendor wallet' }
   ],
-  'Financial Operations': [
-    { id: 'can_refund_wallet', label: 'Refund Wallet', description: 'Can issue refunds to user wallets' },
+  'User Management': [
+    { id: 'can_view_users', label: 'View Users', description: 'Can browse user directory and customer lists' },
+    { id: 'can_view_user_pii', label: 'View PII', description: 'Can view phone numbers, emails, and student ID info' },
+    { id: 'can_activate_user', label: 'Activate Users', description: 'Can reactivate suspended user accounts' },
+    { id: 'can_suspend_user', label: 'Suspend Users', description: 'Can suspend or ban user accounts' },
+    { id: 'can_delete_user', label: 'Delete Users', description: 'Can permanently delete user profiles' },
+    { id: 'can_credit_user_wallet', label: 'Credit User Wallet', description: 'Can manually deposit funds into user wallet' },
+    { id: 'can_debit_user_wallet', label: 'Debit User Wallet', description: 'Can manually deduct funds from user wallet' },
+    { id: 'can_create_admin', label: 'Create Admins', description: 'Can invite or register new admin and staff accounts' }
+  ],
+  'Dispatcher & Errander Management': [
+    { id: 'can_view_dispatchers', label: 'View Dispatchers', description: 'Can view erranders, active delivery runners, and stats' },
+    { id: 'can_approve_dispatcher', label: 'Approve Dispatcher', description: 'Can approve new runner applications and KYC' },
+    { id: 'can_suspend_dispatcher', label: 'Suspend Dispatcher', description: 'Can suspend or pause errander delivery accounts' },
+    { id: 'can_delete_dispatcher', label: 'Delete Dispatcher', description: 'Can permanently delete errander runner records' },
+    { id: 'can_credit_dispatcher_wallet', label: 'Credit Errander Wallet', description: 'Can manually credit runner wallet earnings' },
+    { id: 'can_debit_dispatcher_wallet', label: 'Debit Errander Wallet', description: 'Can manually deduct funds or process runner payouts' }
+  ],
+  'Orders & Logistics': [
+    { id: 'can_view_orders', label: 'View Orders', description: 'Can browse order lists, details, tracking, and logs' },
+    { id: 'can_update_order_status', label: 'Update Order Status', description: 'Can force order status progression (cooking, ready, etc.)' },
+    { id: 'can_reassign_order', label: 'Reassign Orders', description: 'Can transfer active errand to another runner' },
+    { id: 'can_cancel_order', label: 'Cancel Orders', description: 'Can abort active orders and trigger cancellation protocols' }
+  ],
+  'Financial Operations & Wallets': [
+    { id: 'can_view_finances', label: 'View Finances', description: 'Can view platform ledger, revenue analytics, and balances' },
     { id: 'can_approve_payout', label: 'Approve Payouts', description: 'Can approve vendor or dispatcher payouts' },
-    { id: 'can_view_finances', label: 'View Finances', description: 'Can view financial reports and ledger' }
+    { id: 'can_credit_wallet', label: 'Global Wallet Credit', description: 'Can credit any platform wallet' },
+    { id: 'can_debit_wallet', label: 'Global Wallet Debit', description: 'Can debit any platform wallet' },
+    { id: 'can_refund_wallet', label: 'Issue Wallet Refunds', description: 'Can issue refunds directly back to customer wallets' }
   ],
   'Market Pool': [
-    { id: 'can_refund_market_pool', label: 'Refund Market Pool', description: 'Can refund market pool items' },
-    { id: 'can_manage_campaigns', label: 'Manage Campaigns', description: 'Can create, edit, or close market pool campaigns' }
+    { id: 'can_manage_campaigns', label: 'Manage Campaigns', description: 'Can create, edit, or close market pool campaigns' },
+    { id: 'can_refund_market_pool', label: 'Refund Market Pool', description: 'Can refund market pool items' }
   ],
-  'System Settings': [
-    { id: 'can_edit_settings', label: 'Edit Global Settings', description: 'Can modify delivery fees, pricing rules, etc.' },
+  'System Settings & Marketing': [
+    { id: 'can_edit_settings', label: 'Edit Global Settings', description: 'Can modify delivery fees, pricing rules, and platform status' },
     { id: 'can_manage_promos', label: 'Manage Promo Codes', description: 'Can create and disable promo codes' }
   ]
 }
@@ -257,6 +297,18 @@ const fetchDepartments = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const selectAllInGroup = (group: any[]) => {
+  const ids = group.map(p => p.id)
+  const current = new Set(formData.value.permissions)
+  ids.forEach(id => current.add(id))
+  formData.value.permissions = Array.from(current)
+}
+
+const deselectAllInGroup = (group: any[]) => {
+  const ids = new Set(group.map(p => p.id))
+  formData.value.permissions = formData.value.permissions.filter(id => !ids.has(id))
 }
 
 const openCreateModal = () => {

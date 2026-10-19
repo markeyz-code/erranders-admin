@@ -174,7 +174,7 @@
               <td class="py-4 px-6 text-right">
                 <div class="flex justify-end gap-2">
                   <button 
-                    v-if="vendor.status === 'pending'" 
+                    v-if="vendor.status === 'pending' && hasPermission('can_approve_vendor')" 
                     @click="initiateAction('approve', vendor._id)" 
                     class="p-2 rounded-lg bg-[#FF5C1A]/10 text-[#FF5C1A] hover:bg-emerald-100 transition-colors"
                     title="Approve Vendor"
@@ -191,26 +191,26 @@
                     <button @click.stop="activeDropdownId = null; selectedVendor = vendor; activeDrawerTab = 'overview'" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                       <Eye class="w-4 h-4 text-gray-400" /> View Profile
                     </button>
-                    <button @click.stop="activeDropdownId = null; selectedVendor = vendor; enterEditMode()" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                    <button v-if="hasPermission('can_edit_vendor')" @click.stop="activeDropdownId = null; selectedVendor = vendor; enterEditMode()" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                       <Edit class="w-4 h-4 text-gray-400" /> Edit Details
                     </button>
-                    <button @click.stop="activeDropdownId = null; selectedVendor = vendor; activeDrawerTab = 'menu'" class="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 flex items-center gap-2 font-medium">
+                    <button v-if="hasPermission('can_manage_vendor_menu')" @click.stop="activeDropdownId = null; selectedVendor = vendor; activeDrawerTab = 'menu'" class="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 flex items-center gap-2 font-medium">
                       <LayoutList class="w-4 h-4 text-indigo-500" /> Manage Menu & Promos
                     </button>
                     <button @click.stop="activeDropdownId = null; selectedVendor = vendor; activeDrawerTab = 'transactions'" class="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 flex items-center gap-2 font-medium">
                       <Receipt class="w-4 h-4 text-emerald-500" /> View Transactions
                     </button>
-                    <button @click.stop="activeDropdownId = null; vendorForPayout = vendor; showCreditWalletModal = true" class="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 flex items-center gap-2 font-medium">
+                    <button v-if="hasAnyPermission('can_credit_vendor_wallet', 'can_credit_wallet')" @click.stop="activeDropdownId = null; vendorForPayout = vendor; showCreditWalletModal = true" class="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 flex items-center gap-2 font-medium">
                       <DollarSign class="w-4 h-4 text-emerald-500" /> Credit Wallet
                     </button>
-                    <button @click.stop="activeDropdownId = null; vendorForPayout = vendor; showManualDebitModal = true" class="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 flex items-center gap-2 font-medium">
+                    <button v-if="hasAnyPermission('can_debit_vendor_wallet', 'can_debit_wallet')" @click.stop="activeDropdownId = null; vendorForPayout = vendor; showManualDebitModal = true" class="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 flex items-center gap-2 font-medium">
                       <DollarSign class="w-4 h-4 text-rose-500" /> Debit Wallet
                     </button>
                     
-                    <div class="h-px w-full bg-gray-100 my-1"></div>
+                    <div v-if="hasPermission('can_approve_vendor') || hasPermission('can_suspend_vendor') || hasPermission('can_toggle_vendor_visibility') || hasPermission('can_toggle_vendor_online')" class="h-px w-full bg-gray-100 my-1"></div>
                     
                     <button 
-                      v-if="vendor.status === 'pending' || vendor.status === 'suspended'"
+                      v-if="(vendor.status === 'pending' || vendor.status === 'suspended') && hasPermission('can_approve_vendor')"
                       @click.stop="activeDropdownId = null; initiateAction('approve', vendor._id)" 
                       class="w-full text-left px-4 py-2 text-sm text-[#FF5C1A] hover:bg-[#FF5C1A]/10 flex items-center gap-2"
                     >
@@ -218,7 +218,7 @@
                     </button>
                     
                     <button 
-                      v-if="vendor.status !== 'suspended'" 
+                      v-if="vendor.status !== 'suspended' && hasPermission('can_suspend_vendor')" 
                       @click.stop="activeDropdownId = null; initiateAction('reject', vendor._id)" 
                       class="w-full text-left px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 flex items-center gap-2"
                     >
@@ -226,6 +226,7 @@
                     </button>
 
                     <button 
+                      v-if="hasPermission('can_toggle_vendor_visibility')"
                       @click.stop="activeDropdownId = null; initiateAction('toggleVisibility', vendor._id, vendor.isVisible !== false ? false : true)" 
                       class="w-full text-left px-4 py-2 text-sm text-amber-600 hover:bg-amber-50 flex items-center gap-2"
                     >
@@ -235,6 +236,7 @@
                     </button>
 
                     <button 
+                      v-if="hasPermission('can_toggle_vendor_online')"
                       @click.stop="activeDropdownId = null; initiateAction('toggleOnline', vendor._id)" 
                       class="w-full text-left px-4 py-2 text-sm flex items-center gap-2 transition-colors"
                       :class="vendor.isOnline ? 'text-gray-600 hover:bg-gray-50' : 'text-emerald-600 hover:bg-emerald-50'"
@@ -243,9 +245,10 @@
                       {{ vendor.isOnline ? 'Force Offline' : 'Force Online' }}
                     </button>
 
-                    <div class="h-px w-full bg-gray-100 my-1"></div>
+                    <div v-if="hasPermission('can_delete_vendor')" class="h-px w-full bg-gray-100 my-1"></div>
 
                     <button 
+                      v-if="hasPermission('can_delete_vendor')"
                       @click.stop="activeDropdownId = null; initiateAction('delete', vendor._id)" 
                       class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
                     >
@@ -642,9 +645,9 @@
         </div>
 
         <!-- Actions -->
-        <div class="border-t border-gray-100 pt-4 mt-6 flex gap-3">
+        <div v-if="hasPermission('can_approve_vendor') || hasPermission('can_suspend_vendor')" class="border-t border-gray-100 pt-4 mt-6 flex gap-3">
           <button 
-            v-if="selectedVendor.status === 'pending' || selectedVendor.status === 'suspended'"
+            v-if="(selectedVendor.status === 'pending' || selectedVendor.status === 'suspended') && hasPermission('can_approve_vendor')"
             @click="initiateAction('approve', selectedVendor._id)"
             class="flex-1 py-3 px-4 rounded-lg text-white font-semibold text-sm bg-emerald-600 hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2"
           >
@@ -652,7 +655,7 @@
           </button>
           
           <button 
-            v-if="selectedVendor.status !== 'suspended'"
+            v-if="selectedVendor.status !== 'suspended' && hasPermission('can_suspend_vendor')"
             @click="initiateAction('reject', selectedVendor._id)"
             class="flex-1 py-3 px-4 rounded-lg text-rose-600 font-semibold text-sm bg-rose-50 hover:bg-rose-100 border border-rose-100 transition-colors flex items-center justify-center gap-2"
           >
@@ -774,6 +777,7 @@ import { admin_api } from '@/api_factory/modules/admin';
 import { wallets_api } from '@/api_factory/modules/wallets';
 import { GATEWAY_ENDPOINT_WITH_AUTH } from '@/api_factory/axios.config';
 import { useCustomToast } from '@/composables/core/useCustomToast';
+import { usePermissions } from '@/composables/core/usePermissions';
 import WalletTransactionsList from '@/components/wallets/WalletTransactionsList.vue';
 
 definePageMeta({
@@ -784,6 +788,7 @@ useHead({ title: 'Vendors - Errander Admin' });
 
 const router = useRouter();
 const { showToast } = useCustomToast();
+const { hasPermission, hasAnyPermission } = usePermissions();
 const { vendors, loading, fetchVendors, approveVendor, rejectVendor, toggleVendorVisibility, deleteVendor, toggleVendorOnline } = useAdminVendors();
 const activeTab = ref('all');
 const searchQuery = ref('');

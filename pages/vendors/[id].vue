@@ -13,21 +13,21 @@
       </div>
       <div v-if="vendor" class="flex gap-3">
         <button 
-          v-if="vendor" 
+          v-if="hasAnyPermission('can_debit_vendor_wallet', 'can_debit_wallet')" 
           @click="showManualDebitModal = true" 
           class="px-4 py-2 rounded-lg bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition-colors flex items-center gap-2"
         >
           <DollarSign class="w-4 h-4" /> Manual Payout
         </button>
         <button 
-          v-if="vendor.status === 'pending' || vendor.status === 'suspended'" 
+          v-if="(vendor.status === 'pending' || vendor.status === 'suspended') && hasPermission('can_approve_vendor')" 
           @click="handleApprove" 
           class="px-4 py-2 rounded-lg bg-emerald-500 text-white text-sm font-semibold hover:bg-emerald-600 transition-colors flex items-center gap-2"
         >
           <CheckCircle class="w-4 h-4" /> {{ vendor.status === 'pending' ? 'Approve' : 'Restore' }}
         </button>
         <button 
-          v-if="vendor.status !== 'suspended' && vendor.status !== 'rejected'" 
+          v-if="vendor.status !== 'suspended' && vendor.status !== 'rejected' && hasPermission('can_suspend_vendor')" 
           @click="handleReject" 
           class="px-4 py-2 rounded-lg bg-rose-50 text-rose-600 text-sm font-semibold hover:bg-rose-100 transition-colors border border-rose-100 flex items-center gap-2"
         >
@@ -273,6 +273,7 @@ import VendorMenuManager from '@/components/vendors/VendorMenuManager.vue';
 import UserFinances from '@/components/users/UserFinances.vue';
 import PayoutConfiguration from '@/components/users/PayoutConfiguration.vue';
 import { useCustomToast } from '@/composables/core/useCustomToast';
+import { usePermissions } from '@/composables/core/usePermissions';
 
 definePageMeta({
   layout: 'admin'
@@ -281,6 +282,7 @@ definePageMeta({
 const route = useRoute();
 const router = useRouter();
 const { showToast } = useCustomToast();
+const { hasPermission, hasAnyPermission } = usePermissions();
 
 const vendorId = route.params.id as string;
 const vendor = ref<any>(null);

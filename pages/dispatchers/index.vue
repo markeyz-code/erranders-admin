@@ -341,7 +341,7 @@
                       <div class="h-px w-full bg-gray-100 my-1"></div>
                       
                       <button 
-                        v-if="errander.isApproved"
+                        v-if="errander.isApproved && hasPermission('can_suspend_dispatcher')"
                         @click.stop="activeDropdownId = null; toggleSuspension(errander._id, 'suspend')" 
                         :disabled="processing === errander._id"
                         class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 disabled:opacity-50"
@@ -350,7 +350,7 @@
                       </button>
                       
                       <button 
-                        v-else
+                        v-else-if="!errander.isApproved && hasPermission('can_approve_dispatcher')"
                         @click.stop="activeDropdownId = null; toggleSuspension(errander._id, 'activate')" 
                         :disabled="processing === errander._id"
                         class="w-full text-left px-4 py-2 text-sm text-[#FF5C1A] hover:bg-[#FF5C1A]/10 flex items-center gap-2 disabled:opacity-50"
@@ -358,9 +358,10 @@
                         <CheckCircle class="w-4 h-4" /> Reactivate
                       </button>
                       
-                      <div class="h-px w-full bg-gray-100 my-1"></div>
+                      <div v-if="hasPermission('can_delete_dispatcher')" class="h-px w-full bg-gray-100 my-1"></div>
                       
                       <button 
+                        v-if="hasPermission('can_delete_dispatcher')"
                         @click.stop="activeDropdownId = null; deleteDispatcher(errander._id)" 
                         :disabled="processing === errander._id"
                         class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 disabled:opacity-50"
@@ -720,9 +721,9 @@
           <!-- Actions -->
           <div>
             <h4 class="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wider">Account Actions</h4>
-            <div class="space-y-3">
+            <div v-if="hasPermission('can_suspend_dispatcher') || hasPermission('can_approve_dispatcher') || hasPermission('can_delete_dispatcher')" class="space-y-3">
               <button 
-                v-if="selectedProfile.isApproved"
+                v-if="selectedProfile.isApproved && hasPermission('can_suspend_dispatcher')"
                 @click="toggleSuspension(selectedProfile._id, 'suspend')" 
                 :disabled="processing === selectedProfile._id"
                 class="w-full flex items-center justify-between p-4 rounded-xl border border-red-100 bg-red-50 hover:bg-red-100 transition-colors text-red-700 font-bold group"
@@ -732,7 +733,7 @@
               </button>
               
               <button 
-                v-else
+                v-if="!selectedProfile.isApproved && hasPermission('can_approve_dispatcher')"
                 @click="toggleSuspension(selectedProfile._id, 'activate')" 
                 :disabled="processing === selectedProfile._id"
                 class="w-full flex items-center justify-between p-4 rounded-xl border border-[#FF5C1A]/20 bg-[#FF5C1A]/10 hover:bg-emerald-100 transition-colors text-[#FF5C1A] font-bold group"
@@ -742,6 +743,7 @@
               </button>
 
               <button 
+                v-if="hasPermission('can_delete_dispatcher')"
                 @click="deleteDispatcher(selectedProfile._id)" 
                 :disabled="processing === selectedProfile._id"
                 class="w-full flex items-center justify-between p-4 rounded-xl border border-red-100 bg-red-50 hover:bg-red-100 transition-colors text-red-700 font-bold group"
@@ -812,9 +814,11 @@ import ConfirmationModal from '@/components/ui/ConfirmationModal.vue';
 import DateRangePicker from '@/components/ui/DateRangePicker.vue';
 import { useCustomToast as useToast } from '@/composables/core/useCustomToast'
 import { useConfirmModal } from '@/composables/core/useConfirmModal'
+import { usePermissions } from '@/composables/core/usePermissions'
 
 const { showToast } = useToast()
 const { confirm } = useConfirmModal()
+const { hasPermission } = usePermissions()
 
 definePageMeta({ layout: 'admin' })
 useHead({ title: 'Dispatchers Management - Admin' })

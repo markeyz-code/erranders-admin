@@ -27,6 +27,21 @@ export const usePermissions = () => {
   }
 
   /**
+   * Check if the currently logged in user has ANY of the provided permissions.
+   * Super Admins without adminDepartment have access to everything.
+   */
+  const hasAnyPermission = (...permissions: string[]) => {
+    if (!user.value || user.value.role !== 'admin') {
+      return false
+    }
+    if (!user.value.adminDepartment) {
+      return true
+    }
+    const userPerms = user.value.adminDepartment?.permissions || []
+    return permissions.some(p => userPerms.includes(p))
+  }
+
+  /**
    * Check if the currently logged in user has access to a specific module path.
    * This is used primarily for the sidebar.
    * @param path The module path to check (e.g. '/dashboard')
@@ -49,6 +64,7 @@ export const usePermissions = () => {
 
   return {
     hasPermission,
+    hasAnyPermission,
     hasModuleAccess
   }
 }

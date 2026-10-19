@@ -146,7 +146,7 @@
                 <td class="py-4 px-6 text-right">
                   <div class="flex justify-end gap-2">
                     <button 
-                      v-if="user.isActive" 
+                      v-if="user.isActive && hasPermission('can_suspend_user')" 
                       @click.stop="initiateAction('suspend', user._id)" 
                       class="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition-colors"
                       title="Suspend User"
@@ -154,7 +154,7 @@
                       <UserX2 class="w-4 h-4" />
                     </button>
                     <button 
-                      v-else 
+                      v-else-if="!user.isActive && hasPermission('can_activate_user')" 
                       @click.stop="initiateAction('activate', user._id)" 
                       class="p-2 rounded-lg bg-[#FF5C1A]/10 text-[#FF5C1A] hover:bg-emerald-100 transition-colors"
                       title="Activate User"
@@ -169,6 +169,7 @@
                       <Eye class="w-4 h-4" />
                     </button>
                     <button 
+                      v-if="hasAnyPermission('can_credit_user_wallet', 'can_credit_wallet')"
                       @click.stop="openFundModal(user)" 
                       class="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors"
                       title="Fund Wallet"
@@ -176,6 +177,7 @@
                       <Wallet class="w-4 h-4" />
                     </button>
                     <button 
+                      v-if="hasAnyPermission('can_debit_user_wallet', 'can_debit_wallet')"
                       @click.stop="openDebitModal(user)" 
                       class="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-colors"
                       title="Manual Payout / Deduct"
@@ -463,16 +465,16 @@
           </div>
 
           <!-- Actions -->
-          <div class="border-t border-gray-100 pt-4 flex gap-3">
+          <div v-if="(selectedUser.isActive && hasPermission('can_suspend_user')) || (!selectedUser.isActive && hasPermission('can_activate_user'))" class="border-t border-gray-100 pt-4 flex gap-3">
             <button 
-              v-if="selectedUser.isActive"
+              v-if="selectedUser.isActive && hasPermission('can_suspend_user')"
               @click="initiateAction('suspend', selectedUser._id); closeDrawer()"
               class="flex-1 py-3 px-4 rounded-xl text-rose-600 font-semibold text-sm bg-rose-50 hover:bg-rose-100 transition-colors flex items-center justify-center gap-2"
             >
               <UserX2 class="w-4 h-4" /> Suspend
             </button>
             <button 
-              v-else
+              v-if="!selectedUser.isActive && hasPermission('can_activate_user')"
               @click="initiateAction('activate', selectedUser._id); closeDrawer()"
               class="flex-1 py-3 px-4 rounded-xl text-[#FF5C1A] font-semibold text-sm bg-[#FF5C1A]/10 hover:bg-emerald-100 transition-colors flex items-center justify-center gap-2"
             >
@@ -622,6 +624,7 @@ import SideDrawer from '@/components/ui/SideDrawer.vue';
 import DateRangePicker from '@/components/ui/DateRangePicker.vue';
 import ConfirmationModal from '@/components/ui/ConfirmationModal.vue';
 import { useCustomToast } from '@/composables/core/useCustomToast';
+import { usePermissions } from '@/composables/core/usePermissions';
 
 definePageMeta({
   layout: 'admin'
@@ -630,6 +633,7 @@ definePageMeta({
 useHead({ title: 'Users - Errander Admin' });
 
 const { showToast } = useCustomToast();
+const { hasPermission, hasAnyPermission } = usePermissions();
 const { users, loading, fetchUsers } = useAdminUsers();
 const departments = ref<any[]>([]);
 const searchQuery = ref('');

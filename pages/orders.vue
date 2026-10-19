@@ -325,17 +325,17 @@
                   <button @click.stop="selectedOrder = order; activeDropdown = null" class="w-full px-4 py-2 text-[11px] font-bold text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 text-left transition-colors">
                     Profile
                   </button>
-                  <button @click.stop="openModal(order, 'status')" class="w-full px-4 py-2 text-[11px] font-bold text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 text-left transition-colors">
+                  <button v-if="hasPermission('can_update_order_status')" @click.stop="openModal(order, 'status')" class="w-full px-4 py-2 text-[11px] font-bold text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 text-left transition-colors">
                     Update Order Status
                   </button>
-                  <button @click.stop="openModal(order, 'dispatcher')" class="w-full px-4 py-2 text-[11px] font-bold text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 text-left transition-colors">
+                  <button v-if="hasPermission('can_reassign_order')" @click.stop="openModal(order, 'dispatcher')" class="w-full px-4 py-2 text-[11px] font-bold text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 text-left transition-colors">
                     {{ order.errander ? 'Reassign Dispatcher' : 'Assign Dispatcher' }}
                   </button>
                   <button @click.stop="openIssueModal(order)" class="w-full px-4 py-2 text-[11px] font-bold text-gray-700 hover:bg-orange-50 hover:text-orange-600 text-left transition-colors">
                     Update Issues
                   </button>
-                  <div class="border-t border-gray-50 my-1.5"></div>
-                  <button v-if="['pending', 'processing', 'confirmed', 'scheduled', 'preparing'].includes(order.status)" @click.stop="handleCancelOrder(order._id)" class="w-full px-4 py-2 text-[11px] font-bold text-red-600 hover:bg-red-50 text-left transition-colors">
+                  <div v-if="hasPermission('can_cancel_order')" class="border-t border-gray-50 my-1.5"></div>
+                  <button v-if="['pending', 'processing', 'confirmed', 'scheduled', 'preparing'].includes(order.status) && hasPermission('can_cancel_order')" @click.stop="handleCancelOrder(order._id)" class="w-full px-4 py-2 text-[11px] font-bold text-red-600 hover:bg-red-50 text-left transition-colors">
                     Cancel Order
                   </button>
                 </div>
@@ -765,7 +765,7 @@
           </div>
 
           <button 
-            v-if="['pending', 'processing', 'confirmed', 'scheduled', 'preparing'].includes(modalOrder?.status)"
+            v-if="['pending', 'processing', 'confirmed', 'scheduled', 'preparing'].includes(modalOrder?.status) && hasPermission('can_cancel_order')"
             @click="handleCancelOrder(modalOrder?._id)" 
             class="w-full py-2.5 mt-2 bg-red-50 text-red-600 rounded-lg text-sm font-bold hover:bg-red-100 transition-colors"
           >
@@ -868,7 +868,7 @@ definePageMeta({
 
 useHead({ title: 'Orders - Errander Admin' });
 
-const { hasModuleAccess } = usePermissions();
+const { hasModuleAccess, hasPermission, hasAnyPermission } = usePermissions();
 
 const loading = ref(true);
 const orders = ref<any[]>([]);

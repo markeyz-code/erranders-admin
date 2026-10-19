@@ -399,6 +399,162 @@
         </div>
       </div>
 
+      <!-- SECTION 2B: ORDER INTERCEPTION & MULTI-ERRANDER SPLIT -->
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+              <ArrowRightLeft class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-gray-900 lowercase">order interception & errander split</h3>
+                <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-50 text-purple-600">relay delivery</span>
+              </div>
+              <p class="text-xs text-gray-500 lowercase mt-0.5">configure order hand-off and earnings percentage sharing between first and second erranders</p>
+            </div>
+          </div>
+          <!-- Toggle Order Interception -->
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold text-gray-700">{{ form.interceptionEnabled ? 'interception active' : 'interception disabled' }}</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" v-model="form.interceptionEnabled" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+            </label>
+          </div>
+        </div>
+
+        <div v-if="!form.interceptionEnabled" class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium flex items-center gap-2">
+          <AlertTriangle class="w-4 h-4 shrink-0 text-amber-600" />
+          <span>order interception is currently <strong>disabled</strong> across the platform. runners cannot request or hand off orders to fellow erranders.</span>
+        </div>
+
+        <div :class="{ 'opacity-50 pointer-events-none': !form.interceptionEnabled }" class="space-y-6 transition-opacity">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- First Errander Split Percentage -->
+            <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100 transition-all hover:bg-white hover:border-purple-400/40">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <label class="text-sm font-bold text-gray-800 lowercase">1st errander share (pickup runner) (%)</label>
+                    <button @click="showInfo('firstErranderPct')" type="button" class="w-5 h-5 rounded-full bg-gray-200/70 text-gray-600 flex items-center justify-center hover:bg-purple-100 hover:text-purple-600 transition-colors">
+                      <Info class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <p class="text-[11px] text-gray-500 mt-0.5">portion paid to runner who picks up and travels the first leg</p>
+                </div>
+                <span class="text-[10px] font-bold text-purple-700 bg-purple-100/70 px-2 py-0.5 rounded-lg shrink-0">
+                  leg 1 / pickup
+                </span>
+              </div>
+
+              <div class="relative">
+                <input 
+                  v-model.number="form.interceptionFirstErranderPercentage"
+                  @input="onFirstErranderPercentChange"
+                  type="number" required min="1" max="99" step="1"
+                  class="w-full pl-4 pr-10 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all"
+                />
+                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-base">%</span>
+              </div>
+
+              <div class="text-[11px] bg-purple-50/60 text-purple-900 p-2.5 rounded-xl border border-purple-100/60 flex items-center justify-between">
+                <span>on ₦{{ Math.max(0, form.roomDeliveryFee - form.commissionFlatFee) }} delivery pool:</span>
+                <span class="font-bold">₦{{ Math.round((Math.max(0, form.roomDeliveryFee - form.commissionFlatFee)) * (form.interceptionFirstErranderPercentage / 100)) }}</span>
+              </div>
+
+              <div v-if="activeInfo === 'firstErranderPct'" class="p-3 bg-purple-50 text-purple-900 rounded-xl text-xs font-medium leading-relaxed space-y-1 border border-purple-100">
+                <p class="font-bold text-purple-950">what is 1st errander share?</p>
+                <p>the initial runner who accepted the errand, went to the vendor/store, retrieved the item, and handed it off to an intercepting errander. recommended: 55% - 65% due to store wait time.</p>
+                <button @click="activeInfo = ''" class="text-purple-600 hover:text-purple-800 underline text-[11px] font-bold">dismiss</button>
+              </div>
+            </div>
+
+            <!-- Second Errander Split Percentage -->
+            <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100 transition-all hover:bg-white hover:border-purple-400/40">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <label class="text-sm font-bold text-gray-800 lowercase">2nd errander share (final delivery runner) (%)</label>
+                    <button @click="showInfo('secondErranderPct')" type="button" class="w-5 h-5 rounded-full bg-gray-200/70 text-gray-600 flex items-center justify-center hover:bg-purple-100 hover:text-purple-600 transition-colors">
+                      <Info class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <p class="text-[11px] text-gray-500 mt-0.5">portion paid to runner who completes delivery to student's doorstep</p>
+                </div>
+                <span class="text-[10px] font-bold text-indigo-700 bg-indigo-100/70 px-2 py-0.5 rounded-lg shrink-0">
+                  leg 2 / final
+                </span>
+              </div>
+
+              <div class="relative">
+                <input 
+                  v-model.number="form.interceptionSecondErranderPercentage"
+                  @input="onSecondErranderPercentChange"
+                  type="number" required min="1" max="99" step="1"
+                  class="w-full pl-4 pr-10 py-3.5 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all"
+                />
+                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-base">%</span>
+              </div>
+
+              <div class="text-[11px] bg-indigo-50/60 text-indigo-900 p-2.5 rounded-xl border border-indigo-100/60 flex items-center justify-between">
+                <span>on ₦{{ Math.max(0, form.roomDeliveryFee - form.commissionFlatFee) }} delivery pool:</span>
+                <span class="font-bold">₦{{ Math.round((Math.max(0, form.roomDeliveryFee - form.commissionFlatFee)) * (form.interceptionSecondErranderPercentage / 100)) }}</span>
+              </div>
+
+              <div v-if="activeInfo === 'secondErranderPct'" class="p-3 bg-purple-50 text-purple-900 rounded-xl text-xs font-medium leading-relaxed space-y-1 border border-purple-100">
+                <p class="font-bold text-purple-950">what is 2nd errander share?</p>
+                <p>the intercepting runner who received the parcel from runner 1 and completes the journey to the student with delivery confirmation PIN. the sum of both shares always equals 100%.</p>
+                <button @click="activeInfo = ''" class="text-purple-600 hover:text-purple-800 underline text-[11px] font-bold">dismiss</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interception Payout Simulator Live Preview -->
+          <div class="p-5 rounded-2xl bg-gradient-to-r from-purple-50/70 via-indigo-50/40 to-purple-50/70 border border-purple-100 space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-purple-900">live interception earnings simulation</span>
+              <span class="text-xs font-bold text-purple-700 bg-purple-100 px-2.5 py-0.5 rounded-full">split: {{ form.interceptionFirstErranderPercentage }}% / {{ form.interceptionSecondErranderPercentage }}%</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Room Delivery Interception -->
+              <div class="bg-white/90 p-4 rounded-xl border border-purple-100 shadow-2xs space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-gray-800">room delivery (fee: ₦{{ form.roomDeliveryFee }})</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-700">doorstep</span>
+                </div>
+                <div class="text-[11px] text-gray-500">rider pool after platform cut (₦{{ form.commissionFlatFee }}): <strong class="text-gray-900">₦{{ Math.max(0, form.roomDeliveryFee - form.commissionFlatFee) }}</strong></div>
+                <div class="flex items-center justify-between text-xs pt-1 border-t border-gray-100">
+                  <span class="text-gray-600">1st runner ({{ form.interceptionFirstErranderPercentage }}%):</span>
+                  <span class="font-extrabold text-purple-700">₦{{ Math.round((Math.max(0, form.roomDeliveryFee - form.commissionFlatFee)) * (form.interceptionFirstErranderPercentage / 100)) }}</span>
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-gray-600">2nd runner ({{ form.interceptionSecondErranderPercentage }}%):</span>
+                  <span class="font-extrabold text-indigo-700">₦{{ Math.round((Math.max(0, form.roomDeliveryFee - form.commissionFlatFee)) * (form.interceptionSecondErranderPercentage / 100)) }}</span>
+                </div>
+              </div>
+
+              <!-- Drop-off Point Interception -->
+              <div class="bg-white/90 p-4 rounded-xl border border-purple-100 shadow-2xs space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-gray-800">drop-off point (fee: ₦{{ form.dropoffServiceFee }})</span>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-700">station</span>
+                </div>
+                <div class="text-[11px] text-gray-500">rider pool after platform cut (₦{{ form.commissionFlatFee }}): <strong class="text-gray-900">₦{{ Math.max(0, form.dropoffServiceFee - form.commissionFlatFee) }}</strong></div>
+                <div class="flex items-center justify-between text-xs pt-1 border-t border-gray-100">
+                  <span class="text-gray-600">1st runner ({{ form.interceptionFirstErranderPercentage }}%):</span>
+                  <span class="font-extrabold text-purple-700">₦{{ Math.round((Math.max(0, form.dropoffServiceFee - form.commissionFlatFee)) * (form.interceptionFirstErranderPercentage / 100)) }}</span>
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-gray-600">2nd runner ({{ form.interceptionSecondErranderPercentage }}%):</span>
+                  <span class="font-extrabold text-indigo-700">₦{{ Math.round((Math.max(0, form.dropoffServiceFee - form.commissionFlatFee)) * (form.interceptionSecondErranderPercentage / 100)) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- SECTION 3: VENDOR TAKE-RATE & MENU PRICING -->
       <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
         <div class="flex items-center justify-between border-b border-gray-100 pb-4">
@@ -864,6 +1020,10 @@
               <div class="flex justify-between text-[10px] text-gray-400 pt-1">
                 <span>rider guarantee:</span>
                 <span>fair wage floor guaranteed</span>
+              </div>
+              <div v-if="form.interceptionEnabled" class="flex justify-between text-[10px] text-purple-300 pt-1 border-t border-white/5">
+                <span>if intercepted:</span>
+                <span>1st: ₦{{ Math.round(simRunnerPayout * (form.interceptionFirstErranderPercentage / 100)).toLocaleString() }} ({{ form.interceptionFirstErranderPercentage }}%) · 2nd: ₦{{ Math.round(simRunnerPayout * (form.interceptionSecondErranderPercentage / 100)).toLocaleString() }} ({{ form.interceptionSecondErranderPercentage }}%)</span>
               </div>
             </div>
           </div>
@@ -1786,7 +1946,8 @@ import { useRoute } from 'vue-router';
 import { 
   Zap, Loader2, Truck, DollarSign, Tag, Bell, Megaphone, Moon, Info, AlertTriangle, 
   CheckCircle, Calculator, Save, ShieldAlert, Briefcase, Lock, Plus, Trash2, Edit3, 
-  Eye, X, ExternalLink, BarChart2, Sparkles, Check, ArrowRight, ShoppingBag, Store, CreditCard, HelpCircle 
+  Eye, X, ExternalLink, BarChart2, Sparkles, Check, ArrowRight, ShoppingBag, Store, CreditCard, HelpCircle,
+  ArrowRightLeft
 } from 'lucide-vue-next';
 import { admin_api } from '@/api_factory/modules/admin';
 import { useCustomToast } from '@/composables/core/useCustomToast';
@@ -1847,7 +2008,26 @@ const form = reactive({
   platformProcessingFee: 500,
   platformServiceFeePercentage: 5,
   foodMarkupPercentage: 5,
+  interceptionEnabled: true,
+  interceptionFirstErranderPercentage: 60,
+  interceptionSecondErranderPercentage: 40,
 });
+
+const onFirstErranderPercentChange = () => {
+  let val = Number(form.interceptionFirstErranderPercentage) || 0;
+  if (val > 99) val = 99;
+  if (val < 1) val = 1;
+  form.interceptionFirstErranderPercentage = val;
+  form.interceptionSecondErranderPercentage = 100 - val;
+};
+
+const onSecondErranderPercentChange = () => {
+  let val = Number(form.interceptionSecondErranderPercentage) || 0;
+  if (val > 99) val = 99;
+  if (val < 1) val = 1;
+  form.interceptionSecondErranderPercentage = val;
+  form.interceptionFirstErranderPercentage = 100 - val;
+};
 
 const originalForm = reactive({ ...form });
 
@@ -2075,6 +2255,9 @@ const pricingChangesCount = computed(() => {
   if (form.expressFee !== originalForm.expressFee) count++;
   if (form.customErrandCommissionPercentage !== originalForm.customErrandCommissionPercentage) count++;
   if (form.customErrandSafetyBufferPercentage !== originalForm.customErrandSafetyBufferPercentage) count++;
+  if (form.interceptionEnabled !== originalForm.interceptionEnabled) count++;
+  if (form.interceptionFirstErranderPercentage !== originalForm.interceptionFirstErranderPercentage) count++;
+  if (form.interceptionSecondErranderPercentage !== originalForm.interceptionSecondErranderPercentage) count++;
   return count;
 });
 
@@ -2107,6 +2290,10 @@ const confirmSave = (type: string) => {
     if (form.expressFee !== originalForm.expressFee) confirmModal.changes.push(`suggested express errand fee: <strong>₦${originalForm.expressFee}</strong> → <strong>₦${form.expressFee}</strong>`);
     if (form.customErrandCommissionPercentage !== originalForm.customErrandCommissionPercentage) confirmModal.changes.push(`custom errand commission: <strong>${originalForm.customErrandCommissionPercentage}%</strong> → <strong>${form.customErrandCommissionPercentage}%</strong>`);
     if (form.customErrandSafetyBufferPercentage !== originalForm.customErrandSafetyBufferPercentage) confirmModal.changes.push(`custom errand safety buffer: <strong>${originalForm.customErrandSafetyBufferPercentage}%</strong> → <strong>${form.customErrandSafetyBufferPercentage}%</strong>`);
+    if (form.interceptionEnabled !== originalForm.interceptionEnabled) confirmModal.changes.push(`order interception: <strong>${originalForm.interceptionEnabled ? 'enabled' : 'disabled'}</strong> → <strong>${form.interceptionEnabled ? 'enabled' : 'disabled'}</strong>`);
+    if (form.interceptionFirstErranderPercentage !== originalForm.interceptionFirstErranderPercentage || form.interceptionSecondErranderPercentage !== originalForm.interceptionSecondErranderPercentage) {
+      confirmModal.changes.push(`errander interception split: <strong>${originalForm.interceptionFirstErranderPercentage}% / ${originalForm.interceptionSecondErranderPercentage}%</strong> → <strong>${form.interceptionFirstErranderPercentage}% / ${form.interceptionSecondErranderPercentage}%</strong>`);
+    }
     if (confirmModal.changes.length === 0) confirmModal.changes.push('no changes detected — saving current values.');
   } else if (type === 'comms') {
     confirmModal.message = 'you are about to update communication channel settings. this controls whether users receive emails and push notifications.';
@@ -2164,6 +2351,7 @@ const loadSettings = async () => {
     ]);
     
     if (errandRes.data) {
+      const errandSettings = errandRes.data;
       form.baseFee = errandSettings.baseFee ?? 450;
       form.expressFee = errandSettings.expressFee ?? 850;
       form.roomDeliveryFee = errandSettings.roomDeliveryFee ?? 350;
@@ -2180,6 +2368,9 @@ const loadSettings = async () => {
       form.platformProcessingFee = errandSettings.platformProcessingFee !== undefined && errandSettings.platformProcessingFee !== null ? Number(errandSettings.platformProcessingFee) : 0;
       form.platformServiceFeePercentage = errandSettings.platformServiceFeePercentage !== undefined ? Number(errandSettings.platformServiceFeePercentage) : 5;
       form.foodMarkupPercentage = errandSettings.foodMarkupPercentage !== undefined ? Number(errandSettings.foodMarkupPercentage) : 0;
+      form.interceptionEnabled = errandSettings.interceptionEnabled !== undefined ? Boolean(errandSettings.interceptionEnabled) : true;
+      form.interceptionFirstErranderPercentage = Number(errandSettings.interceptionFirstErranderPercentage ?? 60);
+      form.interceptionSecondErranderPercentage = Number(errandSettings.interceptionSecondErranderPercentage ?? 40);
       // Snapshot the originals for change detection
       Object.assign(originalForm, { ...form });
     }
@@ -2248,6 +2439,9 @@ const saveSettings = async () => {
       platformProcessingFee: Number(form.platformProcessingFee ?? 0),
       platformServiceFeePercentage: Number(form.platformServiceFeePercentage ?? 5),
       foodMarkupPercentage: Number(form.foodMarkupPercentage ?? 0),
+      interceptionEnabled: Boolean(form.interceptionEnabled),
+      interceptionFirstErranderPercentage: Number(form.interceptionFirstErranderPercentage ?? 60),
+      interceptionSecondErranderPercentage: Number(form.interceptionSecondErranderPercentage ?? 40),
     });
     Object.assign(originalForm, { ...form });
     showToast({ title: 'success', message: 'pricing and revenue settings saved successfully!', toastType: 'success' });
