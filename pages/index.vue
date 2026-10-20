@@ -68,7 +68,7 @@ definePageMeta({ layout: false })
 useHead({ title: 'Admin Login - Errander Ops' })
 
 const { login, loading } = useAuth()
-const { isLoggedIn } = useUser()
+const { isLoggedIn, token, user, logOut } = useUser()
 const email = ref('')
 const password = ref('')
 const error = ref('')
@@ -76,6 +76,9 @@ const error = ref('')
 onMounted(() => {
   if (isLoggedIn.value) {
     navigateTo('/dashboard')
+  } else if (token.value && user.value?.role !== 'admin') {
+    // Clear any non-admin cookie lingering in the browser so admin login works cleanly
+    logOut()
   }
 })
 
@@ -113,7 +116,7 @@ const handleLogin = async () => {
     await login({ email: email.value, password: password.value }) 
   }
   catch (e: any) { 
-    error.value = e.data?.message || e.response?.data?.message || 'Invalid credentials' 
+    error.value = e.response?.data?.message || e.data?.message || e.message || 'Invalid credentials' 
   }
 }
 </script>

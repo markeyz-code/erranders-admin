@@ -12,10 +12,11 @@ export const useAuth = () => {
   const login = async (payload: any) => {
     loading.value = true;
     try {
-      // payload.role = 'admin'; // Removed to avoid backend DTO validation error
-      const res = await auth_api.login(payload);
+      const loginPayload = { ...payload, role: 'admin' };
+      const res = await auth_api.login(loginPayload);
       
       if (res.data?.user?.role !== 'admin') {
+        logOut();
         showToast({
           title: "Access Denied",
           message: "You are not an administrator.",

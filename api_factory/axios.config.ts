@@ -94,15 +94,42 @@ instanceArray.forEach((instance) => {
         return Promise.reject(err);
       }
 
+      // Never run session-refresh or logout redirect on auth endpoints (e.g. login, register)
+      const isAuthEndpoint = originalRequest?.url?.includes('/auth/login') ||
+                             originalRequest?.url?.includes('/auth/register') ||
+                             originalRequest?.url?.includes('/auth/verify-otp');
+
+      if (isAuthEndpoint) {
+        return Promise.reject(err);
+      }
+
       if (err.response.status === 401) {
+        const clearAllAuthCookies = () => {
+          if (typeof window === 'undefined') return;
+          const cookieNames = ['errandr_token', 'errandr_refresh_token', 'errandr_user'];
+          const host = window.location.hostname;
+          const domains = ['', host, `.${host}`];
+          if (host.includes('.')) {
+            const rootDomain = '.' + host.split('.').slice(-2).join('.');
+            domains.push(rootDomain);
+          }
+          cookieNames.forEach(name => {
+            domains.forEach(domain => {
+              const domainAttr = domain ? `domain=${domain};` : '';
+              document.cookie = `${name}=; Max-Age=0; path=/; ${domainAttr}`;
+              document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; ${domainAttr}`;
+            });
+          });
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+        };
+
         const fallbackLogOut = () => {
           if (typeof window !== 'undefined') {
-            document.cookie = 'errandr_token=; Max-Age=0; path=/;';
-            document.cookie = 'errandr_refresh_token=; Max-Age=0; path=/;';
-            document.cookie = 'errandr_user=; Max-Age=0; path=/;';
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-            window.location.href = '/';
+            clearAllAuthCookies();
+            if (window.location.pathname !== '/') {
+              window.location.href = '/';
+            }
           }
         };
 

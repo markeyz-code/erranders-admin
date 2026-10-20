@@ -56,24 +56,40 @@ export const useUser = () => {
     }
   };
 
+  const clearAllAuthCookies = () => {
+    if (typeof window === 'undefined') return;
+    const cookieNames = ['errandr_token', 'errandr_refresh_token', 'errandr_user'];
+    const host = window.location.hostname;
+    const domains = ['', host, `.${host}`];
+    if (host.includes('.')) {
+      const rootDomain = '.' + host.split('.').slice(-2).join('.');
+      domains.push(rootDomain);
+    }
+    cookieNames.forEach(name => {
+      domains.forEach(domain => {
+        const domainAttr = domain ? `domain=${domain};` : '';
+        document.cookie = `${name}=; Max-Age=0; path=/; ${domainAttr}`;
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; ${domainAttr}`;
+      });
+    });
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+  };
+
   const logOut = () => {
     user.value = null;
     token.value = null;
     refreshToken.value = null;
     
-    // Use vanilla JS to remove cookies as well as fallback
-    document.cookie = 'errandr_token=; Max-Age=0; path=/;';
-    document.cookie = 'errandr_refresh_token=; Max-Age=0; path=/;';
-    document.cookie = 'errandr_user=; Max-Age=0; path=/;';
-    
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    clearAllAuthCookies();
     
     // Force a hard reload to clear all states and bypass Nuxt router middleware reactivity bugs
-    window.location.href = '/';
+    if (typeof window !== 'undefined' && window.location.pathname !== '/') {
+      window.location.href = '/';
+    }
   };
 
-  const isLoggedIn = computed(() => !!token.value);
+  const isLoggedIn = computed(() => !!token.value && user.value?.role === 'admin');
 
   const fullName = computed(() => {
     if (!user.value) return '';
