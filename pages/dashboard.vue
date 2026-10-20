@@ -21,6 +21,53 @@
       </div>
     </div>
 
+    <!-- Executive Growth & Unit Economics (Revenue, Expenses, Profit, Leads, Conversions, CAC, Retention) -->
+    <div class="space-y-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full bg-[#FF5C1A]"></div>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-gray-500">Executive Growth & Unit Economics</h2>
+        </div>
+        <span class="text-xs text-gray-400 font-medium">Real-time platform ledger & conversion analytics</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+        <!-- Loading skeletons -->
+        <template v-if="statsLoading">
+          <div v-for="i in 7" :key="`exec-stat-loading-${i}`" class="bg-white p-4 rounded-2xl border border-gray-100 flex flex-col justify-between animate-pulse h-28">
+            <div class="w-8 h-8 bg-gray-100 rounded-lg"></div>
+            <div class="space-y-1 mt-2">
+              <div class="w-14 h-3 bg-gray-100 rounded"></div>
+              <div class="w-20 h-5 bg-gray-100 rounded"></div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Executive Cards -->
+        <template v-else>
+          <div 
+            v-for="stat in executiveStats" 
+            :key="stat.label" 
+            class="bg-white p-4 rounded-2xl border border-gray-100 hover:border-gray-300 transition-all hover:shadow-sm flex flex-col justify-between relative overflow-hidden group"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <div :class="stat.bgClass" class="w-8 h-8 rounded-xl flex items-center justify-center border shadow-xs">
+                <component :is="stat.icon" class="w-4 h-4" />
+              </div>
+              <span :class="stat.badgeClass" class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md">
+                {{ stat.badge }}
+              </span>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider truncate">{{ stat.label }}</p>
+              <h3 class="text-base font-black text-gray-900 tracking-tight mt-0.5 truncate">{{ stat.value }}</h3>
+              <p class="text-[9px] text-gray-500 font-medium truncate mt-0.5">{{ stat.subtitle }}</p>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+
     <!-- Stats Grid (Primary & Operational) -->
     <div class="space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -295,7 +342,7 @@ import { onMounted, ref, computed } from 'vue'
 import { 
   DollarSign, ShoppingBag, Store, Users, TrendingUp, TrendingDown,
   User, Settings, CheckCircle, Clock, Truck, AlertCircle, ChevronDown, Activity, Filter,
-  ArrowRight
+  ArrowRight, Receipt, Coins, Target, UserCheck, Repeat, Percent
 } from 'lucide-vue-next'
 
 definePageMeta({
@@ -333,6 +380,72 @@ onMounted(() => {
   fetchStats()
   fetchRecentOrders()
 })
+
+const executiveStats = computed(() => [
+  {
+    label: 'Revenue',
+    value: stats.value?.revenue ? `₦${Number(stats.value.revenue).toLocaleString()}` : (stats.value?.totalVolume ? `₦${Number(stats.value.totalVolume).toLocaleString()}` : '₦0'),
+    subtitle: stats.value?.netRevenue ? `Platform Take: ₦${Number(stats.value.netRevenue).toLocaleString()}` : 'Total GMV',
+    icon: DollarSign,
+    bgClass: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+    badge: 'GMV',
+    badgeClass: 'bg-emerald-100/70 text-emerald-700'
+  },
+  {
+    label: 'Expenses',
+    value: stats.value?.expenses ? `₦${Number(stats.value.expenses).toLocaleString()}` : '₦0',
+    subtitle: 'Vendor & rider fulfillment',
+    icon: Receipt,
+    bgClass: 'bg-rose-50 text-rose-600 border-rose-100',
+    badge: 'Disbursed',
+    badgeClass: 'bg-rose-100/70 text-rose-700'
+  },
+  {
+    label: 'Profit',
+    value: stats.value?.profit ? `₦${Number(stats.value.profit).toLocaleString()}` : '₦0',
+    subtitle: 'Net platform retainage',
+    icon: Coins,
+    bgClass: 'bg-teal-50 text-teal-600 border-teal-100',
+    badge: 'Net Margin',
+    badgeClass: 'bg-teal-100/70 text-teal-700'
+  },
+  {
+    label: 'Leads',
+    value: stats.value?.leads !== undefined ? Number(stats.value.leads).toLocaleString() : '0',
+    subtitle: 'Signed up, 0 orders placed',
+    icon: Target,
+    bgClass: 'bg-amber-50 text-amber-600 border-amber-100',
+    badge: 'Prospects',
+    badgeClass: 'bg-amber-100/70 text-amber-700'
+  },
+  {
+    label: 'Conversions',
+    value: stats.value?.conversions !== undefined ? Number(stats.value.conversions).toLocaleString() : '0',
+    subtitle: `${stats.value?.conversionRate || 0}% lead-to-buyer rate`,
+    icon: UserCheck,
+    bgClass: 'bg-blue-50 text-blue-600 border-blue-100',
+    badge: `${stats.value?.conversionRate || 0}% Rate`,
+    badgeClass: 'bg-blue-100/70 text-blue-700'
+  },
+  {
+    label: 'Acquisition Cost',
+    value: stats.value?.cac ? `₦${Number(stats.value.cac).toLocaleString()}` : '₦0',
+    subtitle: 'Avg cost per paying student',
+    icon: Percent,
+    bgClass: 'bg-violet-50 text-violet-600 border-violet-100',
+    badge: 'CAC',
+    badgeClass: 'bg-violet-100/70 text-violet-700'
+  },
+  {
+    label: 'Retention',
+    value: stats.value?.retention !== undefined ? Number(stats.value.retention).toLocaleString() : '0',
+    subtitle: `${stats.value?.retentionRate || 0}% repeat buyer rate`,
+    icon: Repeat,
+    bgClass: 'bg-indigo-50 text-indigo-600 border-indigo-100',
+    badge: `${stats.value?.retentionRate || 0}% Repeat`,
+    badgeClass: 'bg-indigo-100/70 text-indigo-700'
+  }
+])
 
 const dashboardStats = computed(() => [
   { 
