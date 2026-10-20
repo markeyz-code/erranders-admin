@@ -880,6 +880,36 @@
                 percentage added to estimated item purchase price. held in escrow and reconciled after receipt upload.
               </div>
             </div>
+
+            <!-- Service Business & Agency Commission % -->
+            <div class="space-y-3 p-5 rounded-2xl bg-emerald-50/50 border border-emerald-100 sm:col-span-2">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <label class="text-sm font-bold text-emerald-950 lowercase">service business & agency commission (%)</label>
+                    <button @click="showInfo('serviceBusinessCommission')" type="button" class="w-4 h-4 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center hover:text-emerald-950">
+                      <Info class="w-3 h-3" />
+                    </button>
+                  </div>
+                  <p class="text-[11px] text-emerald-700 mt-0.5">platform commission deducted from registered service businesses (e.g. fumigation partners, movers, cleaners)</p>
+                </div>
+                <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">business vendor cut</span>
+              </div>
+              <div class="relative max-w-sm">
+                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">%</span>
+                <input 
+                  v-model.number="form.serviceBusinessCommissionPercentage"
+                  type="number" required min="0" max="100"
+                  class="w-full px-4 pr-10 py-3 bg-white border border-emerald-200 rounded-xl text-base font-bold text-gray-900 focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <div class="text-[11px] text-emerald-900 bg-white p-2.5 rounded-lg border border-emerald-100">
+                on a ₦20,000 fumigation/moving booking, Erranders keeps <strong>₦{{ Math.round(20000 * (form.serviceBusinessCommissionPercentage || 0) / 100) }}</strong> and the business vendor receives <strong>₦{{ 20000 - Math.round(20000 * (form.serviceBusinessCommissionPercentage || 0) / 100) }}</strong>.
+              </div>
+              <div v-if="activeInfo === 'serviceBusinessCommission'" class="p-2.5 bg-emerald-100 text-emerald-950 rounded-lg text-xs leading-relaxed border border-emerald-200">
+                applies to commercial vendors on Decluttered (e.g., fumigation providers, student movers, cleaners) who hire staff/recruits and operate dedicated subdomains.
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2000,6 +2030,7 @@ const form = reactive({
   convenienceFee: 150,
   commissionFlatFee: 0,
   customErrandCommissionPercentage: 20,
+  serviceBusinessCommissionPercentage: 15,
   customErrandSafetyBufferPercentage: 0,
   minCustomErrandFee: 400,
   enableTransferFee: true,
@@ -2254,6 +2285,7 @@ const pricingChangesCount = computed(() => {
   if (form.baseFee !== originalForm.baseFee) count++;
   if (form.expressFee !== originalForm.expressFee) count++;
   if (form.customErrandCommissionPercentage !== originalForm.customErrandCommissionPercentage) count++;
+  if (form.serviceBusinessCommissionPercentage !== originalForm.serviceBusinessCommissionPercentage) count++;
   if (form.customErrandSafetyBufferPercentage !== originalForm.customErrandSafetyBufferPercentage) count++;
   if (form.interceptionEnabled !== originalForm.interceptionEnabled) count++;
   if (form.interceptionFirstErranderPercentage !== originalForm.interceptionFirstErranderPercentage) count++;
@@ -2289,6 +2321,7 @@ const confirmSave = (type: string) => {
     if (form.baseFee !== originalForm.baseFee) confirmModal.changes.push(`suggested standard errand fee: <strong>₦${originalForm.baseFee}</strong> → <strong>₦${form.baseFee}</strong>`);
     if (form.expressFee !== originalForm.expressFee) confirmModal.changes.push(`suggested express errand fee: <strong>₦${originalForm.expressFee}</strong> → <strong>₦${form.expressFee}</strong>`);
     if (form.customErrandCommissionPercentage !== originalForm.customErrandCommissionPercentage) confirmModal.changes.push(`custom errand commission: <strong>${originalForm.customErrandCommissionPercentage}%</strong> → <strong>${form.customErrandCommissionPercentage}%</strong>`);
+    if (form.serviceBusinessCommissionPercentage !== originalForm.serviceBusinessCommissionPercentage) confirmModal.changes.push(`service business commission: <strong>${originalForm.serviceBusinessCommissionPercentage}%</strong> → <strong>${form.serviceBusinessCommissionPercentage}%</strong>`);
     if (form.customErrandSafetyBufferPercentage !== originalForm.customErrandSafetyBufferPercentage) confirmModal.changes.push(`custom errand safety buffer: <strong>${originalForm.customErrandSafetyBufferPercentage}%</strong> → <strong>${form.customErrandSafetyBufferPercentage}%</strong>`);
     if (form.interceptionEnabled !== originalForm.interceptionEnabled) confirmModal.changes.push(`order interception: <strong>${originalForm.interceptionEnabled ? 'enabled' : 'disabled'}</strong> → <strong>${form.interceptionEnabled ? 'enabled' : 'disabled'}</strong>`);
     if (form.interceptionFirstErranderPercentage !== originalForm.interceptionFirstErranderPercentage || form.interceptionSecondErranderPercentage !== originalForm.interceptionSecondErranderPercentage) {
@@ -2368,6 +2401,9 @@ const loadSettings = async () => {
       form.customErrandCommissionPercentage = errandSettings.customErrandCommissionPercentage != null && !isNaN(Number(errandSettings.customErrandCommissionPercentage))
         ? Number(errandSettings.customErrandCommissionPercentage)
         : 20;
+      form.serviceBusinessCommissionPercentage = errandSettings.serviceBusinessCommissionPercentage != null && !isNaN(Number(errandSettings.serviceBusinessCommissionPercentage))
+        ? Number(errandSettings.serviceBusinessCommissionPercentage)
+        : 15;
       form.customErrandSafetyBufferPercentage = errandSettings.customErrandSafetyBufferPercentage != null && !isNaN(Number(errandSettings.customErrandSafetyBufferPercentage))
         ? Number(errandSettings.customErrandSafetyBufferPercentage)
         : 0;
@@ -2465,6 +2501,9 @@ const saveSettings = async () => {
       customErrandCommissionPercentage: form.customErrandCommissionPercentage != null && form.customErrandCommissionPercentage !== '' && !isNaN(Number(form.customErrandCommissionPercentage))
         ? Number(form.customErrandCommissionPercentage)
         : 20,
+      serviceBusinessCommissionPercentage: form.serviceBusinessCommissionPercentage != null && form.serviceBusinessCommissionPercentage !== '' && !isNaN(Number(form.serviceBusinessCommissionPercentage))
+        ? Number(form.serviceBusinessCommissionPercentage)
+        : 15,
       customErrandSafetyBufferPercentage: form.customErrandSafetyBufferPercentage != null && form.customErrandSafetyBufferPercentage !== '' && !isNaN(Number(form.customErrandSafetyBufferPercentage))
         ? Number(form.customErrandSafetyBufferPercentage)
         : 0,
@@ -2507,6 +2546,7 @@ const saveSettings = async () => {
         convenienceFee: res.data.convenienceFee ?? res.data.platformFee ?? form.convenienceFee,
         commissionFlatFee: res.data.commissionFlatFee ?? form.commissionFlatFee,
         customErrandCommissionPercentage: res.data.customErrandCommissionPercentage ?? form.customErrandCommissionPercentage,
+        serviceBusinessCommissionPercentage: res.data.serviceBusinessCommissionPercentage ?? form.serviceBusinessCommissionPercentage,
         customErrandSafetyBufferPercentage: res.data.customErrandSafetyBufferPercentage ?? form.customErrandSafetyBufferPercentage,
         minCustomErrandFee: res.data.minCustomErrandFee ?? form.minCustomErrandFee,
         enableTransferFee: res.data.enableTransferFee ?? form.enableTransferFee,
