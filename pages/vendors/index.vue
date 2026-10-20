@@ -118,7 +118,17 @@
                   </div>
                   <div class="min-w-0">
                     <p class="text-sm font-bold text-gray-900 leading-none mb-1">{{ vendor.storeName }}</p>
-                    <p class="text-sm font-medium text-gray-500 truncate">ID: {{ vendor._id.slice(-8) }}</p>
+                    <a 
+                      v-if="vendor.subdomain" 
+                      :href="`https://${vendor.subdomain}.erranders.org`" 
+                      target="_blank" 
+                      @click.stop
+                      class="inline-flex items-center gap-1 text-[11px] font-semibold text-[#FF5C1A] hover:underline truncate max-w-[200px]"
+                    >
+                      <span>{{ vendor.subdomain }}.erranders.org</span>
+                      <ExternalLink class="w-3 h-3 shrink-0" />
+                    </a>
+                    <p v-else class="text-sm font-medium text-gray-500 truncate">ID: {{ vendor._id.slice(-8) }}</p>
                   </div>
                 </div>
               </td>
@@ -342,8 +352,28 @@
                     <p class="font-bold text-gray-900">{{ selectedVendor.owner?.phone || selectedVendor.phone || 'N/A' }}</p>
                   </div>
                   <div>
-                    <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Website (Subdomain)</p>
-                    <p class="font-bold text-gray-900 flex items-center gap-1">{{ selectedVendor.subdomain || 'N/A' }}.erranders.com <Copy class="w-3 h-3 text-gray-400 cursor-pointer" /></p>
+                    <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Store Web Address</p>
+                    <div class="flex items-center gap-2">
+                      <a 
+                        v-if="selectedVendor.subdomain"
+                        :href="`https://${selectedVendor.subdomain}.erranders.org`"
+                        target="_blank"
+                        class="font-bold text-[#FF5C1A] hover:underline flex items-center gap-1"
+                      >
+                        <span>{{ selectedVendor.subdomain }}.erranders.org</span>
+                        <ExternalLink class="w-3.5 h-3.5" />
+                      </a>
+                      <span v-else class="font-bold text-gray-400">N/A</span>
+                      <button 
+                        v-if="selectedVendor.subdomain"
+                        type="button"
+                        @click="copyVendorDomain(selectedVendor.subdomain)" 
+                        class="text-gray-400 hover:text-gray-700 p-1"
+                        title="Copy Store URL"
+                      >
+                        <Copy class="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -515,8 +545,12 @@
                   <textarea v-model="editVendorPayload.description" rows="2" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20"></textarea>
                 </div>
                 <div class="space-y-2">
-                  <label class="text-sm font-semibold text-gray-700">Subdomain</label>
-                  <input v-model="editVendorPayload.subdomain" type="text" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
+                  <label class="text-sm font-semibold text-gray-700">Subdomain / Unique Domain</label>
+                  <div class="relative flex items-center">
+                    <span class="absolute left-3 text-xs text-gray-400 font-mono">https://</span>
+                    <input v-model="editVendorPayload.subdomain" type="text" class="w-full pl-16 pr-32 p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20" />
+                    <span class="absolute right-3 text-xs text-[#FF5C1A] font-mono font-bold">.erranders.org</span>
+                  </div>
                 </div>
                 <div class="space-y-2">
                   <label class="text-sm font-semibold text-gray-700">Category</label>
@@ -761,7 +795,7 @@
 
 <script setup lang="ts">
 import { useAdminVendors } from '@/composables/modules/admin';
-import { Search, Store, Eye, EyeOff, Trash2, CheckCircle, XCircle, RefreshCcw, Star, Globe, Copy, User, Mail, Phone, GraduationCap, Banknote, AlertCircle, Percent, MoreVertical, Edit, Loader2, LayoutList, Shield, Calendar, Clock, DollarSign, Image as ImageIcon, MapPin, Edit2, Receipt, Settings, X } from 'lucide-vue-next';
+import { Search, Store, Eye, EyeOff, Trash2, CheckCircle, XCircle, RefreshCcw, Star, Globe, Copy, User, Mail, Phone, GraduationCap, Banknote, AlertCircle, Percent, MoreVertical, Edit, Loader2, LayoutList, Shield, Calendar, Clock, DollarSign, Image as ImageIcon, MapPin, Edit2, Receipt, Settings, X, ExternalLink } from 'lucide-vue-next';
 import { onMounted, ref, computed, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import VendorMenuManager from "@/components/vendors/VendorMenuManager.vue";
@@ -832,6 +866,13 @@ const savePayoutConfig = async () => {
   } finally {
     isSavingPayoutConfig.value = false;
   }
+};
+
+const copyVendorDomain = (subdomain: string) => {
+  if (!subdomain) return;
+  const url = `https://${subdomain}.erranders.org`;
+  navigator.clipboard.writeText(url);
+  showToast({ title: 'Copied', message: `Store URL copied: ${url}`, toastType: 'success' });
 };
 
 const creditAmount = ref<number | null>(null);
