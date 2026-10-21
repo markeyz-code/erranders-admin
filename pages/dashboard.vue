@@ -31,14 +31,15 @@
         <span class="text-xs text-gray-400 font-medium">Real-time platform ledger & conversion analytics</span>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3.5">
         <!-- Loading skeletons -->
         <template v-if="statsLoading">
-          <div v-for="i in 7" :key="`exec-stat-loading-${i}`" class="bg-white p-4 rounded-2xl border border-gray-100 flex flex-col justify-between animate-pulse h-28">
+          <div v-for="i in 7" :key="`exec-stat-loading-${i}`" class="bg-white p-4.5 rounded-2xl border border-gray-100 flex flex-col justify-between animate-pulse min-h-[135px]">
             <div class="w-8 h-8 bg-gray-100 rounded-lg"></div>
-            <div class="space-y-1 mt-2">
-              <div class="w-14 h-3 bg-gray-100 rounded"></div>
-              <div class="w-20 h-5 bg-gray-100 rounded"></div>
+            <div class="space-y-1.5 mt-3">
+              <div class="w-16 h-3 bg-gray-100 rounded"></div>
+              <div class="w-24 h-6 bg-gray-100 rounded"></div>
+              <div class="w-20 h-2.5 bg-gray-100 rounded"></div>
             </div>
           </div>
         </template>
@@ -48,20 +49,20 @@
           <div 
             v-for="stat in executiveStats" 
             :key="stat.label" 
-            class="bg-white p-4 rounded-2xl border border-gray-100 hover:border-gray-300 transition-all hover:shadow-sm flex flex-col justify-between relative overflow-hidden group"
+            class="bg-white p-4 sm:p-4.5 rounded-2xl border border-gray-100/80 hover:border-gray-200 transition-all hover:shadow-md flex flex-col justify-between relative overflow-hidden group min-h-[135px]"
           >
-            <div class="flex items-center justify-between mb-2">
-              <div :class="stat.bgClass" class="w-8 h-8 rounded-xl flex items-center justify-center border shadow-xs">
-                <component :is="stat.icon" class="w-4 h-4" />
+            <div class="flex items-center justify-between mb-3">
+              <div :class="stat.bgClass" class="w-9 h-9 rounded-xl flex items-center justify-center border shadow-xs transition-transform group-hover:scale-105">
+                <component :is="stat.icon" class="w-4.5 h-4.5" />
               </div>
-              <span :class="stat.badgeClass" class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md">
+              <span :class="stat.badgeClass" class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md shadow-2xs">
                 {{ stat.badge }}
               </span>
             </div>
             <div>
-              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider truncate">{{ stat.label }}</p>
-              <h3 class="text-base font-black text-gray-900 tracking-tight mt-0.5 truncate">{{ stat.value }}</h3>
-              <p class="text-[9px] text-gray-500 font-medium truncate mt-0.5">{{ stat.subtitle }}</p>
+              <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-wider">{{ stat.label }}</p>
+              <h3 class="text-lg sm:text-xl font-black text-gray-900 tracking-tight mt-0.5 truncate">{{ stat.value }}</h3>
+              <p class="text-[10px] text-gray-500 font-medium leading-tight mt-1 line-clamp-1 group-hover:line-clamp-none transition-all">{{ stat.subtitle }}</p>
             </div>
           </div>
         </template>
@@ -232,9 +233,16 @@
                   <!-- Financials -->
                   <td class="px-5 py-4 text-right">
                     <p class="text-sm font-black text-gray-900 font-mono tracking-tight">₦{{ activity.total.toLocaleString() }}</p>
-                    <div class="flex flex-col items-end gap-0.5 mt-0.5">
+                    <div class="flex flex-col items-end gap-1 mt-1">
+                      <div class="flex items-center gap-1.5 flex-wrap justify-end">
+                        <span class="text-[9px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/60" title="Business Vendor Payout">
+                          Store: ₦{{ activity.vendorPayout.toLocaleString() }}
+                        </span>
+                        <span class="text-[9px] font-bold text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200/60" title="Errand Ninja Delivery Payout">
+                          Ninja: ₦{{ activity.ninjaPayout.toLocaleString() }}
+                        </span>
+                      </div>
                       <span class="text-[9px] font-bold text-emerald-600">Platform: ₦{{ activity.platformShare.toLocaleString() }}</span>
-                      <span class="text-[9px] font-medium text-gray-400">Delivery: ₦{{ activity.deliveryFee.toLocaleString() }}</span>
                     </div>
                   </td>
                   
@@ -381,34 +389,42 @@ onMounted(() => {
   fetchRecentOrders()
 })
 
-const executiveStats = computed(() => [
-  {
-    label: 'Revenue',
-    value: stats.value?.revenue ? `₦${Number(stats.value.revenue).toLocaleString()}` : (stats.value?.totalVolume ? `₦${Number(stats.value.totalVolume).toLocaleString()}` : '₦0'),
-    subtitle: stats.value?.netRevenue ? `Platform Take: ₦${Number(stats.value.netRevenue).toLocaleString()}` : 'Total GMV',
-    icon: DollarSign,
-    bgClass: 'bg-emerald-50 text-emerald-600 border-emerald-100',
-    badge: 'GMV',
-    badgeClass: 'bg-emerald-100/70 text-emerald-700'
-  },
-  {
-    label: 'Expenses',
-    value: stats.value?.expenses ? `₦${Number(stats.value.expenses).toLocaleString()}` : '₦0',
-    subtitle: 'Vendor & rider fulfillment',
-    icon: Receipt,
-    bgClass: 'bg-rose-50 text-rose-600 border-rose-100',
-    badge: 'Disbursed',
-    badgeClass: 'bg-rose-100/70 text-rose-700'
-  },
-  {
-    label: 'Profit',
-    value: stats.value?.profit ? `₦${Number(stats.value.profit).toLocaleString()}` : '₦0',
-    subtitle: 'Net platform retainage',
-    icon: Coins,
-    bgClass: 'bg-teal-50 text-teal-600 border-teal-100',
-    badge: 'Net Margin',
-    badgeClass: 'bg-teal-100/70 text-teal-700'
-  },
+const executiveStats = computed(() => {
+  const gmv = stats.value?.revenue || stats.value?.totalVolume || stats.value?.gmv || 0;
+  const netTake = stats.value?.netRevenue || 0;
+  // If profit was clipped to 0 due to raw unadjusted subtotal aggregation, use netRevenue
+  const profitVal = (stats.value?.profit && Number(stats.value.profit) > 0)
+    ? Number(stats.value.profit)
+    : (netTake > 0 ? netTake : 0);
+
+  return [
+    {
+      label: 'Revenue',
+      value: `₦${Number(gmv).toLocaleString()}`,
+      subtitle: netTake > 0 ? `Platform Take: ₦${Number(netTake).toLocaleString()}` : 'Total GMV',
+      icon: DollarSign,
+      bgClass: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+      badge: 'GMV',
+      badgeClass: 'bg-emerald-100/70 text-emerald-700'
+    },
+    {
+      label: 'Expenses',
+      value: stats.value?.expenses ? `₦${Number(stats.value.expenses).toLocaleString()}` : '₦0',
+      subtitle: 'Vendor & rider fulfillment',
+      icon: Receipt,
+      bgClass: 'bg-rose-50 text-rose-600 border-rose-100',
+      badge: 'Disbursed',
+      badgeClass: 'bg-rose-100/70 text-rose-700'
+    },
+    {
+      label: 'Profit',
+      value: `₦${Number(profitVal).toLocaleString()}`,
+      subtitle: 'Net platform retainage',
+      icon: Coins,
+      bgClass: 'bg-teal-50 text-teal-600 border-teal-100',
+      badge: 'Net Profit',
+      badgeClass: 'bg-teal-100/70 text-teal-700'
+    },
   {
     label: 'Leads',
     value: stats.value?.leads !== undefined ? Number(stats.value.leads).toLocaleString() : '0',
@@ -509,6 +525,16 @@ const operationalStats = computed(() => [
 const recentActivity = computed(() => {
   return recentOrders.value.map((order: any) => {
     const customer = order.customer || order.user;
+    const total = order.total || order.totalAmount || 0;
+    const deliveryFee = order.deliveryFee || 0;
+    const serviceFee = order.serviceFee || 0;
+    const ninjaPayout = order.erranderPayout !== undefined && order.erranderPayout > 0 ? order.erranderPayout : deliveryFee;
+    const deliveryMargin = Math.max(0, deliveryFee - ninjaPayout);
+    const platformShare = serviceFee + deliveryMargin;
+    const vendorPayout = order.subtotal !== undefined && order.subtotal > 0
+      ? order.subtotal
+      : Math.max(0, total - deliveryFee - serviceFee);
+
     return {
       id: order._id,
       orderNumber: order.orderNumber || `ERR-${order._id?.slice(-8).toUpperCase()}`,
@@ -516,9 +542,11 @@ const recentActivity = computed(() => {
       customerEmail: customer?.email || 'No email provided',
       vendorName: order.vendor?.storeName || 'Unknown Vendor',
       erranderName: order.errander ? `${order.errander.firstName} ${order.errander.lastName}` : 'Unassigned',
-      total: order.total || order.totalAmount || 0,
-      deliveryFee: order.deliveryFee || 0,
-      platformShare: (order.serviceFee || 0) + ((order.deliveryFee || 0) - (order.erranderPayout || 0)),
+      total,
+      deliveryFee,
+      vendorPayout,
+      ninjaPayout,
+      platformShare,
       address: order.deliveryAddress || order.specificAddress || 'No address provided',
       time: formatTimeAgo(order.createdAt),
       status: order.status || 'completed',
