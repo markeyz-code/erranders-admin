@@ -216,4 +216,26 @@ export const admin_api = {
   getWalletTransactions: (userId: string, page: number = 1, limit: number = 20) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.get(`/wallets/all?userId=${userId}&page=${page}&limit=${limit}`);
   },
+
+  getFinancialBreakdown: (params: {
+    startDate?: string;
+    endDate?: string;
+    vendorId?: string;
+    studentId?: string;
+    erranderId?: string;
+  } = {}) => {
+    const query = new URLSearchParams();
+    if (params.startDate) query.append('startDate', params.startDate);
+    if (params.endDate) query.append('endDate', params.endDate);
+    if (params.vendorId) query.append('vendorId', params.vendorId);
+    if (params.studentId) query.append('studentId', params.studentId);
+    if (params.erranderId) query.append('erranderId', params.erranderId);
+    const qs = query.toString();
+    return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/financial-breakdown${qs ? `?${qs}` : ''}`);
+  },
+
+  getFinancialFilterOptions: () => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.get('/admin/financial-filter-options');
+  },
 };
+

@@ -14,7 +14,7 @@
           <div class="w-2 h-2 rounded-full bg-parentPrimary"></div>
           Live Data
         </div>
-        <button class="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-gray-800 transition-colors shadow-md">
+        <button @click="scrollToFinancials" class="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-gray-800 transition-colors shadow-md cursor-pointer">
           <Filter class="w-3.5 h-3.5" />
           Filter Data
         </button>
@@ -125,6 +125,9 @@
         </template>
       </div>
     </div>
+
+    <!-- Financial Breakdown & Audited Ledger Section -->
+    <FinancialBreakdownSection />
 
     <!-- Revenue Chart Section -->
     <div class="w-full bg-gray-900 rounded-[1.25rem] border border-gray-800 p-5 shadow-lg relative overflow-hidden group mt-4">
@@ -362,6 +365,14 @@ useHead({
 })
 
 import RevenueChart from '@/components/core/RevenueChart.vue'
+import FinancialBreakdownSection from '@/components/core/FinancialBreakdownSection.vue'
+
+const scrollToFinancials = () => {
+  const el = document.getElementById('financial-breakdown-section');
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
 const { stats, chartData, loading: statsLoading, fetchStats } = useAdminStats()
 const ordersLoading = ref(true)
@@ -461,7 +472,8 @@ const executiveStats = computed(() => {
     badge: `${stats.value?.retentionRate || 0}% Repeat`,
     badgeClass: 'bg-indigo-100/70 text-indigo-700'
   }
-])
+];
+});
 
 const dashboardStats = computed(() => [
   { 

@@ -251,3 +251,136 @@ export const useAdminFinances = () => {
 
   return { loading, stats, transactions, totalTransactions, currentPage, fetchTransactions, fetchFinances, approvePayout, rejectPayout, markPayoutAsPaid, downloadReceipt, exportTransactions };
 };
+
+export const useFinancialBreakdown = () => {
+  const loading = ref(false);
+  const filterOptionsLoading = ref(false);
+  const financials = ref<any>(null);
+  const filterOptions = ref<{
+    vendors: Array<{ id: string; name: string; businessName?: string; category?: string }>;
+    erranders: Array<{ id: string; name: string; phone?: string; completedErrandsCount?: number }>;
+    students: Array<{ id: string; name: string; email?: string }>;
+  }>({
+    vendors: [],
+    erranders: [],
+    students: [],
+  });
+
+  const activeFilters = ref({
+    preset: '30D',
+    startDate: '',
+    endDate: '',
+    vendorId: '',
+    studentId: '',
+    erranderId: '',
+  });
+
+  const computePresetDates = (preset: string) => {
+    const end = new Date();
+    const start = new Date();
+    if (preset === 'today') {
+      start.setHours(0, 0, 0, 0);
+    } else if (preset === '7D') {
+      start.setDate(end.getDate() - 7);
+      start.setHours(0, 0, 0, 0);
+    } else if (preset === '30D') {
+      start.setDate(end.getDate() - 30);
+      start.setHours(0, 0, 0, 0);
+    } else if (preset === 'this_month') {
+      start.setDate(1);
+      start.setHours(0, 0, 0, 0);
+    } else if (preset === 'ytd') {
+      start.setMonth(0, 1);
+      start.setHours(0, 0, 0, 0);
+    } else if (preset === 'all') {
+      return { startDate: '2023-01-01', endDate: end.toISOString().split('T')[0] };
+    }
+    return {
+      startDate: start.toISOString().split('T')[0],
+      endDate: end.toISOString().split('T')[0],
+    };
+  };
+
+  const fetchFilterOptions = async () => {
+    filterOptionsLoading.value = true;
+    try {
+      const res = await admin_api.getFinancialFilterOptions();
+      if (res.data) {
+        filterOptions.value = {
+          vendors: res.data.vendors || [],
+          erranders: res.data.erranders || [],
+          students: res.data.students || [],
+        };
+      }
+    } catch (e) {
+      console.error('Failed to fetch financial filter options', e);
+    } finally {
+      filterOptionsLoading.value = false;
+    }
+  };
+
+  const fetchFinancials = async () => {
+    loading.value = true;
+    try {
+      let { startDate, endDate } = activeFilters.value;
+      if (activeFilters.value.preset !== 'custom' && (!startDate || !endDate)) {
+        const computed = computePresetDates(activeFilters.value.preset);
+        startDate = computed.startDate;
+        endDate = computed.endDate;
+      }
+
+      const params: any = {
+        startDate: startDate || undefined,
+        endDate: endDate || undefined,
+        vendorId: activeFilters.value.vendorId || undefined,
+        studentId: activeFilters.value.studentId || undefined,
+        erranderId: activeFilters.value.erranderId || undefined,
+      };
+
+      const res = await admin_api.getFinancialBreakdown(params);
+      financials.value = res.data;
+    } catch (e) {
+      console.error('Failed to fetch financial breakdown', e);
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const setPreset = (preset: string) => {
+    activeFilters.value.preset = preset;
+    if (preset !== 'custom') {
+      const computed = computePresetDates(preset);
+      activeFilters.value.startDate = computed.startDate;
+      activeFilters.value.endDate = computed.endDate;
+    }
+    return fetchFinancials();
+  };
+
+  const resetFilters = () => {
+    activeFilters.value = {
+      preset: '30D',
+      startDate: '',
+      endDate: '',
+      vendorId: '',
+      studentId: '',
+      erranderId: '',
+    };
+    const computed = computePresetDates('30D');
+    activeFilters.value.startDate = computed.startDate;
+    activeFilters.value.endDate = computed.endDate;
+    return fetchFinancials();
+  };
+
+  return {
+    loading,
+    filterOptionsLoading,
+    financials,
+    filterOptions,
+    activeFilters,
+    fetchFinancials,
+    fetchFilterOptions,
+    setPreset,
+    resetFilters,
+  };
+};
+
