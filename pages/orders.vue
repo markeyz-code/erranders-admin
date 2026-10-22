@@ -263,10 +263,30 @@
               
               <!-- Financials -->
               <td class="px-4 py-2.5 text-right align-top">
-                <p class="text-sm font-black text-gray-900 font-mono tracking-tight mt-0.5">₦{{ Number(order.total || order.totalAmount || 0).toLocaleString() }}</p>
+                <p class="text-sm font-black text-gray-900 font-mono tracking-tight mt-0.5">
+                  ₦{{ Number(order.total || order.totalAmount || 0).toLocaleString() }}
+                </p>
                 <div class="flex flex-col items-end gap-1 mt-1">
-                  <span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded uppercase tracking-wide">Plat: ₦{{ Number(order.platformProcessingFee || order.serviceFee || 0).toLocaleString() }}</span>
-                  <span class="text-[9px] font-bold text-gray-500">Del: ₦{{ Number(order.deliveryFee || 0).toLocaleString() }}</span>
+                  <div class="flex items-center gap-1.5 flex-wrap justify-end">
+                    <span 
+                      class="text-[9px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/60 whitespace-nowrap" 
+                      :title="order.type === 'custom_errand' ? 'Custom Errand Item/Procurement Cost' : 'Store Vendor Payout'"
+                    >
+                      Store: ₦{{ getOrderFinancials(order).vendorPayout.toLocaleString() }}
+                    </span>
+                    <span 
+                      class="text-[9px] font-bold text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200/60 whitespace-nowrap" 
+                      title="Errand Ninja Delivery Payout"
+                    >
+                      Ninja: ₦{{ getOrderFinancials(order).ninjaPayout.toLocaleString() }}
+                    </span>
+                  </div>
+                  <span 
+                    class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/60 whitespace-nowrap"
+                    title="Platform Commission / Processing"
+                  >
+                    Platform: ₦{{ getOrderFinancials(order).platformShare.toLocaleString() }}
+                  </span>
                 </div>
               </td>
               
@@ -658,6 +678,29 @@
                 <span class="text-lg font-black text-[#FF5C1A]">₦{{ Number(selectedOrder.total || selectedOrder.totalAmount || 0).toLocaleString() }}</span>
               </div>
 
+              <!-- 3-Way Financial Split Breakdown -->
+              <div class="mt-4 bg-gray-50/80 border border-gray-100 rounded-xl p-3.5 space-y-2.5">
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">💰 Financial Split Breakdown</p>
+                <div class="flex justify-between items-center text-xs">
+                  <span class="text-amber-800 font-bold flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span> Store (Vendor Payout)
+                  </span>
+                  <span class="text-amber-900 font-black font-mono">₦{{ getOrderFinancials(selectedOrder).vendorPayout.toLocaleString() }}</span>
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                  <span class="text-indigo-800 font-bold flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Errand Ninja Payout
+                  </span>
+                  <span class="text-indigo-900 font-black font-mono">₦{{ getOrderFinancials(selectedOrder).ninjaPayout.toLocaleString() }}</span>
+                </div>
+                <div class="flex justify-between items-center text-xs pt-1.5 border-t border-gray-200/60">
+                  <span class="text-emerald-700 font-bold flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Platform Retainage
+                  </span>
+                  <span class="text-emerald-800 font-black font-mono">₦{{ getOrderFinancials(selectedOrder).platformShare.toLocaleString() }}</span>
+                </div>
+              </div>
+
               <!-- Interception Payout Split -->
               <div v-if="selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed')" class="mt-4 bg-purple-50 border border-purple-100 rounded-xl p-3 space-y-2">
                 <p class="text-[10px] font-bold text-purple-700 uppercase tracking-wider mb-2">🤝 Interception Payout Split</p>
@@ -899,6 +942,44 @@ const selectedErrander = ref('');
 const selectedOrder = ref<any>(null);
 const modalOrder = ref<any>(null);
 const activeDropdown = ref<string | null>(null);
+
+const getOrderFinancials = (order: any) => {
+  if (!order) return { total: 0, vendorPayout: 0, ninjaPayout: 0, platformShare: 0 };
+  
+  const total = Number(order.total || order.totalAmount || 0);
+  const deliveryFee = Number(order.deliveryFee || 0);
+  const serviceFee = Number(order.platformProcessingFee || order.serviceFee || order.platformFee || 0);
+  
+  // Ninja Payout
+  const ninjaPayout = order.erranderPayout !== undefined && Number(order.erranderPayout) > 0
+    ? Number(order.erranderPayout)
+    : deliveryFee;
+    
+  // Delivery margin retained by platform
+  const deliveryMargin = Math.max(0, deliveryFee - ninjaPayout);
+  
+  // Platform share
+  const platformShare = (order.platformFee !== undefined && Number(order.platformFee) > 0 && serviceFee === 0)
+    ? Number(order.platformFee)
+    : (serviceFee + deliveryMargin);
+    
+  // Vendor Payout
+  let vendorPayout = 0;
+  if (order.subtotal !== undefined && Number(order.subtotal) > 0) {
+    vendorPayout = Number(order.subtotal) + Number(order.packagingFee || 0);
+  } else if (order.type === 'custom_errand') {
+    vendorPayout = Number(order.customDetails?.estimatedItemCost || 0);
+  } else {
+    vendorPayout = Math.max(0, total - deliveryFee - serviceFee);
+  }
+
+  return {
+    total,
+    vendorPayout,
+    ninjaPayout,
+    platformShare,
+  };
+};
 
 const statusOptions = [
   { label: 'All Statuses', value: 'all' },
