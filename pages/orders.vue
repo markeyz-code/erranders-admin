@@ -412,10 +412,10 @@
       </template>
 
       <template v-if="selectedOrder">
-        <div class="space-y-6 pt-2 pb-24">
+        <div class="space-y-6 pt-3 pb-24 px-1 sm:px-2">
 
           <!-- 1. Customer & Campus Profile Card -->
-          <div class="bg-gradient-to-br from-white via-gray-50/50 to-orange-50/30 rounded-2xl p-5 border border-gray-200/80 shadow-xs relative overflow-hidden">
+          <div class="bg-gradient-to-br from-white via-gray-50/50 to-orange-50/30 rounded-2xl p-5 sm:p-6 border border-gray-200/80 shadow-xs relative overflow-hidden space-y-4">
             <div class="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-orange-400/10 to-transparent rounded-full blur-xl pointer-events-none"></div>
 
             <div class="flex items-start justify-between gap-4">
@@ -480,14 +480,14 @@
               </div>
             </div>
 
-            <!-- Quick Metrics Grid -->
-            <div class="grid grid-cols-3 gap-2.5 mt-4 pt-3.5 border-t border-gray-200/60">
-              <div class="bg-white/80 rounded-xl p-2.5 border border-gray-100">
-                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">Total Paid</span>
+            <!-- Quick Metrics Grid with comfortable inner padding -->
+            <div class="grid grid-cols-3 gap-3 pt-3.5 border-t border-gray-200/60">
+              <div class="bg-white/90 rounded-xl p-3 border border-gray-150 shadow-2xs">
+                <span class="text-[9px] font-extrabold text-gray-400 uppercase tracking-wider block mb-0.5">Total Paid</span>
                 <span class="text-sm font-black text-gray-900 font-mono">₦{{ Number(selectedOrder.total || selectedOrder.totalAmount || 0).toLocaleString() }}</span>
               </div>
-              <div class="bg-white/80 rounded-xl p-2.5 border border-gray-100">
-                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">Order Type</span>
+              <div class="bg-white/90 rounded-xl p-3 border border-gray-150 shadow-2xs">
+                <span class="text-[9px] font-extrabold text-gray-400 uppercase tracking-wider block mb-0.5">Order Type</span>
                 <span 
                   class="text-[11px] font-black uppercase tracking-tight block truncate"
                   :class="selectedOrder.type === 'custom_errand' ? 'text-amber-700' : 'text-[#FF5C1A]'"
@@ -495,8 +495,8 @@
                   {{ selectedOrder.type === 'custom_errand' ? 'Custom Errand' : (selectedOrder.type?.replace(/_/g, ' ') || 'Food Delivery') }}
                 </span>
               </div>
-              <div class="bg-white/80 rounded-xl p-2.5 border border-gray-100">
-                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">Order Date</span>
+              <div class="bg-white/90 rounded-xl p-3 border border-gray-150 shadow-2xs">
+                <span class="text-[9px] font-extrabold text-gray-400 uppercase tracking-wider block mb-0.5">Order Date</span>
                 <span class="text-[11px] font-bold text-gray-800 block truncate">
                   {{ new Date(selectedOrder.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}
                 </span>
@@ -507,10 +507,10 @@
           <!-- 2. Security Delivery PIN & Verification Banner -->
           <div 
             v-if="selectedOrder.uniqueCode || selectedOrder.deliveryPin" 
-            class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 border border-amber-200/90 rounded-2xl p-4 flex items-center justify-between shadow-xs"
+            class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 border border-amber-200/90 rounded-2xl p-5 sm:p-6 flex items-center justify-between shadow-xs"
           >
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-xs shrink-0">
+            <div class="flex items-center gap-3.5">
+              <div class="w-11 h-11 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-xs shrink-0">
                 <ShieldCheck class="w-5 h-5" />
               </div>
               <div>
@@ -521,7 +521,7 @@
 
             <button 
               @click="copyText(selectedOrder.uniqueCode || selectedOrder.deliveryPin, 'Delivery PIN')"
-              class="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-amber-300/80 shadow-xs hover:bg-amber-50/50 transition-all active:scale-95 shrink-0"
+              class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-xl border border-amber-300/80 shadow-xs hover:bg-amber-50/50 transition-all active:scale-95 shrink-0"
               title="Copy PIN"
             >
               <span class="font-mono text-base font-black text-amber-900 tracking-wider">
@@ -531,56 +531,58 @@
             </button>
           </div>
 
-          <!-- 3. Journey Route (Origin ➔ Destination) -->
-          <div class="bg-white rounded-2xl p-4.5 border border-gray-200/80 shadow-xs space-y-3.5">
+          <!-- 3. Journey Route (Origin ➔ Destination) with dedicated inner padding -->
+          <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/80 shadow-xs space-y-4">
             <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
               <Navigation class="w-3.5 h-3.5 text-gray-500" />
               Route Waypoints
             </h4>
 
-            <div class="relative pl-6 space-y-4">
-              <!-- Connecting dashed line -->
-              <div class="absolute left-2.5 top-2.5 bottom-3 w-0.5 border-l-2 border-dashed border-gray-200"></div>
+            <div class="bg-gray-50/70 rounded-xl p-4 sm:p-4.5 border border-gray-100">
+              <div class="relative pl-6 space-y-4">
+                <!-- Connecting dashed line -->
+                <div class="absolute left-2.5 top-2.5 bottom-3 w-0.5 border-l-2 border-dashed border-gray-300"></div>
 
-              <!-- Pickup Origin -->
-              <div class="relative">
-                <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 border-2 border-white absolute -left-6 top-0 flex items-center justify-center text-[10px] font-bold shadow-2xs">
-                  A
+                <!-- Pickup Origin -->
+                <div class="relative">
+                  <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 border-2 border-white absolute -left-6 top-0 flex items-center justify-center text-[10px] font-bold shadow-2xs">
+                    A
+                  </div>
+                  <div>
+                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">
+                      {{ selectedOrder.type === 'custom_errand' ? 'Pickup Location / Market Store' : 'Vendor Kitchen' }}
+                    </span>
+                    <p class="text-xs font-bold text-gray-900 leading-snug">
+                      <template v-if="selectedOrder.type === 'custom_errand'">
+                        {{ selectedOrder.customDetails?.pickupLocation || 'Specified in errand briefing' }}
+                      </template>
+                      <template v-else>
+                        {{ selectedOrder.vendor?.storeName || 'Campus Cafeteria' }}
+                        <span v-if="selectedOrder.vendor?.address" class="text-gray-500 font-normal"> ({{ selectedOrder.vendor.address }})</span>
+                      </template>
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">
-                    {{ selectedOrder.type === 'custom_errand' ? 'Pickup Location / Market Store' : 'Vendor Kitchen' }}
-                  </span>
-                  <p class="text-xs font-bold text-gray-900 leading-snug">
-                    <template v-if="selectedOrder.type === 'custom_errand'">
-                      {{ selectedOrder.customDetails?.pickupLocation || 'Specified in errand briefing' }}
-                    </template>
-                    <template v-else>
-                      {{ selectedOrder.vendor?.storeName || 'Campus Cafeteria' }}
-                      <span v-if="selectedOrder.vendor?.address" class="text-gray-500 font-normal"> ({{ selectedOrder.vendor.address }})</span>
-                    </template>
-                  </p>
-                </div>
-              </div>
 
-              <!-- Drop-off Destination -->
-              <div class="relative">
-                <div class="w-5 h-5 rounded-full bg-orange-100 text-[#FF5C1A] border-2 border-white absolute -left-6 top-0 flex items-center justify-center text-[10px] font-bold shadow-2xs">
-                  B
-                </div>
-                <div>
-                  <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">Delivery Destination</span>
-                  <p class="text-xs font-bold text-gray-900 leading-snug">
-                    {{ selectedOrder.deliveryAddress || selectedOrder.specificAddress || selectedOrder.shippingAddress || selectedOrder.customDetails?.dropoffLocation || 'Campus Delivery Address' }}
-                  </p>
+                <!-- Drop-off Destination -->
+                <div class="relative">
+                  <div class="w-5 h-5 rounded-full bg-orange-100 text-[#FF5C1A] border-2 border-white absolute -left-6 top-0 flex items-center justify-center text-[10px] font-bold shadow-2xs">
+                    B
+                  </div>
+                  <div>
+                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">Delivery Destination</span>
+                    <p class="text-xs font-bold text-gray-900 leading-snug">
+                      {{ selectedOrder.deliveryAddress || selectedOrder.specificAddress || selectedOrder.shippingAddress || selectedOrder.customDetails?.dropoffLocation || 'Campus Delivery Address' }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- 4. Assigned Errand Ninja (Dispatcher) Card -->
-          <div class="bg-white rounded-2xl p-4.5 border border-gray-200/80 shadow-xs space-y-3.5">
-            <div class="flex items-center justify-between border-b border-gray-100 pb-2.5">
+          <!-- 4. Assigned Errand Ninja (Dispatcher) Card with comfortable padding -->
+          <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/80 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-3">
               <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
                 <Truck class="w-3.5 h-3.5 text-gray-500" />
                 {{ selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed') ? 'Dispatchers (Intercepted Relay)' : 'Assigned Errand Ninja' }}
@@ -596,9 +598,9 @@
             </div>
 
             <!-- If Errand Ninja Assigned -->
-            <div v-if="selectedOrder.errander" class="flex items-center justify-between gap-3">
-              <div class="flex items-center gap-3 min-w-0">
-                <div class="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-700 font-extrabold text-base flex items-center justify-center shrink-0">
+            <div v-if="selectedOrder.errander" class="bg-gray-50/70 rounded-xl p-4 sm:p-4.5 border border-gray-100 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3.5 min-w-0">
+                <div class="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-700 font-extrabold text-base flex items-center justify-center shrink-0 shadow-2xs">
                   {{ selectedOrder.errander?.firstName?.[0] || 'N' }}
                 </div>
                 <div class="min-w-0">
@@ -606,7 +608,7 @@
                     <p class="text-sm font-extrabold text-gray-900 truncate">
                       {{ selectedOrder.errander?.firstName }} {{ selectedOrder.errander?.lastName }}
                     </p>
-                    <span class="text-[9px] font-extrabold bg-indigo-50 text-indigo-700 px-1.5 py-0.2 rounded border border-indigo-100 uppercase">Ninja</span>
+                    <span class="text-[9px] font-extrabold bg-indigo-100/70 text-indigo-700 px-1.5 py-0.2 rounded border border-indigo-200 uppercase">Ninja</span>
                   </div>
                   <p class="text-xs text-gray-500 font-medium truncate mt-0.5">
                     {{ selectedOrder.errander?.phone || 'No phone' }}
@@ -622,7 +624,7 @@
                   v-if="selectedOrder.errander?.phone" 
                   :href="`https://wa.me/${formatWhatsAppNumber(selectedOrder.errander.phone)}`" 
                   target="_blank"
-                  class="p-2 rounded-xl bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200 transition-colors"
+                  class="p-2.5 rounded-xl bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200 transition-colors shadow-2xs"
                   title="WhatsApp Rider"
                 >
                   <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
@@ -630,7 +632,7 @@
                 <a 
                   v-if="selectedOrder.errander?.phone" 
                   :href="`tel:${selectedOrder.errander.phone}`" 
-                  class="p-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200 transition-colors"
+                  class="p-2.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200 transition-colors shadow-2xs"
                   title="Call Rider"
                 >
                   <Phone class="w-4 h-4" />
@@ -639,21 +641,21 @@
             </div>
 
             <!-- If Not Assigned -->
-            <div v-else class="bg-amber-50/70 border border-amber-200/70 rounded-xl p-3 flex items-center justify-between">
-              <div class="flex items-center gap-2 text-amber-800 text-xs font-bold">
+            <div v-else class="bg-amber-50/70 border border-amber-200/70 rounded-xl p-4 flex items-center justify-between">
+              <div class="flex items-center gap-2.5 text-amber-800 text-xs font-bold">
                 <AlertTriangle class="w-4 h-4 text-amber-600 shrink-0" />
                 <span>No Errand Ninja assigned yet</span>
               </div>
               <button 
                 @click="openModal(selectedOrder, 'dispatcher')" 
-                class="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg shadow-2xs transition-colors"
+                class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg shadow-2xs transition-colors"
               >
                 Assign Now
               </button>
             </div>
 
             <!-- Interception Relay (if present) -->
-            <div v-if="selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed') && selectedOrder.interception.secondErrander" class="mt-3 bg-purple-50/70 border border-purple-200/80 rounded-xl p-3 space-y-2">
+            <div v-if="selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed') && selectedOrder.interception.secondErrander" class="mt-3 bg-purple-50/70 border border-purple-200/80 rounded-xl p-4 space-y-2">
               <div class="flex items-center justify-between">
                 <span class="text-[10px] font-extrabold text-purple-700 uppercase tracking-wider flex items-center gap-1">
                   🤝 Second Dispatcher Relay
@@ -674,7 +676,7 @@
           </div>
 
           <!-- 5. Task Specifics: Custom Errand Briefing OR Food Ordered Items -->
-          <div class="bg-white rounded-2xl p-4.5 border border-gray-200/80 shadow-xs space-y-3.5">
+          <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/80 shadow-xs space-y-4">
             <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
               <FileText class="w-3.5 h-3.5 text-gray-500" />
               {{ selectedOrder.type === 'custom_errand' ? 'Custom Errand Instructions & Items' : 'Ordered Items & Packs' }}
@@ -683,7 +685,7 @@
             <!-- A. Custom Errand Details -->
             <div v-if="selectedOrder.type === 'custom_errand'" class="space-y-4">
               <!-- Briefing description -->
-              <div class="bg-gray-50/80 rounded-xl p-3.5 border border-gray-200/60">
+              <div class="bg-gray-50/80 rounded-xl p-4 border border-gray-200/60">
                 <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Errand Instructions / Grocery List</span>
                 <p class="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed font-medium">
                   {{ selectedOrder.customDetails?.description || 'No detailed instructions provided.' }}
@@ -691,7 +693,7 @@
               </div>
 
               <!-- Estimated Items Budget -->
-              <div class="bg-gradient-to-r from-orange-50/60 to-amber-50/60 rounded-xl p-3 border border-orange-200/60 flex items-center justify-between">
+              <div class="bg-gradient-to-r from-orange-50/60 to-amber-50/60 rounded-xl p-4 border border-orange-200/60 flex items-center justify-between">
                 <div>
                   <span class="text-[10px] font-extrabold text-amber-900 uppercase tracking-wider block">Estimated Item Purchase Cost</span>
                   <p class="text-[11px] text-amber-800/80 mt-0.5">Disbursed to rider to purchase the requested goods</p>
@@ -702,7 +704,7 @@
               </div>
 
               <!-- Voice Note Player (if available) -->
-              <div v-if="selectedOrder.customDetails?.attachedVoiceNote" class="bg-indigo-50/60 border border-indigo-100 rounded-xl p-3.5 space-y-2">
+              <div v-if="selectedOrder.customDetails?.attachedVoiceNote" class="bg-indigo-50/60 border border-indigo-100 rounded-xl p-4 space-y-2">
                 <span class="text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider flex items-center gap-1.5">
                   <Volume2 class="w-3.5 h-3.5" />
                   Attached Customer Voice Note
@@ -748,7 +750,7 @@
                   <span class="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{{ selectedOrder.bids.length }} bids placed</span>
                 </div>
                 <div class="space-y-2">
-                  <div v-for="bid in selectedOrder.bids" :key="bid._id" class="p-2.5 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
+                  <div v-for="bid in selectedOrder.bids" :key="bid._id" class="p-3 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
                     <div class="flex items-center gap-2">
                       <div class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center">
                         {{ bid.errander?.firstName?.charAt(0) || 'R' }}
@@ -777,11 +779,11 @@
             <div v-else class="space-y-3">
               <!-- Render Packs -->
               <template v-if="selectedOrder.packs?.length">
-                <div v-for="pack in selectedOrder.packs" :key="pack.name" class="bg-gray-50/70 p-3 rounded-xl border border-gray-100 space-y-2">
-                  <span class="text-[10px] font-extrabold text-[#FF5C1A] uppercase tracking-wider block border-b border-gray-200/60 pb-1">{{ pack.name }}</span>
-                  <div v-for="item in pack.items" :key="item.name" class="flex items-start justify-between text-xs">
-                    <div class="flex items-start gap-2">
-                      <span class="font-extrabold text-[#FF5C1A] bg-[#FF5C1A]/10 px-1.5 py-0.2 rounded text-[11px]">{{ item.quantity }}x</span>
+                <div v-for="pack in selectedOrder.packs" :key="pack.name" class="bg-gray-50/70 p-4 rounded-xl border border-gray-100 space-y-2.5">
+                  <span class="text-[10px] font-extrabold text-[#FF5C1A] uppercase tracking-wider block border-b border-gray-200/60 pb-1.5">{{ pack.name }}</span>
+                  <div v-for="item in pack.items" :key="item.name" class="flex items-start justify-between text-xs py-1">
+                    <div class="flex items-start gap-2.5">
+                      <span class="font-extrabold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded text-[11px]">{{ item.quantity }}x</span>
                       <div>
                         <span class="font-bold text-gray-900">{{ item.name }}</span>
                         <div v-if="item.customizations?.length" class="space-y-0.5 mt-0.5">
@@ -798,9 +800,9 @@
 
               <!-- Fallback to raw items -->
               <div v-else class="space-y-2">
-                <div v-for="item in selectedOrder.items" :key="item._id" class="flex items-start justify-between text-xs p-2 bg-gray-50/50 rounded-xl border border-gray-100">
-                  <div class="flex items-start gap-2">
-                    <span class="font-extrabold text-[#FF5C1A] bg-[#FF5C1A]/10 px-1.5 py-0.2 rounded text-[11px]">{{ item.quantity }}x</span>
+                <div v-for="item in selectedOrder.items" :key="item._id" class="flex items-start justify-between text-xs p-3 bg-gray-50/60 rounded-xl border border-gray-100">
+                  <div class="flex items-start gap-2.5">
+                    <span class="font-extrabold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded text-[11px]">{{ item.quantity }}x</span>
                     <div>
                       <span class="font-bold text-gray-900">{{ item.name }}</span>
                       <div v-if="item.customizations?.length" class="space-y-0.5 mt-0.5">
@@ -816,42 +818,124 @@
             </div>
           </div>
 
-          <!-- 6. Stepped Order Milestones & History Timeline -->
-          <div class="bg-white rounded-2xl p-4.5 border border-gray-200/80 shadow-xs space-y-3.5" v-if="selectedOrder.statusHistory?.length">
+          <!-- 6. NEW: Order Fulfillment & Delivery Speed (Pickup ➔ Completed Calculation) -->
+          <div 
+            v-if="getOrderDuration(selectedOrder)" 
+            class="bg-gradient-to-br from-indigo-50/70 via-white to-emerald-50/40 rounded-2xl p-5 sm:p-6 border border-indigo-150 shadow-xs space-y-4"
+          >
+            <div class="flex items-center justify-between border-b border-indigo-100/70 pb-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-2xs">
+                  <Timer class="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 class="text-xs font-black text-gray-900 uppercase tracking-wider">
+                    Order Delivery & Fulfillment Speed
+                  </h4>
+                  <p class="text-[11px] text-gray-500 font-medium">Turnaround duration from pickup to completion</p>
+                </div>
+              </div>
+
+              <!-- Quick speed rating badge -->
+              <span 
+                v-if="getOrderDuration(selectedOrder).transitDuration"
+                class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border flex items-center gap-1.5 shadow-2xs"
+                :class="getOrderDuration(selectedOrder).transitDurationMs > 0 && getOrderDuration(selectedOrder).transitDurationMs <= 15 * 60 * 1000 
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+                  : 'bg-indigo-50 text-indigo-700 border-indigo-200'"
+              >
+                <span class="w-1.5 h-1.5 rounded-full" :class="getOrderDuration(selectedOrder).transitDurationMs > 0 && getOrderDuration(selectedOrder).transitDurationMs <= 15 * 60 * 1000 ? 'bg-emerald-500' : 'bg-indigo-500'"></span>
+                {{ getOrderDuration(selectedOrder).transitDurationMs > 0 && getOrderDuration(selectedOrder).transitDurationMs <= 15 * 60 * 1000 ? '⚡ Ultra Fast' : '⏱️ Standard Speed' }}
+              </span>
+            </div>
+
+            <!-- Primary Metric: Total Time from Pickup to Delivery -->
+            <div class="bg-white rounded-xl p-4 sm:p-4.5 border border-indigo-100 shadow-2xs flex items-center justify-between">
+              <div class="space-y-1">
+                <span class="text-[10px] font-extrabold text-indigo-900 uppercase tracking-widest flex items-center gap-1.5">
+                  <Zap class="w-3.5 h-3.5 text-indigo-600" />
+                  Total Transit Time (Pickup ➔ Completed)
+                </span>
+                <p class="text-xs text-gray-500 font-medium">
+                  <template v-if="getOrderDuration(selectedOrder).pickupTimeStr && getOrderDuration(selectedOrder).deliveredTimeStr">
+                    Picked up at <span class="font-bold text-gray-700">{{ getOrderDuration(selectedOrder).pickupTimeStr }}</span> • Completed at <span class="font-bold text-gray-700">{{ getOrderDuration(selectedOrder).deliveredTimeStr }}</span>
+                  </template>
+                  <template v-else-if="getOrderDuration(selectedOrder).isCurrentlyInTransit">
+                    Picked up at <span class="font-bold text-gray-700">{{ getOrderDuration(selectedOrder).pickupTimeStr }}</span> • Currently en-route
+                  </template>
+                  <template v-else>
+                    Calculated automatically once rider marks order picked up
+                  </template>
+                </p>
+              </div>
+
+              <div class="text-right pl-3 shrink-0">
+                <span class="text-xl sm:text-2xl font-black text-indigo-700 font-mono tracking-tight block">
+                  {{ getOrderDuration(selectedOrder).transitDuration || 'Pending' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Supporting Milestone Breakdown Grid -->
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <div class="bg-gray-50/80 rounded-xl p-3 sm:p-3.5 border border-gray-150 shadow-2xs">
+                <span class="text-[9px] font-extrabold text-gray-400 uppercase tracking-wider block mb-1">
+                  Placed ➔ Picked Up
+                </span>
+                <span class="text-xs font-black text-gray-800 font-mono">
+                  {{ getOrderDuration(selectedOrder).prepDuration || (selectedOrder.status === 'pending' ? 'In Queue' : 'N/A') }}
+                </span>
+              </div>
+
+              <div class="bg-gray-50/80 rounded-xl p-3 sm:p-3.5 border border-gray-150 shadow-2xs">
+                <span class="text-[9px] font-extrabold text-gray-400 uppercase tracking-wider block mb-1">
+                  Total Order Turnaround
+                </span>
+                <span class="text-xs font-black text-gray-800 font-mono">
+                  {{ getOrderDuration(selectedOrder).totalDuration || 'In Progress' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. Stepped Order Milestones & History Timeline with comfortable padding -->
+          <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/80 shadow-xs space-y-4" v-if="selectedOrder.statusHistory?.length">
             <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
               <Clock class="w-3.5 h-3.5 text-gray-500" />
               Order Journey Milestones
             </h4>
 
-            <div class="relative border-l-2 border-gray-200/80 ml-2 space-y-4 py-1">
-              <div v-for="(history, index) in selectedOrder.statusHistory" :key="index" class="pl-4 relative">
-                <div class="w-2.5 h-2.5 bg-[#FF5C1A] rounded-full absolute -left-[5.5px] top-1 border-2 border-white shadow-2xs"></div>
-                <div class="flex items-center justify-between">
-                  <p class="text-xs font-extrabold text-gray-900 capitalize">{{ history.status?.replace(/_/g, ' ') }}</p>
-                  <span class="text-[10px] font-medium text-gray-400">{{ new Date(history.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</span>
+            <div class="bg-gray-50/70 rounded-xl p-4 sm:p-4.5 border border-gray-100">
+              <div class="relative border-l-2 border-gray-250 ml-2 space-y-4 py-1">
+                <div v-for="(history, index) in selectedOrder.statusHistory" :key="index" class="pl-4 relative">
+                  <div class="w-2.5 h-2.5 bg-[#FF5C1A] rounded-full absolute -left-[5.5px] top-1 border-2 border-white shadow-2xs"></div>
+                  <div class="flex items-center justify-between">
+                    <p class="text-xs font-extrabold text-gray-900 capitalize">{{ history.status?.replace(/_/g, ' ') }}</p>
+                    <span class="text-[10px] font-medium text-gray-400">{{ new Date(history.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</span>
+                  </div>
+                  <p v-if="history.note" class="text-[11px] text-gray-600 mt-0.5 leading-tight">{{ history.note }}</p>
                 </div>
-                <p v-if="history.note" class="text-[11px] text-gray-600 mt-0.5 leading-tight">{{ history.note }}</p>
               </div>
             </div>
           </div>
 
-          <!-- 7. Billing Invoice & 3-Way Financial Split (Cleaned: NO PACKAGING ON CUSTOM ERRANDS) -->
-          <div class="bg-white rounded-2xl p-4.5 border border-gray-200/80 shadow-xs space-y-4">
-            <div class="flex items-center justify-between border-b border-gray-100 pb-2.5">
+          <!-- 8. Billing Invoice & 3-Way Financial Split with comfortable padding -->
+          <div class="bg-white rounded-2xl p-5 sm:p-6 border border-gray-200/80 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-3">
               <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
                 <Receipt class="w-3.5 h-3.5 text-gray-500" />
                 Billing & Financial Split Breakdown
               </h4>
               <span 
-                class="px-2 py-0.5 rounded-full font-black text-[9px] uppercase tracking-wider" 
+                class="px-2.5 py-1 rounded-full font-black text-[9px] uppercase tracking-wider" 
                 :class="selectedOrder.paymentStatus === 'paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'"
               >
                 {{ selectedOrder.paymentStatus || 'Pending' }}
               </span>
             </div>
 
-            <!-- Customer Receipt Breakdown -->
-            <div class="space-y-2 text-xs">
+            <!-- Customer Receipt Breakdown in dedicated padded container -->
+            <div class="bg-gray-50/70 rounded-xl p-4 sm:p-4.5 border border-gray-100 space-y-2.5 text-xs">
               <div class="flex justify-between items-center text-gray-600">
                 <span class="font-medium">
                   {{ selectedOrder.type === 'custom_errand' ? 'Estimated Items Cost' : 'Items Subtotal' }}
@@ -892,7 +976,7 @@
               </div>
 
               <!-- Total Customer Charged -->
-              <div class="pt-2 border-t border-gray-200 flex justify-between items-center">
+              <div class="pt-2.5 border-t border-gray-200 flex justify-between items-center">
                 <span class="text-sm font-black text-gray-900 uppercase">Total Paid by Customer</span>
                 <span class="text-lg font-black text-[#FF5C1A] font-mono">
                   ₦{{ Number(selectedOrder.total || selectedOrder.totalAmount || 0).toLocaleString() }}
@@ -908,8 +992,8 @@
               </div>
             </div>
 
-            <!-- 3-Way Financial Distribution Card -->
-            <div class="bg-gradient-to-br from-gray-50 to-orange-50/20 border border-gray-200 rounded-xl p-3.5 space-y-3">
+            <!-- 3-Way Financial Distribution Card with generous padding -->
+            <div class="bg-gradient-to-br from-gray-50 to-orange-50/20 border border-gray-200 rounded-xl p-4 sm:p-4.5 space-y-3.5">
               <div class="flex items-center justify-between">
                 <p class="text-[10px] font-extrabold text-gray-700 uppercase tracking-wider flex items-center gap-1">
                   💰 3-Way Revenue & Margin Distribution
@@ -1190,7 +1274,8 @@ import {
   ShoppingBag, DollarSign, Activity, Calendar, Store, Truck, CheckCircle, Clock, 
   XCircle, Loader2, X, MapPin, AlertTriangle, Copy, Check, Phone, ExternalLink, 
   ShieldCheck, UserCheck, PackageCheck, FileText, Sparkles, Navigation, Eye, 
-  Volume2, RefreshCw, Receipt, Tag, Users, Repeat, ArrowRight, CornerDownRight
+  Volume2, RefreshCw, Receipt, Tag, Users, Repeat, ArrowRight, CornerDownRight,
+  Timer, Zap, Hourglass
 } from 'lucide-vue-next';
 import SideDrawer from '@/components/ui/SideDrawer.vue';
 import SelectInput from '@/components/ui/SelectInput.vue';
@@ -1326,6 +1411,95 @@ const getOrderFinancials = (order: any) => {
     platformShare,
     itemCost: Number(order.subtotal || 0),
     deliveryFee
+  };
+};
+
+const getOrderDuration = (order: any) => {
+  if (!order) return null;
+
+  const history = order.statusHistory || [];
+  
+  // Find pickup event
+  const pickupEntry = history.find((h: any) => 
+    h.status === 'picked_up' || 
+    h.status?.toLowerCase().includes('picked') ||
+    h.note?.toLowerCase().includes('picked up')
+  ) || history.find((h: any) => h.status === 'in_transit');
+
+  // Find delivery event
+  const deliveredEntry = history.find((h: any) => 
+    h.status === 'delivered' || 
+    h.status === 'completed' ||
+    h.status?.toLowerCase().includes('deliver') ||
+    h.note?.toLowerCase().includes('delivered')
+  );
+
+  const pickupTime = pickupEntry ? new Date(pickupEntry.timestamp) : (order.pickedUpAt ? new Date(order.pickedUpAt) : null);
+  const deliveredTime = deliveredEntry ? new Date(deliveredEntry.timestamp) : (order.deliveredAt ? new Date(order.deliveredAt) : (order.status === 'delivered' && order.updatedAt ? new Date(order.updatedAt) : null));
+  const createdTime = order.createdAt ? new Date(order.createdAt) : (history[0] ? new Date(history[0].timestamp) : null);
+
+  const formatDuration = (ms: number) => {
+    if (ms <= 0) return '< 1 min';
+    const totalSeconds = Math.floor(ms / 1000);
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const seconds = totalSeconds % 60;
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+    if (minutes > 0) {
+      if (minutes < 5 && seconds > 0) {
+        return `${minutes}m ${seconds}s`;
+      }
+      return `${minutes} min${minutes > 1 ? 's' : ''}`;
+    }
+    return `${totalSeconds}s`;
+  };
+
+  // Transit Duration (Pickup -> Delivered)
+  let transitDuration = null;
+  let transitDurationMs = 0;
+  let isCurrentlyInTransit = false;
+
+  if (pickupTime && deliveredTime) {
+    transitDurationMs = Math.max(0, deliveredTime.getTime() - pickupTime.getTime());
+    transitDuration = formatDuration(transitDurationMs);
+  } else if (pickupTime && ['picked_up', 'in_transit'].includes(order.status)) {
+    isCurrentlyInTransit = true;
+    const elapsedMs = Math.max(0, Date.now() - pickupTime.getTime());
+    transitDuration = `${formatDuration(elapsedMs)} (In Transit)`;
+  }
+
+  // Total Duration (Placed -> Delivered)
+  let totalDuration = null;
+  let totalDurationMs = 0;
+  if (createdTime && deliveredTime) {
+    totalDurationMs = Math.max(0, deliveredTime.getTime() - createdTime.getTime());
+    totalDuration = formatDuration(totalDurationMs);
+  } else if (createdTime && order.status !== 'delivered' && order.status !== 'cancelled') {
+    const elapsedTotal = Math.max(0, Date.now() - createdTime.getTime());
+    totalDuration = `${formatDuration(elapsedTotal)} (Ongoing)`;
+  }
+
+  // Prep Duration (Placed -> Picked Up)
+  let prepDuration = null;
+  if (createdTime && pickupTime) {
+    const prepMs = Math.max(0, pickupTime.getTime() - createdTime.getTime());
+    prepDuration = formatDuration(prepMs);
+  }
+
+  return {
+    hasPickup: !!pickupTime,
+    hasDelivered: !!deliveredTime,
+    isCurrentlyInTransit,
+    pickupTimeStr: pickupTime ? pickupTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : null,
+    deliveredTimeStr: deliveredTime ? deliveredTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : null,
+    transitDuration,
+    transitDurationMs,
+    totalDuration,
+    prepDuration
   };
 };
 

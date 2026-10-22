@@ -271,6 +271,86 @@
           </div>
         </div>
 
+        <!-- Order Fulfillment & Delivery Speed (Pickup ➔ Completed Calculation) -->
+        <div 
+          v-if="getOrderDuration(order)" 
+          class="bg-gradient-to-br from-indigo-50/70 via-white to-emerald-50/40 rounded-2xl p-4 sm:p-5 border border-indigo-150 shadow-xs space-y-3 mt-6"
+        >
+          <div class="flex items-center justify-between border-b border-indigo-100/70 pb-2.5">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-2xs">
+                <Timer class="w-4 h-4" />
+              </div>
+              <div>
+                <h4 class="text-xs font-black text-gray-900 uppercase tracking-wider">
+                  Order Delivery Speed
+                </h4>
+                <p class="text-[10px] text-gray-500 font-medium">From pickup to completion</p>
+              </div>
+            </div>
+
+            <!-- Speed badge -->
+            <span 
+              v-if="getOrderDuration(order)?.transitDuration"
+              class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border flex items-center gap-1 shadow-2xs"
+              :class="(getOrderDuration(order)?.transitDurationMs || 0) > 0 && (getOrderDuration(order)?.transitDurationMs || 0) <= 15 * 60 * 1000 
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+                : 'bg-indigo-50 text-indigo-700 border-indigo-200'"
+            >
+              <span class="w-1.5 h-1.5 rounded-full" :class="(getOrderDuration(order)?.transitDurationMs || 0) > 0 && (getOrderDuration(order)?.transitDurationMs || 0) <= 15 * 60 * 1000 ? 'bg-emerald-500' : 'bg-indigo-500'"></span>
+              {{ (getOrderDuration(order)?.transitDurationMs || 0) > 0 && (getOrderDuration(order)?.transitDurationMs || 0) <= 15 * 60 * 1000 ? '⚡ Ultra Fast' : '⏱️ Standard Speed' }}
+            </span>
+          </div>
+
+          <!-- Primary Metric: Total Time from Pickup to Delivery -->
+          <div class="bg-white rounded-xl p-3.5 border border-indigo-100 shadow-2xs flex items-center justify-between">
+            <div class="space-y-0.5">
+              <span class="text-[9px] font-extrabold text-indigo-900 uppercase tracking-widest flex items-center gap-1">
+                <Zap class="w-3 h-3 text-indigo-600" />
+                Transit Time (Pickup ➔ Completed)
+              </span>
+              <p class="text-[11px] text-gray-500 font-medium">
+                <template v-if="getOrderDuration(order)?.pickupTimeStr && getOrderDuration(order)?.deliveredTimeStr">
+                  Picked up at <span class="font-bold text-gray-700">{{ getOrderDuration(order)?.pickupTimeStr }}</span> • Completed at <span class="font-bold text-gray-700">{{ getOrderDuration(order)?.deliveredTimeStr }}</span>
+                </template>
+                <template v-else-if="getOrderDuration(order)?.isCurrentlyInTransit">
+                  Picked up at <span class="font-bold text-gray-700">{{ getOrderDuration(order)?.pickupTimeStr }}</span> • Currently en-route
+                </template>
+                <template v-else>
+                  Calculated automatically once marked picked up
+                </template>
+              </p>
+            </div>
+
+            <div class="text-right pl-3 shrink-0">
+              <span class="text-lg sm:text-xl font-black text-indigo-700 font-mono tracking-tight block">
+                {{ getOrderDuration(order)?.transitDuration || 'Pending' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Secondary Metrics -->
+          <div class="grid grid-cols-2 gap-2.5 pt-0.5">
+            <div class="bg-gray-50/80 rounded-lg p-2.5 border border-gray-150 shadow-2xs">
+              <span class="text-[9px] font-extrabold text-gray-400 uppercase tracking-wider block mb-0.5">
+                Placed ➔ Picked Up
+              </span>
+              <span class="text-[11px] font-black text-gray-800 font-mono">
+                {{ getOrderDuration(order)?.prepDuration || (order.status === 'pending' ? 'In Queue' : 'N/A') }}
+              </span>
+            </div>
+
+            <div class="bg-gray-50/80 rounded-lg p-2.5 border border-gray-150 shadow-2xs">
+              <span class="text-[9px] font-extrabold text-gray-400 uppercase tracking-wider block mb-0.5">
+                Total Turnaround
+              </span>
+              <span class="text-[11px] font-black text-gray-800 font-mono">
+                {{ getOrderDuration(order)?.totalDuration || 'In Progress' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
         <!-- Payment & Billing -->
         <div class="space-y-4 mt-6">
           <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2 flex justify-between items-center">
@@ -331,6 +411,7 @@
 
 <script setup lang="ts">
 import SideDrawer from '@/components/ui/SideDrawer.vue';
+import { Timer, Zap } from 'lucide-vue-next';
 
 defineProps<{
   isOpen: boolean;
@@ -341,19 +422,104 @@ const emit = defineEmits(['close', 'takeAction']);
 
 const close = () => emit('close');
 
+const getOrderDuration = (order: any) => {
+  if (!order) return null;
+
+  const history = order.statusHistory || [];
+  
+  // Find pickup event
+  const pickupEntry = history.find((h: any) => 
+    h.status === 'picked_up' || 
+    h.status?.toLowerCase().includes('picked') ||
+    h.note?.toLowerCase().includes('picked up')
+  ) || history.find((h: any) => h.status === 'in_transit');
+
+  // Find delivery event
+  const deliveredEntry = history.find((h: any) => 
+    h.status === 'delivered' || 
+    h.status === 'completed' ||
+    h.status?.toLowerCase().includes('deliver') ||
+    h.note?.toLowerCase().includes('delivered')
+  );
+
+  const pickupTime = pickupEntry ? new Date(pickupEntry.timestamp) : (order.pickedUpAt ? new Date(order.pickedUpAt) : null);
+  const deliveredTime = deliveredEntry ? new Date(deliveredEntry.timestamp) : (order.deliveredAt ? new Date(order.deliveredAt) : (order.status === 'delivered' && order.updatedAt ? new Date(order.updatedAt) : null));
+  const createdTime = order.createdAt ? new Date(order.createdAt) : (history[0] ? new Date(history[0].timestamp) : null);
+
+  const formatDuration = (ms: number) => {
+    if (ms <= 0) return '< 1 min';
+    const totalSeconds = Math.floor(ms / 1000);
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const seconds = totalSeconds % 60;
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+    if (minutes > 0) {
+      if (minutes < 5 && seconds > 0) {
+        return `${minutes}m ${seconds}s`;
+      }
+      return `${minutes} min${minutes > 1 ? 's' : ''}`;
+    }
+    return `${totalSeconds}s`;
+  };
+
+  // Transit Duration (Pickup -> Delivered)
+  let transitDuration = null;
+  let transitDurationMs = 0;
+  let isCurrentlyInTransit = false;
+
+  if (pickupTime && deliveredTime) {
+    transitDurationMs = Math.max(0, deliveredTime.getTime() - pickupTime.getTime());
+    transitDuration = formatDuration(transitDurationMs);
+  } else if (pickupTime && ['picked_up', 'in_transit'].includes(order.status)) {
+    isCurrentlyInTransit = true;
+    const elapsedMs = Math.max(0, Date.now() - pickupTime.getTime());
+    transitDuration = `${formatDuration(elapsedMs)} (In Transit)`;
+  }
+
+  // Total Duration (Placed -> Delivered)
+  let totalDuration = null;
+  let totalDurationMs = 0;
+  if (createdTime && deliveredTime) {
+    totalDurationMs = Math.max(0, deliveredTime.getTime() - createdTime.getTime());
+    totalDuration = formatDuration(totalDurationMs);
+  } else if (createdTime && order.status !== 'delivered' && order.status !== 'cancelled') {
+    const elapsedTotal = Math.max(0, Date.now() - createdTime.getTime());
+    totalDuration = `${formatDuration(elapsedTotal)} (Ongoing)`;
+  }
+
+  // Prep Duration (Placed -> Picked Up)
+  let prepDuration = null;
+  if (createdTime && pickupTime) {
+    const prepMs = Math.max(0, pickupTime.getTime() - createdTime.getTime());
+    prepDuration = formatDuration(prepMs);
+  }
+
+  return {
+    hasPickup: !!pickupTime,
+    hasDelivered: !!deliveredTime,
+    isCurrentlyInTransit,
+    pickupTimeStr: pickupTime ? pickupTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : null,
+    deliveredTimeStr: deliveredTime ? deliveredTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : null,
+    transitDuration,
+    transitDurationMs,
+    totalDuration,
+    prepDuration
+  };
+};
+
 const formatWhatsAppNumber = (phone: string) => {
   if (!phone) return '';
-  // Remove spaces, dashes, parentheses
   let formatted = phone.replace(/[\s-()]/g, '');
-  // If it starts with 0, replace with 234
   if (formatted.startsWith('0')) {
     formatted = '234' + formatted.substring(1);
   }
-  // If it doesn't start with + or 234, assuming Nigerian number
   if (!formatted.startsWith('+') && !formatted.startsWith('234')) {
     formatted = '234' + formatted;
   }
-  // Remove the + if present for WhatsApp link
   return formatted.replace('+', '');
 };
 </script>
