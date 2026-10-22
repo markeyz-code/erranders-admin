@@ -8,11 +8,21 @@
       <div 
         v-if="isOpen" 
         class="fixed right-0 md:right-4 top-0 md:top-4 bottom-0 md:bottom-4 z-[101] bg-white shadow-2xl flex flex-col md:rounded-[1.25rem]"
-        :class="size === 'full' ? 'w-full md:w-[calc(100%-2rem)]' : 'w-full md:w-[460px]'"
+        :class="[
+          size === 'full' ? 'w-full md:w-[calc(100%-2rem)]' :
+          size === 'xl' ? 'w-full md:w-[720px]' :
+          size === 'lg' ? 'w-full md:w-[620px]' :
+          size === 'md' ? 'w-full md:w-[520px]' :
+          'w-full md:w-[460px]'
+        ]"
       >
         <!-- Header -->
-        <div class="flex items-center justify-end p-6 pb-2">
-          <button @click="close" class="p-2 rounded-full hover:bg-gray-100 text-gray-500 transition-colors">
+        <div class="flex items-center justify-between p-6 pb-2">
+          <div class="flex items-center gap-2">
+            <h3 v-if="title" class="text-base font-bold text-gray-900">{{ title }}</h3>
+            <slot name="header-left"></slot>
+          </div>
+          <button @click="close" class="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition-colors ml-auto" title="Close drawer">
             <X class="w-5 h-5" />
           </button>
         </div>
@@ -32,7 +42,8 @@ import { onUnmounted, watch } from 'vue';
 
 const props = withDefaults(defineProps<{ 
   isOpen: boolean;
-  size?: 'default' | 'full';
+  size?: 'default' | 'md' | 'lg' | 'xl' | 'full';
+  title?: string;
 }>(), {
   size: 'default'
 });

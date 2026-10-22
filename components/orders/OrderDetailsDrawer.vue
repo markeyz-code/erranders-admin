@@ -1,5 +1,5 @@
 <template>
-  <SideDrawer :isOpen="isOpen" @close="close">
+  <SideDrawer :isOpen="isOpen" size="lg" @close="close">
     <template v-if="order">
       <!-- Header Profile -->
       <div class="flex flex-col items-center justify-center pt-8 pb-6 border-b border-gray-100">
@@ -283,7 +283,7 @@
               <span class="text-gray-500 font-semibold uppercase tracking-wide text-[10px]">Items Subtotal</span>
               <span class="text-gray-900 font-bold">₦{{ Number(order.subtotal || 0).toLocaleString() }}</span>
             </div>
-            <div class="flex justify-between items-center text-sm" v-if="order.packagingFee">
+            <div class="flex justify-between items-center text-sm" v-if="order.type !== 'custom_errand' && Number(order.packagingFee) > 0">
               <span class="text-gray-500 font-semibold uppercase tracking-wide text-[10px]">Packaging</span>
               <span class="text-gray-900 font-bold">₦{{ Number(order.packagingFee || 0).toLocaleString() }}</span>
             </div>

@@ -381,353 +381,639 @@
       </div>
     </div>
 
-    <!-- SideDrawer Redesign with Enhanced Tracking -->
-    <SideDrawer :isOpen="!!selectedOrder" @close="selectedOrder = null">
-      <template v-if="selectedOrder">
-        <!-- Header Profile -->
-        <div class="flex flex-col items-center justify-center pt-8 pb-6 border-b border-gray-100">
-          <div class="relative mb-3">
-            <div class="w-16 h-16 rounded-2xl bg-gray-900 flex items-center justify-center text-white text-xl font-bold">
-              {{ selectedOrder.customer?.firstName?.[0] || selectedOrder.user?.firstName?.[0] || '?' }}
-            </div>
-          </div>
-          
-          <h3 class="text-lg font-semibold text-gray-900 font-heading">{{ selectedOrder.customer?.firstName || selectedOrder.user?.firstName }} {{ selectedOrder.customer?.lastName || selectedOrder.user?.lastName }}</h3>
-          <p class="text-sm font-medium text-gray-500 mb-4">{{ selectedOrder.customer?.email || selectedOrder.user?.email }}</p>
-          
-          <div class="flex items-center justify-between w-4/5 bg-white rounded-lg border border-gray-50 divide-x divide-gray-100">
-            <div class="text-center flex-1 py-3">
-              <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-0.5">Total</p>
-              <p class="text-sm font-bold text-gray-900">₦{{ Number(selectedOrder.total || selectedOrder.totalAmount || 0).toLocaleString() }}</p>
-            </div>
-            <div class="text-center flex-1 py-3">
-              <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-0.5">Date</p>
-              <p class="text-sm font-semibold text-gray-900">{{ new Date(selectedOrder.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}</p>
-            </div>
-          </div>
+    <!-- SideDrawer Redesign with Enhanced Tracking & Rich Details -->
+    <SideDrawer :isOpen="!!selectedOrder" size="lg" @close="selectedOrder = null">
+      <template #header-left v-if="selectedOrder">
+        <div class="flex items-center gap-2">
+          <span class="font-mono text-sm font-extrabold text-gray-900 bg-gray-100 hover:bg-gray-200/80 px-2.5 py-1 rounded-lg border border-gray-200 transition-colors flex items-center gap-1.5 cursor-pointer" @click="copyText(selectedOrder.orderNumber || selectedOrder._id, 'Order ID')" title="Click to copy Order ID">
+            <span>{{ selectedOrder.orderNumber || selectedOrder._id }}</span>
+            <component :is="copiedField === (selectedOrder.orderNumber || selectedOrder._id) ? Check : Copy" class="w-3.5 h-3.5 text-gray-500" />
+          </span>
+          <span 
+            class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1.5 border"
+            :class="{
+              'bg-emerald-50 text-emerald-700 border-emerald-200': selectedOrder.status === 'delivered',
+              'bg-blue-50 text-blue-700 border-blue-200': selectedOrder.status === 'in_transit' || selectedOrder.status === 'picked_up',
+              'bg-amber-50 text-amber-700 border-amber-200': ['pending', 'negotiating', 'preparing', 'confirmed', 'ready_for_pickup'].includes(selectedOrder.status),
+              'bg-purple-50 text-purple-700 border-purple-200': selectedOrder.status === 'interception_in_progress',
+              'bg-red-50 text-red-700 border-red-200': selectedOrder.status === 'cancelled'
+            }"
+          >
+            <span class="w-1.5 h-1.5 rounded-full animate-pulse" :class="{
+              'bg-emerald-500': selectedOrder.status === 'delivered',
+              'bg-blue-500': selectedOrder.status === 'in_transit' || selectedOrder.status === 'picked_up',
+              'bg-amber-500': ['pending', 'negotiating', 'preparing', 'confirmed', 'ready_for_pickup'].includes(selectedOrder.status),
+              'bg-purple-500': selectedOrder.status === 'interception_in_progress',
+              'bg-red-500': selectedOrder.status === 'cancelled'
+            }"></span>
+            {{ selectedOrder.status?.replace(/_/g, ' ') }}
+          </span>
         </div>
+      </template>
 
-        <!-- Details Section -->
-        <div class="py-6 space-y-6 pb-24 bg-gray-50/30 -mx-6 px-6">
-          
-          <!-- Order ID & Tracking -->
-          <div class="space-y-4">
-            <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2">
-              Tracking & Details
+      <template v-if="selectedOrder">
+        <div class="space-y-6 pt-2 pb-24">
+
+          <!-- 1. Customer & Campus Profile Card -->
+          <div class="bg-gradient-to-br from-white via-gray-50/50 to-orange-50/30 rounded-2xl p-5 border border-gray-200/80 shadow-xs relative overflow-hidden">
+            <div class="absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br from-orange-400/10 to-transparent rounded-full blur-xl pointer-events-none"></div>
+
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex items-center gap-3.5 min-w-0">
+                <div class="relative shrink-0">
+                  <img 
+                    v-if="selectedOrder.customer?.avatar || selectedOrder.user?.avatar" 
+                    :src="selectedOrder.customer?.avatar || selectedOrder.user?.avatar" 
+                    class="w-14 h-14 rounded-2xl object-cover ring-2 ring-white shadow-sm"
+                  />
+                  <div 
+                    v-else 
+                    class="w-14 h-14 rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 text-white font-extrabold text-xl flex items-center justify-center ring-2 ring-white shadow-sm"
+                  >
+                    {{ selectedOrder.customer?.firstName?.[0] || selectedOrder.user?.firstName?.[0] || 'C' }}
+                  </div>
+                  <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white ring-1 ring-emerald-600/20" title="Active Customer"></div>
+                </div>
+
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <h3 class="text-base font-extrabold text-gray-900 truncate font-heading">
+                      {{ selectedOrder.customer?.firstName || selectedOrder.user?.firstName }} {{ selectedOrder.customer?.lastName || selectedOrder.user?.lastName }}
+                    </h3>
+                    <span v-if="selectedOrder.institution?.name || selectedOrder.institution" class="text-[10px] font-bold text-gray-600 bg-gray-100/90 px-2 py-0.5 rounded-md border border-gray-200/60 flex items-center gap-1">
+                      🏛️ {{ selectedOrder.institution?.name || selectedOrder.institution }}
+                    </span>
+                  </div>
+                  <p class="text-xs text-gray-500 truncate flex items-center gap-1.5 mt-0.5">
+                    <span>{{ selectedOrder.customer?.email || selectedOrder.user?.email || 'No email provided' }}</span>
+                    <button 
+                      v-if="selectedOrder.customer?.email || selectedOrder.user?.email" 
+                      @click="copyText(selectedOrder.customer?.email || selectedOrder.user?.email, 'Customer Email')" 
+                      class="text-gray-400 hover:text-gray-600 transition-colors"
+                      title="Copy email"
+                    >
+                      <Copy class="w-3 h-3" />
+                    </button>
+                  </p>
+                </div>
+              </div>
+
+              <!-- Customer Direct Contact Pill Actions -->
+              <div class="flex items-center gap-1.5 shrink-0">
+                <a 
+                  v-if="(selectedOrder.customer || selectedOrder.user)?.phone" 
+                  :href="`https://wa.me/${formatWhatsAppNumber((selectedOrder.customer || selectedOrder.user)?.phone)}?text=Hello%20${encodeURIComponent(selectedOrder.customer?.firstName || 'there')},%20regarding%20your%20Erranders%20order%20${selectedOrder.orderNumber || ''}...`" 
+                  target="_blank" 
+                  class="p-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-600 hover:text-emerald-700 transition-all border border-emerald-200/80 shadow-2xs hover:scale-105 active:scale-95 flex items-center justify-center"
+                  title="Chat on WhatsApp"
+                >
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                </a>
+                <a 
+                  v-if="(selectedOrder.customer || selectedOrder.user)?.phone" 
+                  :href="`tel:${(selectedOrder.customer || selectedOrder.user)?.phone}`" 
+                  class="p-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all border border-gray-200/80 shadow-2xs hover:scale-105 active:scale-95 flex items-center justify-center"
+                  title="Call Phone"
+                >
+                  <Phone class="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            <!-- Quick Metrics Grid -->
+            <div class="grid grid-cols-3 gap-2.5 mt-4 pt-3.5 border-t border-gray-200/60">
+              <div class="bg-white/80 rounded-xl p-2.5 border border-gray-100">
+                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">Total Paid</span>
+                <span class="text-sm font-black text-gray-900 font-mono">₦{{ Number(selectedOrder.total || selectedOrder.totalAmount || 0).toLocaleString() }}</span>
+              </div>
+              <div class="bg-white/80 rounded-xl p-2.5 border border-gray-100">
+                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">Order Type</span>
+                <span 
+                  class="text-[11px] font-black uppercase tracking-tight block truncate"
+                  :class="selectedOrder.type === 'custom_errand' ? 'text-amber-700' : 'text-[#FF5C1A]'"
+                >
+                  {{ selectedOrder.type === 'custom_errand' ? 'Custom Errand' : (selectedOrder.type?.replace(/_/g, ' ') || 'Food Delivery') }}
+                </span>
+              </div>
+              <div class="bg-white/80 rounded-xl p-2.5 border border-gray-100">
+                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">Order Date</span>
+                <span class="text-[11px] font-bold text-gray-800 block truncate">
+                  {{ new Date(selectedOrder.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Security Delivery PIN & Verification Banner -->
+          <div 
+            v-if="selectedOrder.uniqueCode || selectedOrder.deliveryPin" 
+            class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 border border-amber-200/90 rounded-2xl p-4 flex items-center justify-between shadow-xs"
+          >
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-xs shrink-0">
+                <ShieldCheck class="w-5 h-5" />
+              </div>
+              <div>
+                <span class="text-[10px] font-black text-amber-800 uppercase tracking-widest block">Delivery Handover PIN</span>
+                <p class="text-[11px] text-amber-900/80 leading-tight mt-0.5">Customer shares this 6-digit code with the rider upon arrival</p>
+              </div>
+            </div>
+
+            <button 
+              @click="copyText(selectedOrder.uniqueCode || selectedOrder.deliveryPin, 'Delivery PIN')"
+              class="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-amber-300/80 shadow-xs hover:bg-amber-50/50 transition-all active:scale-95 shrink-0"
+              title="Copy PIN"
+            >
+              <span class="font-mono text-base font-black text-amber-900 tracking-wider">
+                {{ selectedOrder.uniqueCode || selectedOrder.deliveryPin }}
+              </span>
+              <component :is="copiedField === (selectedOrder.uniqueCode || selectedOrder.deliveryPin) ? Check : Copy" class="w-4 h-4 text-amber-700" />
+            </button>
+          </div>
+
+          <!-- 3. Journey Route (Origin ➔ Destination) -->
+          <div class="bg-white rounded-2xl p-4.5 border border-gray-200/80 shadow-xs space-y-3.5">
+            <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+              <Navigation class="w-3.5 h-3.5 text-gray-500" />
+              Route Waypoints
             </h4>
-            <div class="grid grid-cols-2 gap-y-4 gap-x-4 text-sm px-2">
-              <div>
-                <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Order ID</span>
-                <span class="text-sm font-bold text-gray-900 font-mono">{{ selectedOrder.orderNumber || selectedOrder._id }}</span>
+
+            <div class="relative pl-6 space-y-4">
+              <!-- Connecting dashed line -->
+              <div class="absolute left-2.5 top-2.5 bottom-3 w-0.5 border-l-2 border-dashed border-gray-200"></div>
+
+              <!-- Pickup Origin -->
+              <div class="relative">
+                <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 border-2 border-white absolute -left-6 top-0 flex items-center justify-center text-[10px] font-bold shadow-2xs">
+                  A
+                </div>
+                <div>
+                  <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">
+                    {{ selectedOrder.type === 'custom_errand' ? 'Pickup Location / Market Store' : 'Vendor Kitchen' }}
+                  </span>
+                  <p class="text-xs font-bold text-gray-900 leading-snug">
+                    <template v-if="selectedOrder.type === 'custom_errand'">
+                      {{ selectedOrder.customDetails?.pickupLocation || 'Specified in errand briefing' }}
+                    </template>
+                    <template v-else>
+                      {{ selectedOrder.vendor?.storeName || 'Campus Cafeteria' }}
+                      <span v-if="selectedOrder.vendor?.address" class="text-gray-500 font-normal"> ({{ selectedOrder.vendor.address }})</span>
+                    </template>
+                  </p>
+                </div>
               </div>
-              <div>
-                <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Order Type</span>
-                <span class="text-sm font-bold text-[#FF5C1A] uppercase tracking-wide">{{ selectedOrder.type?.replace('_', ' ') || 'standard' }}</span>
+
+              <!-- Drop-off Destination -->
+              <div class="relative">
+                <div class="w-5 h-5 rounded-full bg-orange-100 text-[#FF5C1A] border-2 border-white absolute -left-6 top-0 flex items-center justify-center text-[10px] font-bold shadow-2xs">
+                  B
+                </div>
+                <div>
+                  <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">Delivery Destination</span>
+                  <p class="text-xs font-bold text-gray-900 leading-snug">
+                    {{ selectedOrder.deliveryAddress || selectedOrder.specificAddress || selectedOrder.shippingAddress || selectedOrder.customDetails?.dropoffLocation || 'Campus Delivery Address' }}
+                  </p>
+                </div>
               </div>
-              <div>
-                <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Current Status</span>
-                <div class="capitalize text-sm font-bold px-2 py-1 bg-gray-100 rounded inline-block">{{ selectedOrder.status }}</div>
+            </div>
+          </div>
+
+          <!-- 4. Assigned Errand Ninja (Dispatcher) Card -->
+          <div class="bg-white rounded-2xl p-4.5 border border-gray-200/80 shadow-xs space-y-3.5">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-2.5">
+              <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                <Truck class="w-3.5 h-3.5 text-gray-500" />
+                {{ selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed') ? 'Dispatchers (Intercepted Relay)' : 'Assigned Errand Ninja' }}
+              </h4>
+              <button 
+                v-if="hasPermission('can_reassign_order')" 
+                @click="openModal(selectedOrder, 'dispatcher')" 
+                class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1"
+              >
+                <RefreshCw class="w-3 h-3" />
+                {{ selectedOrder.errander ? 'Reassign' : 'Assign Ninja' }}
+              </button>
+            </div>
+
+            <!-- If Errand Ninja Assigned -->
+            <div v-if="selectedOrder.errander" class="flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-700 font-extrabold text-base flex items-center justify-center shrink-0">
+                  {{ selectedOrder.errander?.firstName?.[0] || 'N' }}
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2">
+                    <p class="text-sm font-extrabold text-gray-900 truncate">
+                      {{ selectedOrder.errander?.firstName }} {{ selectedOrder.errander?.lastName }}
+                    </p>
+                    <span class="text-[9px] font-extrabold bg-indigo-50 text-indigo-700 px-1.5 py-0.2 rounded border border-indigo-100 uppercase">Ninja</span>
+                  </div>
+                  <p class="text-xs text-gray-500 font-medium truncate mt-0.5">
+                    {{ selectedOrder.errander?.phone || 'No phone' }}
+                    <span v-if="selectedOrder.errander?.vehicleType" class="capitalize text-gray-400">
+                      • {{ selectedOrder.errander.vehicleType.replace(/_/g, ' ') }} {{ selectedOrder.errander.plateNumber ? `(${selectedOrder.errander.plateNumber})` : '' }}
+                    </span>
+                  </p>
+                </div>
               </div>
-              <div v-if="selectedOrder.uniqueCode">
-                <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Delivery PIN</span>
-                <span class="text-sm font-black text-[#FF5C1A] tracking-wider">{{ selectedOrder.uniqueCode }}</span>
+
+              <div class="flex items-center gap-2 shrink-0">
+                <a 
+                  v-if="selectedOrder.errander?.phone" 
+                  :href="`https://wa.me/${formatWhatsAppNumber(selectedOrder.errander.phone)}`" 
+                  target="_blank"
+                  class="p-2 rounded-xl bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200 transition-colors"
+                  title="WhatsApp Rider"
+                >
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                </a>
+                <a 
+                  v-if="selectedOrder.errander?.phone" 
+                  :href="`tel:${selectedOrder.errander.phone}`" 
+                  class="p-2 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200 transition-colors"
+                  title="Call Rider"
+                >
+                  <Phone class="w-4 h-4" />
+                </a>
               </div>
-              <div class="col-span-2 mt-2" v-if="selectedOrder.statusHistory?.length">
-                <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-3">Order Timeline</span>
-                <div class="relative border-l border-gray-200 ml-2 space-y-4">
-                  <div v-for="(history, index) in selectedOrder.statusHistory" :key="index" class="pl-4 relative">
-                    <div class="w-2.5 h-2.5 bg-[#FF5C1A] rounded-full absolute -left-[5px] top-1 border border-white"></div>
-                    <p class="text-sm font-bold text-gray-900 capitalize">{{ history.status?.replace(/_/g, ' ') }}</p>
-                    <p class="text-[10px] font-medium text-gray-500">{{ new Date(history.timestamp).toLocaleString() }}</p>
-                    <p v-if="history.note" class="text-[10px] text-gray-600 mt-1 ">{{ history.note }}</p>
+            </div>
+
+            <!-- If Not Assigned -->
+            <div v-else class="bg-amber-50/70 border border-amber-200/70 rounded-xl p-3 flex items-center justify-between">
+              <div class="flex items-center gap-2 text-amber-800 text-xs font-bold">
+                <AlertTriangle class="w-4 h-4 text-amber-600 shrink-0" />
+                <span>No Errand Ninja assigned yet</span>
+              </div>
+              <button 
+                @click="openModal(selectedOrder, 'dispatcher')" 
+                class="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg shadow-2xs transition-colors"
+              >
+                Assign Now
+              </button>
+            </div>
+
+            <!-- Interception Relay (if present) -->
+            <div v-if="selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed') && selectedOrder.interception.secondErrander" class="mt-3 bg-purple-50/70 border border-purple-200/80 rounded-xl p-3 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-extrabold text-purple-700 uppercase tracking-wider flex items-center gap-1">
+                  🤝 Second Dispatcher Relay
+                </span>
+                <span class="text-[9px] font-bold text-purple-700 bg-purple-100 px-1.5 py-0.5 rounded">40% Payout Split</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <span class="text-[10px] text-gray-400 font-bold block">Relay Rider</span>
+                  <span class="font-bold text-gray-900">{{ selectedOrder.interception.secondErrander?.firstName }} {{ selectedOrder.interception.secondErrander?.lastName }}</span>
+                </div>
+                <div>
+                  <span class="text-[10px] text-gray-400 font-bold block">Hand-off Point</span>
+                  <span class="font-bold text-gray-800">{{ selectedOrder.interception.point || 'Campus Landmark' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Task Specifics: Custom Errand Briefing OR Food Ordered Items -->
+          <div class="bg-white rounded-2xl p-4.5 border border-gray-200/80 shadow-xs space-y-3.5">
+            <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+              <FileText class="w-3.5 h-3.5 text-gray-500" />
+              {{ selectedOrder.type === 'custom_errand' ? 'Custom Errand Instructions & Items' : 'Ordered Items & Packs' }}
+            </h4>
+
+            <!-- A. Custom Errand Details -->
+            <div v-if="selectedOrder.type === 'custom_errand'" class="space-y-4">
+              <!-- Briefing description -->
+              <div class="bg-gray-50/80 rounded-xl p-3.5 border border-gray-200/60">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Errand Instructions / Grocery List</span>
+                <p class="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed font-medium">
+                  {{ selectedOrder.customDetails?.description || 'No detailed instructions provided.' }}
+                </p>
+              </div>
+
+              <!-- Estimated Items Budget -->
+              <div class="bg-gradient-to-r from-orange-50/60 to-amber-50/60 rounded-xl p-3 border border-orange-200/60 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] font-extrabold text-amber-900 uppercase tracking-wider block">Estimated Item Purchase Cost</span>
+                  <p class="text-[11px] text-amber-800/80 mt-0.5">Disbursed to rider to purchase the requested goods</p>
+                </div>
+                <span class="text-base font-black text-gray-900 font-mono">
+                  ₦{{ Number(selectedOrder.customDetails?.estimatedItemCost || selectedOrder.subtotal || 0).toLocaleString() }}
+                </span>
+              </div>
+
+              <!-- Voice Note Player (if available) -->
+              <div v-if="selectedOrder.customDetails?.attachedVoiceNote" class="bg-indigo-50/60 border border-indigo-100 rounded-xl p-3.5 space-y-2">
+                <span class="text-[10px] font-extrabold text-indigo-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <Volume2 class="w-3.5 h-3.5" />
+                  Attached Customer Voice Note
+                </span>
+                <audio controls class="w-full h-10 rounded-lg">
+                  <source :src="selectedOrder.customDetails.attachedVoiceNote" type="audio/mpeg">
+                  Your browser does not support the audio player.
+                </audio>
+              </div>
+
+              <!-- Attached Images (if available) -->
+              <div v-if="selectedOrder.customDetails?.attachedImage || (selectedOrder.customDetails?.attachedImages && selectedOrder.customDetails.attachedImages.length > 0)" class="space-y-2">
+                <span class="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider block">Attached Sample Photos / Receipts</span>
+                <div class="flex gap-2.5 flex-wrap">
+                  <div 
+                    v-if="selectedOrder.customDetails.attachedImage" 
+                    @click="previewImageUrl = selectedOrder.customDetails.attachedImage"
+                    class="w-20 h-20 rounded-xl overflow-hidden border border-gray-200 block group relative cursor-pointer shadow-2xs hover:scale-105 transition-all"
+                  >
+                    <img :src="selectedOrder.customDetails.attachedImage" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white">
+                      <Eye class="w-4 h-4" />
+                    </div>
+                  </div>
+                  <div 
+                    v-for="(img, idx) in selectedOrder.customDetails.attachedImages" 
+                    :key="idx" 
+                    @click="previewImageUrl = img"
+                    class="w-20 h-20 rounded-xl overflow-hidden border border-gray-200 block group relative cursor-pointer shadow-2xs hover:scale-105 transition-all"
+                  >
+                    <img :src="img" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white">
+                      <Eye class="w-4 h-4" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Negotiation Bids Timeline -->
+              <div v-if="selectedOrder.bids?.length > 0" class="pt-2 border-t border-gray-100 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-extrabold text-gray-500 uppercase tracking-wider">Errander Bids & Negotiation</span>
+                  <span class="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{{ selectedOrder.bids.length }} bids placed</span>
+                </div>
+                <div class="space-y-2">
+                  <div v-for="bid in selectedOrder.bids" :key="bid._id" class="p-2.5 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <div class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center">
+                        {{ bid.errander?.firstName?.charAt(0) || 'R' }}
+                      </div>
+                      <div>
+                        <p class="text-xs font-bold text-gray-900">{{ bid.errander?.firstName }} {{ bid.errander?.lastName }}</p>
+                        <p class="text-[10px] text-gray-400">{{ new Date(bid.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</p>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-xs font-black text-emerald-600 font-mono">₦{{ Number(bid.amount).toLocaleString() }}</p>
+                      <span class="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded" :class="{
+                        'bg-amber-100 text-amber-700': bid.status === 'pending',
+                        'bg-emerald-100 text-emerald-700': bid.status === 'accepted',
+                        'bg-red-100 text-red-700': bid.status === 'rejected'
+                      }">
+                        {{ bid.status }}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Customer Info -->
-          <div class="space-y-4 mt-6">
-            <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2 flex justify-between items-center">
-              Customer Information
-            </h4>
-            <div class="grid grid-cols-2 gap-y-4 gap-x-4 text-sm px-2">
-              <div>
-                <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Name</p>
-                <p class="font-bold text-gray-900">{{ selectedOrder.customer?.firstName || selectedOrder.user?.firstName }} {{ selectedOrder.customer?.lastName || selectedOrder.user?.lastName }}</p>
-              </div>
-              <div>
-                <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Phone</p>
-                <div class="flex items-center gap-2">
-                  <p class="font-bold text-gray-900">{{ selectedOrder.customer?.phone || selectedOrder.user?.phone || 'N/A' }}</p>
-                  <a v-if="(selectedOrder.customer || selectedOrder.user)?.phone" :href="`https://wa.me/${formatWhatsAppNumber((selectedOrder.customer || selectedOrder.user)?.phone)}?text=Hello, regarding your order ${selectedOrder.orderNumber || ''}, please be patient as we are working on it.`" target="_blank" class="w-6 h-6 rounded-full bg-green-50 text-green-500 flex items-center justify-center hover:bg-green-100 transition-colors" title="Chat on WhatsApp">
-                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                  </a>
-                </div>
-              </div>
-              <div class="col-span-2" v-if="selectedOrder.type === 'custom_errand'">
-                <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Pickup Address</p>
-                <p class="text-sm font-medium text-gray-700 leading-relaxed">{{ selectedOrder.customDetails?.pickupLocation || 'No pickup address provided' }}</p>
-              </div>
-              <div class="col-span-2">
-                <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Delivery Address</p>
-                <p class="text-sm font-medium text-gray-700 leading-relaxed">{{ selectedOrder.deliveryAddress || selectedOrder.specificAddress || selectedOrder.shippingAddress || 'No address provided' }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Errander Info -->
-          <div class="space-y-4 mt-6" v-if="selectedOrder.errander">
-            <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2 flex justify-between items-center">
-              {{ selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed') ? 'Dispatchers (Intercepted)' : 'Assigned Dispatcher' }}
-              <span v-if="selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed')" class="text-[9px] font-black text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-100">🤝 INTERCEPTED</span>
-            </h4>
-            <div class="grid grid-cols-2 gap-y-4 gap-x-4 text-sm px-2">
-              <div>
-                <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Name</p>
-                <p class="font-bold text-gray-900">{{ selectedOrder.errander?.firstName }} {{ selectedOrder.errander?.lastName }}</p>
-              </div>
-              <div>
-                <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Phone</p>
-                <p class="font-bold text-gray-900">{{ selectedOrder.errander?.phone || 'N/A' }}</p>
-              </div>
-              <div class="col-span-2">
-                <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Vehicle</p>
-                <p class="text-sm font-medium text-gray-700 leading-relaxed capitalize">{{ selectedOrder.errander?.vehicleType?.replace('_', ' ') || 'Not specified' }} {{ selectedOrder.errander?.plateNumber ? `(${selectedOrder.errander.plateNumber})` : '' }}</p>
-              </div>
-              <div v-if="selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed')" class="col-span-2">
-                <p class="text-[10px] font-semibold text-indigo-500 uppercase tracking-wide mb-1">💰 Payout (60%)</p>
-                <p class="text-sm font-black text-indigo-600">₦{{ Math.round((selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0) * 0.6).toLocaleString() }}</p>
-              </div>
-            </div>
-
-            <!-- Second Errander (Interception) -->
-            <div v-if="selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed') && selectedOrder.interception.secondErrander" class="mt-4 bg-purple-50 border border-purple-100 rounded-xl p-3">
-              <p class="text-[10px] font-bold text-purple-600 uppercase tracking-wider mb-3 flex items-center gap-1">🤝 Second Dispatcher (Hand-off)</p>
-              <div class="grid grid-cols-2 gap-y-3 gap-x-4 text-sm">
-                <div>
-                  <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Name</p>
-                  <p class="font-bold text-gray-900">{{ selectedOrder.interception.secondErrander?.firstName || 'N/A' }} {{ selectedOrder.interception.secondErrander?.lastName || '' }}</p>
-                </div>
-                <div>
-                  <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Phone</p>
-                  <p class="font-bold text-gray-900">{{ selectedOrder.interception.secondErrander?.phone || 'N/A' }}</p>
-                </div>
-                <div>
-                  <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Hand-off Point</p>
-                  <p class="text-sm font-medium text-gray-700">{{ selectedOrder.interception.point || 'N/A' }}</p>
-                </div>
-                <div>
-                  <p class="text-[10px] font-semibold text-purple-500 uppercase tracking-wide mb-1">💰 Payout (40%)</p>
-                  <p class="text-sm font-black text-purple-600">₦{{ Math.round((selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0) * 0.4).toLocaleString() }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Ordered Items or Custom Errand -->
-          <div class="space-y-4 mt-6" v-if="selectedOrder.type === 'custom_errand' || selectedOrder.packs?.length || selectedOrder.items?.length">
-            <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2">
-              {{ selectedOrder.type === 'custom_errand' ? 'Custom Errand Details' : 'Ordered Items' }}
-            </h4>
-            
-            <!-- Custom Errand Details -->
-            <div v-if="selectedOrder.type === 'custom_errand' && selectedOrder.customDetails" class="px-2 space-y-4">
-              <div v-if="selectedOrder.customDetails.description">
-                <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Description</p>
-                <p class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{{ selectedOrder.customDetails.description }}</p>
-              </div>
-              
-              <div v-if="selectedOrder.customDetails.attachedVoiceNote">
-                <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1 flex items-center gap-1">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
-                  Voice Note
-                </p>
-                <audio controls class="w-full h-10 mt-1">
-                  <source :src="selectedOrder.customDetails.attachedVoiceNote" type="audio/mpeg">
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
-  
-              <div v-if="selectedOrder.customDetails.attachedImage || (selectedOrder.customDetails.attachedImages && selectedOrder.customDetails.attachedImages.length > 0)">
-                <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-2 flex items-center gap-1">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                  Attached Images
-                </p>
-                <div class="flex gap-2 flex-wrap">
-                  <a v-if="selectedOrder.customDetails.attachedImage" :href="selectedOrder.customDetails.attachedImage" target="_blank" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-25 block group relative">
-                    <img :src="selectedOrder.customDetails.attachedImage" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <!-- B. Standard Food & Store Orders -->
+            <div v-else class="space-y-3">
+              <!-- Render Packs -->
+              <template v-if="selectedOrder.packs?.length">
+                <div v-for="pack in selectedOrder.packs" :key="pack.name" class="bg-gray-50/70 p-3 rounded-xl border border-gray-100 space-y-2">
+                  <span class="text-[10px] font-extrabold text-[#FF5C1A] uppercase tracking-wider block border-b border-gray-200/60 pb-1">{{ pack.name }}</span>
+                  <div v-for="item in pack.items" :key="item.name" class="flex items-start justify-between text-xs">
+                    <div class="flex items-start gap-2">
+                      <span class="font-extrabold text-[#FF5C1A] bg-[#FF5C1A]/10 px-1.5 py-0.2 rounded text-[11px]">{{ item.quantity }}x</span>
+                      <div>
+                        <span class="font-bold text-gray-900">{{ item.name }}</span>
+                        <div v-if="item.customizations?.length" class="space-y-0.5 mt-0.5">
+                          <p v-for="(custom, idx) in item.customizations" :key="idx" class="text-[10px] text-gray-500">
+                            + {{ custom.name }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </a>
-                  <a v-for="(img, idx) in selectedOrder.customDetails.attachedImages" :key="idx" :href="img" target="_blank" class="w-20 h-20 rounded-lg overflow-hidden border border-gray-25 block group relative">
-                    <img :src="img" class="w-full h-full object-cover group-hover:scale-110 transition-transform" />
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
-                  </a>
+                    <span class="font-bold text-gray-900 font-mono">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
+                  </div>
                 </div>
-              </div>
-              
-              <div v-if="selectedOrder.customDetails.estimatedItemCost" class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
-                <span class="text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Estimated Item Cost</span>
-                <span class="font-bold text-gray-900">₦{{ Number(selectedOrder.customDetails.estimatedItemCost).toLocaleString() }}</span>
-              </div>
-            </div>
-            
-            <!-- Render Packs -->
-            <template v-else-if="selectedOrder.packs?.length">
-              <div v-for="pack in selectedOrder.packs" :key="pack.name" class="space-y-3 px-2 mb-4 bg-gray-50 p-3 rounded-xl border border-gray-50">
-                <h5 class="text-[10px] font-bold text-[#FF5C1A] uppercase  border-b border-gray-200 pb-1 mb-2">{{ pack.name }}</h5>
-                <div v-for="item in pack.items" :key="item.name" class="flex items-start justify-between mb-2 last:mb-0">
-                  <div class="flex items-start gap-3">
-                    <span class="text-sm font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded">{{ item.quantity }}x</span>
-                    <div class="flex flex-col">
-                      <span class="text-sm font-bold text-gray-900">{{ item.name }}</span>
-                      <div v-if="item.customizations?.length" class="mt-1 space-y-1">
-                        <p v-for="(custom, idx) in item.customizations" :key="idx" class="text-[10px] font-medium text-gray-500 flex items-center gap-1">
-                          <span class="text-gray-300">•</span> {{ custom.name }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
+              </template>
+
+              <!-- Fallback to raw items -->
+              <div v-else class="space-y-2">
+                <div v-for="item in selectedOrder.items" :key="item._id" class="flex items-start justify-between text-xs p-2 bg-gray-50/50 rounded-xl border border-gray-100">
+                  <div class="flex items-start gap-2">
+                    <span class="font-extrabold text-[#FF5C1A] bg-[#FF5C1A]/10 px-1.5 py-0.2 rounded text-[11px]">{{ item.quantity }}x</span>
+                    <div>
+                      <span class="font-bold text-gray-900">{{ item.name }}</span>
+                      <div v-if="item.customizations?.length" class="space-y-0.5 mt-0.5">
+                        <p v-for="(custom, idx) in item.customizations" :key="idx" class="text-[10px] text-gray-500">
+                          + {{ custom.name }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
                         </p>
                       </div>
                     </div>
                   </div>
-                  <span class="text-sm font-black text-gray-900">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
+                  <span class="font-bold text-gray-900 font-mono">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
                 </div>
-              </div>
-            </template>
-
-            <!-- Fallback to raw items if no packs -->
-            <div v-else class="space-y-3 px-2">
-              <div v-for="item in selectedOrder.items" :key="item._id" class="flex items-start justify-between">
-                <div class="flex items-start gap-3">
-                  <span class="text-sm font-black text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded">{{ item.quantity }}x</span>
-                  <div class="flex flex-col">
-                    <span class="text-sm font-bold text-gray-900">{{ item.name }}</span>
-                    <div v-if="item.customizations?.length" class="mt-1 space-y-1">
-                      <p v-for="(custom, idx) in item.customizations" :key="idx" class="text-[10px] font-medium text-gray-500 flex items-center gap-1">
-                        <span class="text-gray-300">•</span> {{ custom.name }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <span class="text-sm font-black text-gray-900">₦{{ Number(item.subtotal || item.price || 0).toLocaleString() }}</span>
               </div>
             </div>
           </div>
 
-          <!-- Negotiation Bids -->
-          <div class="space-y-4 mt-6" v-if="selectedOrder.type === 'custom_errand' && selectedOrder.bids?.length > 0">
-            <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2 flex items-center justify-between">
-              Negotiation Bids
-              <span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full text-[9px]">{{ selectedOrder.bids.length }} Bids</span>
+          <!-- 6. Stepped Order Milestones & History Timeline -->
+          <div class="bg-white rounded-2xl p-4.5 border border-gray-200/80 shadow-xs space-y-3.5" v-if="selectedOrder.statusHistory?.length">
+            <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+              <Clock class="w-3.5 h-3.5 text-gray-500" />
+              Order Journey Milestones
             </h4>
-            <div class="space-y-2">
-              <div v-for="bid in selectedOrder.bids" :key="bid._id" class="p-3 bg-gray-50 border border-gray-100 rounded-lg flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
-                    <img v-if="bid.errander?.avatar" :src="bid.errander.avatar" class="w-full h-full object-cover" />
-                    <div v-else class="w-full h-full flex items-center justify-center text-gray-500 font-bold text-xs">{{ bid.errander?.firstName?.charAt(0) }}</div>
-                  </div>
-                  <div>
-                    <p class="text-sm font-bold text-gray-900">{{ bid.errander?.firstName }} {{ bid.errander?.lastName }}</p>
-                    <p class="text-[10px] text-gray-500">{{ new Date(bid.createdAt).toLocaleString() }}</p>
-                  </div>
+
+            <div class="relative border-l-2 border-gray-200/80 ml-2 space-y-4 py-1">
+              <div v-for="(history, index) in selectedOrder.statusHistory" :key="index" class="pl-4 relative">
+                <div class="w-2.5 h-2.5 bg-[#FF5C1A] rounded-full absolute -left-[5.5px] top-1 border-2 border-white shadow-2xs"></div>
+                <div class="flex items-center justify-between">
+                  <p class="text-xs font-extrabold text-gray-900 capitalize">{{ history.status?.replace(/_/g, ' ') }}</p>
+                  <span class="text-[10px] font-medium text-gray-400">{{ new Date(history.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</span>
                 </div>
-                <div class="text-right">
-                  <p class="text-sm font-black text-emerald-600">₦{{ Number(bid.amount).toLocaleString() }}</p>
-                  <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" 
-                        :class="{
-                          'bg-amber-100 text-amber-700': bid.status === 'pending',
-                          'bg-emerald-100 text-emerald-700': bid.status === 'accepted',
-                          'bg-red-100 text-red-700': bid.status === 'rejected'
-                        }">
-                    {{ bid.status }}
+                <p v-if="history.note" class="text-[11px] text-gray-600 mt-0.5 leading-tight">{{ history.note }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. Billing Invoice & 3-Way Financial Split (Cleaned: NO PACKAGING ON CUSTOM ERRANDS) -->
+          <div class="bg-white rounded-2xl p-4.5 border border-gray-200/80 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-2.5">
+              <h4 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                <Receipt class="w-3.5 h-3.5 text-gray-500" />
+                Billing & Financial Split Breakdown
+              </h4>
+              <span 
+                class="px-2 py-0.5 rounded-full font-black text-[9px] uppercase tracking-wider" 
+                :class="selectedOrder.paymentStatus === 'paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'"
+              >
+                {{ selectedOrder.paymentStatus || 'Pending' }}
+              </span>
+            </div>
+
+            <!-- Customer Receipt Breakdown -->
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between items-center text-gray-600">
+                <span class="font-medium">
+                  {{ selectedOrder.type === 'custom_errand' ? 'Estimated Items Cost' : 'Items Subtotal' }}
+                </span>
+                <span class="font-bold text-gray-900 font-mono">
+                  ₦{{ Number(selectedOrder.type === 'custom_errand' ? (selectedOrder.customDetails?.estimatedItemCost || selectedOrder.subtotal || 0) : (selectedOrder.subtotal || 0)).toLocaleString() }}
+                </span>
+              </div>
+
+              <!-- Packaging Fee: CRITICAL FIX - ONLY RENDER FOR STORE/FOOD ORDERS, NEVER FOR CUSTOM ERRANDS -->
+              <div 
+                v-if="selectedOrder.type !== 'custom_errand' && Number(selectedOrder.packagingFee) > 0" 
+                class="flex justify-between items-center text-gray-600"
+              >
+                <span class="font-medium">Food Pack / Container Packaging</span>
+                <span class="font-bold text-gray-900 font-mono">₦{{ Number(selectedOrder.packagingFee).toLocaleString() }}</span>
+              </div>
+
+              <!-- Delivery Fee -->
+              <div class="flex justify-between items-center text-gray-600">
+                <span class="font-medium">Delivery Fee Charged</span>
+                <span class="font-bold text-gray-900 font-mono">₦{{ Number(selectedOrder.deliveryFee || 0).toLocaleString() }}</span>
+              </div>
+
+              <!-- Platform Service Charge (if applicable) -->
+              <div 
+                v-if="Number(selectedOrder.serviceFee || selectedOrder.platformProcessingFee || selectedOrder.platformFee || 0) > 0" 
+                class="flex justify-between items-center text-gray-600"
+              >
+                <span class="font-medium">Platform Service Charge</span>
+                <span class="font-bold text-gray-900 font-mono">₦{{ Number(selectedOrder.serviceFee || selectedOrder.platformProcessingFee || selectedOrder.platformFee || 0).toLocaleString() }}</span>
+              </div>
+
+              <!-- Discount / Promo -->
+              <div v-if="selectedOrder.discount" class="flex justify-between items-center text-emerald-700">
+                <span class="font-medium">Promo Discount</span>
+                <span class="font-bold font-mono">-₦{{ Number(selectedOrder.discount).toLocaleString() }}</span>
+              </div>
+
+              <!-- Total Customer Charged -->
+              <div class="pt-2 border-t border-gray-200 flex justify-between items-center">
+                <span class="text-sm font-black text-gray-900 uppercase">Total Paid by Customer</span>
+                <span class="text-lg font-black text-[#FF5C1A] font-mono">
+                  ₦{{ Number(selectedOrder.total || selectedOrder.totalAmount || 0).toLocaleString() }}
+                </span>
+              </div>
+
+              <div v-if="selectedOrder.paymentReference" class="flex justify-between items-center text-[11px] text-gray-400 pt-1">
+                <span>Payment Reference:</span>
+                <span class="font-mono flex items-center gap-1 cursor-pointer hover:text-gray-600" @click="copyText(selectedOrder.paymentReference, 'Payment Reference')">
+                  {{ selectedOrder.paymentReference }}
+                  <Copy class="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+
+            <!-- 3-Way Financial Distribution Card -->
+            <div class="bg-gradient-to-br from-gray-50 to-orange-50/20 border border-gray-200 rounded-xl p-3.5 space-y-3">
+              <div class="flex items-center justify-between">
+                <p class="text-[10px] font-extrabold text-gray-700 uppercase tracking-wider flex items-center gap-1">
+                  💰 3-Way Revenue & Margin Distribution
+                </p>
+                <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                  Balanced Split
+                </span>
+              </div>
+
+              <!-- Visual distribution bar -->
+              <div class="h-2 w-full rounded-full bg-gray-200 flex overflow-hidden">
+                <div 
+                  class="bg-amber-500" 
+                  :style="{ width: `${Math.round((getOrderFinancials(selectedOrder).vendorPayout / Math.max(1, getOrderFinancials(selectedOrder).total)) * 100)}%` }"
+                  title="Store / Items Budget"
+                ></div>
+                <div 
+                  class="bg-indigo-500" 
+                  :style="{ width: `${Math.round((getOrderFinancials(selectedOrder).ninjaPayout / Math.max(1, getOrderFinancials(selectedOrder).total)) * 100)}%` }"
+                  title="Ninja Payout"
+                ></div>
+                <div 
+                  class="bg-emerald-500" 
+                  :style="{ width: `${Math.max(2, 100 - Math.round(((getOrderFinancials(selectedOrder).vendorPayout + getOrderFinancials(selectedOrder).ninjaPayout) / Math.max(1, getOrderFinancials(selectedOrder).total)) * 100))}%` }"
+                  title="Platform Retainage"
+                ></div>
+              </div>
+
+              <div class="space-y-2 pt-1 text-xs">
+                <!-- Store / Goods Budget -->
+                <div class="flex justify-between items-center">
+                  <span class="text-amber-900 font-bold flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                    {{ selectedOrder.type === 'custom_errand' ? 'Item Purchase Budget (Runner)' : 'Store (Vendor Payout)' }}
+                  </span>
+                  <span class="text-amber-950 font-black font-mono">
+                    ₦{{ getOrderFinancials(selectedOrder).vendorPayout.toLocaleString() }}
+                  </span>
+                </div>
+
+                <!-- Ninja Courier Payout -->
+                <div class="flex justify-between items-center">
+                  <span class="text-indigo-900 font-bold flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                    Errand Ninja Payout (Delivery)
+                  </span>
+                  <span class="text-indigo-950 font-black font-mono">
+                    ₦{{ getOrderFinancials(selectedOrder).ninjaPayout.toLocaleString() }}
+                  </span>
+                </div>
+
+                <!-- Platform Share -->
+                <div class="flex justify-between items-center pt-2 border-t border-gray-200/70">
+                  <span class="text-emerald-800 font-bold flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    Platform Retainage (Net Margin)
+                  </span>
+                  <span class="text-emerald-900 font-black font-mono">
+                    ₦{{ getOrderFinancials(selectedOrder).platformShare.toLocaleString() }}
                   </span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Payment & Billing -->
-          <div class="space-y-4 mt-6">
-            <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 pb-2 flex justify-between items-center">
-              Billing & Revenue Split
-              <span class="px-2 py-0.5 rounded-md font-bold text-[10px]" :class="selectedOrder.paymentStatus === 'paid' ? 'bg-emerald-100 text-[#FF5C1A]' : 'bg-amber-100 text-amber-700'">{{ selectedOrder.paymentStatus || 'Pending' }}</span>
-            </h4>
-            
-            <div class="px-2 space-y-3">
-              <div class="flex justify-between items-center text-sm">
-                <span class="text-gray-500 font-semibold uppercase tracking-wide text-[10px]">Items Subtotal</span>
-                <span class="text-gray-900 font-bold">₦{{ Number(selectedOrder.subtotal || 0).toLocaleString() }}</span>
-              </div>
-              <div class="flex justify-between items-center text-sm" v-if="selectedOrder.packagingFee">
-                <span class="text-gray-500 font-semibold uppercase tracking-wide text-[10px]">Packaging</span>
-                <span class="text-gray-900 font-bold">₦{{ Number(selectedOrder.packagingFee || 0).toLocaleString() }}</span>
-              </div>
-              
-              <div class="my-3 py-3 border-y border-gray-100 border-dashed space-y-3">
-                <div class="flex justify-between items-center text-sm">
-                  <span class="text-gray-500 font-bold uppercase tracking-wide text-[10px]">Total Delivery Charged</span>
-                  <span class="text-gray-900 font-black">₦{{ Number(selectedOrder.deliveryFee || 0).toLocaleString() }}</span>
-                </div>
-              </div>
-
-              <div class="flex justify-between items-center pt-3 border-t border-gray-100">
-                <span class="text-sm font-black text-gray-900 uppercase">Total Paid</span>
-                <span class="text-lg font-black text-[#FF5C1A]">₦{{ Number(selectedOrder.total || selectedOrder.totalAmount || 0).toLocaleString() }}</span>
-              </div>
-
-              <!-- 3-Way Financial Split Breakdown -->
-              <div class="mt-4 bg-gray-50/80 border border-gray-100 rounded-xl p-3.5 space-y-2.5">
-                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">💰 Financial Split Breakdown</p>
-                <div class="flex justify-between items-center text-xs">
-                  <span class="text-amber-800 font-bold flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-amber-500"></span> Store (Vendor Payout)
-                  </span>
-                  <span class="text-amber-900 font-black font-mono">₦{{ getOrderFinancials(selectedOrder).vendorPayout.toLocaleString() }}</span>
-                </div>
-                <div class="flex justify-between items-center text-xs">
-                  <span class="text-indigo-800 font-bold flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-indigo-500"></span> Errand Ninja Payout
-                  </span>
-                  <span class="text-indigo-900 font-black font-mono">₦{{ getOrderFinancials(selectedOrder).ninjaPayout.toLocaleString() }}</span>
-                </div>
-                <div class="flex justify-between items-center text-xs pt-1.5 border-t border-gray-200/60">
-                  <span class="text-emerald-700 font-bold flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Platform Retainage
-                  </span>
-                  <span class="text-emerald-800 font-black font-mono">₦{{ getOrderFinancials(selectedOrder).platformShare.toLocaleString() }}</span>
-                </div>
-              </div>
-
-              <!-- Interception Payout Split -->
-              <div v-if="selectedOrder.interception && (selectedOrder.interception.status === 'accepted' || selectedOrder.interception.status === 'completed')" class="mt-4 bg-purple-50 border border-purple-100 rounded-xl p-3 space-y-2">
-                <p class="text-[10px] font-bold text-purple-700 uppercase tracking-wider mb-2">🤝 Interception Payout Split</p>
-                <div class="flex justify-between items-center text-sm">
-                  <span class="text-gray-600 font-semibold">Errander Payout (Total)</span>
-                  <span class="text-gray-900 font-black">₦{{ Number(selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0).toLocaleString() }}</span>
-                </div>
-                <div class="flex justify-between items-center text-sm">
-                  <span class="text-indigo-600 font-semibold">→ {{ selectedOrder.errander?.firstName || 'Primary' }} (60%)</span>
-                  <span class="text-indigo-700 font-black">₦{{ Math.round((selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0) * 0.6).toLocaleString() }}</span>
-                </div>
-                <div class="flex justify-between items-center text-sm">
-                  <span class="text-purple-600 font-semibold">→ {{ selectedOrder.interception?.secondErrander?.firstName || 'Second' }} (40%)</span>
-                  <span class="text-purple-700 font-black">₦{{ Math.round((selectedOrder.erranderPayout || selectedOrder.deliveryFee || 0) * 0.4).toLocaleString() }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </template>
       
-      <div v-if="selectedOrder" class="p-6 border-t border-gray-100 flex flex-col gap-4">
-        <button @click="showActionModal = true" class="w-full py-3 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-colors shadow-sm">
-          Take Action
+      <!-- Drawer Sticky Footer Action Controls -->
+      <div v-if="selectedOrder" class="p-4 bg-white/95 backdrop-blur-md border-t border-gray-100 flex items-center gap-2.5 shrink-0">
+        <button 
+          @click="openActionModalFromDrawer(selectedOrder)" 
+          class="flex-1 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-extrabold shadow-sm hover:shadow transition-all active:scale-[0.99] flex items-center justify-center gap-2"
+        >
+          <Sparkles class="w-4 h-4" />
+          Take Action & Update
+        </button>
+
+        <button 
+          v-if="['pending', 'processing', 'confirmed', 'scheduled', 'preparing'].includes(selectedOrder.status) && hasPermission('can_cancel_order')"
+          @click="modalOrder = selectedOrder; handleCancelOrder(selectedOrder._id)" 
+          class="py-3 px-4 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-sm font-bold border border-red-200 transition-colors shrink-0"
+        >
+          Cancel
         </button>
       </div>
     </SideDrawer>
+
+    <!-- Lightbox Zoom Modal for Errand Photos -->
+    <Teleport to="body">
+      <div v-if="previewImageUrl" class="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" @click="previewImageUrl = null">
+        <div class="relative max-w-3xl max-h-[90vh] p-2 bg-white rounded-2xl shadow-2xl overflow-hidden" @click.stop>
+          <button @click="previewImageUrl = null" class="absolute top-4 right-4 z-10 p-2 bg-black/60 text-white hover:bg-black/80 rounded-full transition-colors">
+            <X class="w-5 h-5" />
+          </button>
+          <img :src="previewImageUrl" class="max-w-full max-h-[80vh] object-contain rounded-xl" />
+          <div class="p-3 text-center">
+            <a :href="previewImageUrl" target="_blank" class="text-xs font-bold text-indigo-600 hover:underline inline-flex items-center gap-1">
+              <ExternalLink class="w-3.5 h-3.5" /> Open original image in new tab
+            </a>
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <!-- Action Modal -->
     <Teleport to="body">
@@ -900,7 +1186,12 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { admin_api } from '@/api_factory/modules/admin';
 import { useCustomToast as useToast } from '@/composables/core/useCustomToast';
 const { showToast } = useToast();
-import { ShoppingBag, DollarSign, Activity, Calendar, Store, Truck, CheckCircle, Clock, XCircle, Loader2, X, MapPin, AlertTriangle } from 'lucide-vue-next';
+import { 
+  ShoppingBag, DollarSign, Activity, Calendar, Store, Truck, CheckCircle, Clock, 
+  XCircle, Loader2, X, MapPin, AlertTriangle, Copy, Check, Phone, ExternalLink, 
+  ShieldCheck, UserCheck, PackageCheck, FileText, Sparkles, Navigation, Eye, 
+  Volume2, RefreshCw, Receipt, Tag, Users, Repeat, ArrowRight, CornerDownRight
+} from 'lucide-vue-next';
 import SideDrawer from '@/components/ui/SideDrawer.vue';
 import SelectInput from '@/components/ui/SelectInput.vue';
 import DateRangePicker from '@/components/ui/DateRangePicker.vue';
@@ -943,32 +1234,87 @@ const selectedOrder = ref<any>(null);
 const modalOrder = ref<any>(null);
 const activeDropdown = ref<string | null>(null);
 
+// Drawer Helpers
+const copiedField = ref<string | null>(null);
+const previewImageUrl = ref<string | null>(null);
+
+const copyText = async (text: string, label: string = 'Text') => {
+  if (!text) return;
+  try {
+    if (navigator?.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+    copiedField.value = text;
+    showToast({ title: 'Copied', message: `${label} copied to clipboard`, toastType: 'success' });
+    setTimeout(() => {
+      if (copiedField.value === text) copiedField.value = null;
+    }, 2000);
+  } catch (e) {
+    showToast({ title: 'Error', message: 'Failed to copy', toastType: 'error' });
+  }
+};
+
+const openActionModalFromDrawer = (order: any) => {
+  if (!order) return;
+  modalOrder.value = order;
+  showActionModal.value = true;
+};
+
 const getOrderFinancials = (order: any) => {
-  if (!order) return { total: 0, vendorPayout: 0, ninjaPayout: 0, platformShare: 0 };
+  if (!order) return { total: 0, vendorPayout: 0, ninjaPayout: 0, platformShare: 0, itemCost: 0, deliveryFee: 0 };
   
   const total = Number(order.total || order.totalAmount || 0);
   const deliveryFee = Number(order.deliveryFee || 0);
   const serviceFee = Number(order.platformProcessingFee || order.serviceFee || order.platformFee || 0);
   
-  // Ninja Payout
+  // Custom errand specific calculation (No packaging fee!)
+  if (order.type === 'custom_errand') {
+    const itemCost = Number(order.customDetails?.estimatedItemCost || order.subtotal || 0);
+    const ninjaPayout = order.erranderPayout !== undefined && Number(order.erranderPayout) > 0
+      ? Number(order.erranderPayout)
+      : (order.erranderShare !== undefined && Number(order.erranderShare) > 0
+          ? Number(order.erranderShare)
+          : (order.agreedDeliveryFee !== undefined && Number(order.agreedDeliveryFee) > 0
+              ? Number(order.agreedDeliveryFee)
+              : deliveryFee));
+    
+    // Platform share is total minus item purchase budget minus ninja payout
+    const platformShare = Math.max(0, total - itemCost - ninjaPayout);
+    const vendorPayout = itemCost; // Disbursed budget for purchasing items
+
+    return {
+      total,
+      vendorPayout,
+      ninjaPayout,
+      platformShare,
+      itemCost,
+      deliveryFee
+    };
+  }
+  
+  // Regular marketplace / store food orders
   const ninjaPayout = order.erranderPayout !== undefined && Number(order.erranderPayout) > 0
     ? Number(order.erranderPayout)
     : deliveryFee;
     
-  // Delivery margin retained by platform
   const deliveryMargin = Math.max(0, deliveryFee - ninjaPayout);
   
-  // Platform share
   const platformShare = (order.platformFee !== undefined && Number(order.platformFee) > 0 && serviceFee === 0)
     ? Number(order.platformFee)
     : (serviceFee + deliveryMargin);
     
-  // Vendor Payout
   let vendorPayout = 0;
-  if (order.subtotal !== undefined && Number(order.subtotal) > 0) {
+  if (order.vendorShare && Number(order.vendorShare) > 0) {
+    vendorPayout = Number(order.vendorShare);
+  } else if (order.subtotal !== undefined && Number(order.subtotal) > 0) {
     vendorPayout = Number(order.subtotal) + Number(order.packagingFee || 0);
-  } else if (order.type === 'custom_errand') {
-    vendorPayout = Number(order.customDetails?.estimatedItemCost || 0);
   } else {
     vendorPayout = Math.max(0, total - deliveryFee - serviceFee);
   }
@@ -978,6 +1324,8 @@ const getOrderFinancials = (order: any) => {
     vendorPayout,
     ninjaPayout,
     platformShare,
+    itemCost: Number(order.subtotal || 0),
+    deliveryFee
   };
 };
 
