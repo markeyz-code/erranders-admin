@@ -43,20 +43,13 @@
           <label class="text-[10px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1">
             <Store class="w-3 h-3 text-amber-500" /> Filter by Vendor
           </label>
-          <select
+          <SearchableSelect
             v-model="activeFilters.vendorId"
+            :options="vendorOptions"
+            :all-label="`All approved vendors (${filterOptions.vendors.length})`"
+            search-placeholder="Search vendors…"
             @change="applyCurrentFilters"
-            class="w-full text-xs font-semibold bg-gray-50/70 border border-gray-200 rounded-xl px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] transition-all cursor-pointer"
-          >
-            <option value="">All Approved Vendors ({{ filterOptions.vendors.length }})</option>
-            <option
-              v-for="vendor in filterOptions.vendors"
-              :key="vendor.id"
-              :value="vendor.id"
-            >
-              {{ vendor.businessName || vendor.name }} {{ vendor.category ? `(${vendor.category})` : '' }}
-            </option>
-          </select>
+          />
         </div>
 
         <!-- Errand Ninja Filter -->
@@ -64,20 +57,13 @@
           <label class="text-[10px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1">
             <Truck class="w-3 h-3 text-indigo-500" /> Filter by Errand Ninja
           </label>
-          <select
+          <SearchableSelect
             v-model="activeFilters.erranderId"
+            :options="ninjaOptions"
+            :all-label="`All errand ninjas (${filterOptions.erranders.length})`"
+            search-placeholder="Search errand ninjas…"
             @change="applyCurrentFilters"
-            class="w-full text-xs font-semibold bg-gray-50/70 border border-gray-200 rounded-xl px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] transition-all cursor-pointer"
-          >
-            <option value="">All Errand Ninjas ({{ filterOptions.erranders.length }})</option>
-            <option
-              v-for="ninja in filterOptions.erranders"
-              :key="ninja.id"
-              :value="ninja.id"
-            >
-              {{ ninja.name }} {{ ninja.completedErrandsCount ? `(${ninja.completedErrandsCount} completed)` : '' }}
-            </option>
-          </select>
+          />
         </div>
 
         <!-- Student / Customer Filter -->
@@ -85,20 +71,13 @@
           <label class="text-[10px] font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1">
             <Users class="w-3 h-3 text-blue-500" /> Filter by Student / Customer
           </label>
-          <select
+          <SearchableSelect
             v-model="activeFilters.studentId"
+            :options="studentOptions"
+            :all-label="`All students (${filterOptions.students.length})`"
+            search-placeholder="Search students…"
             @change="applyCurrentFilters"
-            class="w-full text-xs font-semibold bg-gray-50/70 border border-gray-200 rounded-xl px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20 focus:border-[#FF5C1A] transition-all cursor-pointer"
-          >
-            <option value="">All Students ({{ filterOptions.students.length }})</option>
-            <option
-              v-for="student in filterOptions.students"
-              :key="student.id"
-              :value="student.id"
-            >
-              {{ student.name }} {{ student.email ? `(${student.email})` : '' }}
-            </option>
-          </select>
+          />
         </div>
 
         <!-- Date Range Controls -->
@@ -525,6 +504,27 @@ const {
   setPreset,
   resetFilters,
 } = useFinancialBreakdown();
+
+// Label lists for the three filters. Built here rather than in the template so the
+// searchable dropdown receives one flat { value, label } array.
+const vendorOptions = computed(() =>
+  (filterOptions.value?.vendors || []).map((v: any) => ({
+    value: v.id,
+    label: [v.businessName || v.name, v.category ? `(${v.category})` : ''].filter(Boolean).join(' '),
+  })),
+);
+const ninjaOptions = computed(() =>
+  (filterOptions.value?.erranders || []).map((n: any) => ({
+    value: n.id,
+    label: [n.name, n.completedErrandsCount ? `(${n.completedErrandsCount} completed)` : ''].filter(Boolean).join(' '),
+  })),
+);
+const studentOptions = computed(() =>
+  (filterOptions.value?.students || []).map((st: any) => ({
+    value: st.id,
+    label: [st.name, st.email ? `(${st.email})` : ''].filter(Boolean).join(' '),
+  })),
+);
 
 const chartMode = ref<'flow' | 'profit_streams'>('flow');
 
