@@ -13,12 +13,17 @@
     <!-- Campaign Selector -->
     <div class="mb-6 flex items-center gap-3">
       <label class="font-bold text-gray-700 text-sm">Select Pool:</label>
-      <select v-model="campaign" @change="onCampaignChange" class="bg-white border border-gray-25 rounded-lg px-4 py-2 text-sm focus:ring-primary outline-none min-w-[300px]">
-        <option :value="null">-- Select a Campaign --</option>
-        <option v-for="c in campaigns" :key="c._id" :value="c">
-          {{ c.title }} ({{ c.status.toUpperCase() }})
-        </option>
-      </select>
+      <!-- The select bound the whole campaign object; the dropdown works in ids, so this
+           maps back to the object on change. -->
+      <div class="min-w-0 flex-1 max-w-md">
+        <SearchableSelect
+          v-model="selectedCampaignId"
+          :options="campaignOptions"
+          all-label="Select a campaign"
+          search-placeholder="Search campaigns…"
+          @change="onCampaignSelect"
+        />
+      </div>
     </div>
 
     <!-- Active Campaign Section -->
@@ -536,7 +541,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { Plus, X, CalendarX, ShoppingCart, LayoutList, UploadCloud, Edit, Trash2 } from 'lucide-vue-next'
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config'
 import { useCustomToast } from '@/composables/core/useCustomToast'
@@ -689,6 +694,25 @@ const fetchAllCampaigns = async () => {
     loading.value = false
   }
 }
+
+// Bridges the id-based dropdown to the object the rest of this page expects.
+const campaignOptions = computed(() =>
+  campaigns.value.map((c) => ({
+    value: c._id,
+    label: `${c.title} (${String(c.status || '').toUpperCase()})`,
+  })),
+);
+
+const selectedCampaignId = computed({
+  get: () => campaign.value?._id || '',
+  set: (id) => {
+    campaign.value = campaigns.value.find((c) => c._id === id) || null;
+  },
+});
+
+const onCampaignSelect = async () => {
+  await onCampaignChange();
+};
 
 const onCampaignChange = async () => {
   if (campaign.value) {
