@@ -34,12 +34,15 @@
           />
         </div>
         
-        <select v-model="statusFilter" @change="applyFilters" class="py-2.5 pl-3 pr-8 rounded-xl border border-gray-25 text-sm focus:outline-none focus:border-[#FF5C1A] appearance-none bg-white font-medium text-gray-700 min-w-[150px]">
-          <option value="">All Statuses</option>
-          <option value="completed">Completed</option>
-          <option value="pending">Pending</option>
-          <option value="failed">Failed</option>
-        </select>
+        <div class="min-w-[150px]">
+          <SearchableSelect
+            v-model="statusFilter"
+            :options="statusOptions"
+            all-label="All statuses"
+            search-placeholder="Search status…"
+            @change="applyFilters"
+          />
+        </div>
         
         <DateRangePicker 
           v-model:start="startDate"
@@ -402,6 +405,13 @@ const currentPage = ref(1)
 const searchQuery = ref('')
 const typeFilter = ref('all')
 const statusFilter = ref('')
+
+// Fixed order, so the dropdown reads the same way every time.
+const statusOptions = [
+  { value: 'completed', label: 'Completed' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'failed', label: 'Failed' },
+];
 const userRoleFilter = ref('all')
 const userIdFilter = ref('all')
 const startDate = ref('')

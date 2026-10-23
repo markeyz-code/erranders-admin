@@ -1,6 +1,6 @@
 <template>
   <FullScreenLoader />
-  <div class="min-h-screen bg-[#F8FAFC] font-sans selection:bg-[#FF5C1A]/20 selection:text-[#FF5C1A]">
+  <div class="min-h-screen w-full overflow-x-hidden bg-[#F8FAFC] font-sans selection:bg-[#FF5C1A]/20 selection:text-[#FF5C1A]">
     
     <!-- Desktop Sidebar -->
     <aside class="hidden lg:flex flex-col bg-black h-screen fixed left-0 top-0 z-50 transition-all duration-300 shadow-[4px_0_24px_rgba(0,0,0,0.05)] border-r border-white/5" :class="isSidebarMinimized ? 'w-20' : 'w-[280px]'">
@@ -126,7 +126,7 @@
 
     <!-- Mobile Sidebar -->
     <Transition name="slide">
-      <aside v-if="showMobileMenu" class="lg:hidden w-[85vw] max-w-[320px] bg-black min-h-screen fixed left-0 top-0 z-50 shadow-2xl flex flex-col">
+      <aside v-if="showMobileMenu" class="lg:hidden w-[85vw] max-w-[320px] bg-black h-[100dvh] max-h-[100dvh] fixed left-0 top-0 z-50 shadow-2xl flex flex-col">
         <div class="p-6 border-b border-white/5 flex items-center justify-between bg-black">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 bg-gradient-to-br from-[#FF5C1A] to-[#FF7A45] rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-sm">E</div>
@@ -137,7 +137,7 @@
           </button>
         </div>
 
-        <div class="p-6 flex-1 overflow-y-auto">
+        <div class="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 py-5 sm:px-6 custom-scrollbar">
           <div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 mb-8 backdrop-blur-md">
             <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF5C1A]/20 to-[#FF7A45]/20 border border-[#FF5C1A]/30 flex items-center justify-center text-[#FF5C1A] font-bold text-lg relative">
               {{ userInitials }}
@@ -240,7 +240,7 @@
       </div>
 
       <!-- Page Content -->
-      <div class="p-4 md:p-8 lg:p-10 flex-1 w-full max-w-[1600px] mx-auto overflow-x-hidden relative">
+      <div class="relative mx-auto w-full max-w-[1600px] flex-1 overflow-x-hidden px-3 py-4 sm:px-5 sm:py-6 md:px-8 md:py-8 lg:px-10 lg:py-10">
         <slot />
       </div>
     </main>
