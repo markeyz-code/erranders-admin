@@ -785,10 +785,10 @@
                     <div class="flex items-start gap-2.5">
                       <span class="font-extrabold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded text-[11px]">{{ item.quantity }}x</span>
                       <div>
-                        <span class="font-bold text-gray-900">{{ item.name }}</span>
+                        <span class="font-bold text-gray-900">{{ getItemDisplayName(item) }}</span>
                         <div v-if="item.customizations?.length" class="space-y-0.5 mt-0.5">
                           <p v-for="(custom, idx) in item.customizations" :key="idx" class="text-[10px] text-gray-500">
-                            + {{ custom.name }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
+                            • {{ formatCustomizationLabel(custom) }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
                           </p>
                         </div>
                       </div>
@@ -804,10 +804,10 @@
                   <div class="flex items-start gap-2.5">
                     <span class="font-extrabold text-[#FF5C1A] bg-[#FF5C1A]/10 px-2 py-0.5 rounded text-[11px]">{{ item.quantity }}x</span>
                     <div>
-                      <span class="font-bold text-gray-900">{{ item.name }}</span>
+                      <span class="font-bold text-gray-900">{{ getItemDisplayName(item) }}</span>
                       <div v-if="item.customizations?.length" class="space-y-0.5 mt-0.5">
                         <p v-for="(custom, idx) in item.customizations" :key="idx" class="text-[10px] text-gray-500">
-                          + {{ custom.name }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
+                          • {{ formatCustomizationLabel(custom) }} <span class="font-semibold text-gray-700" v-if="custom.price > 0">(+₦{{ custom.price?.toLocaleString() }})</span>
                         </p>
                       </div>
                     </div>
@@ -1318,6 +1318,62 @@ const selectedErrander = ref('');
 const selectedOrder = ref<any>(null);
 const modalOrder = ref<any>(null);
 const activeDropdown = ref<string | null>(null);
+
+// Item & Customization Formatters for Crystal-Clear Order Display
+const getItemDisplayName = (item: any): string => {
+  if (!item?.name) return '';
+  const rawName = item.name.trim();
+  if (!item.customizations?.length) return rawName;
+
+  const isBread = /bread/i.test(rawName);
+  const colorCust = item.customizations.find((c: any) => 
+    /color/i.test(c.selected || '') || 
+    /^(brown|white|wheat)$/i.test(c.name?.trim() || '')
+  );
+  const sizeCust = item.customizations.find((c: any) => 
+    /size|price|portion/i.test(c.selected || '') ||
+    (/^\d+$/.test(c.name?.trim() || '') && Number(c.name) >= 100)
+  );
+
+  if (isBread && (colorCust || sizeCust)) {
+    const details: string[] = [];
+    if (colorCust) details.push(colorCust.name.trim());
+    if (sizeCust) {
+      const val = sizeCust.name.trim();
+      details.push(/^\d+$/.test(val) ? `₦${Number(val).toLocaleString()} Loaf` : val);
+    }
+    return `${rawName} (${details.join(' · ')})`;
+  }
+
+  return rawName;
+};
+
+const formatCustomizationLabel = (custom: any): string => {
+  if (!custom) return '';
+  const name = String(custom.name || '').trim();
+  const selected = String(custom.selected || '').trim();
+
+  if (/size/i.test(selected) && /^\d+$/.test(name)) {
+    return `${selected}: ₦${Number(name).toLocaleString()} Loaf`;
+  }
+
+  if (/^\d+$/.test(name) && Number(name) >= 50) {
+    if (selected) {
+      return `${selected}: ₦${Number(name).toLocaleString()}`;
+    }
+    return `Size: ₦${Number(name).toLocaleString()}`;
+  }
+
+  if (/color|type|flavor|protein|variant/i.test(selected)) {
+    return `${selected}: ${name}`;
+  }
+
+  if (selected && !/^(add-on|add-ons|extra|extras|customization|customizations)$/i.test(selected) && selected.toLowerCase() !== name.toLowerCase()) {
+    return `${selected}: ${name}`;
+  }
+
+  return name;
+};
 
 // Drawer Helpers
 const copiedField = ref<string | null>(null);
