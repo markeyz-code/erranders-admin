@@ -4,12 +4,25 @@
     <button
       type="button"
       class="flex w-full items-center justify-between gap-2 rounded-xl border border-gray-200 bg-gray-50/70 px-3 py-2 text-left text-xs font-semibold text-gray-800 transition-all hover:border-gray-300 focus:border-[#FF5C1A] focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20"
+      :class="{ 'border-[#FF5C1A]/60 bg-orange-50/20 text-[#FF5C1A]': modelValue && modelValue !== '' }"
       :aria-expanded="isOpen"
       aria-haspopup="listbox"
       @click="toggle"
     >
-      <span class="truncate">{{ selectedLabel }}</span>
-      <ChevronDown class="h-3.5 w-3.5 shrink-0 text-gray-400 transition-transform" :class="{ 'rotate-180': isOpen }" />
+      <span class="truncate" :class="{ 'text-gray-900 font-bold': modelValue && modelValue !== '' }">{{ selectedLabel }}</span>
+      <div class="flex items-center gap-1 shrink-0">
+        <span
+          v-if="modelValue && modelValue !== ''"
+          role="button"
+          tabindex="0"
+          @click.stop="pick('')"
+          class="p-0.5 hover:bg-gray-200/80 rounded-full text-gray-400 hover:text-rose-600 transition-colors"
+          title="Clear filter"
+        >
+          <X class="w-3 h-3" />
+        </span>
+        <ChevronDown class="h-3.5 w-3.5 text-gray-400 transition-transform" :class="{ 'rotate-180': isOpen }" />
+      </div>
     </button>
 
     <div
@@ -66,7 +79,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { Check, ChevronDown, Search } from 'lucide-vue-next';
+import { Check, ChevronDown, Search, X } from 'lucide-vue-next';
 
 /**
  * A single-select dropdown with a search box.

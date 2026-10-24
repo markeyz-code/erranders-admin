@@ -385,6 +385,7 @@ import {
 } from 'lucide-vue-next'
 import SideDrawer from '@/components/ui/SideDrawer.vue'
 import SelectInput from '@/components/ui/SelectInput.vue'
+import SearchableSelect from '@/components/ui/SearchableSelect.vue'
 import DateRangePicker from '@/components/ui/DateRangePicker.vue'
 
 definePageMeta({

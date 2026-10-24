@@ -1418,16 +1418,23 @@ const getOrderFinancials = (order: any) => {
   // Custom errand specific calculation (No packaging fee!)
   if (order.type === 'custom_errand') {
     const itemCost = Number(order.customDetails?.estimatedItemCost || order.subtotal || 0);
-    const ninjaPayout = order.erranderPayout !== undefined && Number(order.erranderPayout) > 0
+    let ninjaPayout = order.erranderPayout !== undefined && Number(order.erranderPayout) > 0
       ? Number(order.erranderPayout)
       : (order.erranderShare !== undefined && Number(order.erranderShare) > 0
           ? Number(order.erranderShare)
           : (order.agreedDeliveryFee !== undefined && Number(order.agreedDeliveryFee) > 0
-              ? Number(order.agreedDeliveryFee)
-              : deliveryFee));
+              ? Math.round(Number(order.agreedDeliveryFee) * 0.8)
+              : Math.round(deliveryFee * 0.8)));
     
     // Platform share is total minus item purchase budget minus ninja payout
-    const platformShare = Math.max(0, total - itemCost - ninjaPayout);
+    let platformShare = order.platformShare !== undefined && Number(order.platformShare) > 0
+      ? Number(order.platformShare)
+      : Math.max(0, total - itemCost - ninjaPayout);
+
+    // Reconcile if total has both
+    if (total > 0 && Math.abs((itemCost + ninjaPayout + platformShare) - total) > 0) {
+      platformShare = Math.max(0, total - itemCost - ninjaPayout);
+    }
     const vendorPayout = itemCost; // Disbursed budget for purchasing items
 
     return {

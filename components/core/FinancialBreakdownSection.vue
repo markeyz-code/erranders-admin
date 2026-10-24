@@ -492,6 +492,7 @@ import {
   Coins, ShoppingBag, Zap, Wrench, TrendingUp, Layers,
   PieChart, Loader2
 } from 'lucide-vue-next';
+import SearchableSelect from '@/components/ui/SearchableSelect.vue';
 import { useFinancialBreakdown } from '@/composables/modules/admin';
 
 const {

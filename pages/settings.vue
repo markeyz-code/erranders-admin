@@ -831,9 +831,9 @@
                       <Info class="w-3 h-3" />
                     </button>
                   </div>
-                  <p class="text-[11px] text-gray-500 mt-0.5">percentage erranders takes from runner's custom delivery fee</p>
+                  <p class="text-[11px] text-gray-500 mt-0.5">percentage erranders takes from runner's negotiated delivery fee</p>
                 </div>
-                <span class="text-[10px] font-bold text-purple-700 bg-purple-100 px-2 py-0.5 rounded">p2p cut</span>
+                <span class="text-[10px] font-bold text-purple-700 bg-purple-100 px-2 py-0.5 rounded">ninja cut</span>
               </div>
               <div class="relative">
                 <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">%</span>
@@ -848,6 +848,61 @@
               </div>
               <div v-if="activeInfo === 'customCommission'" class="p-2.5 bg-blue-50 text-blue-900 rounded-lg text-xs leading-relaxed border border-blue-100">
                 the platform's cut on custom errands. deducted from the runner fee that the student sets.
+              </div>
+            </div>
+
+            <!-- Custom Errand Customer Fixed Service Fee -->
+            <div class="space-y-3 p-5 rounded-2xl bg-gray-50/70 border border-gray-100">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <label class="text-sm font-bold text-gray-800 lowercase">customer fixed service fee (₦)</label>
+                    <button @click="showInfo('customCustomerFee')" type="button" class="w-4 h-4 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center hover:text-[#FF5C1A]">
+                      <Info class="w-3 h-3" />
+                    </button>
+                  </div>
+                  <p class="text-[11px] text-gray-500 mt-0.5">fixed service fee paid by student specifically for custom errands</p>
+                </div>
+                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">customer fee</span>
+              </div>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">₦</span>
+                <input 
+                  v-model.number="form.customErrandCustomerFee"
+                  type="number" required min="0" step="50"
+                  class="w-full px-4 pl-9 py-3 bg-white border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <div class="text-[11px] text-gray-600 bg-white p-2.5 rounded-lg border border-gray-100">
+                charged directly to the student on top of estimated item cost + runner fee.
+              </div>
+              <div v-if="activeInfo === 'customCustomerFee'" class="p-2.5 bg-blue-50 text-blue-900 rounded-lg text-xs leading-relaxed border border-blue-100">
+                fixed service fee paid by student on custom errands. combined with the ninja commission to make up total platform revenue.
+              </div>
+            </div>
+
+            <!-- Full Financial Money Flow Explainer Card -->
+            <div class="sm:col-span-2 p-4 rounded-2xl bg-purple-50/60 border border-purple-100 space-y-2">
+              <div class="flex items-center gap-2 text-xs font-bold text-purple-900 uppercase tracking-wider">
+                <Coins class="w-4 h-4 text-purple-600" />
+                Live Custom Errand Financial Flow (Example: ₦3,700 items + ₦400 negotiated runner fee)
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
+                <div class="bg-white p-3 rounded-xl border border-purple-100">
+                  <span class="text-gray-400 block text-[10px] uppercase font-bold">1. Customer Pays</span>
+                  <span class="font-extrabold text-gray-900 text-sm font-mono">₦{{ (3700 + 400 + (form.customErrandCustomerFee || 0)).toLocaleString() }}</span>
+                  <p class="text-[10px] text-gray-500 mt-0.5">₦3,700 item + ₦400 runner + ₦{{ form.customErrandCustomerFee || 0 }} fixed fee</p>
+                </div>
+                <div class="bg-white p-3 rounded-xl border border-purple-100">
+                  <span class="text-gray-400 block text-[10px] uppercase font-bold">2. Errand Ninja Receives</span>
+                  <span class="font-extrabold text-indigo-700 text-sm font-mono">₦{{ (400 - Math.round(400 * (form.customErrandCommissionPercentage || 0) / 100)).toLocaleString() }}</span>
+                  <p class="text-[10px] text-gray-500 mt-0.5">₦400 runner fee minus {{ form.customErrandCommissionPercentage || 0 }}% commission (₦{{ Math.round(400 * (form.customErrandCommissionPercentage || 0) / 100) }})</p>
+                </div>
+                <div class="bg-white p-3 rounded-xl border border-purple-100">
+                  <span class="text-gray-400 block text-[10px] uppercase font-bold">3. Platform Revenue</span>
+                  <span class="font-extrabold text-emerald-700 text-sm font-mono">₦{{ ((form.customErrandCustomerFee || 0) + Math.round(400 * (form.customErrandCommissionPercentage || 0) / 100)).toLocaleString() }}</span>
+                  <p class="text-[10px] text-gray-500 mt-0.5">₦{{ form.customErrandCustomerFee || 0 }} student fee + ₦{{ Math.round(400 * (form.customErrandCommissionPercentage || 0) / 100) }} runner cut</p>
+                </div>
               </div>
             </div>
 
@@ -2028,6 +2083,7 @@ const form = reactive({
   dropoffServiceFee: 300,
   platformFee: 150,
   convenienceFee: 150,
+  customErrandCustomerFee: 100,
   commissionFlatFee: 0,
   customErrandCommissionPercentage: 20,
   serviceBusinessCommissionPercentage: 15,
@@ -2285,6 +2341,7 @@ const pricingChangesCount = computed(() => {
   if (form.baseFee !== originalForm.baseFee) count++;
   if (form.expressFee !== originalForm.expressFee) count++;
   if (form.customErrandCommissionPercentage !== originalForm.customErrandCommissionPercentage) count++;
+  if (form.customErrandCustomerFee !== originalForm.customErrandCustomerFee) count++;
   if (form.serviceBusinessCommissionPercentage !== originalForm.serviceBusinessCommissionPercentage) count++;
   if (form.customErrandSafetyBufferPercentage !== originalForm.customErrandSafetyBufferPercentage) count++;
   if (form.interceptionEnabled !== originalForm.interceptionEnabled) count++;
@@ -2321,6 +2378,7 @@ const confirmSave = (type: string) => {
     if (form.baseFee !== originalForm.baseFee) confirmModal.changes.push(`suggested standard errand fee: <strong>₦${originalForm.baseFee}</strong> → <strong>₦${form.baseFee}</strong>`);
     if (form.expressFee !== originalForm.expressFee) confirmModal.changes.push(`suggested express errand fee: <strong>₦${originalForm.expressFee}</strong> → <strong>₦${form.expressFee}</strong>`);
     if (form.customErrandCommissionPercentage !== originalForm.customErrandCommissionPercentage) confirmModal.changes.push(`custom errand commission: <strong>${originalForm.customErrandCommissionPercentage}%</strong> → <strong>${form.customErrandCommissionPercentage}%</strong>`);
+    if (form.customErrandCustomerFee !== originalForm.customErrandCustomerFee) confirmModal.changes.push(`custom errand customer fee: <strong>₦${originalForm.customErrandCustomerFee}</strong> → <strong>₦${form.customErrandCustomerFee}</strong>`);
     if (form.serviceBusinessCommissionPercentage !== originalForm.serviceBusinessCommissionPercentage) confirmModal.changes.push(`service business commission: <strong>${originalForm.serviceBusinessCommissionPercentage}%</strong> → <strong>${form.serviceBusinessCommissionPercentage}%</strong>`);
     if (form.customErrandSafetyBufferPercentage !== originalForm.customErrandSafetyBufferPercentage) confirmModal.changes.push(`custom errand safety buffer: <strong>${originalForm.customErrandSafetyBufferPercentage}%</strong> → <strong>${form.customErrandSafetyBufferPercentage}%</strong>`);
     if (form.interceptionEnabled !== originalForm.interceptionEnabled) confirmModal.changes.push(`order interception: <strong>${originalForm.interceptionEnabled ? 'enabled' : 'disabled'}</strong> → <strong>${form.interceptionEnabled ? 'enabled' : 'disabled'}</strong>`);
@@ -2395,6 +2453,9 @@ const loadSettings = async () => {
         ? Number(errandSettings.convenienceFee)
         : (errandSettings.platformFee != null && !isNaN(Number(errandSettings.platformFee)) ? Number(errandSettings.platformFee) : 150);
       form.convenienceFee = form.platformFee;
+      form.customErrandCustomerFee = errandSettings.customErrandCustomerFee != null && !isNaN(Number(errandSettings.customErrandCustomerFee))
+        ? Number(errandSettings.customErrandCustomerFee)
+        : (errandSettings.convenienceFee != null && !isNaN(Number(errandSettings.convenienceFee)) ? Number(errandSettings.convenienceFee) : 100);
       form.commissionFlatFee = errandSettings.commissionFlatFee != null && !isNaN(Number(errandSettings.commissionFlatFee))
         ? Math.max(0, Math.min(50, Number(errandSettings.commissionFlatFee)))
         : 0;
@@ -2495,6 +2556,9 @@ const saveSettings = async () => {
       dropoffServiceFee: form.dropoffServiceFee != null && form.dropoffServiceFee !== '' && !isNaN(Number(form.dropoffServiceFee)) ? Number(form.dropoffServiceFee) : 300,
       platformFee: resolvedOrderServiceFee,
       convenienceFee: resolvedOrderServiceFee,
+      customErrandCustomerFee: form.customErrandCustomerFee != null && form.customErrandCustomerFee !== '' && !isNaN(Number(form.customErrandCustomerFee))
+        ? Number(form.customErrandCustomerFee)
+        : 100,
       commissionFlatFee: form.commissionFlatFee != null && form.commissionFlatFee !== '' && !isNaN(Number(form.commissionFlatFee))
         ? Math.max(0, Math.min(50, Number(form.commissionFlatFee)))
         : 0,
@@ -2544,6 +2608,7 @@ const saveSettings = async () => {
         dropoffServiceFee: res.data.dropoffServiceFee ?? form.dropoffServiceFee,
         platformFee: res.data.convenienceFee ?? res.data.platformFee ?? form.platformFee,
         convenienceFee: res.data.convenienceFee ?? res.data.platformFee ?? form.convenienceFee,
+        customErrandCustomerFee: res.data.customErrandCustomerFee ?? form.customErrandCustomerFee,
         commissionFlatFee: res.data.commissionFlatFee ?? form.commissionFlatFee,
         customErrandCommissionPercentage: res.data.customErrandCommissionPercentage ?? form.customErrandCommissionPercentage,
         serviceBusinessCommissionPercentage: res.data.serviceBusinessCommissionPercentage ?? form.serviceBusinessCommissionPercentage,

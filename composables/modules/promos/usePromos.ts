@@ -1,26 +1,32 @@
 import { ref } from 'vue'
 import { promos_api } from '@/api_factory/modules/promos'
 import { admin_api } from '@/api_factory/modules/admin'
+import { referrals_api } from '@/api_factory/modules/referrals'
 import { useCustomToast } from '@/composables/core/useCustomToast'
 
 export const usePromos = () => {
   const promos = ref<any[]>([])
+  const referralPromos = ref<any[]>([])
+  const statsOverview = ref<any>(null)
   const loading = ref(false)
   const isSubmitting = ref(false)
   const users = ref<any[]>([])
   const vendors = ref<any[]>([])
+  const facilitators = ref<any[]>([])
   const { showToast } = useCustomToast()
 
   const fetchDependencies = async () => {
     try {
-      const [usersRes, vendorsRes] = await Promise.all([
+      const [usersRes, vendorsRes, facRes] = await Promise.all([
         admin_api.getUsers(),
-        admin_api.getVendors()
+        admin_api.getVendors(),
+        referrals_api.getFacilitators({ active: 'true' }),
       ])
       users.value = usersRes.data?.users || usersRes.data || []
       vendors.value = vendorsRes.data?.vendors || vendorsRes.data || []
+      facilitators.value = facRes.data || []
     } catch (e: any) {
-      console.error('Failed to load users/vendors', e)
+      console.error('Failed to load dependencies for promos', e)
     }
   }
 
@@ -28,7 +34,7 @@ export const usePromos = () => {
     loading.value = true
     try {
       const res = await promos_api.getPromoCodes()
-      promos.value = res.data
+      promos.value = res.data || []
     } catch (error: any) {
       showToast({
         title: 'Error',
@@ -37,6 +43,27 @@ export const usePromos = () => {
       })
     } finally {
       loading.value = false
+    }
+  }
+
+  const fetchReferralPromos = async (referrerType?: string, search?: string) => {
+    loading.value = true
+    try {
+      const res = await promos_api.getReferralPromos({ referrerType, search })
+      referralPromos.value = res.data || []
+    } catch (error: any) {
+      console.error('Failed to fetch referral promos', error)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const fetchStatsOverview = async () => {
+    try {
+      const res = await promos_api.getStatsOverview()
+      statsOverview.value = res.data || null
+    } catch (error: any) {
+      console.error('Failed to fetch promo stats overview', error)
     }
   }
 
@@ -104,11 +131,16 @@ export const usePromos = () => {
 
   return {
     promos,
+    referralPromos,
+    statsOverview,
     users,
     vendors,
+    facilitators,
     loading,
     isSubmitting,
     fetchPromos,
+    fetchReferralPromos,
+    fetchStatsOverview,
     fetchDependencies,
     createPromo,
     updatePromo,

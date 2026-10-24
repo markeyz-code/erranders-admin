@@ -1,12 +1,32 @@
 import { GATEWAY_ENDPOINT_WITH_AUTH } from '../axios.config';
 
 export const referrals_api = {
-  // Stats
+  // Stats with persona breakdown
   getStats: () => {
     return GATEWAY_ENDPOINT_WITH_AUTH.get('/admin/referrals/stats');
   },
 
-  // Referrals
+  // Multi-persona referrers (Errand Ninjas, Customers, Vendors, Ambassadors)
+  getAllReferrers: (params?: { role?: string; search?: string; page?: number; limit?: number }) => {
+    const query = new URLSearchParams();
+    if (params?.role) query.set('role', params.role);
+    if (params?.search) query.set('search', params.search);
+    if (params?.page) query.set('page', params.page.toString());
+    if (params?.limit) query.set('limit', params.limit.toString());
+    return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/referrals/all-referrers?${query.toString()}`);
+  },
+
+  // Full 360-degree referrer profile with linked promo codes and redemptions
+  getReferrerProfile: (type: 'facilitator' | 'user', id: string) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/referrals/referrer-profile/${type}/${id}`);
+  },
+
+  // Generate / update custom referral code
+  generateCode: (data: { type: 'facilitator' | 'user'; id: string; customCode?: string }) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.post('/admin/referrals/generate-code', data);
+  },
+
+  // All individual referral events log
   getAllReferrals: (params?: { page?: number; limit?: number; status?: string; type?: string }) => {
     const query = new URLSearchParams();
     if (params?.page) query.set('page', params.page.toString());
@@ -16,9 +36,12 @@ export const referrals_api = {
     return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/referrals?${query.toString()}`);
   },
 
-  // Leaderboard
-  getLeaderboard: (limit = 20) => {
-    return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/referrals/leaderboard?limit=${limit}`);
+  // Leaderboard with optional role filter
+  getLeaderboard: (limit = 20, role?: string) => {
+    const query = new URLSearchParams();
+    query.set('limit', limit.toString());
+    if (role) query.set('role', role);
+    return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/referrals/leaderboard?${query.toString()}`);
   },
 
   // Facilitators
@@ -57,7 +80,6 @@ export const referrals_api = {
     return GATEWAY_ENDPOINT_WITH_AUTH.post('/admin/referrals/facilitators/seed', { facilitators });
   },
 
-  // User referrals
   getUserReferrals: (userId: string) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/referrals/user/${userId}`);
   },

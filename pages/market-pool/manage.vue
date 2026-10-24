@@ -545,6 +545,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { Plus, X, CalendarX, ShoppingCart, LayoutList, UploadCloud, Edit, Trash2 } from 'lucide-vue-next'
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config'
 import { useCustomToast } from '@/composables/core/useCustomToast'
+import SearchableSelect from '@/components/ui/SearchableSelect.vue'
 
 definePageMeta({
   layout: 'admin'
