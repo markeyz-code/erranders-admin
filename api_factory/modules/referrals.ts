@@ -52,8 +52,12 @@ export const referrals_api = {
     return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/referrals/facilitators?${query.toString()}`);
   },
 
-  createFacilitator: (data: { name: string; email: string; matricNumber?: string; skill?: string; referralCode?: string; sendWelcomeEmail?: boolean }) => {
+  createFacilitator: (data: { name: string; email?: string; phone?: string; matricNumber?: string; skill?: string; referralCode?: string; sendWelcomeEmail?: boolean }) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.post('/admin/referrals/facilitators', data);
+  },
+
+  createStaff: (data: { name: string; email?: string; phone?: string; department?: string; referralCode?: string }) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.post('/admin/referrals/staff', data);
   },
 
   getFacilitator: (id: string) => {

@@ -21,6 +21,12 @@
           Create Referral Promo
         </button>
 
+        <button @click="showAddStaffModal = true"
+          class="flex items-center gap-2 px-4 h-11 bg-white border border-gray-200 text-gray-800 rounded-xl font-bold text-sm hover:bg-gray-50 transition-colors shadow-xs">
+          <UserCheck class="w-4 h-4 text-amber-600" />
+          Add Staff / Internal Team
+        </button>
+
         <button @click="showAddFacModal = true"
           class="flex items-center gap-2 px-4 h-11 bg-gray-900 text-white rounded-xl font-medium text-sm hover:bg-gray-800 transition-colors shadow-sm">
           <UserPlus class="w-4 h-4" />
@@ -720,42 +726,158 @@
     </Teleport>
 
     <!-- ══════════════════════════════════════════════════════════════ -->
-    <!-- MODAL 2: ADD AMBASSADOR (FACILITATOR)                          -->
+    <!-- MODAL 2: ADD ERRANDERS STAFF / INTERNAL TEAM                   -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <Teleport to="body">
+      <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
+        <div v-if="showAddStaffModal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4" @click.self="showAddStaffModal = false">
+          <div class="bg-white rounded-2xl shadow-xl border border-gray-100 max-w-sm w-full p-6 space-y-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center text-sm font-bold">👔</span>
+                <h2 class="text-lg font-black text-gray-900">Add Erranders Staff</h2>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">Register an internal team member or staff to track their referrals. Only the full name is compulsory.</p>
+            </div>
+
+            <form @submit.prevent="handleAddStaff" class="space-y-3.5">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
+                  Full Name <span class="text-red-500">*</span>
+                </label>
+                <input v-model="newStaff.name" type="text" required placeholder="e.g. Samuel Okafor"
+                  class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:bg-white" />
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="text-xs font-bold text-gray-700 uppercase">Email</label>
+                  <span class="text-[10px] text-gray-400 font-medium">Optional</span>
+                </div>
+                <input v-model="newStaff.email" type="email" placeholder="samuel@erranders.org (optional)"
+                  class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:bg-white" />
+              </div>
+
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="text-xs font-bold text-gray-700 uppercase">Phone</label>
+                    <span class="text-[10px] text-gray-400 font-medium">Optional</span>
+                  </div>
+                  <input v-model="newStaff.phone" type="tel" placeholder="08012345678"
+                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:bg-white" />
+                </div>
+                <div>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="text-xs font-bold text-gray-700 uppercase">Department</label>
+                    <span class="text-[10px] text-gray-400 font-medium">Optional</span>
+                  </div>
+                  <input v-model="newStaff.department" type="text" placeholder="e.g. Operations"
+                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:bg-white" />
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="text-xs font-bold text-gray-700 uppercase">Custom Code</label>
+                  <span class="text-[10px] text-gray-400 font-medium">Auto if blank</span>
+                </div>
+                <input v-model="newStaff.referralCode" type="text" placeholder="e.g. ERR-SAMUEL"
+                  class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:bg-white uppercase font-mono" />
+              </div>
+
+              <div v-if="addStaffError" class="p-2.5 bg-red-50 text-red-600 text-xs rounded-xl border border-red-100 font-medium">
+                {{ addStaffError }}
+              </div>
+
+              <div class="flex gap-2 pt-2">
+                <button type="button" @click="showAddStaffModal = false"
+                  class="flex-1 py-2 bg-gray-100 text-gray-700 rounded-xl font-bold text-xs hover:bg-gray-200 transition-colors">
+                  Cancel
+                </button>
+                <button type="submit" :disabled="addingStaff"
+                  class="flex-1 py-2 bg-gray-900 text-white rounded-xl font-bold text-xs hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                  <Loader2 v-if="addingStaff" class="w-3.5 h-3.5 animate-spin" />
+                  <span>{{ addingStaff ? 'Adding Staff...' : 'Add Staff' }}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- MODAL 3: ADD AMBASSADOR (FACILITATOR)                          -->
     <!-- ══════════════════════════════════════════════════════════════ -->
     <Teleport to="body">
       <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
         <div v-if="showAddFacModal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4" @click.self="showAddFacModal = false">
           <div class="bg-white rounded-2xl shadow-xl border border-gray-100 max-w-sm w-full p-6 space-y-4">
             <div>
-              <h2 class="text-lg font-black text-gray-900">Add Campus Ambassador</h2>
-              <p class="text-xs text-gray-500 mt-0.5">Register a student leader to drive campus growth.</p>
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm font-bold">💎</span>
+                <h2 class="text-lg font-black text-gray-900">Add Ambassador</h2>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">Register a campus ambassador. Only the full name is compulsory; other details are optional.</p>
             </div>
 
             <form @submit.prevent="handleAddFacilitator" class="space-y-3.5">
               <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Full Name *</label>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
+                  Full Name <span class="text-red-500">*</span>
+                </label>
                 <input v-model="newFac.name" type="text" required placeholder="e.g. Tunde Adeyemi"
                   class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:bg-white" />
               </div>
+
               <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Email *</label>
-                <input v-model="newFac.email" type="email" required placeholder="tunde@university.edu.ng"
+                <div class="flex items-center justify-between mb-1">
+                  <label class="text-xs font-bold text-gray-700 uppercase">Email</label>
+                  <span class="text-[10px] text-gray-400 font-medium">Optional</span>
+                </div>
+                <input v-model="newFac.email" type="email" placeholder="tunde@university.edu.ng (optional)"
                   class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:bg-white" />
               </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="text-xs font-bold text-gray-700 uppercase">Phone Number</label>
+                  <span class="text-[10px] text-gray-400 font-medium">Optional</span>
+                </div>
+                <input v-model="newFac.phone" type="tel" placeholder="08012345678 (optional)"
+                  class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:bg-white" />
+              </div>
+
               <div class="grid grid-cols-2 gap-2.5">
                 <div>
-                  <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Matric No.</label>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="text-xs font-bold text-gray-700 uppercase">Matric No.</label>
+                    <span class="text-[10px] text-gray-400 font-medium">Optional</span>
+                  </div>
                   <input v-model="newFac.matricNumber" type="text" placeholder="Optional"
                     class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:bg-white" />
                 </div>
                 <div>
-                  <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Skill / Niche</label>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="text-xs font-bold text-gray-700 uppercase">Skill / Niche</label>
+                    <span class="text-[10px] text-gray-400 font-medium">Optional</span>
+                  </div>
                   <input v-model="newFac.skill" type="text" placeholder="e.g. Content Creator"
                     class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:bg-white" />
                 </div>
               </div>
 
-              <div class="flex items-center gap-2 pt-1">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="text-xs font-bold text-gray-700 uppercase">Custom Code</label>
+                  <span class="text-[10px] text-gray-400 font-medium">Auto if blank</span>
+                </div>
+                <input v-model="newFac.referralCode" type="text" placeholder="e.g. ERR-TUNDE"
+                  class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:bg-white uppercase font-mono" />
+              </div>
+
+              <div v-if="newFac.email" class="flex items-center gap-2 pt-1">
                 <input v-model="newFac.sendWelcomeEmail" type="checkbox" id="fac-send-email"
                   class="w-4 h-4 accent-gray-900 rounded border-gray-300" />
                 <label for="fac-send-email" class="text-xs font-medium text-gray-700 cursor-pointer">
@@ -763,7 +885,7 @@
                 </label>
               </div>
 
-              <div v-if="addFacError" class="p-2 bg-red-50 text-red-600 text-xs rounded-lg border border-red-100">
+              <div v-if="addFacError" class="p-2.5 bg-red-50 text-red-600 text-xs rounded-xl border border-red-100 font-medium">
                 {{ addFacError }}
               </div>
 
@@ -1091,7 +1213,7 @@ import { useCustomToast } from '@/composables/core/useCustomToast'
 import SideDrawer from '@/components/ui/SideDrawer.vue'
 import SearchableSelect from '@/components/ui/SearchableSelect.vue'
 import {
-  Gift, Users, UserPlus, Trophy, Search,
+  Gift, Users, UserPlus, UserCheck, Trophy, Search,
   TrendingUp, Loader2, Star, X, Tag, Plus, Check, Copy,
   RefreshCw, BarChart3, ShoppingBag, Bike, Store, GraduationCap, Sparkles, ChevronRight
 } from 'lucide-vue-next'
@@ -1154,6 +1276,18 @@ const promoForm = reactive({
   onlyForNewUsers: false,
 })
 
+// Add Staff / Internal Team Modal
+const showAddStaffModal = ref(false)
+const addingStaff = ref(false)
+const addStaffError = ref('')
+const newStaff = reactive({
+  name: '',
+  email: '',
+  phone: '',
+  department: '',
+  referralCode: '',
+})
+
 // Add Ambassador Modal
 const showAddFacModal = ref(false)
 const addingFac = ref(false)
@@ -1161,8 +1295,10 @@ const addFacError = ref('')
 const newFac = reactive({
   name: '',
   email: '',
+  phone: '',
   matricNumber: '',
   skill: '',
+  referralCode: '',
   sendWelcomeEmail: true,
 })
 
@@ -1544,13 +1680,62 @@ const togglePromoStatus = async (promo: any) => {
   }
 }
 
+// ─── Actions: Staff / Internal Team ──────────────────────────────
+
+const handleAddStaff = async () => {
+  if (!newStaff.name?.trim()) {
+    addStaffError.value = 'Full name is compulsory'
+    return
+  }
+  addStaffError.value = ''
+  addingStaff.value = true
+  try {
+    const payload = {
+      name: newStaff.name.trim(),
+      email: newStaff.email?.trim() || undefined,
+      phone: newStaff.phone?.trim() || undefined,
+      department: newStaff.department?.trim() || undefined,
+      referralCode: newStaff.referralCode?.trim()?.toUpperCase() || undefined,
+    }
+    const res = await referrals_api.createStaff(payload)
+    if (res?.type === 'ERROR') throw res
+    showToast({
+      title: 'Staff Member Added!',
+      message: `${newStaff.name} has been registered to Erranders internal team.`,
+      toastType: 'success'
+    })
+    showAddStaffModal.value = false
+    Object.assign(newStaff, { name: '', email: '', phone: '', department: '', referralCode: '' })
+    fetchReferrers()
+    fetchStats()
+    fetchDependencies()
+  } catch (e: any) {
+    addStaffError.value = e?.response?.data?.message || 'Failed to add staff member'
+  } finally {
+    addingStaff.value = false
+  }
+}
+
 // ─── Actions: Ambassador / Facilitator ───────────────────────────
 
 const handleAddFacilitator = async () => {
+  if (!newFac.name?.trim()) {
+    addFacError.value = 'Full name is compulsory'
+    return
+  }
   addFacError.value = ''
   addingFac.value = true
   try {
-    const res = await referrals_api.createFacilitator(newFac)
+    const payload = {
+      name: newFac.name.trim(),
+      email: newFac.email?.trim() || undefined,
+      phone: newFac.phone?.trim() || undefined,
+      matricNumber: newFac.matricNumber?.trim() || undefined,
+      skill: newFac.skill?.trim() || undefined,
+      referralCode: newFac.referralCode?.trim()?.toUpperCase() || undefined,
+      sendWelcomeEmail: newFac.email ? newFac.sendWelcomeEmail : false,
+    }
+    const res = await referrals_api.createFacilitator(payload)
     if (res?.type === 'ERROR') throw res
     showToast({
       title: 'Ambassador Registered!',
@@ -1558,12 +1743,12 @@ const handleAddFacilitator = async () => {
       toastType: 'success'
     })
     showAddFacModal.value = false
-    Object.assign(newFac, { name: '', email: '', matricNumber: '', skill: '', sendWelcomeEmail: true })
+    Object.assign(newFac, { name: '', email: '', phone: '', matricNumber: '', skill: '', referralCode: '', sendWelcomeEmail: true })
     fetchReferrers()
     fetchStats()
     fetchDependencies()
   } catch (e: any) {
-    addFacError.value = e?.response?.data?.message || 'Failed to create facilitator'
+    addFacError.value = e?.response?.data?.message || 'Failed to create ambassador'
   } finally {
     addingFac.value = false
   }
