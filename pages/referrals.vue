@@ -10,7 +10,7 @@
           </span>
         </div>
         <p class="text-sm text-gray-500">
-          Create trackable promo codes and manage referrals for Errand Ninjas, Customers, Vendors & Campus Ambassadors
+          Create trackable promo codes and manage referrals for Erranders Staffs, Vendors, Errand Ninjas, Customers/Students & Ambassadors
         </p>
       </div>
 
@@ -35,97 +35,97 @@
       </div>
     </div>
 
-    <!-- 6-Grid Stats Cards -->
+    <!-- 6-Grid Stats Cards: Strictly 5 Persona Categories + Total Performance -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-      <!-- Total Referrals -->
+      <!-- 1. Erranders Staffs or internal team -->
       <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
         <div class="flex items-center justify-between mb-2">
-          <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-            <Gift class="w-4 h-4" />
+          <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold text-base">
+            👔
           </div>
-          <span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">All-Time</span>
+          <span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">Staff</span>
         </div>
-        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Total Referrals</p>
+        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide truncate">Erranders Staffs</p>
         <h3 class="text-xl font-black text-gray-900 mt-0.5 tabular-nums">
-          {{ statsLoading ? '...' : (statsData?.totalReferrals || 0).toLocaleString() }}
+          {{ statsLoading ? '...' : (statsData?.personas?.staff?.referrals || statsData?.referralsByType?.staff || 0).toLocaleString() }}
         </h3>
-        <p class="text-[10px] text-gray-400 mt-1 font-medium">{{ statsData?.recentReferrals || 0 }} in last 7d</p>
+        <p class="text-[10px] text-gray-400 mt-1 font-medium truncate">{{ statsData?.personas?.staff?.total || 0 }} internal team</p>
       </div>
 
-      <!-- Errand Ninjas -->
+      <!-- 2. Vendors -->
       <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
         <div class="flex items-center justify-between mb-2">
-          <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-            <Bike class="w-4 h-4" />
-          </div>
-          <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">Ninjas</span>
-        </div>
-        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Errand Ninjas</p>
-        <h3 class="text-xl font-black text-gray-900 mt-0.5 tabular-nums">
-          {{ statsLoading ? '...' : (statsData?.personas?.ninjas?.referrals || statsData?.referralsByType?.errander || 0).toLocaleString() }}
-        </h3>
-        <p class="text-[10px] text-gray-400 mt-1 font-medium">{{ statsData?.personas?.ninjas?.total || 0 }} registered ninjas</p>
-      </div>
-
-      <!-- Customers -->
-      <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
-        <div class="flex items-center justify-between mb-2">
-          <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
-            <GraduationCap class="w-4 h-4" />
-          </div>
-          <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">Customers</span>
-        </div>
-        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Customers</p>
-        <h3 class="text-xl font-black text-gray-900 mt-0.5 tabular-nums">
-          {{ statsLoading ? '...' : (statsData?.personas?.customers?.referrals || statsData?.referralsByType?.student || 0).toLocaleString() }}
-        </h3>
-        <p class="text-[10px] text-gray-400 mt-1 font-medium">Peer-to-peer growth</p>
-      </div>
-
-      <!-- Vendors -->
-      <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
-        <div class="flex items-center justify-between mb-2">
-          <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-            <Store class="w-4 h-4" />
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-base">
+            🏪
           </div>
           <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Vendors</span>
         </div>
-        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Vendors</p>
+        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide truncate">Vendors</p>
         <h3 class="text-xl font-black text-gray-900 mt-0.5 tabular-nums">
           {{ statsLoading ? '...' : (statsData?.personas?.vendors?.referrals || statsData?.referralsByType?.vendor || 0).toLocaleString() }}
         </h3>
-        <p class="text-[10px] text-gray-400 mt-1 font-medium">{{ statsData?.personas?.vendors?.total || 0 }} merchants</p>
+        <p class="text-[10px] text-gray-400 mt-1 font-medium truncate">{{ statsData?.personas?.vendors?.total || 0 }} merchants</p>
       </div>
 
-      <!-- Ambassadors -->
+      <!-- 3. Errand Ninjas -->
       <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
         <div class="flex items-center justify-between mb-2">
-          <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
-            <Trophy class="w-4 h-4" />
+          <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-base">
+            🛵
           </div>
-          <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">Ambassadors</span>
+          <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">Ninjas</span>
         </div>
-        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Ambassadors</p>
+        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide truncate">Errand Ninjas</p>
+        <h3 class="text-xl font-black text-gray-900 mt-0.5 tabular-nums">
+          {{ statsLoading ? '...' : (statsData?.personas?.ninjas?.referrals || statsData?.referralsByType?.errander || 0).toLocaleString() }}
+        </h3>
+        <p class="text-[10px] text-gray-400 mt-1 font-medium truncate">{{ statsData?.personas?.ninjas?.total || 0 }} registered ninjas</p>
+      </div>
+
+      <!-- 4. Customers/Students -->
+      <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+        <div class="flex items-center justify-between mb-2">
+          <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-base">
+            🎓
+          </div>
+          <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">Customers</span>
+        </div>
+        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide truncate">Customers/Students</p>
+        <h3 class="text-xl font-black text-gray-900 mt-0.5 tabular-nums">
+          {{ statsLoading ? '...' : (statsData?.personas?.customers?.referrals || statsData?.referralsByType?.student || 0).toLocaleString() }}
+        </h3>
+        <p class="text-[10px] text-gray-400 mt-1 font-medium truncate">{{ statsData?.personas?.customers?.total || 0 }} registered</p>
+      </div>
+
+      <!-- 5. Ambassadors -->
+      <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+        <div class="flex items-center justify-between mb-2">
+          <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-base">
+            💎
+          </div>
+          <span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">Ambassadors</span>
+        </div>
+        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide truncate">Ambassadors</p>
         <h3 class="text-xl font-black text-gray-900 mt-0.5 tabular-nums">
           {{ statsLoading ? '...' : (statsData?.personas?.ambassadors?.referrals || statsData?.referralsByType?.facilitator || 0).toLocaleString() }}
         </h3>
-        <p class="text-[10px] text-gray-400 mt-1 font-medium">{{ statsData?.totalFacilitators || 0 }} ambassadors</p>
+        <p class="text-[10px] text-gray-400 mt-1 font-medium truncate">{{ statsData?.totalFacilitators || 0 }} active campus leads</p>
       </div>
 
-      <!-- Promo Code Sales -->
+      <!-- Total Referrals & Promo Volume -->
       <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
         <div class="flex items-center justify-between mb-2">
           <div class="w-8 h-8 rounded-xl bg-[#FF5C1A]/10 text-[#FF5C1A] flex items-center justify-center font-bold">
-            <Tag class="w-4 h-4" />
+            <Gift class="w-4 h-4" />
           </div>
-          <span class="text-[10px] font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-1.5 py-0.5 rounded">Promo Sales</span>
+          <span class="text-[10px] font-bold text-[#FF5C1A] bg-[#FF5C1A]/10 px-1.5 py-0.5 rounded">All-Time</span>
         </div>
-        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide">Promo Sales</p>
-        <h3 class="text-lg font-black text-gray-900 mt-0.5 tabular-nums truncate">
-          ₦{{ statsLoading ? '...' : (statsData?.affiliatePromos?.totalRevenueDriven || 0).toLocaleString() }}
+        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wide truncate">Total Referrals</p>
+        <h3 class="text-xl font-black text-gray-900 mt-0.5 tabular-nums">
+          {{ statsLoading ? '...' : (statsData?.totalReferrals || 0).toLocaleString() }}
         </h3>
-        <p class="text-[10px] text-gray-400 mt-1 font-medium">
-          {{ statsData?.affiliatePromos?.totalOrdersDriven || 0 }} orders driven
+        <p class="text-[10px] text-gray-400 mt-1 font-medium truncate">
+          ₦{{ (statsData?.affiliatePromos?.totalRevenueDriven || 0).toLocaleString() }} promo sales
         </p>
       </div>
     </div>
@@ -597,17 +597,18 @@
               <!-- Persona Selector Tabs -->
               <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Affiliate Persona *</label>
-                <div class="grid grid-cols-4 gap-2">
+                <div class="grid grid-cols-5 gap-1.5">
                   <button v-for="roleOption in [
-                    { key: 'errander', label: 'Ninja', emoji: '🚲' },
-                    { key: 'student', label: 'Customer', emoji: '🎓' },
+                    { key: 'staff', label: 'Staff', emoji: '👔' },
                     { key: 'vendor', label: 'Vendor', emoji: '🏪' },
+                    { key: 'errander', label: 'Ninja', emoji: '🛵' },
+                    { key: 'student', label: 'Customer', emoji: '🎓' },
                     { key: 'facilitator', label: 'Ambassador', emoji: '💎' },
                   ]" :key="roleOption.key" type="button" @click="onSelectPromoPersona(roleOption.key)"
-                    class="py-2 px-2 rounded-xl text-xs font-bold border transition-all text-center flex flex-col items-center gap-1"
+                    class="py-2 px-1 rounded-xl text-xs font-bold border transition-all text-center flex flex-col items-center gap-1"
                     :class="promoForm.targetRole === roleOption.key ? 'bg-gray-900 text-white border-gray-900 shadow-sm' : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'">
                     <span class="text-base">{{ roleOption.emoji }}</span>
-                    <span>{{ roleOption.label }}</span>
+                    <span class="text-[10px]">{{ roleOption.label }}</span>
                   </button>
                 </div>
               </div>
@@ -800,10 +801,11 @@
                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Target Persona *</label>
                 <select v-model="customCodeForm.targetRole" @change="onSelectCustomCodePersona(customCodeForm.targetRole)"
                   class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold focus:outline-none">
-                  <option value="errander">🚲 Errand Ninja</option>
-                  <option value="student">🎓 Customer</option>
-                  <option value="vendor">🏪 Vendor</option>
-                  <option value="facilitator">💎 Ambassador</option>
+                  <option value="staff">👔 Erranders Staffs or internal team</option>
+                  <option value="vendor">🏪 Vendors</option>
+                  <option value="errander">🛵 Errand Ninjas</option>
+                  <option value="student">🎓 Customers/Students</option>
+                  <option value="facilitator">💎 Ambassadors</option>
                 </select>
               </div>
 
@@ -1196,25 +1198,28 @@ const mainTabs = computed(() => [
 
 const personaFilters = [
   { key: 'all', label: 'All Personas', emoji: '👥' },
-  { key: 'errander', label: 'Errand Ninjas', emoji: '🚲' },
-  { key: 'student', label: 'Customers', emoji: '🎓' },
+  { key: 'staff', label: 'Erranders Staffs or internal team', emoji: '👔' },
   { key: 'vendor', label: 'Vendors', emoji: '🏪' },
+  { key: 'errander', label: 'Errand Ninjas', emoji: '🛵' },
+  { key: 'student', label: 'Customers/Students', emoji: '🎓' },
   { key: 'facilitator', label: 'Ambassadors', emoji: '💎' },
 ]
 
 const promoPersonaFilters = [
   { key: 'all', label: 'All Affiliates', emoji: '👥' },
-  { key: 'errander', label: 'Errand Ninjas', emoji: '🚲' },
-  { key: 'student', label: 'Customers', emoji: '🎓' },
+  { key: 'staff', label: 'Erranders Staffs or internal team', emoji: '👔' },
   { key: 'vendor', label: 'Vendors', emoji: '🏪' },
+  { key: 'errander', label: 'Errand Ninjas', emoji: '🛵' },
+  { key: 'student', label: 'Customers/Students', emoji: '🎓' },
   { key: 'facilitator', label: 'Ambassadors', emoji: '💎' },
 ]
 
 const leaderboardFilters = [
   { key: 'all', label: 'All' },
-  { key: 'errander', label: 'Ninjas' },
-  { key: 'student', label: 'Customers' },
+  { key: 'staff', label: 'Staff / Internal' },
   { key: 'vendor', label: 'Vendors' },
+  { key: 'errander', label: 'Errand Ninjas' },
+  { key: 'student', label: 'Customers/Students' },
   { key: 'facilitator', label: 'Ambassadors' },
 ]
 
@@ -1223,8 +1228,12 @@ const leaderboardFilters = [
 const filteredReferrers = computed(() => {
   return referrers.value.filter(r => {
     // Persona filter
-    if (selectedPersona.value !== 'all' && r.role !== selectedPersona.value) {
-      return false
+    if (selectedPersona.value !== 'all') {
+      if (selectedPersona.value === 'staff') {
+        if (r.role !== 'staff' && r.role !== 'admin') return false
+      } else if (r.role !== selectedPersona.value) {
+        return false
+      }
     }
     // Search filter
     if (referrerSearch.value) {
@@ -1243,8 +1252,12 @@ const filteredReferrers = computed(() => {
 
 const filteredReferralPromos = computed(() => {
   return referralPromos.value.filter(p => {
-    if (selectedPromoPersona.value !== 'all' && p.referrerType !== selectedPromoPersona.value) {
-      return false
+    if (selectedPromoPersona.value !== 'all') {
+      if (selectedPromoPersona.value === 'staff') {
+        if (p.referrerType !== 'staff' && p.referrerType !== 'admin') return false
+      } else if (p.referrerType !== selectedPromoPersona.value) {
+        return false
+      }
     }
     if (promoSearch.value) {
       const q = promoSearch.value.toLowerCase()
@@ -1271,12 +1284,20 @@ const personOptions = computed(() => {
       sublabel: `Vendor • ${v.email}`,
     }))
   }
+  if (promoForm.targetRole === 'staff') {
+    const staffUsers = rawUsers.value.filter(u => u.role === 'admin' || u.role === 'staff')
+    return staffUsers.map(u => ({
+      label: `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email,
+      value: u._id,
+      sublabel: `Staff / Internal • ${u.email}`,
+    }))
+  }
   // Users (Errander or Student)
   const filteredUsers = rawUsers.value.filter(u => u.role === promoForm.targetRole)
   return filteredUsers.map(u => ({
     label: `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email,
     value: u._id,
-    sublabel: `${u.role === 'errander' ? 'Errand Ninja' : 'Customer'} • ${u.email}`,
+    sublabel: `${u.role === 'errander' ? 'Errand Ninja' : 'Customer/Student'} • ${u.email}`,
   }))
 })
 
@@ -1291,6 +1312,13 @@ const personOptionsForCustomCode = computed(() => {
     return rawVendors.value.map(v => ({
       label: v.storeName || v.businessName || v.name || v.email,
       value: v.userId || v._id,
+    }))
+  }
+  if (customCodeForm.targetRole === 'staff') {
+    const staffUsers = rawUsers.value.filter(u => u.role === 'admin' || u.role === 'staff')
+    return staffUsers.map(u => ({
+      label: `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email,
+      value: u._id,
     }))
   }
   const filteredUsers = rawUsers.value.filter(u => u.role === customCodeForm.targetRole)
@@ -1434,13 +1462,15 @@ const onPersonSelected = (val: string) => {
 }
 
 const suggestCodeString = (nameInput?: string) => {
-  const rolePrefix = promoForm.targetRole === 'errander' 
-    ? 'NINJA' 
-    : promoForm.targetRole === 'vendor' 
-      ? 'VENDOR' 
-      : promoForm.targetRole === 'facilitator' 
-        ? 'AMB' 
-        : 'CUST'
+  const rolePrefix = promoForm.targetRole === 'staff'
+    ? 'STAFF'
+    : promoForm.targetRole === 'vendor'
+      ? 'VENDOR'
+      : promoForm.targetRole === 'errander' 
+        ? 'NINJA' 
+        : promoForm.targetRole === 'student'
+          ? 'CUST'
+          : 'AMB'
 
   let base = 'AFF'
   if (nameInput) {
@@ -1618,30 +1648,38 @@ const openRedemptionsDrawer = async (promo: any) => {
 
 const personaBadgeTheme = (role: string) => {
   switch (role) {
+    case 'staff':
+    case 'admin':
+      return {
+        label: 'Erranders Staffs or internal team',
+        emoji: '👔',
+        tagClass: 'bg-amber-50 text-amber-800 border-amber-300',
+        avatarClass: 'bg-amber-50 text-amber-700 border-amber-200',
+      }
+    case 'vendor':
+      return {
+        label: 'Vendors',
+        emoji: '🏪',
+        tagClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+        avatarClass: 'bg-emerald-50 text-emerald-600 border-emerald-200',
+      }
     case 'errander':
       return {
-        label: 'Errand Ninja',
-        emoji: '🚲',
+        label: 'Errand Ninjas',
+        emoji: '🛵',
         tagClass: 'bg-blue-50 text-blue-700 border-blue-200',
         avatarClass: 'bg-blue-50 text-blue-600 border-blue-200',
       }
     case 'student':
       return {
-        label: 'Customer',
+        label: 'Customers/Students',
         emoji: '🎓',
         tagClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
         avatarClass: 'bg-indigo-50 text-indigo-600 border-indigo-200',
       }
-    case 'vendor':
-      return {
-        label: 'Vendor',
-        emoji: '🏪',
-        tagClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-        avatarClass: 'bg-emerald-50 text-emerald-600 border-emerald-200',
-      }
     case 'facilitator':
       return {
-        label: 'Ambassador',
+        label: 'Ambassadors',
         emoji: '💎',
         tagClass: 'bg-purple-50 text-purple-700 border-purple-200',
         avatarClass: 'bg-purple-50 text-purple-600 border-purple-200',
