@@ -182,8 +182,78 @@
         </div>
       </div>
 
+      <!-- Batch Actions Bar (when items are selected) -->
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="opacity-0 -translate-y-2"
+        enter-to-class="opacity-100 translate-y-0"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="opacity-100 translate-y-0"
+        leave-to-class="opacity-0 -translate-y-2"
+      >
+        <div v-if="selectedReferrersList.length > 0"
+          class="bg-gradient-to-r from-rose-950 via-gray-900 to-gray-950 text-white p-3.5 px-5 rounded-2xl shadow-xl flex flex-wrap items-center justify-between gap-4 border border-rose-500/30">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-xl bg-rose-500/20 border border-rose-500/30 text-rose-400 flex items-center justify-center font-bold text-xs">
+              {{ selectedReferrersList.length }}
+            </div>
+            <div>
+              <p class="text-xs font-bold text-white">{{ selectedReferrersList.length }} persona{{ selectedReferrersList.length > 1 ? 's' : '' }} selected</p>
+              <p class="text-[10px] text-gray-400">Selected across Erranders Staffs, Vendors, Errand Ninjas, Customers & Ambassadors</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              @click="clearSelection()"
+              class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors">
+              Deselect All
+            </button>
+            <button
+              type="button"
+              @click="confirmDeleteBatch()"
+              class="flex items-center gap-2 px-4 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-md shadow-rose-600/40 transition-all">
+              <Trash2 class="w-3.5 h-3.5" />
+              <span>Batch Delete ({{ selectedReferrersList.length }})</span>
+            </button>
+          </div>
+        </div>
+      </Transition>
+
       <!-- Referrers List / Table -->
       <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <!-- List Header with Select All -->
+        <div class="px-4 py-3 bg-gray-50/70 border-b border-gray-100 flex items-center justify-between gap-4 text-xs">
+          <div class="flex items-center gap-3">
+            <label class="flex items-center gap-2 cursor-pointer font-bold text-gray-700 select-none">
+              <input
+                type="checkbox"
+                :checked="isAllSelected"
+                @change="toggleSelectAll"
+                class="w-4 h-4 rounded border-gray-300 text-[#FF5C1A] focus:ring-[#FF5C1A]/20 cursor-pointer"
+              />
+              <span class="text-xs">Select All ({{ filteredReferrers.length }})</span>
+            </label>
+            <span v-if="selectedReferrersList.length > 0" class="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100">
+              {{ selectedReferrersList.length }} selected
+            </span>
+          </div>
+
+          <div class="flex items-center gap-3 text-xs text-gray-500">
+            <span class="text-[11px] font-medium text-gray-400">
+              Showing {{ filteredReferrers.length }} of {{ referrers.length }} personas
+            </span>
+            <button
+              v-if="selectedReferrersList.length > 0"
+              @click="confirmDeleteBatch()"
+              class="flex items-center gap-1.5 px-3 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-xs font-bold border border-rose-200 transition-colors">
+              <Trash2 class="w-3 h-3" />
+              <span>Delete Selected ({{ selectedReferrersList.length }})</span>
+            </button>
+          </div>
+        </div>
+
         <!-- Loading State -->
         <div v-if="referrersLoading" class="p-8 space-y-4">
           <div v-for="i in 5" :key="`ref-load-${i}`" class="flex items-center gap-4 animate-pulse">
@@ -211,10 +281,22 @@
         <div v-else class="divide-y divide-gray-100">
           <div v-for="referrer in filteredReferrers" :key="`${referrer.type}-${referrer._id}`"
             @click="openReferrerProfile(referrer)"
-            class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 hover:bg-gray-50/70 transition-all cursor-pointer group">
+            class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 hover:bg-gray-50/70 transition-all cursor-pointer group"
+            :class="{ 'bg-orange-50/30': isSelected(referrer) }">
             
-            <!-- Identity & Role -->
+            <!-- Checkbox & Identity & Role -->
             <div class="flex items-center gap-3.5 min-w-0">
+              <!-- Selection Checkbox -->
+              <div class="flex items-center shrink-0" @click.stop>
+                <input
+                  type="checkbox"
+                  :checked="isSelected(referrer)"
+                  @change="toggleSelect(referrer)"
+                  class="w-4 h-4 rounded border-gray-300 text-[#FF5C1A] focus:ring-[#FF5C1A]/20 cursor-pointer"
+                />
+              </div>
+
+              <!-- Avatar -->
               <div class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 border"
                 :class="personaBadgeTheme(referrer.role).avatarClass">
                 {{ referrer.name?.charAt(0)?.toUpperCase() || 'U' }}
@@ -271,7 +353,7 @@
             </div>
 
             <!-- Performance Stats & Actions -->
-            <div class="flex items-center justify-between sm:justify-end gap-6 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
+            <div class="flex items-center justify-between sm:justify-end gap-5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
               <div class="text-left sm:text-right">
                 <p class="text-xs font-black text-gray-900 tabular-nums">{{ referrer.totalReferrals || 0 }}</p>
                 <p class="text-[9px] font-bold text-gray-400 uppercase tracking-wide">Referrals</p>
@@ -291,6 +373,11 @@
                 <button @click.stop="quickAssignPromo(referrer)"
                   class="p-2 text-gray-400 hover:text-[#FF5C1A] hover:bg-[#FF5C1A]/10 rounded-lg transition-colors" title="Create dedicated promo code for this person">
                   <Tag class="w-4 h-4" />
+                </button>
+                <button @click.stop="confirmDeleteSingle(referrer)"
+                  class="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                  :title="`Delete ${referrer.name}`">
+                  <Trash2 class="w-4 h-4" />
                 </button>
                 <button @click.stop="openReferrerProfile(referrer)"
                   class="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors" title="View 360° Profile & Activity">
@@ -646,11 +733,13 @@
               <div class="grid grid-cols-2 gap-3">
                 <div>
                   <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Discount Type *</label>
-                  <select v-model="promoForm.discountType"
-                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:border-gray-900">
-                    <option value="percentage">Percentage (%)</option>
-                    <option value="flat">Flat Amount (₦)</option>
-                  </select>
+                  <SearchableSelect
+                    v-model="promoForm.discountType"
+                    :options="discountTypeOptions"
+                    :show-all-option="false"
+                    placeholder="Select discount type..."
+                    search-placeholder="Search type..."
+                  />
                 </div>
                 <div>
                   <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Discount Value *</label>
@@ -665,11 +754,13 @@
                 <div class="grid grid-cols-2 gap-3">
                   <div>
                     <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Reward Type</label>
-                    <select v-model="promoForm.rewardType"
-                      class="w-full px-2.5 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold focus:outline-none">
-                      <option value="points">Reward Points</option>
-                      <option value="wallet_credit">Wallet Credit (₦)</option>
-                    </select>
+                    <SearchableSelect
+                      v-model="promoForm.rewardType"
+                      :options="rewardTypeOptions"
+                      :show-all-option="false"
+                      placeholder="Select reward type..."
+                      search-placeholder="Search reward..."
+                    />
                   </div>
                   <div>
                     <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Reward Value</label>
@@ -921,14 +1012,14 @@
             <form @submit.prevent="handleAssignCustomCode" class="space-y-3.5">
               <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Target Persona *</label>
-                <select v-model="customCodeForm.targetRole" @change="onSelectCustomCodePersona(customCodeForm.targetRole)"
-                  class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold focus:outline-none">
-                  <option value="staff">👔 Erranders Staffs or internal team</option>
-                  <option value="vendor">🏪 Vendors</option>
-                  <option value="errander">🛵 Errand Ninjas</option>
-                  <option value="student">🎓 Customers/Students</option>
-                  <option value="facilitator">💎 Ambassadors</option>
-                </select>
+                <SearchableSelect
+                  v-model="customCodeForm.targetRole"
+                  :options="personaDropdownOptions"
+                  :show-all-option="false"
+                  placeholder="Select persona..."
+                  search-placeholder="Search target persona..."
+                  @change="onSelectCustomCodePersona(customCodeForm.targetRole)"
+                />
               </div>
 
               <div>
@@ -980,21 +1071,33 @@
       <template v-else-if="selectedProfile">
         <!-- Drawer Header -->
         <div class="p-6 border-b border-gray-100 bg-gray-50/50">
-          <div class="flex items-center gap-3.5">
-            <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-black border"
-              :class="personaBadgeTheme(selectedProfile.profile.role).avatarClass">
-              {{ selectedProfile.profile.name?.charAt(0)?.toUpperCase() || 'U' }}
-            </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <h3 class="text-base font-black text-gray-900">{{ selectedProfile.profile.name }}</h3>
-                <span class="inline-flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded border uppercase"
-                  :class="personaBadgeTheme(selectedProfile.profile.role).tagClass">
-                  {{ personaBadgeTheme(selectedProfile.profile.role).emoji }} {{ personaBadgeTheme(selectedProfile.profile.role).label }}
-                </span>
+          <div class="flex items-center justify-between gap-3.5">
+            <div class="flex items-center gap-3.5 min-w-0">
+              <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-black border shrink-0"
+                :class="personaBadgeTheme(selectedProfile.profile.role).avatarClass">
+                {{ selectedProfile.profile.name?.charAt(0)?.toUpperCase() || 'U' }}
               </div>
-              <p class="text-xs text-gray-500 mt-0.5">{{ selectedProfile.profile.email }}</p>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h3 class="text-base font-black text-gray-900 truncate">{{ selectedProfile.profile.name }}</h3>
+                  <span class="inline-flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded border uppercase"
+                    :class="personaBadgeTheme(selectedProfile.profile.role).tagClass">
+                    {{ personaBadgeTheme(selectedProfile.profile.role).emoji }} {{ personaBadgeTheme(selectedProfile.profile.role).label }}
+                  </span>
+                </div>
+                <p class="text-xs text-gray-500 mt-0.5 truncate">{{ selectedProfile.profile.email }}</p>
+              </div>
             </div>
+
+            <button
+              type="button"
+              @click="confirmDeleteSingle(selectedProfile.profile)"
+              class="flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 rounded-xl font-bold text-xs transition-all shrink-0"
+              title="Delete Persona Record"
+            >
+              <Trash2 class="w-3.5 h-3.5" />
+              <span>Delete</span>
+            </button>
           </div>
 
           <!-- Quick Metrics Bar -->
@@ -1127,6 +1230,24 @@
             </div>
           </div>
 
+          <!-- Danger Zone: Permanent Deletion -->
+          <div class="p-4 bg-rose-50/60 rounded-2xl border border-rose-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <p class="text-xs font-bold text-rose-950 flex items-center gap-1.5">
+                <Trash2 class="w-3.5 h-3.5 text-rose-600" /> Permanent Account Deletion
+              </p>
+              <p class="text-[11px] text-rose-700 mt-0.5">Permanently remove this persona, unlink promo codes, and clear platform records.</p>
+            </div>
+            <button
+              type="button"
+              @click="confirmDeleteSingle(selectedProfile.profile)"
+              class="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-xs transition-colors shrink-0 flex items-center gap-1.5 shadow-sm shadow-rose-600/30"
+            >
+              <Trash2 class="w-3.5 h-3.5" />
+              <span>Delete Permanently</span>
+            </button>
+          </div>
+
         </div>
       </template>
     </SideDrawer>
@@ -1201,6 +1322,118 @@
       </template>
     </SideDrawer>
 
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- MODAL 4: CUSTOM CONFIRMATION MODAL BEFORE DELETE               -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <Teleport to="body">
+      <Transition
+        enter-active-class="transition duration-200 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="showDeleteConfirmModal"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-gray-950/60 backdrop-blur-sm p-4 overflow-y-auto"
+          @click.self="!isDeleting && (showDeleteConfirmModal = false)"
+        >
+          <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 max-w-md w-full p-6 space-y-5 animate-scale-in">
+            <!-- Header with Warning Icon -->
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center shrink-0 shadow-sm shadow-rose-100">
+                <Trash2 class="w-6 h-6 animate-pulse" />
+              </div>
+              <div class="space-y-1 min-w-0">
+                <h3 class="text-lg font-black text-gray-900 tracking-tight">
+                  {{ deleteModalType === 'single' ? `Delete ${itemToDelete?.name || 'Persona'}?` : `Batch Delete ${selectedReferrersList.length} Personas?` }}
+                </h3>
+                <p class="text-xs text-gray-500 font-medium leading-relaxed">
+                  This action is permanent and will completely remove the persona from database records, unlink promo codes, and clear associated performance history.
+                </p>
+              </div>
+            </div>
+
+            <!-- Single Item Preview Details Box -->
+            <div v-if="deleteModalType === 'single' && itemToDelete" class="bg-rose-50/50 border border-rose-100 rounded-2xl p-4 space-y-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm border"
+                  :class="personaBadgeTheme(itemToDelete.role).avatarClass">
+                  {{ itemToDelete.name?.charAt(0)?.toUpperCase() || 'U' }}
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2">
+                    <p class="text-sm font-bold text-gray-900 truncate">{{ itemToDelete.name }}</p>
+                    <span class="text-[9px] font-black px-1.5 py-0.5 rounded border uppercase"
+                      :class="personaBadgeTheme(itemToDelete.role).tagClass">
+                      {{ personaBadgeTheme(itemToDelete.role).emoji }} {{ personaBadgeTheme(itemToDelete.role).label }}
+                    </span>
+                  </div>
+                  <p class="text-xs text-gray-500 truncate">{{ itemToDelete.email }}</p>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-rose-100/60 text-gray-600">
+                <div>
+                  <span class="text-[10px] uppercase font-bold text-gray-400">Ref Code:</span>
+                  <span class="font-mono font-bold text-gray-900 ml-1">{{ itemToDelete.referralCode || 'None' }}</span>
+                </div>
+                <div>
+                  <span class="text-[10px] uppercase font-bold text-gray-400">Referrals:</span>
+                  <span class="font-bold text-gray-900 ml-1">{{ itemToDelete.totalReferrals || 0 }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Batch Items Preview Box -->
+            <div v-else-if="deleteModalType === 'batch'" class="bg-rose-50/50 border border-rose-100 rounded-2xl p-4 space-y-2">
+              <div class="flex items-center justify-between text-xs font-bold text-rose-800">
+                <span>Selected for deletion:</span>
+                <span class="bg-rose-100 px-2 py-0.5 rounded-full">{{ selectedReferrersList.length }} items</span>
+              </div>
+              <div class="max-h-36 overflow-y-auto divide-y divide-rose-100/70 pr-1 space-y-1.5">
+                <div v-for="item in selectedReferrersList" :key="`${item.type}-${item._id}`" class="flex items-center justify-between text-xs pt-1.5">
+                  <div class="flex items-center gap-2 truncate">
+                    <span class="text-xs">{{ personaBadgeTheme(item.role).emoji }}</span>
+                    <span class="font-bold text-gray-900 truncate">{{ item.name }}</span>
+                    <span class="text-[10px] text-gray-400">({{ item.referralCode }})</span>
+                  </div>
+                  <span class="text-[9px] font-bold text-rose-600 shrink-0 uppercase">{{ personaBadgeTheme(item.role).label.split(' ')[0] }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Error Message Display -->
+            <div v-if="deleteError" class="p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200 font-medium">
+              {{ deleteError }}
+            </div>
+
+            <!-- Modal Footer Actions -->
+            <div class="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                :disabled="isDeleting"
+                @click="showDeleteConfirmModal = false"
+                class="px-4 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-bold text-xs transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                :disabled="isDeleting"
+                @click="executeDelete"
+                class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition-all shadow-sm shadow-rose-600/30 flex items-center gap-2 disabled:opacity-50"
+              >
+                <Loader2 v-if="isDeleting" class="w-4 h-4 animate-spin" />
+                <Trash2 v-else class="w-4 h-4" />
+                <span>{{ isDeleting ? 'Deleting...' : (deleteModalType === 'single' ? 'Yes, Delete Permanently' : `Yes, Delete ${selectedReferrersList.length} Personas`) }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+
   </div>
 </template>
 
@@ -1215,13 +1448,131 @@ import SearchableSelect from '@/components/ui/SearchableSelect.vue'
 import {
   Gift, Users, UserPlus, UserCheck, Trophy, Search,
   TrendingUp, Loader2, Star, X, Tag, Plus, Check, Copy,
-  RefreshCw, BarChart3, ShoppingBag, Bike, Store, GraduationCap, Sparkles, ChevronRight
+  RefreshCw, BarChart3, ShoppingBag, Bike, Store, GraduationCap, Sparkles, ChevronRight,
+  Trash2, AlertTriangle
 } from 'lucide-vue-next'
 
 definePageMeta({ layout: 'admin' })
 useHead({ title: 'Referrals & Affiliates Hub - Errander Admin' })
 
 const { showToast } = useCustomToast()
+
+// ─── Dropdown Options ────────────────────────────────────────────
+
+const discountTypeOptions = [
+  { value: 'percentage', label: 'Percentage (%)', emoji: '%' },
+  { value: 'flat', label: 'Flat Amount (₦)', emoji: '₦' },
+]
+
+const rewardTypeOptions = [
+  { value: 'points', label: 'Reward Points', emoji: '⭐' },
+  { value: 'wallet_credit', label: 'Wallet Credit (₦)', emoji: '💳' },
+]
+
+const personaDropdownOptions = [
+  { value: 'staff', label: 'Erranders Staffs or internal team', emoji: '👔', sublabel: 'Internal team & system operators' },
+  { value: 'vendor', label: 'Vendors', emoji: '🏪', sublabel: 'Registered merchants and store owners' },
+  { value: 'errander', label: 'Errand Ninjas', emoji: '🛵', sublabel: 'Delivery riders & dispatchers' },
+  { value: 'student', label: 'Customers/Students', emoji: '🎓', sublabel: 'Campus students & app shoppers' },
+  { value: 'facilitator', label: 'Ambassadors', emoji: '💎', sublabel: 'Campus leads & affiliate ambassadors' },
+]
+
+// ─── Batch Selection & Deletion State ─────────────────────────────
+
+const selectedReferrerKeys = ref<Set<string>>(new Set())
+const showDeleteConfirmModal = ref(false)
+const deleteModalType = ref<'single' | 'batch'>('single')
+const itemToDelete = ref<any>(null)
+const isDeleting = ref(false)
+const deleteError = ref('')
+
+const isSelected = (referrer: any) => {
+  return selectedReferrerKeys.value.has(`${referrer.type}:${referrer._id}`)
+}
+
+const toggleSelect = (referrer: any) => {
+  const key = `${referrer.type}:${referrer._id}`
+  if (selectedReferrerKeys.value.has(key)) {
+    selectedReferrerKeys.value.delete(key)
+  } else {
+    selectedReferrerKeys.value.add(key)
+  }
+}
+
+const isAllSelected = computed(() => {
+  if (filteredReferrers.value.length === 0) return false
+  return filteredReferrers.value.every(r => selectedReferrerKeys.value.has(`${r.type}:${r._id}`))
+})
+
+const toggleSelectAll = () => {
+  if (isAllSelected.value) {
+    selectedReferrerKeys.value.clear()
+  } else {
+    filteredReferrers.value.forEach(r => selectedReferrerKeys.value.add(`${r.type}:${r._id}`))
+  }
+}
+
+const clearSelection = () => {
+  selectedReferrerKeys.value.clear()
+}
+
+const selectedReferrersList = computed(() => {
+  return referrers.value.filter(r => selectedReferrerKeys.value.has(`${r.type}:${r._id}`))
+})
+
+const confirmDeleteSingle = (referrer: any) => {
+  deleteModalType.value = 'single'
+  itemToDelete.value = referrer
+  deleteError.value = ''
+  showDeleteConfirmModal.value = true
+}
+
+const confirmDeleteBatch = () => {
+  if (selectedReferrersList.value.length === 0) return
+  deleteModalType.value = 'batch'
+  itemToDelete.value = null
+  deleteError.value = ''
+  showDeleteConfirmModal.value = true
+}
+
+const executeDelete = async () => {
+  isDeleting.value = true
+  deleteError.value = ''
+  try {
+    if (deleteModalType.value === 'single' && itemToDelete.value) {
+      await referrals_api.deleteReferrer(itemToDelete.value.type, itemToDelete.value._id)
+      showToast({
+        title: 'Deleted Successfully',
+        message: `${itemToDelete.value.name} has been permanently deleted`,
+        toastType: 'success'
+      })
+      if (selectedProfile.value && (selectedProfile.value.profile?._id === itemToDelete.value._id || selectedProfile.value._id === itemToDelete.value._id)) {
+        showProfileDrawer.value = false
+      }
+      selectedReferrerKeys.value.delete(`${itemToDelete.value.type}:${itemToDelete.value._id}`)
+    } else if (deleteModalType.value === 'batch') {
+      const items = selectedReferrersList.value.map(r => ({ type: r.type, id: r._id }))
+      await referrals_api.batchDeleteReferrers(items)
+      showToast({
+        title: 'Batch Delete Completed',
+        message: `Permanently deleted ${items.length} records across personas`,
+        toastType: 'success'
+      })
+      clearSelection()
+    }
+    showDeleteConfirmModal.value = false
+    await refreshAll()
+  } catch (err: any) {
+    deleteError.value = err?.response?.data?.message || err?.message || 'Failed to delete. Please try again.'
+    showToast({
+      title: 'Deletion Failed',
+      message: deleteError.value,
+      toastType: 'error'
+    })
+  } finally {
+    isDeleting.value = false
+  }
+}
 
 // ─── State ───────────────────────────────────────────────────────
 

@@ -87,4 +87,12 @@ export const referrals_api = {
   getUserReferrals: (userId: string) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/referrals/user/${userId}`);
   },
+
+  deleteReferrer: (type: 'facilitator' | 'user' | string, id: string) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.delete(`/admin/referrals/referrers/${type}/${id}`);
+  },
+
+  batchDeleteReferrers: (items: Array<{ type: 'facilitator' | 'user' | string; id: string }>) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.post('/admin/referrals/referrers/batch-delete', { items });
+  },
 };

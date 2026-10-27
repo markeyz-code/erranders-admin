@@ -184,6 +184,14 @@
                     >
                       <Wallet class="w-4 h-4" />
                     </button>
+                    <button 
+                      v-if="hasAnyPermission('can_delete_user')"
+                      @click.stop="initiateAction('delete', user._id)" 
+                      class="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition-colors"
+                      title="Delete User Permanently"
+                    >
+                      <Trash2 class="w-4 h-4" />
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -465,7 +473,7 @@
           </div>
 
           <!-- Actions -->
-          <div v-if="(selectedUser.isActive && hasPermission('can_suspend_user')) || (!selectedUser.isActive && hasPermission('can_activate_user'))" class="border-t border-gray-100 pt-4 flex gap-3">
+          <div class="border-t border-gray-100 pt-4 flex flex-wrap gap-3">
             <button 
               v-if="selectedUser.isActive && hasPermission('can_suspend_user')"
               @click="initiateAction('suspend', selectedUser._id); closeDrawer()"
@@ -479,6 +487,14 @@
               class="flex-1 py-3 px-4 rounded-xl text-[#FF5C1A] font-semibold text-sm bg-[#FF5C1A]/10 hover:bg-emerald-100 transition-colors flex items-center justify-center gap-2"
             >
               <UserCheck2 class="w-4 h-4" /> Activate
+            </button>
+            <button 
+              v-if="hasAnyPermission('can_delete_user')"
+              @click="initiateAction('delete', selectedUser._id); closeDrawer()"
+              class="py-3 px-4 rounded-xl text-rose-700 font-semibold text-sm bg-rose-100 hover:bg-rose-200 transition-colors flex items-center justify-center gap-2"
+              title="Delete User Permanently"
+            >
+              <Trash2 class="w-4 h-4" /> Delete
             </button>
           </div>
         </template>
@@ -617,7 +633,7 @@
 import { admin_api } from '@/api_factory/modules/admin';
 import { wallets_api } from '@/api_factory/modules/wallets';
 import { useAdminUsers } from '@/composables/modules/admin';
-import { Users as UsersIcon, Search, MoreHorizontal, UserCheck, UserX, Shield, Edit2, Activity, DollarSign, XCircle, UserX2, UserCheck2, MapPin, X, Wallet, Eye } from 'lucide-vue-next';
+import { Users as UsersIcon, Search, MoreHorizontal, UserCheck, UserX, Shield, Edit2, Activity, DollarSign, XCircle, UserX2, UserCheck2, MapPin, X, Wallet, Eye, Trash2 } from 'lucide-vue-next';
 import { ref, computed, onMounted } from 'vue';
 import StatusBadge from '@/components/ui/StatusBadge.vue';
 import SideDrawer from '@/components/ui/SideDrawer.vue';
@@ -795,12 +811,17 @@ const handleUpdateUser = async () => {
   }
 };
 
-const initiateAction = (action: 'suspend' | 'activate', userId: string) => {
+const initiateAction = (action: 'suspend' | 'activate' | 'delete', userId: string) => {
   confirmModal.value.userId = userId;
   confirmModal.value.actionType = action;
   confirmModal.value.isOpen = true;
   
-  if (action === 'suspend') {
+  if (action === 'delete') {
+    confirmModal.value.title = 'Delete User Permanently';
+    confirmModal.value.message = 'Are you sure you want to permanently delete this user? All their records, profile, and data will be removed. This cannot be undone.';
+    confirmModal.value.type = 'danger';
+    confirmModal.value.confirmText = 'Delete Permanently';
+  } else if (action === 'suspend') {
     confirmModal.value.title = 'Suspend User';
     confirmModal.value.message = 'Are you sure you want to suspend this user? They will not be able to log in.';
     confirmModal.value.type = 'danger';
@@ -818,7 +839,10 @@ const executeAction = async () => {
     confirmModal.value.isOpen = false;
     const { actionType, userId } = confirmModal.value;
     
-    if (actionType === 'suspend') {
+    if (actionType === 'delete') {
+      await admin_api.deleteUser(userId);
+      showToast({ title: 'Success', message: 'User deleted permanently', toastType: 'success' });
+    } else if (actionType === 'suspend') {
       await admin_api.suspendUser(userId);
       showToast({ title: 'Success', message: 'User suspended successfully', toastType: 'success' });
     } else {
@@ -827,8 +851,9 @@ const executeAction = async () => {
     }
     
     await fetchUsers();
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
+    showToast({ title: 'Error', message: e?.response?.data?.message || 'Operation failed', toastType: 'error' });
   }
 };
 

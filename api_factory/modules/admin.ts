@@ -53,6 +53,14 @@ export const admin_api = {
     return GATEWAY_ENDPOINT_WITH_AUTH.delete(`/admin/vendors/${id}`);
   },
 
+  deleteUser: (id: string) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.delete(`/admin/users/${id}`);
+  },
+
+  batchDeleteUsers: (ids: string[]) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.post('/admin/users/batch-delete', { ids });
+  },
+
   cancelOrder: (id: string) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.post(`/orders/${id}/cancel`);
   },
