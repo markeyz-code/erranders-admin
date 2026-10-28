@@ -45,9 +45,9 @@
               <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Current Status</span>
               <div class="capitalize text-sm font-bold px-2 py-1 bg-gray-100 rounded inline-block">{{ order.status }}</div>
             </div>
-            <div v-if="order.uniqueCode">
+            <div v-if="order.deliveryPin || order.uniqueCode">
               <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-1">Delivery PIN</span>
-              <span class="text-sm font-black text-[#FF5C1A] tracking-wider">{{ order.uniqueCode }}</span>
+              <span class="text-sm font-black text-[#FF5C1A] tracking-wider">{{ order.deliveryPin || order.uniqueCode }}</span>
             </div>
             <div class="col-span-2 mt-2" v-if="order.statusHistory?.length">
               <span class="text-[10px] font-semibold text-gray-400 uppercase tracking-wide block mb-3">Order Timeline</span>

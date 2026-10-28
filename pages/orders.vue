@@ -513,7 +513,7 @@
 
           <!-- 2. Security Delivery PIN & Verification Banner -->
           <div 
-            v-if="selectedOrder.uniqueCode || selectedOrder.deliveryPin" 
+            v-if="selectedOrder.deliveryPin || selectedOrder.uniqueCode" 
             class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 border border-amber-200/90 rounded-2xl p-5 sm:p-6 flex items-center justify-between shadow-xs"
           >
             <div class="flex items-center gap-3.5">
@@ -522,19 +522,19 @@
               </div>
               <div>
                 <span class="text-[10px] font-black text-amber-800 uppercase tracking-widest block">Delivery Handover PIN</span>
-                <p class="text-[11px] text-amber-900/80 leading-tight mt-0.5">Customer shares this 6-digit code with the rider upon arrival</p>
+                <p class="text-[11px] text-amber-900/80 leading-tight mt-0.5">Customer shares this 4-digit code with the rider upon arrival</p>
               </div>
             </div>
 
             <button 
-              @click="copyText(selectedOrder.uniqueCode || selectedOrder.deliveryPin, 'Delivery PIN')"
+              @click="copyText(selectedOrder.deliveryPin || selectedOrder.uniqueCode, 'Delivery PIN')"
               class="flex items-center gap-2 bg-white px-4 py-2.5 rounded-xl border border-amber-300/80 shadow-xs hover:bg-amber-50/50 transition-all active:scale-95 shrink-0"
               title="Copy PIN"
             >
               <span class="font-mono text-base font-black text-amber-900 tracking-wider">
-                {{ selectedOrder.uniqueCode || selectedOrder.deliveryPin }}
+                {{ selectedOrder.deliveryPin || selectedOrder.uniqueCode }}
               </span>
-              <component :is="copiedField === (selectedOrder.uniqueCode || selectedOrder.deliveryPin) ? Check : Copy" class="w-4 h-4 text-amber-700" />
+              <component :is="copiedField === (selectedOrder.deliveryPin || selectedOrder.uniqueCode) ? Check : Copy" class="w-4 h-4 text-amber-700" />
             </button>
           </div>
 
