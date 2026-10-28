@@ -7,6 +7,13 @@
         <p class="text-sm font-medium text-gray-500">View and manage all customer orders.</p>
       </div>
       <div class="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          class="rounded-xl bg-[#FF5C1A] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#E54D12]"
+          @click="openPlaceOrder"
+        >
+          Place order
+        </button>
         <!-- Date Filters -->
         <DateRangePicker v-model:start="startDate" v-model:end="endDate" @update:start="fetchOrders" @update:end="fetchOrders" />
         <button @click="clearFilters" v-if="startDate || endDate || selectedCustomer || selectedVendor" class="text-sm font-medium text-gray-500 hover:text-gray-900 underline underline-offset-2">Clear</button>
@@ -1262,6 +1269,65 @@
       </div>
     </div>
     </Teleport>
+
+    <!-- Place an order on a customer's behalf -->
+    <div v-if="placeOpen" class="fixed inset-0 z-[120] flex items-end justify-center bg-black/50 p-0 backdrop-blur-sm md:items-center md:p-4" @click.self="placeOpen = false">
+      <div class="w-full overflow-hidden rounded-t-2xl bg-white shadow-xl md:max-w-lg md:rounded-2xl">
+        <div class="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+          <div>
+            <h2 class="text-base font-bold text-gray-900">Place an order</h2>
+            <p class="text-xs text-gray-500">Created as the customer, so they can track and be refunded.</p>
+          </div>
+          <button class="rounded-lg p-1.5 text-gray-400 hover:bg-gray-50" @click="placeOpen = false">✕</button>
+        </div>
+
+        <div class="max-h-[70vh] space-y-3 overflow-y-auto p-4">
+          <div>
+            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Customer</label>
+            <SearchableSelect
+              v-model="placeForm.customerId"
+              :options="customerOptions"
+              all-label="Select a customer"
+              search-placeholder="Search by name or email…"
+            />
+          </div>
+
+          <div>
+            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">What is being run</label>
+            <input v-model="placeForm.description" placeholder="e.g. Fumigation pickup and return" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm" />
+          </div>
+
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Pickup</label>
+              <input v-model="placeForm.pickupLocation" placeholder="Moremi Hall" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm" />
+            </div>
+            <div>
+              <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Drop-off</label>
+              <input v-model="placeForm.dropoffLocation" placeholder="New Hall" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm" />
+            </div>
+          </div>
+
+          <div>
+            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Runner fee (₦)</label>
+            <input v-model.number="placeForm.runnerFee" type="number" min="300" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm" />
+          </div>
+
+          <p v-if="placeError" class="rounded-lg bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700">{{ placeError }}</p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 border-t border-gray-100 px-4 py-3">
+          <button class="rounded-xl px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50" @click="placeOpen = false">Cancel</button>
+          <button
+            class="rounded-xl bg-[#FF5C1A] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#E54D12] disabled:opacity-50"
+            :disabled="placing || !placeForm.customerId || !placeForm.description || !placeForm.runnerFee"
+            @click="submitPlaceOrder"
+          >
+            {{ placing ? 'Placing…' : 'Place order' }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -1269,6 +1335,65 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { admin_api } from '@/api_factory/modules/admin';
 import { useCustomToast as useToast } from '@/composables/core/useCustomToast';
+// ── Place an order for a customer ──────────────────────────────────────────
+const placeOpen = ref(false);
+const placing = ref(false);
+const placeError = ref('');
+const placeForm = ref({
+  customerId: '',
+  description: '',
+  pickupLocation: '',
+  dropoffLocation: '',
+  runnerFee: 500,
+});
+
+const openPlaceOrder = async () => {
+  placeOpen.value = true;
+  placeError.value = '';
+  // The page already loads customerOptions for its filters; reuse them if present.
+  if (customerOptions.value.length) return;
+
+  try {
+    const res = await admin_api.getUsers();
+    const users = res?.data?.data || res?.data || [];
+    const list = Array.isArray(users) ? users : users.users || [];
+    customerOptions.value = list
+      .filter((u: any) => u.role === 'student' || !u.role)
+      .map((u: any) => ({
+        value: u._id,
+        label: [`${u.firstName || ''} ${u.lastName || ''}`.trim(), u.email ? `(${u.email})` : '']
+          .filter(Boolean)
+          .join(' '),
+      }));
+  } catch {
+    placeError.value = 'Could not load customers.';
+  }
+};
+
+const submitPlaceOrder = async () => {
+  if (!placeForm.value.customerId) return;
+  placing.value = true;
+  placeError.value = '';
+  try {
+    await orders_api.placeForCustomer({
+      customerId: placeForm.value.customerId,
+      type: 'custom_errand',
+      description: placeForm.value.description,
+      pickupLocation: placeForm.value.pickupLocation,
+      dropoffLocation: placeForm.value.dropoffLocation,
+      runnerFee: Number(placeForm.value.runnerFee) || 0,
+    });
+    showToast({ title: 'Order placed', message: 'The customer can now track it.', toastType: 'success' } as any);
+    placeOpen.value = false;
+    placeForm.value = { customerId: '', description: '', pickupLocation: '', dropoffLocation: '', runnerFee: 500 };
+    await fetchOrders();
+  } catch (err: any) {
+    placeError.value = err?.response?.data?.message || 'Could not place the order.';
+  } finally {
+    placing.value = false;
+  }
+};
+
 const { showToast } = useToast();
 import { 
   ShoppingBag, DollarSign, Activity, Calendar, Store, Truck, CheckCircle, Clock, 
@@ -1280,6 +1405,8 @@ import {
 import SideDrawer from '@/components/ui/SideDrawer.vue';
 import SelectInput from '@/components/ui/SelectInput.vue';
 import DateRangePicker from '@/components/ui/DateRangePicker.vue';
+import SearchableSelect from '@/components/ui/SearchableSelect.vue';
+import { orders_api } from '@/api_factory/modules/orders';
 
 definePageMeta({
   layout: 'admin'

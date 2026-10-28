@@ -13,6 +13,19 @@ export const orders_api = {
     return GATEWAY_ENDPOINT_WITH_AUTH.post('/orders', payload);
   },
 
+  /** Places an order on a customer's behalf, from the support desk. */
+  placeForCustomer: (payload: {
+    customerId: string;
+    type: string;
+    pickupLocation?: string;
+    dropoffLocation?: string;
+    runnerFee?: number;
+    description?: string;
+    notes?: string;
+  }) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.post('/orders/admin/place', payload);
+  },
+
   updateOrderStatus: (id: string, status: string) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.put(`/orders/${id}/status`, { status });
   },
