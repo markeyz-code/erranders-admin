@@ -1270,61 +1270,545 @@
     </div>
     </Teleport>
 
-    <!-- Place an order on a customer's behalf -->
-    <div v-if="placeOpen" class="fixed inset-0 z-[120] flex items-end justify-center bg-black/50 p-0 backdrop-blur-sm md:items-center md:p-4" @click.self="placeOpen = false">
-      <div class="w-full overflow-hidden rounded-t-2xl bg-white shadow-xl md:max-w-lg md:rounded-2xl">
-        <div class="flex items-center justify-between border-b border-gray-100 px-4 py-3">
-          <div>
-            <h2 class="text-base font-bold text-gray-900">Place an order</h2>
-            <p class="text-xs text-gray-500">Created as the customer, so they can track and be refunded.</p>
-          </div>
-          <button class="rounded-lg p-1.5 text-gray-400 hover:bg-gray-50" @click="placeOpen = false">✕</button>
-        </div>
-
-        <div class="max-h-[70vh] space-y-3 overflow-y-auto p-4">
-          <div>
-            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Customer</label>
-            <SearchableSelect
-              v-model="placeForm.customerId"
-              :options="customerOptions"
-              all-label="Select a customer"
-              search-placeholder="Search by name or email…"
-            />
-          </div>
-
-          <div>
-            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">What is being run</label>
-            <input v-model="placeForm.description" placeholder="e.g. Fumigation pickup and return" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm" />
-          </div>
-
-          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div>
-              <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Pickup</label>
-              <input v-model="placeForm.pickupLocation" placeholder="Moremi Hall" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm" />
+    <!-- Place an order on a customer's behalf (Student Web App Waybill Flow Parity) -->
+    <div v-if="placeOpen" class="fixed inset-0 z-[120] flex items-end justify-center bg-black/60 p-0 backdrop-blur-sm md:items-center md:p-4" @click.self="placeOpen = false">
+      <div class="w-full overflow-hidden rounded-t-3xl bg-white shadow-2xl md:max-w-2xl md:rounded-3xl border border-gray-100 flex flex-col max-h-[92vh]">
+        <!-- Waybill Header -->
+        <div class="flex items-center justify-between border-b border-gray-100 bg-gradient-to-r from-[#0D0805] to-[#1A110B] px-6 py-4 text-white">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#FF5C1A]/20 border border-[#FF5C1A]/40 flex items-center justify-center text-[#FF5C1A]">
+              <Stamp class="w-5 h-5" />
             </div>
             <div>
-              <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Drop-off</label>
-              <input v-model="placeForm.dropoffLocation" placeholder="New Hall" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm" />
+              <div class="flex items-center gap-2">
+                <h2 class="text-base font-bold text-white tracking-tight">Errand Waybill</h2>
+                <span class="rounded-full bg-[#FF5C1A]/20 px-2 py-0.5 text-[11px] font-bold text-[#FF5C1A] border border-[#FF5C1A]/30">
+                  {{ waybillNumber || 'Slip' }}
+                </span>
+              </div>
+              <p class="text-xs text-white/60">Order placed on customer's behalf · Broadcasts directly to campus runners</p>
+            </div>
+          </div>
+          <button class="rounded-xl p-2 text-white/60 hover:bg-white/10 hover:text-white transition" @click="placeOpen = false">✕</button>
+        </div>
+
+        <!-- 3-Step Waybill Progress Navigation -->
+        <div class="flex items-center justify-between border-b border-gray-100 bg-[#FAF7F2] px-6 py-3">
+          <div class="grid grid-cols-3 gap-2 w-full">
+            <button
+              v-for="s in [1, 2, 3]"
+              :key="s"
+              type="button"
+              @click="goToStep(s)"
+              class="flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold transition-all border"
+              :class="placeStep === s 
+                ? 'bg-[#170D08] text-white border-[#170D08] shadow-sm' 
+                : (placeStep > s ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100' : 'bg-white/80 text-gray-400 border-gray-200')"
+            >
+              <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold"
+                :class="placeStep === s ? 'bg-[#FF5C1A] text-white' : (placeStep > s ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-600')">
+                {{ placeStep > s ? '✓' : s }}
+              </span>
+              <span>{{ s === 1 ? 'Details' : (s === 2 ? 'Pricing & Labor' : 'Review Slip') }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Modal Body Content -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-5">
+          <!-- Customer Selection (Always pinned at top of Step 1) -->
+          <div v-if="placeStep === 1" class="space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 flex items-center gap-1.5">
+                  <User class="w-3.5 h-3.5 text-[#FF5C1A]" />
+                  Ordering Customer *
+                </label>
+                <span class="text-[11px] text-gray-400">Order will belong to this customer</span>
+              </div>
+              <SearchableSelect
+                v-model="placeForm.customerId"
+                :options="customerOptions"
+                all-label="Select a student / customer"
+                search-placeholder="Search customer by name, email or phone…"
+              />
+
+              <!-- Selected Customer Badge -->
+              <div v-if="selectedCustomerObj" class="mt-2.5 rounded-xl border border-orange-100 bg-orange-50/40 p-3 flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-full bg-[#FF5C1A] text-white font-bold flex items-center justify-center shrink-0">
+                    {{ selectedCustomerObj.firstName?.[0] || 'U' }}
+                  </div>
+                  <div class="min-w-0">
+                    <p class="font-bold text-gray-900 truncate">{{ selectedCustomerObj.firstName }} {{ selectedCustomerObj.lastName }}</p>
+                    <p class="text-gray-500 text-[11px] truncate">{{ selectedCustomerObj.email }} · {{ selectedCustomerObj.phone || 'No phone' }}</p>
+                  </div>
+                </div>
+                <span class="shrink-0 rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
+                  Verified Student
+                </span>
+              </div>
+            </div>
+
+            <!-- Errand Type Selector (Any Work vs Market Run) -->
+            <div class="space-y-2">
+              <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500">What kind of errand?</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  @click="placeErrandType = 'custom'"
+                  class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border text-xs font-bold transition-all"
+                  :class="placeErrandType === 'custom' 
+                    ? 'bg-[#170D08] text-white border-[#170D08] shadow-sm' 
+                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'"
+                >
+                  <Target class="w-4 h-4 text-[#FF5C1A]" />
+                  <span>Any Work? (Task / Delivery)</span>
+                </button>
+                <button
+                  type="button"
+                  @click="placeErrandType = 'market'"
+                  class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border text-xs font-bold transition-all"
+                  :class="placeErrandType === 'market' 
+                    ? 'bg-[#170D08] text-white border-[#170D08] shadow-sm' 
+                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'"
+                >
+                  <ShoppingBag class="w-4 h-4 text-[#FF5C1A]" />
+                  <span>Market Run (Shopping List)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Templates & Ideas (Like Student App) -->
+            <div class="space-y-2">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Quick Errand Ideas</span>
+              <div class="flex flex-wrap gap-1.5">
+                <button
+                  v-for="tmpl in errandTemplates"
+                  :key="tmpl"
+                  type="button"
+                  @click="applyTemplate(tmpl)"
+                  class="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:border-[#FF5C1A] hover:text-[#FF5C1A] transition shadow-2xs flex items-center gap-1.5"
+                >
+                  <ListChecks class="w-3.5 h-3.5 text-gray-400" />
+                  <span>{{ tmpl }}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Task Checklist (Any Work Mode) -->
+            <div v-if="placeErrandType === 'custom'" class="space-y-2">
+              <div class="flex items-center justify-between">
+                <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500">What needs to be done? *</label>
+                <button type="button" @click="addChecklistItem" class="text-xs font-bold text-[#FF5C1A] hover:underline flex items-center gap-1">
+                  <Plus class="w-3 h-3" /> Add item
+                </button>
+              </div>
+              <div class="space-y-2">
+                <div v-for="(item, idx) in checklistItems" :key="idx" class="flex items-center gap-2 group">
+                  <span class="w-6 h-6 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-[11px] font-bold text-gray-600 shrink-0">
+                    {{ idx + 1 }}
+                  </span>
+                  <input
+                    v-model="checklistItems[idx]"
+                    type="text"
+                    :placeholder="idx === 0 ? 'e.g. Pick up printed thesis from College Library' : 'Next task or pickup detail...'"
+                    class="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:border-[#FF5C1A] focus:bg-white focus:outline-none transition"
+                    @keydown="handleChecklistKeydown($event, idx)"
+                  />
+                  <button
+                    v-if="checklistItems.length > 1"
+                    type="button"
+                    @click="removeChecklistItem(idx)"
+                    class="p-2 text-gray-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition"
+                    title="Remove item"
+                  >
+                    <Trash2 class="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+              <p class="text-[11px] text-gray-400 italic">Press <kbd class="px-1.5 py-0.5 bg-gray-100 rounded text-[10px] font-bold">Enter</kbd> to add another task line.</p>
+            </div>
+
+            <!-- Market Run Mode Inputs -->
+            <div v-else class="space-y-3 rounded-2xl border border-orange-100 bg-orange-50/30 p-4">
+              <div>
+                <label class="text-[11px] font-bold uppercase tracking-wider text-gray-600">Which market / store? *</label>
+                <input
+                  v-model="marketName"
+                  type="text"
+                  placeholder="e.g. Yaba Market, Tejuosho, or Campus Mini-Mart"
+                  class="mt-1 w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 focus:border-[#FF5C1A] focus:outline-none"
+                />
+              </div>
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="text-[11px] font-bold uppercase tracking-wider text-gray-600">Shopping List *</label>
+                  <button type="button" @click="addMarketItem" class="text-xs font-bold text-[#FF5C1A] hover:underline flex items-center gap-1">
+                    <Plus class="w-3 h-3" /> Add item
+                  </button>
+                </div>
+                <div class="space-y-2">
+                  <div v-for="(item, idx) in marketChecklistItems" :key="idx" class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-orange-100 text-[#FF5C1A] font-bold text-[11px] flex items-center justify-center shrink-0">{{ idx + 1 }}</span>
+                    <input
+                      v-model="marketChecklistItems[idx]"
+                      type="text"
+                      :placeholder="idx === 0 ? 'e.g. 3 yards black velvet or 2kg detergent' : 'Next market item...'"
+                      class="flex-1 rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-900 focus:border-[#FF5C1A] focus:outline-none"
+                      @keydown="handleMarketKeydown($event, idx)"
+                    />
+                    <button
+                      v-if="marketChecklistItems.length > 1"
+                      type="button"
+                      @click="removeMarketItem(idx)"
+                      class="p-2 text-gray-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition"
+                    >
+                      <Trash2 class="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Locations (Pickup & Drop-off with Campus Chips) -->
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2 border-t border-gray-100">
+              <!-- Pickup -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 flex items-center gap-1">
+                    <MapPin class="w-3.5 h-3.5 text-amber-500" />
+                    Pickup Location
+                  </label>
+                  <span class="text-[10px] text-gray-400">Where runner starts</span>
+                </div>
+                <input
+                  v-model="placeForm.pickupLocation"
+                  type="text"
+                  placeholder="e.g. College Library or Gate"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:border-[#FF5C1A] focus:bg-white focus:outline-none transition"
+                />
+                <!-- Quick Pickup Chips -->
+                <div class="flex flex-wrap gap-1">
+                  <button
+                    v-for="loc in campusPickups"
+                    :key="loc"
+                    type="button"
+                    @click="placeForm.pickupLocation = loc"
+                    class="rounded-md bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-600 hover:bg-[#FF5C1A]/10 hover:text-[#FF5C1A] transition"
+                  >
+                    {{ loc }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Drop-off -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-[11px] font-bold uppercase tracking-wider text-gray-500 flex items-center gap-1">
+                    <Navigation class="w-3.5 h-3.5 text-emerald-600" />
+                    Drop-off Location *
+                  </label>
+                  <span class="text-[10px] text-gray-400">Destination</span>
+                </div>
+                <input
+                  v-model="placeForm.dropoffLocation"
+                  type="text"
+                  placeholder="e.g. Moremi Hall Room 214"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm text-gray-900 focus:border-[#FF5C1A] focus:bg-white focus:outline-none transition"
+                />
+                <!-- Quick Drop-off Chips -->
+                <div class="flex flex-wrap gap-1">
+                  <button
+                    v-for="hall in campusDropoffs"
+                    :key="hall"
+                    type="button"
+                    @click="placeForm.dropoffLocation = hall"
+                    class="rounded-md bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition"
+                  >
+                    {{ hall }}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div>
-            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Runner fee (₦)</label>
-            <input v-model.number="placeForm.runnerFee" type="number" min="300" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm" />
+          <!-- STEP 2: Pricing & Labor (Exact Student App Financial Logic) -->
+          <div v-if="placeStep === 2" class="space-y-5 animate-fade-in">
+            <!-- How It Works Banner -->
+            <div class="rounded-2xl border border-orange-200 bg-orange-50/50 p-4 flex items-start gap-3 text-xs leading-relaxed text-gray-700">
+              <CircleDollarSign class="w-5 h-5 text-[#FF5C1A] shrink-0 mt-0.5" />
+              <div>
+                <p class="font-bold text-gray-900">How Errand Pricing Works</p>
+                <p class="mt-0.5 text-gray-600">
+                  Set the <span class="font-bold text-gray-800">Estimated Item Cost</span> if the ninja is purchasing something, plus a <span class="font-bold text-gray-800">Runner Fee (labor)</span> for their service. The labor sits safely in escrow until the order is confirmed delivered.
+                </p>
+              </div>
+            </div>
+
+            <!-- Estimated Item Cost Input -->
+            <div class="rounded-2xl border border-gray-200 bg-white p-4 space-y-2">
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="text-xs font-bold text-gray-900">Estimated Item Cost (₦)</label>
+                  <p class="text-[11px] text-gray-400">Enter ₦0 if this is just a delivery/pickup run with no purchases</p>
+                </div>
+                <span class="rounded-md bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-gray-500">Item Budget</span>
+              </div>
+              <div class="relative flex items-center">
+                <span class="absolute left-3.5 text-base font-bold text-gray-400">₦</span>
+                <input
+                  v-model.number="placeForm.estimatedItemCost"
+                  type="number"
+                  min="0"
+                  step="100"
+                  placeholder="0"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-8 pr-4 text-base font-bold text-gray-900 focus:border-[#FF5C1A] focus:bg-white focus:outline-none transition"
+                />
+              </div>
+            </div>
+
+            <!-- Runner Labor Fee Input with Presets -->
+            <div class="rounded-2xl border border-gray-200 bg-white p-4 space-y-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="text-xs font-bold text-gray-900">Runner Fee / Labor (₦) *</label>
+                  <p class="text-[11px] text-gray-400">Fair fee motivates runners to accept immediately (min ₦300)</p>
+                </div>
+                <span class="rounded-md bg-orange-100 px-2 py-0.5 text-[10px] font-bold text-[#FF5C1A]">Ninja Labor</span>
+              </div>
+              <div class="relative flex items-center">
+                <span class="absolute left-3.5 text-base font-bold text-gray-400">₦</span>
+                <input
+                  v-model.number="placeForm.runnerFee"
+                  type="number"
+                  min="300"
+                  step="100"
+                  placeholder="500"
+                  class="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-8 pr-4 text-base font-bold text-gray-900 focus:border-[#FF5C1A] focus:bg-white focus:outline-none transition"
+                />
+              </div>
+
+              <!-- Quick Fee Preset Buttons -->
+              <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                <span class="text-[11px] font-bold text-gray-400 mr-1">Presets:</span>
+                <button
+                  v-for="amt in runnerFeePresets"
+                  :key="amt"
+                  type="button"
+                  @click="placeForm.runnerFee = amt"
+                  class="rounded-lg border px-3 py-1.5 text-xs font-bold transition"
+                  :class="placeForm.runnerFee === amt 
+                    ? 'bg-[#170D08] text-white border-[#170D08]' 
+                    : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'"
+                >
+                  ₦{{ amt.toLocaleString() }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Errand Pool Option (Parity with Student App) -->
+            <div class="rounded-2xl border border-dashed border-[#FF5C1A]/40 bg-[#FF5C1A]/5 p-4">
+              <label class="flex items-start gap-3 cursor-pointer">
+                <input
+                  v-model="placeForm.allowPoolJoin"
+                  type="checkbox"
+                  class="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#FF5C1A] focus:ring-[#FF5C1A]"
+                />
+                <div>
+                  <p class="text-xs font-bold text-gray-900 flex items-center gap-1.5">
+                    <Layers class="w-3.5 h-3.5 text-[#FF5C1A]" />
+                    Turn into a Market Pool / Split Errand
+                  </p>
+                  <p class="text-[11px] text-gray-500 mt-0.5">
+                    Allow other students heading to the same destination to join this run and automatically split the delivery fee.
+                  </p>
+                </div>
+              </label>
+            </div>
+
+            <!-- Real-Time Fee Breakdown Table -->
+            <div class="rounded-2xl border border-gray-200 bg-[#FAF7F2] p-4 space-y-2.5 text-xs font-medium">
+              <div class="flex justify-between text-gray-600">
+                <span class="flex items-center gap-1.5"><Package class="w-3.5 h-3.5 text-gray-400" /> Estimated Item Cost</span>
+                <span class="font-bold text-gray-900">₦{{ Number(placeForm.estimatedItemCost || 0).toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between text-gray-600">
+                <span class="flex items-center gap-1.5"><Target class="w-3.5 h-3.5 text-gray-400" /> Runner Labor Fee</span>
+                <span class="font-bold text-gray-900">₦{{ Number(placeForm.runnerFee || 0).toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between text-gray-600 pb-2 border-b border-gray-200">
+                <span class="flex items-center gap-1.5"><Layers class="w-3.5 h-3.5 text-gray-400" /> Platform Service Fee</span>
+                <span class="font-bold text-gray-900">₦{{ serviceFee.toLocaleString() }}</span>
+              </div>
+              <div class="flex justify-between items-center pt-1 text-sm">
+                <span class="font-bold text-gray-900">Total Customer Due:</span>
+                <span class="font-black text-lg text-[#FF5C1A]">₦{{ grandTotal.toLocaleString() }}</span>
+              </div>
+            </div>
           </div>
 
-          <p v-if="placeError" class="rounded-lg bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700">{{ placeError }}</p>
+          <!-- STEP 3: Review Slip & Confirm Placement -->
+          <div v-if="placeStep === 3" class="space-y-5 animate-fade-in">
+            <!-- Simulated Errand Waybill Slip (Exact Visual Style of Student App) -->
+            <div class="relative rounded-2xl border-2 border-dashed border-[#D8D2C4] bg-[#FDFBF7] p-5 shadow-sm space-y-4">
+              <!-- Slip Header -->
+              <div class="flex items-start justify-between border-b-2 border-dashed border-[#D8D2C4] pb-3">
+                <div>
+                  <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Erranders Dispatch System</p>
+                  <h3 class="text-base font-black text-gray-900 tracking-tight">Official Errand Slip</h3>
+                </div>
+                <div class="text-right">
+                  <span class="rounded bg-black px-2 py-0.5 text-[10px] font-bold text-white tracking-widest">{{ waybillNumber }}</span>
+                  <p class="text-[10px] text-gray-400 mt-0.5">{{ new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) }}</p>
+                </div>
+              </div>
+
+              <!-- Customer & Route -->
+              <div class="grid grid-cols-2 gap-4 text-xs">
+                <div>
+                  <p class="text-[10px] font-bold uppercase text-gray-400">Customer</p>
+                  <p class="font-bold text-gray-900">{{ selectedCustomerObj ? `${selectedCustomerObj.firstName} ${selectedCustomerObj.lastName}` : 'Selected Student' }}</p>
+                  <p class="text-[11px] text-gray-500">{{ selectedCustomerObj?.phone || selectedCustomerObj?.email }}</p>
+                </div>
+                <div>
+                  <p class="text-[10px] font-bold uppercase text-gray-400">Errand Type</p>
+                  <span class="inline-block rounded-md bg-[#FF5C1A]/10 px-2 py-0.5 text-[11px] font-bold text-[#FF5C1A] mt-0.5">
+                    {{ placeErrandType === 'market' ? '🛒 Market Run' : '⚡ Custom Errand' }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Route Path -->
+              <div class="rounded-xl bg-white border border-gray-200 p-3 space-y-2 text-xs">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <span class="text-gray-500 text-[11px]">Pickup:</span>
+                  <span class="font-bold text-gray-900">{{ placeForm.pickupLocation || 'Campus General' }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span class="text-gray-500 text-[11px]">Drop-off:</span>
+                  <span class="font-bold text-gray-900">{{ placeForm.dropoffLocation }}</span>
+                </div>
+              </div>
+
+              <!-- Task Description Preview -->
+              <div class="text-xs">
+                <p class="text-[10px] font-bold uppercase text-gray-400 mb-1">Task Manifest</p>
+                <div class="rounded-xl bg-white border border-gray-200 p-3 text-gray-800 whitespace-pre-line text-xs font-mono">
+                  {{ compiledDescription }}
+                </div>
+              </div>
+
+              <!-- Slip Financial Total -->
+              <div class="border-t-2 border-dashed border-[#D8D2C4] pt-3 flex items-center justify-between">
+                <div>
+                  <p class="text-[10px] font-bold uppercase text-gray-400">Total Charged to Order</p>
+                  <p class="text-[11px] text-gray-500">Item ₦{{ Number(placeForm.estimatedItemCost || 0).toLocaleString() }} + Labor ₦{{ Number(placeForm.runnerFee || 0).toLocaleString() }} + Fee</p>
+                </div>
+                <span class="text-2xl font-black text-[#FF5C1A]">₦{{ grandTotal.toLocaleString() }}</span>
+              </div>
+            </div>
+
+            <!-- Recipient & Urgency Options -->
+            <div class="space-y-3 pt-2">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="text-[11px] font-bold uppercase text-gray-500">Recipient Name (Optional)</label>
+                  <input
+                    v-model="placeForm.recipientName"
+                    type="text"
+                    placeholder="Customer or third-party recipient"
+                    class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-900 focus:bg-white focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label class="text-[11px] font-bold uppercase text-gray-500">Recipient Phone (Optional)</label>
+                  <input
+                    v-model="placeForm.recipientPhone"
+                    type="tel"
+                    placeholder="e.g. 08123456789"
+                    class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-900 focus:bg-white focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="text-[11px] font-bold uppercase text-gray-500">Urgency Mode</label>
+                  <select
+                    v-model="placeForm.urgency"
+                    class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-900 focus:bg-white focus:outline-none font-medium"
+                  >
+                    <option value="standard">Standard (15-30 mins)</option>
+                    <option value="express">Express / Immediate Priority</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="text-[11px] font-bold uppercase text-gray-500">Runner Notes</label>
+                  <input
+                    v-model="placeForm.notes"
+                    type="text"
+                    placeholder="e.g. Call upon arrival at hostel gate"
+                    class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-900 focus:bg-white focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error Feedback -->
+          <div v-if="placeError" class="rounded-xl bg-rose-50 border border-rose-200 p-3 text-xs font-semibold text-rose-700 flex items-center justify-between">
+            <span>{{ placeError }}</span>
+            <button @click="placeError = ''" class="text-rose-500 hover:text-rose-700">✕</button>
+          </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2 border-t border-gray-100 px-4 py-3">
-          <button class="rounded-xl px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50" @click="placeOpen = false">Cancel</button>
-          <button
-            class="rounded-xl bg-[#FF5C1A] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#E54D12] disabled:opacity-50"
-            :disabled="placing || !placeForm.customerId || !placeForm.description || !placeForm.runnerFee"
-            @click="submitPlaceOrder"
-          >
-            {{ placing ? 'Placing…' : 'Place order' }}
-          </button>
+        <!-- Modal Footer Actions with Multi-Step Navigation -->
+        <div class="border-t border-gray-100 bg-white px-6 py-4 flex items-center justify-between">
+          <div>
+            <button
+              v-if="placeStep > 1"
+              type="button"
+              @click="placeStep--"
+              class="rounded-xl border border-gray-200 px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 transition flex items-center gap-1.5"
+            >
+              <ArrowLeft class="w-3.5 h-3.5" /> Back
+            </button>
+            <button
+              v-else
+              type="button"
+              class="rounded-xl px-4 py-2 text-xs font-semibold text-gray-500 hover:bg-gray-50"
+              @click="placeOpen = false"
+            >
+              Cancel
+            </button>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button
+              v-if="placeStep < 3"
+              type="button"
+              :disabled="placeStep === 1 ? !isStep1Valid : !isStep2Valid"
+              @click="placeStep++"
+              class="rounded-xl bg-[#170D08] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#FF5C1A] disabled:opacity-40 flex items-center gap-2"
+            >
+              <span>{{ placeStep === 1 ? 'Continue to Pricing' : 'Review Waybill Slip' }}</span>
+              <ArrowRight class="w-3.5 h-3.5" />
+            </button>
+
+            <button
+              v-else
+              type="button"
+              class="rounded-xl bg-[#FF5C1A] px-6 py-2.5 text-xs font-bold text-white transition hover:bg-[#E54D12] disabled:opacity-50 flex items-center gap-2 shadow-sm"
+              :disabled="placing || !placeForm.customerId || !placeForm.runnerFee"
+              @click="submitPlaceOrder"
+            >
+              <Loader2 v-if="placing" class="w-4 h-4 animate-spin" />
+              <span>{{ placing ? 'Broadcasting Errand…' : `Place & Broadcast (₦${grandTotal.toLocaleString()})` }}</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1335,33 +1819,191 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { admin_api } from '@/api_factory/modules/admin';
 import { useCustomToast as useToast } from '@/composables/core/useCustomToast';
-// ── Place an order for a customer ──────────────────────────────────────────
+// ── Place an order for a customer (Student Web App Parity) ───────────────────
 const placeOpen = ref(false);
 const placing = ref(false);
 const placeError = ref('');
+const placeStep = ref(1);
+const placeErrandType = ref<'custom' | 'market'>('custom');
+const waybillNumber = ref('');
+const rawCustomersList = ref<any[]>([]);
+
 const placeForm = ref({
   customerId: '',
   description: '',
   pickupLocation: '',
   dropoffLocation: '',
   runnerFee: 500,
+  estimatedItemCost: 0,
+  recipientName: '',
+  recipientPhone: '',
+  urgency: 'standard',
+  notes: '',
+  allowPoolJoin: false,
 });
+
+const checklistItems = ref<string[]>(['']);
+const marketName = ref('');
+const marketChecklistItems = ref<string[]>(['']);
+
+const errandTemplates = [
+  'Print lecture slides / thesis at library',
+  'Get prescribed drugs from pharmacy',
+  'Pick up parcel from main gate / park',
+  'Buy snacks and cold drinks',
+  'Drop off package at faculty office',
+  'Collect laundry from dry cleaner',
+];
+
+const campusPickups = [
+  'College Library',
+  'Faculty of Science',
+  'Senate Building',
+  'Sub / Commercial Center',
+  'Main Gate',
+  'Yaba Market',
+];
+
+const campusDropoffs = [
+  'Moremi Hall',
+  'New Hall',
+  'Jaja Hall',
+  'OPH Hostel',
+  'Block Hostel',
+  'Queen Amina Hall',
+  'Makama Hall',
+  'Kofo Hall',
+];
+
+const runnerFeePresets = [500, 1000, 1500, 2000, 3500];
+const serviceFee = computed(() => 100);
+
+const grandTotal = computed(() => {
+  const itemCost = Number(placeForm.value.estimatedItemCost) || 0;
+  const labor = Number(placeForm.value.runnerFee) || 0;
+  return itemCost + labor + serviceFee.value;
+});
+
+const selectedCustomerObj = computed(() => {
+  if (!placeForm.value.customerId) return null;
+  return rawCustomersList.value.find((c: any) => c._id === placeForm.value.customerId) || null;
+});
+
+// Auto-populate dropoff location and recipient info when customer is selected
+watch(selectedCustomerObj, (cust) => {
+  if (cust) {
+    if (!placeForm.value.dropoffLocation && (cust.deliveryAddress || cust.hostel)) {
+      placeForm.value.dropoffLocation = cust.deliveryAddress || cust.hostel;
+    }
+    if (!placeForm.value.recipientName) {
+      placeForm.value.recipientName = `${cust.firstName || ''} ${cust.lastName || ''}`.trim();
+    }
+    if (!placeForm.value.recipientPhone && cust.phone) {
+      placeForm.value.recipientPhone = cust.phone;
+    }
+  }
+});
+
+const compiledDescription = computed(() => {
+  if (placeErrandType.value === 'market') {
+    const list = marketChecklistItems.value.filter(i => i.trim()).join('\n• ');
+    return `Market Run (${marketName.value || 'Local Market'}):\n• ${list || 'Items to buy'}`;
+  }
+  const items = checklistItems.value.filter(i => i.trim());
+  if (items.length > 0) {
+    return items.map(i => `• ${i}`).join('\n');
+  }
+  return placeForm.value.description;
+});
+
+const isStep1Valid = computed(() => {
+  if (!placeForm.value.customerId) return false;
+  if (!placeForm.value.dropoffLocation || placeForm.value.dropoffLocation.trim().length < 2) return false;
+
+  if (placeErrandType.value === 'market') {
+    return marketName.value.trim().length >= 2 && marketChecklistItems.value.some(i => i.trim().length > 1);
+  }
+  return checklistItems.value.some(i => i.trim().length > 1) || placeForm.value.description.trim().length > 2;
+});
+
+const isStep2Valid = computed(() => {
+  return Number(placeForm.value.runnerFee) >= 300;
+});
+
+const goToStep = (targetStep: number) => {
+  if (targetStep === 2 && !isStep1Valid.value) return;
+  if (targetStep === 3 && (!isStep1Valid.value || !isStep2Valid.value)) return;
+  placeStep.value = targetStep;
+};
+
+const applyTemplate = (tmpl: string) => {
+  if (checklistItems.value.length === 1 && !checklistItems.value[0]) {
+    checklistItems.value[0] = tmpl;
+  } else {
+    checklistItems.value.push(tmpl);
+  }
+};
+
+const addChecklistItem = () => {
+  checklistItems.value.push('');
+};
+
+const removeChecklistItem = (idx: number) => {
+  if (checklistItems.value.length > 1) {
+    checklistItems.value.splice(idx, 1);
+  } else {
+    checklistItems.value[0] = '';
+  }
+};
+
+const handleChecklistKeydown = (e: KeyboardEvent, idx: number) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    checklistItems.value.splice(idx + 1, 0, '');
+  } else if (e.key === 'Backspace' && checklistItems.value[idx] === '' && checklistItems.value.length > 1) {
+    e.preventDefault();
+    removeChecklistItem(idx);
+  }
+};
+
+const addMarketItem = () => {
+  marketChecklistItems.value.push('');
+};
+
+const removeMarketItem = (idx: number) => {
+  if (marketChecklistItems.value.length > 1) {
+    marketChecklistItems.value.splice(idx, 1);
+  } else {
+    marketChecklistItems.value[0] = '';
+  }
+};
+
+const handleMarketKeydown = (e: KeyboardEvent, idx: number) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    marketChecklistItems.value.splice(idx + 1, 0, '');
+  } else if (e.key === 'Backspace' && marketChecklistItems.value[idx] === '' && marketChecklistItems.value.length > 1) {
+    e.preventDefault();
+    removeMarketItem(idx);
+  }
+};
 
 const openPlaceOrder = async () => {
   placeOpen.value = true;
   placeError.value = '';
-  // The page already loads customerOptions for its filters; reuse them if present.
-  if (customerOptions.value.length) return;
+  placeStep.value = 1;
+  waybillNumber.value = 'ND-' + Math.floor(100000 + Math.random() * 900000);
 
   try {
     const res = await admin_api.getUsers();
     const users = res?.data?.data || res?.data || [];
     const list = Array.isArray(users) ? users : users.users || [];
+    rawCustomersList.value = list;
     customerOptions.value = list
       .filter((u: any) => u.role === 'student' || !u.role)
       .map((u: any) => ({
         value: u._id,
-        label: [`${u.firstName || ''} ${u.lastName || ''}`.trim(), u.email ? `(${u.email})` : '']
+        label: [`${u.firstName || ''} ${u.lastName || ''}`.trim(), u.phone || u.email ? `(${u.phone || u.email})` : '']
           .filter(Boolean)
           .join(' '),
       }));
@@ -1374,18 +2016,53 @@ const submitPlaceOrder = async () => {
   if (!placeForm.value.customerId) return;
   placing.value = true;
   placeError.value = '';
+
   try {
+    const payloadDescription = compiledDescription.value || placeForm.value.description;
+    const finalPickup = placeErrandType.value === 'market' 
+      ? (marketName.value || 'Local Market') 
+      : (placeForm.value.pickupLocation || 'Campus General');
+
     await orders_api.placeForCustomer({
       customerId: placeForm.value.customerId,
       type: 'custom_errand',
-      description: placeForm.value.description,
-      pickupLocation: placeForm.value.pickupLocation,
+      description: payloadDescription,
+      pickupLocation: finalPickup,
       dropoffLocation: placeForm.value.dropoffLocation,
-      runnerFee: Number(placeForm.value.runnerFee) || 0,
+      runnerFee: Number(placeForm.value.runnerFee) || 500,
+      estimatedItemCost: Number(placeForm.value.estimatedItemCost) || 0,
+      recipientName: placeForm.value.recipientName || undefined,
+      recipientPhone: placeForm.value.recipientPhone || undefined,
+      urgency: placeForm.value.urgency || 'standard',
+      notes: placeForm.value.notes || undefined,
+      intendsToCreatePool: placeForm.value.allowPoolJoin || false,
     });
-    showToast({ title: 'Order placed', message: 'The customer can now track it.', toastType: 'success' } as any);
+
+    showToast({ 
+      title: 'Errand Broadcasted!', 
+      message: 'The errand has been placed on the customer\'s behalf and is now available for campus riders.', 
+      toastType: 'success' 
+    } as any);
+
     placeOpen.value = false;
-    placeForm.value = { customerId: '', description: '', pickupLocation: '', dropoffLocation: '', runnerFee: 500 };
+    // Reset form state
+    placeForm.value = {
+      customerId: '',
+      description: '',
+      pickupLocation: '',
+      dropoffLocation: '',
+      runnerFee: 500,
+      estimatedItemCost: 0,
+      recipientName: '',
+      recipientPhone: '',
+      urgency: 'standard',
+      notes: '',
+      allowPoolJoin: false,
+    };
+    checklistItems.value = [''];
+    marketChecklistItems.value = [''];
+    marketName.value = '';
+
     await fetchOrders();
   } catch (err: any) {
     placeError.value = err?.response?.data?.message || 'Could not place the order.';
@@ -1400,7 +2077,7 @@ import {
   XCircle, Loader2, X, MapPin, AlertTriangle, Copy, Check, Phone, ExternalLink, 
   ShieldCheck, UserCheck, PackageCheck, FileText, Sparkles, Navigation, Eye, 
   Volume2, RefreshCw, Receipt, Tag, Users, Repeat, ArrowRight, CornerDownRight,
-  Timer, Zap, Hourglass
+  Timer, Zap, Hourglass, CircleDollarSign, Package, Target, Layers, ListChecks, Plus, Trash2, ArrowLeft, Stamp, CreditCard, User
 } from 'lucide-vue-next';
 import SideDrawer from '@/components/ui/SideDrawer.vue';
 import SelectInput from '@/components/ui/SelectInput.vue';

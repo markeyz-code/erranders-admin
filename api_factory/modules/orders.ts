@@ -22,8 +22,27 @@ export const orders_api = {
     runnerFee?: number;
     description?: string;
     notes?: string;
+    estimatedItemCost?: number;
+    recipientName?: string;
+    recipientPhone?: string;
+    urgency?: string;
+    intendsToCreatePool?: boolean;
+    items?: any[];
   }) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.post('/orders/admin/place', payload);
+  },
+
+  /** Places a vendor/store order on a customer's behalf */
+  placeVendorForCustomer: (payload: {
+    customerId: string;
+    vendorId: string;
+    items: Array<{ productId: string; quantity: number }>;
+    deliveryAddress?: string;
+    recipientName?: string;
+    recipientPhone?: string;
+    notes?: string;
+  }) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.post('/orders/admin/place-vendor', payload);
   },
 
   updateOrderStatus: (id: string, status: string) => {
