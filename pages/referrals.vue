@@ -670,151 +670,351 @@
     </div>
 
     <!-- ══════════════════════════════════════════════════════════════ -->
-    <!-- MODAL 1: CREATE REFERRAL PROMO CODE                            -->
+    <!-- DRAWER 1: CREATE REFERRAL PROMO CODE                           -->
     <!-- ══════════════════════════════════════════════════════════════ -->
-    <Teleport to="body">
-      <Transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
-        <div v-if="showPromoModal" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4 overflow-y-auto" @click.self="showPromoModal = false">
-          <div class="bg-white rounded-2xl shadow-xl border border-gray-100 max-w-lg w-full p-6 space-y-5 my-8">
-            <div class="flex items-start justify-between">
-              <div>
-                <h2 class="text-lg font-black text-gray-900">Create Referral Promo Code</h2>
-                <p class="text-xs text-gray-500 mt-0.5">Empower an Errand Ninja, Customer, Vendor, or Ambassador with an exclusive affiliate promo code.</p>
-              </div>
-              <button @click="showPromoModal = false" class="p-1 text-gray-400 hover:text-gray-900 rounded-lg">
-                <X class="w-5 h-5" />
-              </button>
-            </div>
-
-            <form @submit.prevent="handleCreatePromo" class="space-y-4">
-              <!-- Persona Selector Tabs -->
-              <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Affiliate Persona *</label>
-                <div class="grid grid-cols-5 gap-1.5">
-                  <button v-for="roleOption in [
-                    { key: 'staff', label: 'Staff', emoji: '👔' },
-                    { key: 'vendor', label: 'Vendor', emoji: '🏪' },
-                    { key: 'errander', label: 'Ninja', emoji: '🛵' },
-                    { key: 'student', label: 'Customer', emoji: '🎓' },
-                    { key: 'facilitator', label: 'Ambassador', emoji: '💎' },
-                  ]" :key="roleOption.key" type="button" @click="onSelectPromoPersona(roleOption.key)"
-                    class="py-2 px-1 rounded-xl text-xs font-bold border transition-all text-center flex flex-col items-center gap-1"
-                    :class="promoForm.targetRole === roleOption.key ? 'bg-gray-900 text-white border-gray-900 shadow-sm' : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'">
-                    <span class="text-base">{{ roleOption.emoji }}</span>
-                    <span class="text-[10px]">{{ roleOption.label }}</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Beneficiary Person Selector -->
-              <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Select Person / Store *</label>
-                <SearchableSelect
-                  v-model="promoForm.selectedPersonId"
-                  :options="personOptions"
-                  :search-placeholder="`Search ${promoForm.targetRole} by name or email...`"
-                  @update:model-value="onPersonSelected"
-                />
-              </div>
-
-              <!-- Promo Code String (Auto-suggested) -->
-              <div>
-                <div class="flex items-center justify-between mb-1">
-                  <label class="text-xs font-bold text-gray-700 uppercase tracking-wider">Promo Code String *</label>
-                  <button type="button" @click="suggestCodeString()" class="text-[10px] font-bold text-[#FF5C1A] hover:underline flex items-center gap-1">
-                    <Sparkles class="w-3 h-3" /> Regenerate Suggestion
-                  </button>
-                </div>
-                <input v-model="promoForm.code" type="text" required placeholder="e.g. NINJA-MUSA10"
-                  class="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-mono font-bold uppercase focus:outline-none focus:border-[#FF5C1A] focus:bg-white transition-colors" />
-              </div>
-
-              <!-- Discount Configuration -->
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Discount Type *</label>
-                  <SearchableSelect
-                    v-model="promoForm.discountType"
-                    :options="discountTypeOptions"
-                    :show-all-option="false"
-                    placeholder="Select discount type..."
-                    search-placeholder="Search type..."
-                  />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Discount Value *</label>
-                  <input v-model.number="promoForm.value" type="number" required min="1"
-                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none focus:border-gray-900" />
-                </div>
-              </div>
-
-              <!-- Referrer Reward per redemption -->
-              <div class="bg-[#FF5C1A]/5 border border-[#FF5C1A]/20 p-3 rounded-xl space-y-2">
-                <label class="block text-xs font-bold text-[#FF5C1A] uppercase tracking-wider">Referrer Reward per Order *</label>
-                <div class="grid grid-cols-2 gap-3">
-                  <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Reward Type</label>
-                    <SearchableSelect
-                      v-model="promoForm.rewardType"
-                      :options="rewardTypeOptions"
-                      :show-all-option="false"
-                      placeholder="Select reward type..."
-                      search-placeholder="Search reward..."
-                    />
-                  </div>
-                  <div>
-                    <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Reward Value</label>
-                    <input v-model.number="promoForm.rewardPerUse" type="number" min="0" placeholder="e.g. 50"
-                      class="w-full px-2.5 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold focus:outline-none" />
-                  </div>
-                </div>
-                <p class="text-[10px] text-gray-500">
-                  Whenever an order completes with this code, this amount is credited automatically to the referrer.
-                </p>
-              </div>
-
-              <!-- Optional Constraints -->
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Min Order (₦)</label>
-                  <input v-model.number="promoForm.minOrderAmount" type="number" min="0" placeholder="e.g. 1500"
-                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none" />
-                </div>
-                <div>
-                  <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Max Discount Cap (₦)</label>
-                  <input v-model.number="promoForm.maxDiscountAmount" type="number" min="0" placeholder="e.g. 1000"
-                    class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:outline-none" />
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2 pt-1">
-                <input v-model="promoForm.onlyForNewUsers" type="checkbox" id="promo-new-users"
-                  class="w-4 h-4 accent-[#FF5C1A] rounded border-gray-300" />
-                <label for="promo-new-users" class="text-xs font-medium text-gray-700 cursor-pointer">
-                  Valid only for new users on their 1st order
-                </label>
-              </div>
-
-              <div v-if="promoError" class="p-2.5 bg-red-50 text-red-600 text-xs rounded-xl border border-red-100 font-medium">
-                {{ promoError }}
-              </div>
-
-              <div class="flex gap-2 pt-2">
-                <button type="button" @click="showPromoModal = false"
-                  class="flex-1 py-2.5 bg-gray-100 text-gray-700 rounded-xl font-bold text-xs hover:bg-gray-200 transition-colors">
-                  Cancel
-                </button>
-                <button type="submit" :disabled="creatingPromo"
-                  class="flex-1 py-2.5 bg-[#FF5C1A] text-white rounded-xl font-bold text-xs hover:bg-[#e04f14] transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
-                  <Loader2 v-if="creatingPromo" class="w-3.5 h-3.5 animate-spin" />
-                  <span>{{ creatingPromo ? 'Creating...' : 'Create Promo Code' }}</span>
-                </button>
-              </div>
-            </form>
+    <SideDrawer :isOpen="showPromoModal" @close="showPromoModal = false" size="lg" title="Create Referral Promo Code">
+      <div class="space-y-6 pt-1">
+        <!-- Subheader with clear guidance -->
+        <div class="rounded-xl bg-orange-50/60 border border-orange-100 p-3.5 flex items-start gap-3">
+          <Sparkles class="w-5 h-5 text-[#FF5C1A] shrink-0 mt-0.5" />
+          <div class="text-xs text-gray-700 leading-relaxed">
+            <span class="font-bold text-gray-900">Affiliate Voucher Generation:</span>
+            Configure an exclusive promo code for an Errand Ninja, Vendor, Customer, or Ambassador. When shoppers use this code, they get an instant discount while the affiliate automatically earns reward commissions.
           </div>
         </div>
-      </Transition>
-    </Teleport>
+
+        <form @submit.prevent="handleCreatePromo" class="space-y-5">
+          <!-- ── Section 1: Affiliate Partner Linkage ── -->
+          <div class="space-y-3.5 bg-gray-50/80 p-4 rounded-2xl border border-gray-200/80">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+                <Users class="w-3.5 h-3.5 text-[#FF5C1A]" />
+                1. Affiliate Beneficiary Linkage
+              </span>
+              <span class="text-[10px] font-bold text-gray-400 uppercase">Required</span>
+            </div>
+
+            <!-- Persona Selector Tabs -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                Affiliate Category <span class="text-gray-400 font-normal">(Who earns commissions?)</span> *
+              </label>
+              <div class="grid grid-cols-5 gap-1.5">
+                <button 
+                  v-for="roleOption in [
+                    { key: 'staff', label: 'Staff', emoji: '👔', desc: 'Internal' },
+                    { key: 'vendor', label: 'Vendor', emoji: '🏪', desc: 'Merchant' },
+                    { key: 'errander', label: 'Ninja', emoji: '🛵', desc: 'Rider' },
+                    { key: 'student', label: 'Customer', emoji: '🎓', desc: 'Shopper' },
+                    { key: 'facilitator', label: 'Ambassador', emoji: '💎', desc: 'Rep' },
+                  ]" 
+                  :key="roleOption.key" 
+                  type="button" 
+                  @click="onSelectPromoPersona(roleOption.key)"
+                  class="py-2.5 px-1.5 rounded-xl text-xs font-bold border transition-all text-center flex flex-col items-center gap-1"
+                  :class="promoForm.targetRole === roleOption.key ? 'bg-gray-900 text-white border-gray-900 shadow-md ring-2 ring-gray-900/10' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100/80'"
+                >
+                  <span class="text-base">{{ roleOption.emoji }}</span>
+                  <span class="text-[11px] font-bold truncate leading-tight">{{ roleOption.label }}</span>
+                  <span class="text-[9px] opacity-60 uppercase tracking-tighter">{{ roleOption.desc }}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Beneficiary Person Selector -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                Select Beneficiary Person or Store *
+              </label>
+              <SearchableSelect
+                v-model="promoForm.selectedPersonId"
+                :options="personOptions"
+                :show-all-option="false"
+                placeholder="Choose affiliate person or merchant store..."
+                :search-placeholder="`Search ${promoForm.targetRole} by name, email or phone...`"
+                @update:model-value="onPersonSelected"
+              />
+            </div>
+
+            <!-- Promo Code String (Auto-suggested) -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-bold text-gray-700">
+                  Promo Voucher Code String *
+                </label>
+                <button type="button" @click="suggestCodeString()" class="text-xs font-bold text-[#FF5C1A] hover:underline flex items-center gap-1 transition-colors">
+                  <Sparkles class="w-3.5 h-3.5" /> Regenerate Code
+                </button>
+              </div>
+              <input 
+                v-model="promoForm.code" 
+                type="text" 
+                required 
+                placeholder="e.g. NINJA-MUSA10"
+                class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-mono font-black uppercase text-gray-900 tracking-wider focus:outline-none focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 transition-all" 
+              />
+              <p class="text-[10px] text-gray-400 mt-1">This is the code customers enter at checkout to unlock their discount.</p>
+            </div>
+          </div>
+
+          <!-- ── Section 2: Discount & Pricing Configuration ── -->
+          <div class="space-y-3.5 bg-gray-50/80 p-4 rounded-2xl border border-gray-200/80">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+                <Tag class="w-3.5 h-3.5 text-[#FF5C1A]" />
+                2. Customer Discount Terms
+              </span>
+              <span class="text-[10px] font-bold text-gray-400 uppercase">Pricing</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">Discount Calculation Method *</label>
+                <SearchableSelect
+                  v-model="promoForm.discountType"
+                  :options="discountTypeOptions"
+                  :show-all-option="false"
+                  placeholder="Select discount method..."
+                  search-placeholder="Search method..."
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                  Discount Value ({{ promoForm.discountType === 'percentage' ? '%' : '₦' }}) *
+                </label>
+                <input 
+                  v-model.number="promoForm.value" 
+                  type="number" 
+                  required 
+                  min="1"
+                  :placeholder="promoForm.discountType === 'percentage' ? 'e.g. 10 (for 10% off)' : 'e.g. 500 (for ₦500 off)'"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-bold text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 transition-all" 
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                  Minimum Order Subtotal (₦)
+                </label>
+                <input 
+                  v-model.number="promoForm.minOrderAmount" 
+                  type="number" 
+                  min="0" 
+                  placeholder="e.g. 2000 (0 for no minimum)"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 transition-all" 
+                />
+                <span class="text-[10px] text-gray-400 mt-1 block">Order must reach this amount before voucher applies.</span>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                  Maximum Discount Cap (₦)
+                </label>
+                <input 
+                  v-model.number="promoForm.maxDiscountAmount" 
+                  type="number" 
+                  min="0" 
+                  placeholder="e.g. 1500 (0 for no cap)"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 transition-all" 
+                />
+                <span class="text-[10px] text-gray-400 mt-1 block">Caps percentage discounts to prevent excessive deductions.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Section 3: Referrer Commission & Earnings ── -->
+          <div class="bg-gradient-to-br from-orange-500/10 via-amber-500/5 to-transparent border border-[#FF5C1A]/25 p-4 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-[#FF5C1A] uppercase tracking-wider flex items-center gap-1.5">
+                <Star class="w-3.5 h-3.5 text-[#FF5C1A]" />
+                3. Referrer Commission & Reward
+              </span>
+              <span class="text-[10px] font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">Per Order</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">Reward Currency *</label>
+                <SearchableSelect
+                  v-model="promoForm.rewardType"
+                  :options="rewardTypeOptions"
+                  :show-all-option="false"
+                  placeholder="Select reward currency..."
+                  search-placeholder="Search reward type..."
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                  Commission Amount ({{ promoForm.rewardType === 'wallet_credit' ? '₦' : 'Points' }}) *
+                </label>
+                <input 
+                  v-model.number="promoForm.rewardPerUse" 
+                  type="number" 
+                  min="0" 
+                  placeholder="e.g. 50"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-black text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 transition-all" 
+                />
+              </div>
+            </div>
+            <p class="text-[11px] text-gray-600 leading-snug">
+              Every time a customer places and completes an order using this code, this amount is instantly credited to the affiliate's wallet or point balance.
+            </p>
+          </div>
+
+          <!-- ── Section 4: Global Limits & Expiry ── -->
+          <div class="space-y-3.5 bg-gray-50/80 p-4 rounded-2xl border border-gray-200/80">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+                <TrendingUp class="w-3.5 h-3.5 text-[#FF5C1A]" />
+                4. Redemption Limits & Schedule
+              </span>
+              <span class="text-[10px] font-bold text-gray-400 uppercase">Limits</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">Global Redemption Limit</label>
+                <input 
+                  v-model.number="promoForm.maxUsageCount" 
+                  type="number" 
+                  min="0" 
+                  placeholder="e.g. 100 (0 for unlimited)"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 transition-all" 
+                />
+                <span class="text-[10px] text-gray-400 mt-1 block">Total times code can ever be redeemed platform-wide.</span>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1.5">Per-Customer Redemption Limit</label>
+                <input 
+                  v-model.number="promoForm.maxUsagePerUser" 
+                  type="number" 
+                  min="0" 
+                  placeholder="e.g. 1 (0 for unlimited)"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 transition-all" 
+                />
+                <span class="text-[10px] text-gray-400 mt-1 block">Maximum times an individual shopper can use this code.</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">Expiration Date & Time</label>
+              <input 
+                v-model="promoForm.expiresAt" 
+                type="datetime-local" 
+                class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-900 focus:outline-none focus:border-[#FF5C1A] focus:ring-2 focus:ring-[#FF5C1A]/20 transition-all" 
+              />
+              <span class="text-[10px] text-gray-400 mt-1 block">Leave empty if the promo voucher has no expiration date.</span>
+            </div>
+          </div>
+
+          <!-- ── Section 5: Errand Types & Advanced Restrictions ── -->
+          <div class="space-y-3.5 bg-gray-50/80 p-4 rounded-2xl border border-gray-200/80">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+                <Bike class="w-3.5 h-3.5 text-[#FF5C1A]" />
+                5. Advanced Restrictions & Targeting
+              </span>
+              <span class="text-[10px] font-bold text-gray-400 uppercase">Optional</span>
+            </div>
+
+            <!-- Applicable Order Types -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                Eligible Errand & Order Types
+                <span class="text-gray-400 font-normal">(Leave empty for All Order Types)</span>
+              </label>
+              <SearchableMultiSelect
+                v-model="promoForm.applicableOrderTypes"
+                :options="orderTypeOptions"
+                placeholder="All Errand & Order Types eligible"
+                search-placeholder="Search errand types..."
+              />
+            </div>
+
+            <!-- Applicable Vendors -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                Eligible Merchant Stores & Vendors
+                <span class="text-gray-400 font-normal">(Leave empty for All Vendors)</span>
+              </label>
+              <SearchableMultiSelect
+                v-model="promoForm.applicableVendors"
+                :options="vendorMultiSelectOptions"
+                placeholder="All Merchant Stores eligible"
+                search-placeholder="Search stores by name, email or phone..."
+              />
+            </div>
+
+            <!-- Applicable Users -->
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                Specific Customer Account Targeting
+                <span class="text-gray-400 font-normal">(Leave empty for All Customers)</span>
+              </label>
+              <SearchableMultiSelect
+                v-model="promoForm.applicableUsers"
+                :options="customerMultiSelectOptions"
+                placeholder="All Customers eligible"
+                search-placeholder="Search customers by name, email or phone..."
+              />
+            </div>
+
+            <!-- Checkbox Restrictions -->
+            <div class="space-y-2.5 pt-2 border-t border-gray-200/80">
+              <label class="flex items-start gap-2.5 cursor-pointer select-none">
+                <input 
+                  v-model="promoForm.onlyForNewUsers" 
+                  type="checkbox" 
+                  class="mt-0.5 w-4 h-4 accent-[#FF5C1A] rounded border-gray-300" 
+                />
+                <div>
+                  <span class="text-xs font-bold text-gray-800 block">First-Time Customers Only</span>
+                  <span class="text-[11px] text-gray-500 block">Valid exclusively on a customer's very 1st completed order.</span>
+                </div>
+              </label>
+
+              <label class="flex items-start gap-2.5 cursor-pointer select-none">
+                <input 
+                  v-model="promoForm.appliesToDeliveryFeeOnly" 
+                  type="checkbox" 
+                  class="mt-0.5 w-4 h-4 accent-[#FF5C1A] rounded border-gray-300" 
+                />
+                <div>
+                  <span class="text-xs font-bold text-gray-800 block">Apply Discount to Delivery Fee Only</span>
+                  <span class="text-[11px] text-gray-500 block">Protects merchant food/item payout; discounts only the errand delivery fee.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Error Alert -->
+          <div v-if="promoError" class="p-3.5 bg-rose-50 text-rose-700 text-xs rounded-xl border border-rose-200 font-medium flex items-center gap-2">
+            <AlertTriangle class="w-4 h-4 shrink-0 text-rose-600" />
+            <span>{{ promoError }}</span>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center gap-3 pt-2">
+            <button 
+              type="button" 
+              @click="showPromoModal = false"
+              class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold text-xs transition-colors"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              :disabled="creatingPromo"
+              class="flex-[2] py-3 bg-[#FF5C1A] text-white rounded-xl font-bold text-xs hover:bg-[#e04f14] transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-md shadow-orange-500/20"
+            >
+              <Loader2 v-if="creatingPromo" class="w-3.5 h-3.5 animate-spin" />
+              <span>{{ creatingPromo ? 'Generating Referral Code...' : 'Create Referral Promo Code' }}</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </SideDrawer>
 
     <!-- ══════════════════════════════════════════════════════════════ -->
     <!-- MODAL 2: ADD ERRANDERS STAFF / INTERNAL TEAM                   -->
@@ -1445,6 +1645,7 @@ import { admin_api } from '@/api_factory/modules/admin'
 import { useCustomToast } from '@/composables/core/useCustomToast'
 import SideDrawer from '@/components/ui/SideDrawer.vue'
 import SearchableSelect from '@/components/ui/SearchableSelect.vue'
+import SearchableMultiSelect from '@/components/ui/SearchableMultiSelect.vue'
 import {
   Gift, Users, UserPlus, UserCheck, Trophy, Search,
   TrendingUp, Loader2, Star, X, Tag, Plus, Check, Copy,
@@ -1620,11 +1821,18 @@ const promoForm = reactive({
   code: '',
   discountType: 'percentage',
   value: 10,
+  maxDiscountAmount: 0,
+  minOrderAmount: 0,
+  maxUsageCount: 0,
+  maxUsagePerUser: 1,
+  expiresAt: '',
   rewardType: 'points',
   rewardPerUse: 50,
-  minOrderAmount: 0,
-  maxDiscountAmount: 0,
   onlyForNewUsers: false,
+  appliesToDeliveryFeeOnly: false,
+  applicableOrderTypes: [] as string[],
+  applicableVendors: [] as string[],
+  applicableUsers: [] as string[],
 })
 
 // Add Staff / Internal Team Modal
@@ -1815,6 +2023,33 @@ const personOptionsForCustomCode = computed(() => {
   }))
 })
 
+const orderTypeOptions = [
+  { value: 'inside_campus', label: 'Inside Campus Delivery', emoji: '🏫', sublabel: 'Deliveries strictly within university campus grounds' },
+  { value: 'outside_campus', label: 'Outside Campus Delivery', emoji: '🏙️', sublabel: 'Off-campus errands and town delivery locations' },
+  { value: 'custom_errand', label: 'Custom Errand / Runner Task', emoji: '⚡', sublabel: 'Personalized customer errand requests' },
+  { value: 'group_order', label: 'Group Orders', emoji: '👥', sublabel: 'Pooled multi-order grocery & restaurant deliveries' },
+]
+
+const vendorMultiSelectOptions = computed(() => {
+  return rawVendors.value.map(v => ({
+    value: v._id || v.userId,
+    label: v.storeName || v.businessName || v.name || 'Store',
+    sublabel: `${v.email || ''} ${v.phone ? '• ' + v.phone : ''}`.trim(),
+    emoji: '🏪'
+  }))
+})
+
+const customerMultiSelectOptions = computed(() => {
+  return rawUsers.value
+    .filter(u => u.role === 'student' || u.role === 'customer' || !u.role)
+    .map(u => ({
+      value: u._id,
+      label: `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email,
+      sublabel: `${u.email} ${u.phone ? '• ' + u.phone : ''}`.trim(),
+      emoji: '🎓'
+    }))
+})
+
 // ─── Fetchers ────────────────────────────────────────────────────
 
 const fetchStats = async () => {
@@ -1915,11 +2150,18 @@ const openCreatePromoModal = () => {
   promoForm.code = ''
   promoForm.discountType = 'percentage'
   promoForm.value = 10
-  promoForm.rewardType = 'points'
-  promoForm.rewardPerUse = 50
   promoForm.minOrderAmount = 0
   promoForm.maxDiscountAmount = 0
+  promoForm.maxUsageCount = 0
+  promoForm.maxUsagePerUser = 1
+  promoForm.expiresAt = ''
+  promoForm.rewardType = 'points'
+  promoForm.rewardPerUse = 50
   promoForm.onlyForNewUsers = false
+  promoForm.appliesToDeliveryFeeOnly = false
+  promoForm.applicableOrderTypes = []
+  promoForm.applicableVendors = []
+  promoForm.applicableUsers = []
   showPromoModal.value = true
 }
 
@@ -1930,8 +2172,18 @@ const quickAssignPromo = (person: any) => {
   suggestCodeString(person.name)
   promoForm.discountType = 'percentage'
   promoForm.value = 10
+  promoForm.minOrderAmount = 0
+  promoForm.maxDiscountAmount = 0
+  promoForm.maxUsageCount = 0
+  promoForm.maxUsagePerUser = 1
+  promoForm.expiresAt = ''
   promoForm.rewardType = 'points'
   promoForm.rewardPerUse = 50
+  promoForm.onlyForNewUsers = false
+  promoForm.appliesToDeliveryFeeOnly = false
+  promoForm.applicableOrderTypes = []
+  promoForm.applicableVendors = []
+  promoForm.applicableUsers = []
   showPromoModal.value = true
 }
 
@@ -1988,7 +2240,14 @@ const handleCreatePromo = async () => {
       rewardPerUse: Number(promoForm.rewardPerUse) || 0,
       minOrderAmount: Number(promoForm.minOrderAmount) || null,
       maxDiscountAmount: Number(promoForm.maxDiscountAmount) || null,
-      onlyForNewUsers: promoForm.onlyForNewUsers,
+      maxUsageCount: Number(promoForm.maxUsageCount) || null,
+      maxUsagePerUser: Number(promoForm.maxUsagePerUser) || null,
+      expiresAt: promoForm.expiresAt ? new Date(promoForm.expiresAt) : null,
+      onlyForNewUsers: !!promoForm.onlyForNewUsers,
+      appliesToDeliveryFeeOnly: !!promoForm.appliesToDeliveryFeeOnly,
+      applicableOrderTypes: promoForm.applicableOrderTypes || [],
+      applicableVendors: promoForm.applicableVendors || [],
+      applicableUsers: promoForm.applicableUsers || [],
       isReferralPromo: true,
       referrerType: promoForm.targetRole,
     }
