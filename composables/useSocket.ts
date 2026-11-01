@@ -12,11 +12,22 @@ export const useSocket = (namespace: string) => {
   const connect = () => {
     if (socket) return socket;
 
+    let authToken = '';
+    if (typeof document !== 'undefined') {
+      const match = document.cookie.match(/(^| )errandr_admin_token=([^;]+)/) || document.cookie.match(/(^| )token=([^;]+)/);
+      if (match) {
+        authToken = match[2];
+      } else if (typeof localStorage !== 'undefined') {
+        authToken = localStorage.getItem('errandr_admin_token') || localStorage.getItem('token') || '';
+      }
+    }
+
     socket = io(`${config.public.wsBase}/${namespace}`, {
       query: {
         userId: user.value?._id,
       },
-      transports: ['polling'],
+      auth: { token: authToken },
+      transports: ['websocket', 'polling'],
       reconnection: true,
     });
 
