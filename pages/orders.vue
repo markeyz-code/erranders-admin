@@ -1737,13 +1737,12 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label class="text-[11px] font-bold uppercase text-gray-500">Urgency Mode</label>
-                  <select
+                  <SearchableSelect
                     v-model="placeForm.urgency"
-                    class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-900 focus:bg-white focus:outline-none font-medium"
-                  >
-                    <option value="standard">Standard (15-30 mins)</option>
-                    <option value="express">Express / Immediate Priority</option>
-                  </select>
+                    :options="urgencyOptions"
+                    :show-all-option="false"
+                    placeholder="Select urgency"
+                  />
                 </div>
                 <div>
                   <label class="text-[11px] font-bold uppercase text-gray-500">Runner Notes</label>
@@ -1820,6 +1819,11 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { admin_api } from '@/api_factory/modules/admin';
 import { useCustomToast as useToast } from '@/composables/core/useCustomToast';
 // ── Place an order for a customer (Student Web App Parity) ───────────────────
+const urgencyOptions = [
+  { value: 'standard', label: 'Standard (15-30 mins)' },
+  { value: 'express', label: 'Express / immediate priority' },
+];
+
 const placeOpen = ref(false);
 const placing = ref(false);
 const placeError = ref('');

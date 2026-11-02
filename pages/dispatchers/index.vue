@@ -673,11 +673,12 @@
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
                   <label class="text-sm font-semibold text-gray-700">School</label>
-                  <select v-model="editDispatcherPayload.school" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
-                    <option value="UNILAG">UNILAG</option>
-                    <option value="CMUL">CMUL</option>
-                    <option value="YABATECH">YABATECH</option>
-                  </select>
+                  <SearchableSelect
+                    v-model="editDispatcherPayload.school"
+                    :options="schoolOptions"
+                    :show-all-option="false"
+                    placeholder="Select school"
+                  />
                 </div>
                 <div class="space-y-2">
                   <label class="text-sm font-semibold text-gray-700">Matric Number</label>
@@ -697,19 +698,21 @@
                 </div>
                 <div class="space-y-2">
                   <label class="text-sm font-semibold text-gray-700">Verification Status</label>
-                  <select v-model="editDispatcherPayload.verificationStatus" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                  </select>
+                  <SearchableSelect
+                    v-model="editDispatcherPayload.verificationStatus"
+                    :options="verificationStatusOptions"
+                    :show-all-option="false"
+                    placeholder="Select verification status"
+                  />
                 </div>
                 <div class="space-y-2">
                   <label class="text-sm font-semibold text-gray-700">Status</label>
-                  <select v-model="editDispatcherPayload.status" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
-                    <option value="offline">Offline</option>
-                    <option value="online">Online</option>
-                    <option value="busy">Busy</option>
-                  </select>
+                  <SearchableSelect
+                    v-model="editDispatcherPayload.status"
+                    :options="dispatcherStatusOptions"
+                    :show-all-option="false"
+                    placeholder="Select status"
+                  />
                 </div>
               </div>
               <button type="submit" :disabled="updatingDispatcher" class="w-full py-3 bg-[#FF5C1A] text-white rounded-xl font-bold hover:bg-[#E04D12] transition-colors disabled:opacity-50">
@@ -931,6 +934,26 @@ const selectedTier = ref(1)
 const drawerOpen = ref(false)
 const selectedProfile = ref<any>(null)
 const activeDrawerTab = ref('overview')
+// String-valued choices only. The tier fields bind to numbers and stay native selects,
+// because this component works in strings and a silent coercion there would filter wrongly.
+const schoolOptions = [
+  { value: 'UNILAG', label: 'UNILAG' },
+  { value: 'CMUL', label: 'CMUL' },
+  { value: 'YABATECH', label: 'YABATECH' },
+];
+
+const verificationStatusOptions = [
+  { value: 'pending', label: 'Pending' },
+  { value: 'approved', label: 'Approved' },
+  { value: 'rejected', label: 'Rejected' },
+];
+
+const dispatcherStatusOptions = [
+  { value: 'offline', label: 'Offline' },
+  { value: 'online', label: 'Online' },
+  { value: 'busy', label: 'Busy' },
+];
+
 const editDispatcherPayload = ref({ 
   school: 'UNILAG', 
   matricNumber: '', 
