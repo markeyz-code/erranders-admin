@@ -938,6 +938,20 @@
 
             <!-- Service Business & Agency Commission % -->
             <div class="space-y-3 p-5 rounded-2xl bg-emerald-50/50 border border-emerald-100 sm:col-span-2">
+              <!-- This page prices the marketplace. Booking fees live on their own tab, and
+                   people kept looking for them here. -->
+              <button
+                type="button"
+                class="flex w-full items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-white/70 px-3 py-2 text-left transition hover:bg-white"
+                @click="activeTab = 'services'"
+              >
+                <span class="text-[11px] font-semibold leading-snug text-emerald-900">
+                  Booking fees for service providers, and how clients pay them, are configured under
+                  <span class="font-bold">service bookings</span>.
+                </span>
+                <span class="shrink-0 text-[11px] font-bold text-emerald-700">Open →</span>
+              </button>
+
               <div class="flex items-start justify-between gap-2">
                 <div>
                   <div class="flex items-center gap-2">
