@@ -344,7 +344,8 @@ import {
  Bell,
  Activity,
  Banknote,
- ShoppingCart
+ ShoppingCart,
+ CalendarCheck
 } from 'lucide-vue-next'
 import RouteSearchModal from '@/components/ui/RouteSearchModal.vue'
 
@@ -382,6 +383,7 @@ const rawNavItems = [
  { path: '/dispatchers', label: 'Dispatchers', icon: ShieldCheck },
  { path: '/vendors', label: 'Vendors', icon: Store },
  { path: '/orders', label: 'Orders', icon: Package },
+ { path: '/booked-services', label: 'Booked Services', icon: CalendarCheck },
  { path: '/scheduled-orders', label: 'Scheduled Orders', icon: Package },
  { path: '/market-pool/manage', label: 'Market Pool', icon: ShoppingCart },
  { path: '/referrals', label: 'Referrals', icon: Gift },
@@ -404,6 +406,7 @@ const pageTitles: Record<string, { title: string; description: string }> = {
  '/dispatchers': { title: 'Dispatcher Verifications', description: 'Review and approve dispatcher verifications' },
  '/vendors': { title: 'Vendor Management', description: 'Manage merchants and store settings' },
  '/orders': { title: 'Order Management', description: 'Monitor and track active deliveries' },
+ '/booked-services': { title: 'Booked Services', description: 'Monitor and track client appointments and service bookings' },
  '/scheduled-orders': { title: 'Scheduled Orders', description: 'Manage and track meal autopilot orders' },
  '/market-pool/manage': { title: 'Market Pool Management', description: 'Manage weekly campaigns, aggregation, and refunds' },
   '/promos': { title: 'Promo Codes & Affiliates', description: 'Create and track discount codes with affiliate attribution and order audits' },

@@ -1188,6 +1188,319 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- TAB: SERVICE BOOKINGS & REVENUE -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <div v-show="activeTab === 'services'" class="space-y-8">
+
+      <!-- EXPLAINER BANNER -->
+      <div class="bg-gradient-to-r from-orange-500/10 via-amber-500/5 to-transparent border border-[#FF5C1A]/20 rounded-[2rem] p-6 sm:p-7 backdrop-blur-sm relative overflow-hidden">
+        <div class="flex items-start gap-4 relative z-10">
+          <div class="w-12 h-12 rounded-2xl bg-[#FF5C1A] text-white flex items-center justify-center shrink-0 shadow-lg shadow-[#FF5C1A]/25">
+            <CalendarCheck class="w-6 h-6" />
+          </div>
+          <div class="space-y-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 class="text-base font-bold text-gray-900 tracking-tight lowercase">service bookings revenue &amp; fee structure</h3>
+              <span class="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FF5C1A]/10 text-[#FF5C1A]">platform economics</span>
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed font-medium">
+              control how erranders monetizes service appointments (barbering, salon, laundry, photography, tech repair, makeup, tutoring).
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+              <div class="p-3 bg-white/80 rounded-xl border border-gray-100 shadow-2xs space-y-1">
+                <span class="text-[10px] font-bold uppercase text-orange-600 tracking-wider">1. platform service fee (₦)</span>
+                <p class="text-[11px] text-gray-600 leading-snug">direct fee paid online by the client at booking. 100% retained by erranders.</p>
+              </div>
+              <div class="p-3 bg-white/80 rounded-xl border border-gray-100 shadow-2xs space-y-1">
+                <span class="text-[10px] font-bold uppercase text-blue-600 tracking-wider">2. commitment deposit (%)</span>
+                <p class="text-[11px] text-gray-600 leading-snug">percentage of service price paid online to lock in the appointment slot with the vendor.</p>
+              </div>
+              <div class="p-3 bg-white/80 rounded-xl border border-gray-100 shadow-2xs space-y-1">
+                <span class="text-[10px] font-bold uppercase text-emerald-600 tracking-wider">3. vendor commission (%)</span>
+                <p class="text-[11px] text-gray-600 leading-snug">erranders take-rate deducted from the vendor's payout upon appointment completion.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 1: ERRANDERS PLATFORM SERVICE CHARGE -->
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-orange-50 text-[#FF5C1A] flex items-center justify-center">
+              <DollarSign class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-gray-900 lowercase">erranders service charge (platform benefit)</h3>
+                <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-orange-50 text-orange-600">buyer checkout</span>
+              </div>
+              <p class="text-xs text-gray-500 lowercase mt-0.5">convenience fee added to the client's online payment when booking a service</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Master Switch -->
+        <div class="flex items-center justify-between p-5 bg-gray-50/70 rounded-2xl border border-gray-100">
+          <div class="space-y-1">
+            <h4 class="text-sm font-bold text-gray-900 lowercase">charge service fee to clients</h4>
+            <p class="text-xs text-gray-500 lowercase">when enabled, clients pay a platform service fee online alongside their commitment deposit</p>
+          </div>
+          <button 
+            type="button" 
+            @click="serviceForm.isEnabled = !serviceForm.isEnabled" 
+            :class="serviceForm.isEnabled ? 'bg-[#FF5C1A]' : 'bg-gray-200'" 
+            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
+          >
+            <span :class="serviceForm.isEnabled ? 'translate-x-5' : 'translate-x-0'" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out"></span>
+          </button>
+        </div>
+
+        <div v-if="serviceForm.isEnabled" class="space-y-6 animate-fade-in">
+          <!-- Fee Calculation Type -->
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-gray-700 uppercase tracking-wider">service fee model</label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <button 
+                type="button"
+                @click="serviceForm.serviceFeeType = 'flat'"
+                :class="serviceForm.serviceFeeType === 'flat' ? 'border-[#FF5C1A] bg-orange-50/50 text-[#FF5C1A]' : 'border-gray-100 bg-gray-50/50 text-gray-600 hover:border-gray-200'"
+                class="p-4 rounded-2xl border text-left transition-all"
+              >
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-bold lowercase">flat fee</span>
+                  <div class="w-4 h-4 rounded-full border flex items-center justify-center shrink-0" :class="serviceForm.serviceFeeType === 'flat' ? 'border-[#FF5C1A]' : 'border-gray-300'">
+                    <div v-if="serviceForm.serviceFeeType === 'flat'" class="w-2 h-2 rounded-full bg-[#FF5C1A]"></div>
+                  </div>
+                </div>
+                <p class="text-[11px] text-gray-500 lowercase">fixed naira amount per booking regardless of price</p>
+              </button>
+
+              <button 
+                type="button"
+                @click="serviceForm.serviceFeeType = 'percentage'"
+                :class="serviceForm.serviceFeeType === 'percentage' ? 'border-[#FF5C1A] bg-orange-50/50 text-[#FF5C1A]' : 'border-gray-100 bg-gray-50/50 text-gray-600 hover:border-gray-200'"
+                class="p-4 rounded-2xl border text-left transition-all"
+              >
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-bold lowercase">percentage</span>
+                  <div class="w-4 h-4 rounded-full border flex items-center justify-center shrink-0" :class="serviceForm.serviceFeeType === 'percentage' ? 'border-[#FF5C1A]' : 'border-gray-300'">
+                    <div v-if="serviceForm.serviceFeeType === 'percentage'" class="w-2 h-2 rounded-full bg-[#FF5C1A]"></div>
+                  </div>
+                </div>
+                <p class="text-[11px] text-gray-500 lowercase">% of total service price (subject to minimum fee)</p>
+              </button>
+
+              <button 
+                type="button"
+                @click="serviceForm.serviceFeeType = 'both'"
+                :class="serviceForm.serviceFeeType === 'both' ? 'border-[#FF5C1A] bg-orange-50/50 text-[#FF5C1A]' : 'border-gray-100 bg-gray-50/50 text-gray-600 hover:border-gray-200'"
+                class="p-4 rounded-2xl border text-left transition-all"
+              >
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-bold lowercase">flat + percentage</span>
+                  <div class="w-4 h-4 rounded-full border flex items-center justify-center shrink-0" :class="serviceForm.serviceFeeType === 'both' ? 'border-[#FF5C1A]' : 'border-gray-300'">
+                    <div v-if="serviceForm.serviceFeeType === 'both'" class="w-2 h-2 rounded-full bg-[#FF5C1A]"></div>
+                  </div>
+                </div>
+                <p class="text-[11px] text-gray-500 lowercase">fixed base fee plus a % percentage surcharge</p>
+              </button>
+            </div>
+          </div>
+
+          <!-- Input Fields Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Fixed Service Fee -->
+            <div v-if="serviceForm.serviceFeeType === 'flat' || serviceForm.serviceFeeType === 'both'" class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100">
+              <label class="text-sm font-bold text-gray-800 lowercase">fixed service fee (₦)</label>
+              <input 
+                v-model.number="serviceForm.serviceFee"
+                type="number"
+                min="0"
+                step="50"
+                class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-4 py-3 outline-none font-semibold transition-all"
+              />
+              <p class="text-[11px] text-gray-500 lowercase">e.g. ₦150 charged to the student at booking</p>
+            </div>
+
+            <!-- Percentage Service Fee -->
+            <div v-if="serviceForm.serviceFeeType === 'percentage' || serviceForm.serviceFeeType === 'both'" class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100">
+              <label class="text-sm font-bold text-gray-800 lowercase">service fee percentage (%)</label>
+              <input 
+                v-model.number="serviceForm.serviceFeePercentage"
+                type="number"
+                min="0"
+                max="50"
+                step="0.5"
+                class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-4 py-3 outline-none font-semibold transition-all"
+              />
+              <p class="text-[11px] text-gray-500 lowercase">e.g. 5% of service subtotal</p>
+            </div>
+
+            <!-- Minimum Floor Service Fee -->
+            <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100">
+              <label class="text-sm font-bold text-gray-800 lowercase">minimum floor fee (₦)</label>
+              <input 
+                v-model.number="serviceForm.minServiceFee"
+                type="number"
+                min="0"
+                step="50"
+                class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-4 py-3 outline-none font-semibold transition-all"
+              />
+              <p class="text-[11px] text-gray-500 lowercase">ensures platform fee never falls below this floor</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: BOOKING DEPOSITS & VENDOR COMMISSIONS -->
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+              <Store class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-gray-900 lowercase">booking deposits &amp; vendor commission</h3>
+                <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-50 text-purple-600">vendor split</span>
+              </div>
+              <p class="text-xs text-gray-500 lowercase mt-0.5">commitment deposit percentage paid online and platform take-rate on vendor payouts</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Client Commitment Fee Percentage -->
+          <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100">
+            <div class="flex items-center justify-between">
+              <label class="text-sm font-bold text-gray-800 lowercase">client commitment deposit (%)</label>
+              <span class="text-xs font-black text-[#FF5C1A]">{{ serviceForm.commitmentFeePercentage }}%</span>
+            </div>
+            <input 
+              v-model.number="serviceForm.commitmentFeePercentage"
+              type="number"
+              min="10"
+              max="100"
+              step="5"
+              class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-4 py-3 outline-none font-semibold transition-all"
+            />
+            <p class="text-[11px] text-gray-500 lowercase">
+              the percentage of the service cost paid online upon booking (e.g. 30%). the remaining balance is paid in person directly to the provider.
+            </p>
+          </div>
+
+          <!-- Vendor Platform Commission Percentage -->
+          <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100">
+            <div class="flex items-center justify-between">
+              <label class="text-sm font-bold text-gray-800 lowercase">vendor payout commission (%)</label>
+              <span class="text-xs font-black text-emerald-600">{{ serviceForm.vendorCommissionPercentage }}%</span>
+            </div>
+            <input 
+              v-model.number="serviceForm.vendorCommissionPercentage"
+              type="number"
+              min="0"
+              max="50"
+              step="1"
+              class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-4 py-3 outline-none font-semibold transition-all"
+            />
+            <p class="text-[11px] text-gray-500 lowercase">
+              erranders commission deducted from the vendor's wallet payout when the appointment is marked completed (e.g. 10% of deposit).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: REAL-TIME SERVICE ECONOMICS SIMULATOR -->
+      <div class="bg-gray-950 p-6 sm:p-8 rounded-[2rem] text-white space-y-6 shadow-xl border border-gray-900 relative overflow-hidden">
+        <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-[#FF5C1A]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-5">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-orange-500/10 text-[#FF5C1A] flex items-center justify-center border border-[#FF5C1A]/20">
+              <Calculator class="w-5 h-5" />
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white lowercase">real-time service booking simulator</h3>
+              <p class="text-xs text-gray-400 lowercase">test how this fee structure splits cash flows on any service price</p>
+            </div>
+          </div>
+
+          <!-- Sample Amount Input -->
+          <div class="flex items-center gap-2 bg-gray-900 px-4 py-2 rounded-xl border border-gray-800">
+            <span class="text-xs text-gray-400 font-bold">₦</span>
+            <input 
+              v-model.number="serviceSimAmount"
+              type="number"
+              min="500"
+              step="500"
+              class="bg-transparent text-sm font-bold text-white w-24 outline-none"
+              placeholder="10000"
+            />
+            <span class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold">service subtotal</span>
+          </div>
+        </div>
+
+        <!-- 4-Way Breakdown Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1: Client Pays Online -->
+          <div class="p-4 rounded-2xl bg-gray-900/80 border border-gray-800 space-y-2">
+            <span class="text-[10px] uppercase font-bold text-orange-400 tracking-wider">1. client pays online (paystack)</span>
+            <p class="text-2xl font-black text-white">₦{{ serviceSimTotalOnline.toLocaleString() }}</p>
+            <div class="space-y-0.5 text-[11px] text-gray-400">
+              <p>• deposit ({{ serviceForm.commitmentFeePercentage }}%): <strong>₦{{ serviceSimCommitment.toLocaleString() }}</strong></p>
+              <p>• platform charge: <strong>₦{{ serviceSimFee.toLocaleString() }}</strong></p>
+            </div>
+          </div>
+
+          <!-- Card 2: Client Balance in Person -->
+          <div class="p-4 rounded-2xl bg-gray-900/80 border border-gray-800 space-y-2">
+            <span class="text-[10px] uppercase font-bold text-blue-400 tracking-wider">2. client balance (in person)</span>
+            <p class="text-2xl font-black text-white">₦{{ serviceSimBalance.toLocaleString() }}</p>
+            <p class="text-[11px] text-gray-400">
+              paid directly to the stylist/vendor upon arriving at their shop or on completion.
+            </p>
+          </div>
+
+          <!-- Card 3: Vendor Payout -->
+          <div class="p-4 rounded-2xl bg-gray-900/80 border border-gray-800 space-y-2">
+            <span class="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">3. vendor online payout</span>
+            <p class="text-2xl font-black text-white">₦{{ serviceSimVendorOnlinePayout.toLocaleString() }}</p>
+            <div class="space-y-0.5 text-[11px] text-gray-400">
+              <p>• from deposit: ₦{{ serviceSimCommitment.toLocaleString() }}</p>
+              <p>• less commission: -₦{{ serviceSimCommission.toLocaleString() }}</p>
+            </div>
+          </div>
+
+          <!-- Card 4: Erranders Total Revenue -->
+          <div class="p-4 rounded-2xl bg-[#FF5C1A]/10 border border-[#FF5C1A]/30 space-y-2">
+            <span class="text-[10px] uppercase font-bold text-[#FF5C1A] tracking-wider">4. erranders total profit</span>
+            <p class="text-2xl font-black text-[#FF5C1A]">₦{{ serviceSimPlatformProfit.toLocaleString() }}</p>
+            <div class="space-y-0.5 text-[11px] text-orange-200">
+              <p>• service fee: <strong>₦{{ serviceSimFee.toLocaleString() }}</strong></p>
+              <p>• vendor commission: <strong>₦{{ serviceSimCommission.toLocaleString() }}</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAVE BAR -->
+      <div class="flex justify-end pt-4">
+        <button 
+          @click="confirmSave('services')" 
+          :disabled="savingServices"
+          class="px-8 py-3.5 bg-gray-900 text-white rounded-xl text-sm font-bold lowercase hover:bg-[#FF5C1A] transition-all shadow-lg shadow-gray-200 disabled:opacity-50 flex items-center gap-2"
+        >
+          <Loader2 v-if="savingServices" class="w-4 h-4 animate-spin" />
+          <Save v-else class="w-4 h-4" />
+          <span>{{ savingServices ? 'saving...' : 'save service booking settings' }}</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
     <!-- TAB 2: COMMUNICATIONS -->
     <!-- ═══════════════════════════════════════════════════════ -->
     <div v-show="activeTab === 'comms'" class="space-y-8">
@@ -2032,9 +2345,10 @@ import {
   Zap, Loader2, Truck, DollarSign, Tag, Bell, Megaphone, Moon, Info, AlertTriangle, 
   CheckCircle, Calculator, Save, ShieldAlert, Briefcase, Lock, Plus, Trash2, Edit3, 
   Eye, X, ExternalLink, BarChart2, Sparkles, Check, ArrowRight, ShoppingBag, Store, CreditCard, HelpCircle,
-  ArrowRightLeft
+  ArrowRightLeft, CalendarCheck, Coins
 } from 'lucide-vue-next';
 import { admin_api } from '@/api_factory/modules/admin';
+import { appointments_api } from '@/api_factory/modules/appointments';
 import { useCustomToast } from '@/composables/core/useCustomToast';
 
 definePageMeta({ layout: 'admin' });
@@ -2050,6 +2364,7 @@ if (route.query.tab) {
 
 const tabs = [
   { id: 'pricing', label: 'pricing & revenue', icon: DollarSign },
+  { id: 'services', label: 'service bookings', icon: CalendarCheck },
   { id: 'comms', label: 'communications', icon: Bell },
   { id: 'adverts', label: 'adverts & monetization', icon: Megaphone },
   { id: 'campaigns', label: 'campaigns', icon: Moon },
@@ -2065,11 +2380,58 @@ const showInfo = (key: string) => {
 
 // ─── Form State ────────────────
 const saving = ref(false);
+const savingServices = ref(false);
 const savingComms = ref(false);
 const savingAdvert = ref(false);
 const savingExamBrethren = ref(false);
 const savingErrander = ref(false);
 const savingPlatform = ref(false);
+
+const serviceForm = reactive({
+  isEnabled: true,
+  serviceFeeType: 'flat' as 'flat' | 'percentage' | 'both',
+  serviceFee: 150,
+  serviceFeePercentage: 0,
+  commitmentFeePercentage: 30,
+  vendorCommissionPercentage: 10,
+  minServiceFee: 100,
+});
+const originalServiceForm = reactive({ ...serviceForm });
+
+// ─── Service Economics Simulator ────────────────
+const serviceSimAmount = ref(10000);
+const serviceSimCommitment = computed(() => {
+  return Math.round(serviceSimAmount.value * (Number(serviceForm.commitmentFeePercentage || 0) / 100));
+});
+const serviceSimFee = computed(() => {
+  if (!serviceForm.isEnabled) return 0;
+  let fee = 0;
+  const rawFee = Number(serviceForm.serviceFee) || 0;
+  const pct = Number(serviceForm.serviceFeePercentage) || 0;
+  if (serviceForm.serviceFeeType === 'percentage') {
+    fee = Math.round(serviceSimAmount.value * (pct / 100));
+  } else if (serviceForm.serviceFeeType === 'both') {
+    fee = rawFee + Math.round(serviceSimAmount.value * (pct / 100));
+  } else {
+    fee = rawFee;
+  }
+  return Math.max(Number(serviceForm.minServiceFee) || 0, fee);
+});
+const serviceSimTotalOnline = computed(() => {
+  return serviceSimCommitment.value + serviceSimFee.value;
+});
+const serviceSimBalance = computed(() => {
+  return Math.max(0, serviceSimAmount.value - serviceSimCommitment.value);
+});
+const serviceSimCommission = computed(() => {
+  return Math.round(serviceSimCommitment.value * (Number(serviceForm.vendorCommissionPercentage || 0) / 100));
+});
+const serviceSimVendorOnlinePayout = computed(() => {
+  return Math.max(0, serviceSimCommitment.value - serviceSimCommission.value);
+});
+const serviceSimPlatformProfit = computed(() => {
+  return serviceSimFee.value + serviceSimCommission.value;
+});
 
 const erranderForm = reactive({
   maxConcurrentOrders: 0,
@@ -2386,6 +2748,19 @@ const confirmSave = (type: string) => {
       confirmModal.changes.push(`errander interception split: <strong>${originalForm.interceptionFirstErranderPercentage}% / ${originalForm.interceptionSecondErranderPercentage}%</strong> → <strong>${form.interceptionFirstErranderPercentage}% / ${form.interceptionSecondErranderPercentage}%</strong>`);
     }
     if (confirmModal.changes.length === 0) confirmModal.changes.push('no changes detected — saving current values.');
+  } else if (type === 'services') {
+    confirmModal.message = 'you are about to update service booking pricing and platform commission configuration. these changes take effect immediately for all new service appointments.';
+    confirmModal.changes.push(`service charge status: <strong>${serviceForm.isEnabled ? 'enabled' : 'disabled'}</strong>`);
+    confirmModal.changes.push(`fee structure: <strong>${serviceForm.serviceFeeType}</strong>`);
+    if (serviceForm.serviceFeeType === 'flat' || serviceForm.serviceFeeType === 'both') {
+      confirmModal.changes.push(`fixed service charge: <strong>₦${serviceForm.serviceFee}</strong>`);
+    }
+    if (serviceForm.serviceFeeType === 'percentage' || serviceForm.serviceFeeType === 'both') {
+      confirmModal.changes.push(`percentage service charge: <strong>${serviceForm.serviceFeePercentage}%</strong>`);
+    }
+    confirmModal.changes.push(`minimum floor service charge: <strong>₦${serviceForm.minServiceFee}</strong>`);
+    confirmModal.changes.push(`client commitment fee: <strong>${serviceForm.commitmentFeePercentage}%</strong>`);
+    confirmModal.changes.push(`vendor completion commission: <strong>${serviceForm.vendorCommissionPercentage}%</strong>`);
   } else if (type === 'comms') {
     confirmModal.message = 'you are about to update communication channel settings. this controls whether users receive emails and push notifications.';
     confirmModal.changes.push(`emails: <strong>${commsForm.emailsEnabled ? 'enabled' : 'disabled'}</strong>`);
@@ -2421,6 +2796,7 @@ const executeConfirmedSave = async () => {
   const type = confirmModal.type;
 
   if (type === 'pricing') await saveSettings();
+  else if (type === 'services') await saveServiceSettings();
   else if (type === 'comms') await saveCommunicationsSettings();
   else if (type === 'adverts') await saveAdvertSettings();
   else if (type === 'campaigns') await saveExamBrethrenSettings();
@@ -2438,10 +2814,11 @@ const loadSettings = async () => {
       admin_api.getExamBrethrenSettings(),
       admin_api.getErranderSettings(),
       admin_api.getPayoutSettings(),
-      admin_api.getPlatformStatus()
+      admin_api.getPlatformStatus(),
+      appointments_api.getServiceSettings(),
     ]);
     
-    const [errandSettled, commsSettled, advertSettled, examBrethrenSettled, erranderSettingsSettled, payoutSettled, platformSettled] = results;
+    const [errandSettled, commsSettled, advertSettled, examBrethrenSettled, erranderSettingsSettled, payoutSettled, platformSettled, serviceSettled] = results;
 
     if (errandSettled.status === 'fulfilled' && errandSettled.value?.data) {
       const errandSettings = errandSettled.value.data;
@@ -2532,6 +2909,18 @@ const loadSettings = async () => {
       platformForm.isStudentAppClosed = pData.isStudentAppClosed ?? pData.isClosed ?? false;
       platformForm.isVendorAppClosed = pData.isVendorAppClosed ?? pData.isClosed ?? false;
       platformForm.isDispatchAppClosed = pData.isDispatchAppClosed ?? pData.isClosed ?? false;
+    }
+
+    if (serviceSettled.status === 'fulfilled' && serviceSettled.value?.data) {
+      const sData = serviceSettled.value.data;
+      serviceForm.isEnabled = sData.isEnabled !== false;
+      serviceForm.serviceFeeType = sData.serviceFeeType || 'flat';
+      serviceForm.serviceFee = sData.serviceFee !== undefined ? Number(sData.serviceFee) : 150;
+      serviceForm.serviceFeePercentage = sData.serviceFeePercentage !== undefined ? Number(sData.serviceFeePercentage) : 0;
+      serviceForm.commitmentFeePercentage = sData.commitmentFeePercentage !== undefined ? Number(sData.commitmentFeePercentage) : 30;
+      serviceForm.vendorCommissionPercentage = sData.vendorCommissionPercentage !== undefined ? Number(sData.vendorCommissionPercentage) : 10;
+      serviceForm.minServiceFee = sData.minServiceFee !== undefined ? Number(sData.minServiceFee) : 100;
+      Object.assign(originalServiceForm, { ...serviceForm });
     }
   } catch (e: any) {
     console.error('Failed to load settings:', e);
@@ -2632,6 +3021,38 @@ const saveSettings = async () => {
     showToast({ title: 'error', message: e.response?.data?.message || 'failed to save settings.', toastType: 'error' });
   } finally {
     saving.value = false;
+  }
+};
+
+const saveServiceSettings = async () => {
+  savingServices.value = true;
+  try {
+    const payload = {
+      isEnabled: Boolean(serviceForm.isEnabled),
+      serviceFeeType: serviceForm.serviceFeeType,
+      serviceFee: Number(serviceForm.serviceFee) || 0,
+      serviceFeePercentage: Number(serviceForm.serviceFeePercentage) || 0,
+      commitmentFeePercentage: Number(serviceForm.commitmentFeePercentage) || 30,
+      vendorCommissionPercentage: Number(serviceForm.vendorCommissionPercentage) || 10,
+      minServiceFee: Number(serviceForm.minServiceFee) || 100,
+    };
+    const res = await appointments_api.updateServiceSettings(payload);
+    if (res?.data) {
+      serviceForm.isEnabled = res.data.isEnabled !== false;
+      serviceForm.serviceFeeType = res.data.serviceFeeType || 'flat';
+      serviceForm.serviceFee = res.data.serviceFee !== undefined ? Number(res.data.serviceFee) : 150;
+      serviceForm.serviceFeePercentage = res.data.serviceFeePercentage !== undefined ? Number(res.data.serviceFeePercentage) : 0;
+      serviceForm.commitmentFeePercentage = res.data.commitmentFeePercentage !== undefined ? Number(res.data.commitmentFeePercentage) : 30;
+      serviceForm.vendorCommissionPercentage = res.data.vendorCommissionPercentage !== undefined ? Number(res.data.vendorCommissionPercentage) : 10;
+      serviceForm.minServiceFee = res.data.minServiceFee !== undefined ? Number(res.data.minServiceFee) : 100;
+    }
+    Object.assign(originalServiceForm, { ...serviceForm });
+    showToast({ title: 'success', message: 'service booking settings saved successfully!', toastType: 'success' });
+  } catch (e: any) {
+    console.error('Failed to save service settings:', e);
+    showToast({ title: 'error', message: e.response?.data?.message || 'failed to save service settings.', toastType: 'error' });
+  } finally {
+    savingServices.value = false;
   }
 };
 

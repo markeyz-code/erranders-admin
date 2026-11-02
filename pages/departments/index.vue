@@ -194,7 +194,7 @@ import { ref, onMounted } from 'vue'
 import { Plus, Users, Layout, ShieldCheck, Info, Edit2, Trash2, X, Save } from 'lucide-vue-next'
 import { admin_api } from '@/api_factory/modules/admin'
 import { useCustomToast } from '@/composables/core/useCustomToast'
-import { LayoutDashboard, Store, Package, ShoppingCart, Gift, Wallet, Banknote, Tag, MessageSquare, Bell, FileText, Settings } from 'lucide-vue-next'
+import { LayoutDashboard, Store, Package, ShoppingCart, Gift, Wallet, Banknote, Tag, MessageSquare, Bell, FileText, Settings, CalendarCheck } from 'lucide-vue-next'
 
 definePageMeta({
   layout: 'admin'
@@ -213,6 +213,7 @@ const availableModules = [
   { path: '/dispatchers', label: 'Dispatchers', icon: ShieldCheck },
   { path: '/vendors', label: 'Vendors', icon: Store },
   { path: '/orders', label: 'Orders', icon: Package },
+  { path: '/booked-services', label: 'Booked Services', icon: CalendarCheck },
   { path: '/market-pool/manage', label: 'Market Pool', icon: ShoppingCart },
   { path: '/referrals', label: 'Referrals', icon: Gift },
   { path: '/finances', label: 'Finances', icon: Wallet },
@@ -261,6 +262,12 @@ const groupedPermissions = {
     { id: 'can_update_order_status', label: 'Update Order Status', description: 'Can force order status progression (cooking, ready, etc.)' },
     { id: 'can_reassign_order', label: 'Reassign Orders', description: 'Can transfer active errand to another runner' },
     { id: 'can_cancel_order', label: 'Cancel Orders', description: 'Can abort active orders and trigger cancellation protocols' }
+  ],
+  'Service Bookings & Appointments': [
+    { id: 'can_view_bookings', label: 'View Booked Services', description: 'Can browse booked appointments, schedule details, and client lists' },
+    { id: 'can_update_booking_status', label: 'Update Booking Status', description: 'Can confirm, complete, cancel, or mark appointments as no-show' },
+    { id: 'can_verify_booking_payment', label: 'Verify Direct Transfer', description: 'Can verify proof of payment receipts for direct bank transfers' },
+    { id: 'can_reschedule_booking', label: 'Reschedule Bookings', description: 'Can adjust appointment date and time on behalf of clients or vendors' }
   ],
   'Financial Operations & Wallets': [
     { id: 'can_view_finances', label: 'View Finances', description: 'Can view platform ledger, revenue analytics, and balances' },

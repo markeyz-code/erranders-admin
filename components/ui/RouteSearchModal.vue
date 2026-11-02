@@ -85,7 +85,8 @@ import {
   Package, 
   Wallet, 
   FileText,
-  ChevronRight
+  ChevronRight,
+  CalendarCheck
 } from 'lucide-vue-next';
 
 const props = defineProps({
@@ -107,6 +108,7 @@ const routes = [
   { path: '/users', label: 'User Management', icon: Users },
   { path: '/vendors', label: 'Vendor Management', icon: Store },
   { path: '/orders', label: 'Order Management', icon: Package },
+  { path: '/booked-services', label: 'Booked Services & Appointments', icon: CalendarCheck },
   { path: '/finances', label: 'Finances & Transactions', icon: Wallet },
   { path: '/reports', label: 'Platform Reports', icon: FileText }
 ];
