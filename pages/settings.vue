@@ -1391,13 +1391,47 @@
             </p>
           </div>
 
-          <!-- Vendor Platform Commission Percentage -->
+          <!-- Provider-side commission: the half the student never sees -->
           <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100">
             <div class="flex items-center justify-between">
-              <label class="text-sm font-bold text-gray-800 lowercase">vendor payout commission (%)</label>
-              <span class="text-xs font-black text-emerald-600">{{ serviceForm.vendorCommissionPercentage }}%</span>
+              <label class="text-sm font-bold text-gray-800 lowercase">provider commission</label>
+              <span class="text-xs font-black text-emerald-600">
+                {{ serviceForm.vendorCommissionType === 'fixed'
+                  ? '₦' + Number(serviceForm.vendorCommissionFixed || 0).toLocaleString()
+                  : serviceForm.vendorCommissionPercentage + '%' }}
+              </span>
             </div>
-            <input 
+
+            <div class="flex gap-2">
+              <button
+                type="button"
+                class="flex-1 rounded-xl border px-3 py-2 text-xs font-bold transition-all"
+                :class="serviceForm.vendorCommissionType === 'percentage' ? 'border-[#FF5C1A] bg-orange-50 text-[#FF5C1A]' : 'border-gray-200 bg-white text-gray-600'"
+                @click="serviceForm.vendorCommissionType = 'percentage'"
+              >
+                Percentage
+              </button>
+              <button
+                type="button"
+                class="flex-1 rounded-xl border px-3 py-2 text-xs font-bold transition-all"
+                :class="serviceForm.vendorCommissionType === 'fixed' ? 'border-[#FF5C1A] bg-orange-50 text-[#FF5C1A]' : 'border-gray-200 bg-white text-gray-600'"
+                @click="serviceForm.vendorCommissionType = 'fixed'"
+              >
+                Fixed amount
+              </button>
+            </div>
+
+            <input
+              v-if="serviceForm.vendorCommissionType === 'fixed'"
+              v-model.number="serviceForm.vendorCommissionFixed"
+              type="number"
+              min="0"
+              step="50"
+              placeholder="Amount in naira"
+              class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-4 py-3 outline-none font-semibold transition-all"
+            />
+            <input
+              v-else
               v-model.number="serviceForm.vendorCommissionPercentage"
               type="number"
               min="0"
@@ -1405,8 +1439,10 @@
               step="1"
               class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-[#FF5C1A] focus:border-[#FF5C1A] block px-4 py-3 outline-none font-semibold transition-all"
             />
+
             <p class="text-[11px] text-gray-500 lowercase">
-              erranders commission deducted from the vendor's wallet payout when the appointment is marked completed (e.g. 10% of deposit).
+              charged to the service provider out of their payout. students never see this figure.
+              a fixed amount is capped at the booking value so a small booking cannot owe more than it is worth.
             </p>
           </div>
         </div>
@@ -2394,6 +2430,8 @@ const serviceForm = reactive({
   serviceFeePercentage: 0,
   commitmentFeePercentage: 30,
   vendorCommissionPercentage: 10,
+  vendorCommissionType: 'percentage' as 'percentage' | 'fixed',
+  vendorCommissionFixed: 0,
   minServiceFee: 100,
 });
 const originalServiceForm = reactive({ ...serviceForm });
@@ -3034,6 +3072,8 @@ const saveServiceSettings = async () => {
       serviceFeePercentage: Number(serviceForm.serviceFeePercentage) || 0,
       commitmentFeePercentage: Number(serviceForm.commitmentFeePercentage) || 30,
       vendorCommissionPercentage: Number(serviceForm.vendorCommissionPercentage) || 10,
+      vendorCommissionType: serviceForm.vendorCommissionType,
+      vendorCommissionFixed: Number(serviceForm.vendorCommissionFixed) || 0,
       minServiceFee: Number(serviceForm.minServiceFee) || 100,
     };
     const res = await appointments_api.updateServiceSettings(payload);
@@ -3044,6 +3084,8 @@ const saveServiceSettings = async () => {
       serviceForm.serviceFeePercentage = res.data.serviceFeePercentage !== undefined ? Number(res.data.serviceFeePercentage) : 0;
       serviceForm.commitmentFeePercentage = res.data.commitmentFeePercentage !== undefined ? Number(res.data.commitmentFeePercentage) : 30;
       serviceForm.vendorCommissionPercentage = res.data.vendorCommissionPercentage !== undefined ? Number(res.data.vendorCommissionPercentage) : 10;
+      serviceForm.vendorCommissionType = res.data.vendorCommissionType === 'fixed' ? 'fixed' : 'percentage';
+      serviceForm.vendorCommissionFixed = res.data.vendorCommissionFixed !== undefined ? Number(res.data.vendorCommissionFixed) : 0;
       serviceForm.minServiceFee = res.data.minServiceFee !== undefined ? Number(res.data.minServiceFee) : 100;
     }
     Object.assign(originalServiceForm, { ...serviceForm });
