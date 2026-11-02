@@ -234,6 +234,36 @@
           <div class="space-y-3 p-5 rounded-2xl bg-gray-50/60 border border-gray-100 transition-all hover:bg-white hover:border-blue-400/40">
             <div class="flex items-start justify-between gap-2">
               <div>
+            <!-- Priced by distance, not by handover -->
+            <div class="space-y-3 p-5 rounded-2xl bg-white border border-gray-100 sm:col-span-3">
+              <div>
+                <p class="text-sm font-bold text-gray-800 lowercase">delivery fee by distance from the hostel</p>
+                <p class="text-[11px] text-gray-500 mt-0.5">
+                  the student picks where the delivery is going, and this sets the price. how it is
+                  handed over (room or gate) no longer changes what they pay — that was how someone
+                  outside the hostel could choose the cheaper option.
+                </p>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label class="text-[11px] font-bold text-gray-600 lowercase">inside the hostel</label>
+                  <input v-model.number="form.hostelDeliveryFee" type="number" min="0" step="50"
+                    class="mt-1 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-base font-bold text-gray-900 outline-none focus:border-[#FF5C1A]" />
+                </div>
+                <div>
+                  <label class="text-[11px] font-bold text-gray-600 lowercase">within school, away from hostel</label>
+                  <input v-model.number="form.withinSchoolFee" type="number" min="0" step="50"
+                    class="mt-1 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-base font-bold text-gray-900 outline-none focus:border-[#FF5C1A]" />
+                </div>
+                <div>
+                  <label class="text-[11px] font-bold text-gray-600 lowercase">entirely outside school</label>
+                  <input v-model.number="form.outsideSchoolFee" type="number" min="0" step="50"
+                    class="mt-1 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-base font-bold text-gray-900 outline-none focus:border-[#FF5C1A]" />
+                </div>
+              </div>
+            </div>
+
                 <div class="flex items-center gap-2">
                   <label class="text-sm font-bold text-gray-800 lowercase">room delivery fee (₦)</label>
                   <button @click="showInfo('roomDeliveryFee')" type="button" class="w-5 h-5 rounded-full bg-gray-200/70 text-gray-600 flex items-center justify-center hover:bg-blue-100 hover:text-blue-600 transition-colors">
