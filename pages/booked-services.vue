@@ -172,42 +172,31 @@
       </div>
 
       <!-- Status Filter -->
-      <select 
-        v-model="selectedStatus" 
-        @change="fetchBookings"
-        class="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 outline-none focus:border-indigo-500"
-      >
-        <option value="">All Statuses</option>
-        <option value="pending">Pending</option>
-        <option value="confirmed">Confirmed</option>
-        <option value="completed">Completed</option>
-        <option value="cancelled">Cancelled</option>
-        <option value="no_show">No Show</option>
-      </select>
+      <SearchableSelect
+        v-model="selectedStatus"
+        :options="statusOptions"
+        all-label="All statuses"
+        search-placeholder="Search status…"
+        @update:model-value="fetchBookings"
+      />
 
       <!-- Payment Status Filter -->
-      <select 
-        v-model="selectedPaymentStatus" 
-        @change="fetchBookings"
-        class="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 outline-none focus:border-indigo-500"
-      >
-        <option value="">All Payment Statuses</option>
-        <option value="success">Paid / Success</option>
-        <option value="pending_verification">Awaiting Verification</option>
-        <option value="pending">Pending Payment</option>
-        <option value="failed">Failed</option>
-      </select>
+      <SearchableSelect
+        v-model="selectedPaymentStatus"
+        :options="paymentStatusOptions"
+        all-label="All payment statuses"
+        search-placeholder="Search payment status…"
+        @update:model-value="fetchBookings"
+      />
 
       <!-- Payment Method Filter -->
-      <select 
-        v-model="selectedPaymentMethod" 
-        @change="fetchBookings"
-        class="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 outline-none focus:border-indigo-500"
-      >
-        <option value="">All Payment Methods</option>
-        <option value="paystack">Online (Paystack)</option>
-        <option value="direct_transfer">Direct Bank Transfer</option>
-      </select>
+      <SearchableSelect
+        v-model="selectedPaymentMethod"
+        :options="paymentMethodOptions"
+        all-label="All payment methods"
+        search-placeholder="Search payment method…"
+        @update:model-value="fetchBookings"
+      />
     </div>
 
     <!-- Bookings Table Section -->
@@ -475,6 +464,28 @@ const meta = ref({
 
 // Filters
 const searchQuery = ref('');
+// Filter choices live here rather than in native selects, so every dropdown in the admin
+// looks and behaves the same — searchable, keyboard-navigable, no OS-native popup.
+const statusOptions = [
+  { value: 'pending', label: 'Pending' },
+  { value: 'confirmed', label: 'Confirmed' },
+  { value: 'completed', label: 'Completed' },
+  { value: 'cancelled', label: 'Cancelled' },
+  { value: 'no_show', label: 'No show' },
+];
+
+const paymentStatusOptions = [
+  { value: 'success', label: 'Paid / Success' },
+  { value: 'pending_verification', label: 'Awaiting verification' },
+  { value: 'pending', label: 'Pending payment' },
+  { value: 'failed', label: 'Failed' },
+];
+
+const paymentMethodOptions = [
+  { value: 'paystack', label: 'Online (Paystack)' },
+  { value: 'direct_transfer', label: 'Direct bank transfer' },
+];
+
 const selectedStatus = ref('');
 const selectedPaymentStatus = ref('');
 const selectedPaymentMethod = ref('');

@@ -558,11 +558,12 @@
                 </div>
                 <div class="space-y-2">
                   <label class="text-sm font-semibold text-gray-700">Business Type</label>
-                  <select v-model="editVendorPayload.businessType" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
-                    <option value="physical_product">Physical Product</option>
-                    <option value="service_provider">Service Provider</option>
-                    <option value="hybrid">Hybrid</option>
-                  </select>
+                  <SearchableSelect
+                    v-model="editVendorPayload.businessType"
+                    :options="businessTypeOptions"
+                    :show-all-option="false"
+                    placeholder="Select business model"
+                  />
                 </div>
                 <div class="space-y-2">
                   <label class="text-sm font-semibold text-gray-700">Service Location</label>
@@ -663,12 +664,12 @@
 
                 <div class="col-span-2 pt-4">
                   <label class="text-sm font-semibold text-gray-700">Status</label>
-                  <select v-model="editVendorPayload.status" class="w-full p-3 text-base bg-white border border-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5C1A]/20">
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="suspended">Suspended</option>
-                    <option value="rejected">Rejected</option>
-                  </select>
+                  <SearchableSelect
+                    v-model="editVendorPayload.status"
+                    :options="vendorStatusOptions"
+                    :show-all-option="false"
+                    placeholder="Select status"
+                  />
                 </div>
               </div>
               <button type="submit" :disabled="updatingVendor" class="w-full py-3 bg-[#FF5C1A] text-white rounded-xl font-bold hover:bg-[#E04D12] transition-colors disabled:opacity-50">
@@ -978,6 +979,19 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener('click', closeDropdown);
 });
+
+const businessTypeOptions = [
+  { value: 'physical_product', label: 'Physical product' },
+  { value: 'service_provider', label: 'Service provider' },
+  { value: 'hybrid', label: 'Hybrid' },
+];
+
+const vendorStatusOptions = [
+  { value: 'pending', label: 'Pending' },
+  { value: 'approved', label: 'Approved' },
+  { value: 'suspended', label: 'Suspended' },
+  { value: 'rejected', label: 'Rejected' },
+];
 
 const editVendorPayload = ref({ 
   storeName: '', 
