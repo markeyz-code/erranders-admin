@@ -339,7 +339,45 @@
                       </nuxt-link>
                       
                       <div class="h-px w-full bg-gray-100 my-1"></div>
-                      
+
+                      <!-- Verification: the tier is what a rider can actually do -->
+                      <p class="px-4 pb-1 pt-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">Verification</p>
+                      <button
+                        v-for="tier in [1, 2, 3]"
+                        :key="tier"
+                        @click.stop="activeDropdownId = null; setDispatcherTier(errander, tier)"
+                        :disabled="processing === errander._id"
+                        class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <ShieldCheck class="w-4 h-4 text-gray-400" />
+                        {{ errander.verificationLevel === tier ? '● ' : '' }}Set Tier {{ tier }}
+                      </button>
+
+                      <div class="h-px w-full bg-gray-100 my-1"></div>
+
+                      <!-- Money: look before touching -->
+                      <p class="px-4 pb-1 pt-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">Wallet</p>
+                      <button
+                        @click.stop="activeDropdownId = null; openWallet(errander)"
+                        class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                      >
+                        <Wallet class="w-4 h-4 text-gray-400" /> Wallet &amp; Ledger
+                      </button>
+                      <button
+                        @click.stop="activeDropdownId = null; openAdjust(errander, 'credit')"
+                        class="w-full text-left px-4 py-2 text-sm text-emerald-700 hover:bg-emerald-50 flex items-center gap-2"
+                      >
+                        <PlusCircle class="w-4 h-4" /> Credit earnings
+                      </button>
+                      <button
+                        @click.stop="activeDropdownId = null; openAdjust(errander, 'debit')"
+                        class="w-full text-left px-4 py-2 text-sm text-amber-700 hover:bg-amber-50 flex items-center gap-2"
+                      >
+                        <MinusCircle class="w-4 h-4" /> Debit earnings
+                      </button>
+
+                      <div class="h-px w-full bg-gray-100 my-1"></div>
+
                       <button 
                         v-if="errander.isApproved && hasPermission('can_suspend_dispatcher')"
                         @click.stop="activeDropdownId = null; toggleSuspension(errander._id, 'suspend')" 
@@ -430,6 +468,113 @@
     </div>
 
     <!-- Reject Modal -->
+    <!-- Wallet and ledger -->
+    <div v-if="walletModalOpen" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4" @click.self="walletModalOpen = false">
+      <div class="bg-white rounded-2xl w-full max-w-lg p-6 max-h-[85vh] overflow-y-auto">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="text-lg font-bold text-gray-900">Wallet</h3>
+            <p class="text-sm text-gray-500">
+              {{ selectedDispatcherForWallet?.user?.firstName }} {{ selectedDispatcherForWallet?.user?.lastName }}
+            </p>
+          </div>
+          <button class="rounded-lg p-1.5 text-gray-400 hover:bg-gray-50" @click="walletModalOpen = false">✕</button>
+        </div>
+
+        <div v-if="walletLoading" class="py-10 text-center text-sm text-gray-400">Loading…</div>
+
+        <template v-else-if="walletData">
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <div class="rounded-xl border border-gray-100 bg-gray-50/60 p-3">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Wallet balance</p>
+              <p class="mt-1 text-lg font-black text-gray-900">₦{{ Number(walletData.walletBalance || 0).toLocaleString() }}</p>
+            </div>
+            <div class="rounded-xl border border-emerald-100 bg-emerald-50/60 p-3">
+              <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Total earnings</p>
+              <p class="mt-1 text-lg font-black text-emerald-800">₦{{ Number(walletData.totalEarnings || 0).toLocaleString() }}</p>
+            </div>
+          </div>
+
+          <p class="mt-4 mb-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">Recent transactions</p>
+          <div v-if="walletData.transactions?.length" class="divide-y divide-gray-50 rounded-xl border border-gray-100">
+            <div v-for="t in walletData.transactions" :key="t.id" class="flex items-center justify-between gap-3 px-3 py-2.5">
+              <div class="min-w-0">
+                <p class="truncate text-xs font-semibold text-gray-800">{{ t.description || t.type }}</p>
+                <p class="text-[10px] text-gray-400">{{ new Date(t.createdAt).toLocaleString() }} · {{ t.status }}</p>
+              </div>
+              <span class="shrink-0 text-sm font-bold" :class="t.type === 'credit' ? 'text-emerald-600' : 'text-rose-600'">
+                {{ t.type === 'credit' ? '+' : '−' }}₦{{ Number(t.amount || 0).toLocaleString() }}
+              </span>
+            </div>
+          </div>
+          <p v-else class="rounded-xl border border-dashed border-gray-200 px-3 py-6 text-center text-xs text-gray-400">
+            No transactions yet.
+          </p>
+        </template>
+
+        <div class="mt-5 flex gap-2">
+          <button
+            class="flex-1 rounded-xl bg-emerald-600 py-2.5 text-sm font-bold text-white hover:bg-emerald-500"
+            @click="walletModalOpen = false; openAdjust(selectedDispatcherForWallet, 'credit')"
+          >
+            Credit
+          </button>
+          <button
+            class="flex-1 rounded-xl border border-amber-200 bg-amber-50 py-2.5 text-sm font-bold text-amber-700 hover:bg-amber-100"
+            @click="walletModalOpen = false; openAdjust(selectedDispatcherForWallet, 'debit')"
+          >
+            Debit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Credit or debit earnings -->
+    <div v-if="adjustModalOpen" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4" @click.self="adjustModalOpen = false">
+      <div class="bg-white rounded-2xl w-full max-w-md p-6">
+        <h3 class="text-lg font-bold text-gray-900">
+          {{ adjustMode === 'credit' ? 'Credit earnings' : 'Debit earnings' }}
+        </h3>
+        <p class="mt-1 text-sm text-gray-500">
+          {{ selectedDispatcherForWallet?.user?.firstName }} {{ selectedDispatcherForWallet?.user?.lastName }}
+        </p>
+
+        <label class="mt-4 block text-[11px] font-bold uppercase tracking-wider text-gray-400">Amount (₦)</label>
+        <input
+          v-model.number="adjustAmount"
+          type="number"
+          min="1"
+          step="100"
+          class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-semibold text-gray-900 outline-none focus:border-[#FF5C1A] focus:bg-white"
+        />
+
+        <label class="mt-3 block text-[11px] font-bold uppercase tracking-wider text-gray-400">Note (optional)</label>
+        <input
+          v-model="adjustNote"
+          placeholder="Why is this adjustment being made?"
+          class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 outline-none focus:border-[#FF5C1A] focus:bg-white"
+        />
+
+        <p class="mt-3 text-[11px] leading-relaxed text-amber-700">
+          The rider is messaged on WhatsApp when earnings are credited, so keep the note factual.
+        </p>
+
+        <div class="mt-5 flex gap-2">
+          <button class="flex-1 rounded-xl bg-gray-100 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-200" @click="adjustModalOpen = false">
+            Cancel
+          </button>
+          <button
+            class="flex-1 rounded-xl py-2.5 text-sm font-bold text-white disabled:opacity-50"
+            :class="adjustMode === 'credit' ? 'bg-emerald-600 hover:bg-emerald-500' : 'bg-amber-600 hover:bg-amber-500'"
+            :disabled="adjusting || !adjustAmount"
+            @click="confirmAdjust"
+          >
+            {{ adjusting ? 'Working…' : (adjustMode === 'credit' ? 'Credit' : 'Debit') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div v-if="rejectModalOpen" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4" @click.self="rejectModalOpen = false">
       <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl text-left">
         <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -809,7 +954,7 @@
 <script setup lang="ts">
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config';
 import { admin_api } from '@/api_factory/modules/admin';
-import { Bike, FileText, CheckCircle, XCircle, Search, User, MapPin, MoreHorizontal, Shield, Edit2, Star, Clock, AlertTriangle, AlertCircle, RefreshCw, Eye, Hash, Calendar, DollarSign, Image as ImageIcon, Receipt, Trash2, MoreVertical, Edit, X, Settings } from 'lucide-vue-next';
+import { Bike, FileText, CheckCircle, XCircle, Search, User, MapPin, MoreHorizontal, Shield, Edit2, Star, Clock, AlertTriangle, AlertCircle, RefreshCw, Eye, Hash, Calendar, DollarSign, Image as ImageIcon, Receipt, Trash2, MoreVertical, Edit, X, Settings, ShieldCheck, Wallet, PlusCircle, MinusCircle } from 'lucide-vue-next';
 import { ref, onMounted, computed, watch, onUnmounted } from 'vue';
 import StatusBadge from '@/components/ui/StatusBadge.vue';
 import SkeletonTable from '@/components/ui/SkeletonTable.vue';
@@ -924,6 +1069,16 @@ const savePayoutConfig = async () => {
 };
 
 // Modals
+const walletModalOpen = ref(false)
+const walletLoading = ref(false)
+const walletData = ref<any>(null)
+const adjustModalOpen = ref(false)
+const adjustMode = ref<'credit' | 'debit'>('credit')
+const adjustAmount = ref<number | null>(null)
+const adjustNote = ref('')
+const adjusting = ref(false)
+const selectedDispatcherForWallet = ref<any>(null)
+
 const approveModalOpen = ref(false)
 const rejectModalOpen = ref(false)
 const selectedDispatcher = ref<any>(null)
@@ -1076,6 +1231,77 @@ const toggleAccountStatus = async (dispatcherId: string, currentStatus: string) 
     showToast({ title: 'Error', message: `Failed to ${action} dispatcher`, toastType: 'error' })
   } finally {
     processing.value = null
+  }
+}
+
+/**
+ * Verification and money actions.
+ *
+ * These were previously only reachable by editing the record or calling the API. An admin
+ * reviewing a rider needs to see the wallet before touching it, and to set a tier without
+ * hunting for another screen.
+ */
+const setDispatcherTier = async (errander: any, tier: number) => {
+  if (errander.verificationLevel === tier) return
+  processing.value = errander._id
+  try {
+    await api.put(`/admin/dispatchers/${errander._id}/tier`, { tier })
+    showToast({ title: 'Tier updated', message: `Now Tier ${tier}`, toastType: 'success' })
+    await fetchPending()
+    if (activeTab.value === 'all') await fetchAll()
+  } catch {
+    showToast({ title: 'Error', message: 'Could not change the tier', toastType: 'error' })
+  } finally {
+    processing.value = null
+  }
+}
+
+const openWallet = async (errander: any) => {
+  selectedDispatcherForWallet.value = errander
+  walletModalOpen.value = true
+  walletLoading.value = true
+  walletData.value = null
+  try {
+    const res = await api.get(`/admin/dispatchers/${errander._id}/wallet`)
+    walletData.value = res.data
+  } catch {
+    showToast({ title: 'Error', message: 'Could not load the wallet', toastType: 'error' })
+  } finally {
+    walletLoading.value = false
+  }
+}
+
+const openAdjust = (errander: any, mode: 'credit' | 'debit') => {
+  selectedDispatcherForWallet.value = errander
+  adjustMode.value = mode
+  adjustAmount.value = null
+  adjustNote.value = ''
+  adjustModalOpen.value = true
+}
+
+const confirmAdjust = async () => {
+  const errander = selectedDispatcherForWallet.value
+  const amount = Number(adjustAmount.value)
+  if (!errander || !amount || amount <= 0) {
+    showToast({ title: 'Enter an amount', message: 'The amount must be greater than zero', toastType: 'error' })
+    return
+  }
+  adjusting.value = true
+  try {
+    const path = adjustMode.value === 'credit' ? 'credit-earnings' : 'debit-earnings'
+    const method = adjustMode.value === 'credit' ? 'post' : 'post'
+    await api[method](`/admin/dispatchers/${errander._id}/${path}`, { amount, description: adjustNote.value || undefined })
+    showToast({
+      title: adjustMode.value === 'credit' ? 'Credited' : 'Debited',
+      message: `₦${amount.toLocaleString()} ${adjustMode.value === 'credit' ? 'added to' : 'removed from'} earnings`,
+      toastType: 'success',
+    })
+    adjustModalOpen.value = false
+    if (activeTab.value === 'all') await fetchAll()
+  } catch (err: any) {
+    showToast({ title: 'Error', message: err?.response?.data?.message || 'Could not adjust earnings', toastType: 'error' })
+  } finally {
+    adjusting.value = false
   }
 }
 
