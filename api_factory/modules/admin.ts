@@ -245,5 +245,22 @@ export const admin_api = {
   getFinancialFilterOptions: () => {
     return GATEWAY_ENDPOINT_WITH_AUTH.get('/admin/financial-filter-options');
   },
+
+  getAmbassadors: (params?: { persona?: string; search?: string; minSpend?: number }) => {
+    const query = new URLSearchParams();
+    if (params?.persona) query.append('persona', params.persona);
+    if (params?.search) query.append('search', params.search);
+    if (params?.minSpend !== undefined) query.append('minSpend', params.minSpend.toString());
+    const qs = query.toString();
+    return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/ambassadors${qs ? `?${qs}` : ''}`);
+  },
+
+  getAmbassadorStats: () => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.get('/admin/ambassadors/stats');
+  },
+
+  getReferredPersonOrders: (userId: string) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/ambassadors/person-orders/${userId}`);
+  },
 };
 
