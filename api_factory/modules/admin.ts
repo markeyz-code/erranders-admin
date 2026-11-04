@@ -262,5 +262,26 @@ export const admin_api = {
   getReferredPersonOrders: (userId: string) => {
     return GATEWAY_ENDPOINT_WITH_AUTH.get(`/admin/ambassadors/person-orders/${userId}`);
   },
+
+  // ─── Errand Ninja Weekly Shift Schedule & Bot Dispatch ───
+  getNinjaShifts: () => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.get('/admin/ninja-shifts');
+  },
+
+  updateNinjaShifts: (payload: any) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.put('/admin/ninja-shifts', payload);
+  },
+
+  getCurrentDutyNinja: () => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.get('/admin/ninja-shifts/current');
+  },
+
+  resetNinjaShifts: () => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.post('/admin/ninja-shifts/reset');
+  },
+
+  testNinjaShiftAlert: (payload: { phone?: string; ninjaName?: string } = {}) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.post('/admin/ninja-shifts/test-alert', payload);
+  },
 };
 

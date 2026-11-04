@@ -13,7 +13,7 @@
     </div>
 
     <!-- Tabs -->
-    <div class="flex items-center gap-6 border-b border-gray-100">
+    <div class="flex items-center gap-6 border-b border-gray-100 flex-wrap">
       <button 
         @click="activeTab = 'all'"
         class="pb-4 text-sm font-bold transition-colors border-b-2 relative -mb-[1px]"
@@ -28,6 +28,16 @@
       >
         Pending Verifications
         <span v-if="total > 0" class="ml-2 inline-flex items-center justify-center bg-red-500 text-white text-[10px] w-5 h-5 rounded-full">{{ total }}</span>
+      </button>
+      <button 
+        @click="activeTab = 'schedule'"
+        class="pb-4 text-sm font-bold transition-colors border-b-2 relative -mb-[1px] flex items-center gap-1.5"
+        :class="activeTab === 'schedule' ? 'border-[#FF5C1A] text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700'"
+      >
+        <span>🗓️ Weekly Shift Schedule</span>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black bg-orange-100 text-[#FF5C1A]">
+          Bot Dispatch Control
+        </span>
       </button>
     </div>
 
@@ -905,6 +915,11 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- 🗓️ Shift Schedule & Bot Dispatch Tab -->
+  <div v-show="activeTab === 'schedule'" class="space-y-6">
+    <NinjaShiftScheduleManager />
   </div>
 
   <!-- Delete Confirmation Modal -->
