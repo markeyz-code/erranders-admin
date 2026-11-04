@@ -409,145 +409,365 @@
                 </td>
               </tr>
 
-              <!-- Expandable Sub-Table: Complete Referred People & Spend -->
-              <tr v-if="expandedRowId === row.id" class="bg-gray-50/60">
-                <td colspan="8" class="p-4 sm:p-5">
-                  <div class="space-y-3">
-                    <div class="flex items-center justify-between flex-wrap gap-2">
-                      <div class="flex items-center gap-2">
-                        <Users class="w-4 h-4 text-[#FF5C1A]" />
-                        <h4 class="text-xs font-black uppercase tracking-wider text-gray-900">
-                          Referred People for {{ row.name }} ({{ row.people?.length || 0 }})
-                        </h4>
+              <!-- Expandable Sub-Section: Complete Referred People & Spend -->
+              <tr v-if="expandedRowId === row.id" class="bg-gradient-to-b from-orange-50/40 via-gray-50/50 to-gray-50">
+                <td colspan="8" class="p-4 sm:p-6 border-b-2 border-orange-200/80">
+                  <div class="space-y-4">
+                    <!-- Top Cohort Hero Banner -->
+                    <div class="bg-white rounded-2xl p-4 sm:p-5 border border-orange-100 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div class="space-y-1">
+                        <div class="flex items-center gap-2 flex-wrap">
+                          <span class="w-8 h-8 rounded-xl bg-orange-100 text-[#FF5C1A] flex items-center justify-center font-bold text-base shadow-2xs">
+                            👥
+                          </span>
+                          <h4 class="text-sm sm:text-base font-black text-gray-900 tracking-tight">
+                            Referred Network for {{ row.name }}
+                          </h4>
+                          <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-orange-50 text-[#FF5C1A] border border-orange-200">
+                            {{ row.people?.length || 0 }} Members
+                          </span>
+                        </div>
+                        <p class="text-xs text-gray-500 pl-10">
+                          Directly onboarded via code <span class="font-mono font-bold text-[#FF5C1A]">{{ row.referralCode || 'N/A' }}</span>
+                          <span v-if="row.promoCodes?.length"> and linked affiliate promos</span>.
+                        </p>
                       </div>
-                      <p class="text-[11px] text-gray-500">
-                        Total customer spend: <strong class="text-gray-900">₦{{ (row.spend || 0).toLocaleString() }}</strong> across <strong class="text-gray-900">{{ row.ordersPlaced }}</strong> orders
-                      </p>
+
+                      <!-- Quick Impact Badges -->
+                      <div class="flex items-center gap-2.5 flex-wrap">
+                        <div class="px-3 py-2 rounded-xl bg-gray-50 border border-gray-100 text-left">
+                          <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Customer Spend</p>
+                          <p class="text-xs font-black text-gray-900">
+                            ₦{{ (row.spend || 0).toLocaleString() }}
+                            <span class="text-[10px] font-normal text-gray-500">({{ row.ordersPlaced || 0 }} orders)</span>
+                          </p>
+                        </div>
+                        <div class="px-3 py-2 rounded-xl bg-blue-50/60 border border-blue-100 text-left">
+                          <p class="text-[10px] font-bold uppercase tracking-wider text-blue-500">Ninja Deliveries</p>
+                          <p class="text-xs font-black text-blue-900">
+                            {{ getCohortNinjaDeliveries(row).count }} done
+                            <span class="text-[10px] font-normal text-blue-600">(₦{{ getCohortNinjaDeliveries(row).fees.toLocaleString() }})</span>
+                          </p>
+                        </div>
+                        <div class="px-3 py-2 rounded-xl bg-emerald-50/60 border border-emerald-100 text-left">
+                          <p class="text-[10px] font-bold uppercase tracking-wider text-emerald-600">Active Rate</p>
+                          <p class="text-xs font-black text-emerald-900">
+                            {{ row.conversionRate || 0 }}%
+                            <span class="text-[10px] font-normal text-emerald-700">({{ row.activeReferrals || 0 }} active)</span>
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
-                    <div v-if="!row.people?.length" class="p-6 bg-white rounded-xl border border-gray-200 text-center text-xs text-gray-400">
-                      No referred people recorded yet for this ambassador/referrer.
-                    </div>
-
-                    <div v-else class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xs">
-                      <table class="w-full text-left text-xs">
-                        <thead class="bg-gray-50 text-[10px] font-bold uppercase tracking-wider text-gray-500 border-b border-gray-100">
-                          <tr>
-                            <th class="px-3.5 py-2.5">Referred User</th>
-                            <th class="px-3.5 py-2.5">Persona</th>
-                            <th class="px-3.5 py-2.5">Channel / Code</th>
-                            <th class="px-3.5 py-2.5">Joined Date</th>
-                            <th class="px-3.5 py-2.5 text-center">Orders</th>
-                            <th class="px-3.5 py-2.5">Total Spent</th>
-                            <th class="px-3.5 py-2.5">Ecosystem Role Impact</th>
-                            <th class="px-3.5 py-2.5 text-right">Order Audit</th>
-                          </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                          <tr
-                            v-for="person in row.people"
-                            :key="person.id"
-                            class="hover:bg-gray-50/70 transition-colors"
+                    <!-- Filter & View Controls Toolbar -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3 rounded-xl border border-gray-200/80 shadow-2xs">
+                      <!-- Persona Quick Pills -->
+                      <div class="flex items-center gap-1.5 flex-wrap">
+                        <button
+                          v-for="tab in getCohortPersonaTabs(row)"
+                          :key="tab.value"
+                          @click="cohortPersonaFilter = tab.value"
+                          class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border"
+                          :class="cohortPersonaFilter === tab.value
+                            ? 'bg-gray-900 text-white border-gray-900 shadow-2xs'
+                            : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'"
+                        >
+                          <span>{{ tab.emoji }}</span>
+                          <span>{{ tab.label }}</span>
+                          <span
+                            class="px-1.5 py-0.2 rounded-full text-[10px]"
+                            :class="cohortPersonaFilter === tab.value ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-600'"
                           >
-                            <!-- User Name & Contact -->
-                            <td class="px-3.5 py-2.5">
-                              <div class="flex items-center gap-2.5">
-                                <div class="w-7 h-7 rounded-lg bg-gray-100 text-gray-700 flex items-center justify-center font-bold text-xs shrink-0">
-                                  {{ person.name?.charAt(0)?.toUpperCase() || 'U' }}
-                                </div>
-                                <div class="min-w-0">
-                                  <p class="font-bold text-gray-900 truncate">{{ person.name }}</p>
-                                  <p class="text-[10px] text-gray-400 truncate">{{ person.email || person.phone || 'No email' }}</p>
+                            {{ tab.count }}
+                          </span>
+                        </button>
+                      </div>
+
+                      <!-- Search & View Toggle -->
+                      <div class="flex items-center gap-2">
+                        <div class="relative w-full sm:w-48">
+                          <Search class="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                          <input
+                            v-model="cohortSearchQuery"
+                            type="text"
+                            placeholder="Filter cohort..."
+                            class="w-full pl-8 pr-2.5 py-1.5 text-xs bg-white rounded-lg border border-gray-200 focus:outline-none focus:border-[#FF5C1A] text-gray-800 placeholder-gray-400"
+                          />
+                          <button
+                            v-if="cohortSearchQuery"
+                            @click="cohortSearchQuery = ''"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                          >
+                            <X class="w-3 h-3" />
+                          </button>
+                        </div>
+
+                        <!-- View Toggle -->
+                        <div class="flex items-center bg-gray-100 p-0.5 rounded-lg border border-gray-200 shrink-0">
+                          <button
+                            @click="cohortViewMode = 'grid'"
+                            title="Grid View"
+                            class="p-1.5 rounded-md transition-colors"
+                            :class="cohortViewMode === 'grid' ? 'bg-white text-gray-900 shadow-2xs' : 'text-gray-500 hover:text-gray-700'"
+                          >
+                            <LayoutGrid class="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            @click="cohortViewMode = 'list'"
+                            title="List View"
+                            class="p-1.5 rounded-md transition-colors"
+                            :class="cohortViewMode === 'list' ? 'bg-white text-gray-900 shadow-2xs' : 'text-gray-500 hover:text-gray-700'"
+                          >
+                            <List class="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Empty State for Cohort Filter -->
+                    <div
+                      v-if="!getFilteredCohortPeople(row).length"
+                      class="p-8 bg-white rounded-2xl border border-gray-200 text-center space-y-2 shadow-2xs"
+                    >
+                      <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto text-lg">
+                        🔍
+                      </div>
+                      <p class="text-xs font-bold text-gray-700">No referred people match this filter</p>
+                      <p class="text-[11px] text-gray-400">Try clearing the search or choosing "All" personas</p>
+                      <button
+                        @click="cohortPersonaFilter = 'all'; cohortSearchQuery = ''"
+                        class="mt-2 text-xs font-bold text-[#FF5C1A] hover:underline"
+                      >
+                        Reset Cohort Filters
+                      </button>
+                    </div>
+
+                    <!-- 1. GRID CARDS VIEW -->
+                    <div
+                      v-else-if="cohortViewMode === 'grid'"
+                      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5"
+                    >
+                      <div
+                        v-for="person in getFilteredCohortPeople(row)"
+                        :key="person.id"
+                        class="bg-white rounded-2xl border border-gray-200/90 hover:border-orange-300 hover:shadow-md transition-all p-4 flex flex-col justify-between space-y-3 relative group shadow-2xs"
+                      >
+                        <!-- Card Top: Avatar, Name, Persona & Channel -->
+                        <div class="space-y-2.5">
+                          <div class="flex items-start justify-between gap-2">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                              <div
+                                class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm shrink-0 border shadow-2xs"
+                                :class="getPersonaTheme(person.role).avatarClass"
+                              >
+                                <span>{{ getPersonaTheme(person.role).emoji }}</span>
+                              </div>
+                              <div class="min-w-0">
+                                <h5 class="text-xs font-black text-gray-900 truncate flex items-center gap-1.5" :title="person.name">
+                                  {{ person.name }}
+                                </h5>
+                                <div class="flex items-center gap-1.5 mt-0.5">
+                                  <span
+                                    class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded border"
+                                    :class="getPersonaTheme(person.role).tagClass"
+                                  >
+                                    {{ getPersonaTheme(person.role).label }}
+                                  </span>
+                                  <span class="text-[10px] text-gray-400">
+                                    {{ formatJoinedDate(person.joinedAt) }}
+                                  </span>
                                 </div>
                               </div>
-                            </td>
+                            </div>
 
-                            <!-- Role / Persona -->
-                            <td class="px-3.5 py-2.5">
+                            <!-- Attribution Tag -->
+                            <div class="shrink-0 text-right">
                               <span
-                                class="text-[10px] font-bold uppercase px-2 py-0.5 rounded border"
-                                :class="getPersonaTheme(person.role).tagClass"
+                                v-if="person.attributionType === 'signup_code'"
+                                class="inline-flex items-center gap-1 text-[9px] font-mono font-bold text-[#FF5C1A] bg-orange-50 border border-orange-100 px-1.5 py-0.5 rounded-md"
                               >
-                                {{ person.role }}
+                                🔑 {{ person.signupReferralCode || row.referralCode || 'Code' }}
                               </span>
-                            </td>
-
-                            <!-- Attribution Channel -->
-                            <td class="px-3.5 py-2.5">
-                              <div class="space-y-0.5">
-                                <span
-                                  v-if="person.attributionType === 'signup_code'"
-                                  class="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-[#FF5C1A] bg-orange-50 px-1.5 py-0.2 rounded"
-                                >
-                                  🔑 {{ person.signupReferralCode || 'Signup Code' }}
-                                </span>
-                                <span
-                                  v-else-if="person.attributionType === 'promo_code'"
-                                  class="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded"
-                                >
-                                  🏷️ {{ person.promoCodesUsed?.[0] || 'Promo Code' }}
-                                </span>
-                                <span
-                                  v-else
-                                  class="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded"
-                                >
-                                  ✨ Code + Promo
-                                </span>
-                              </div>
-                            </td>
-
-                            <!-- Joined Date -->
-                            <td class="px-3.5 py-2.5 text-gray-500 text-[11px]">
-                              {{ person.joinedAt ? new Date(person.joinedAt).toLocaleDateString() : '—' }}
-                            </td>
-
-                            <!-- Orders Count -->
-                            <td class="px-3.5 py-2.5 text-center">
                               <span
-                                class="font-bold px-2 py-0.5 rounded-md text-xs"
-                                :class="person.orders ? 'bg-emerald-50 text-emerald-700 font-black' : 'text-gray-400'"
+                                v-else-if="person.attributionType === 'promo_code'"
+                                class="inline-flex items-center gap-1 text-[9px] font-mono font-bold text-amber-700 bg-amber-50 border border-amber-100 px-1.5 py-0.5 rounded-md"
                               >
-                                {{ person.orders }}
+                                🏷️ {{ person.promoCodesUsed?.[0] || 'Promo' }}
                               </span>
-                            </td>
-
-                            <!-- Total Spent on Erranders -->
-                            <td class="px-3.5 py-2.5">
                               <span
-                                class="font-black text-xs tabular-nums"
+                                v-else
+                                class="inline-flex items-center gap-1 text-[9px] font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded-md"
+                              >
+                                ✨ Code + Promo
+                              </span>
+                            </div>
+                          </div>
+
+                          <!-- Contact Info Row -->
+                          <div class="text-[11px] text-gray-500 space-y-0.5 bg-gray-50/70 p-2 rounded-xl border border-gray-100">
+                            <div class="flex items-center gap-1.5 truncate">
+                              <Mail class="w-3 h-3 text-gray-400 shrink-0" />
+                              <span class="truncate" :title="person.email">{{ person.email || 'No email provided' }}</span>
+                            </div>
+                            <div v-if="person.phone" class="flex items-center gap-1.5 truncate">
+                              <Phone class="w-3 h-3 text-gray-400 shrink-0" />
+                              <span>{{ person.phone }}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Card Activity & Ecosystem Impact Box -->
+                        <div class="space-y-2 pt-1 border-t border-gray-100">
+                          <!-- Errand Ninja Specific Metrics -->
+                          <div
+                            v-if="person.role === 'errander'"
+                            class="p-2.5 rounded-xl border"
+                            :class="person.deliveriesCount ? 'bg-blue-50/60 border-blue-100' : 'bg-gray-50/60 border-gray-100'"
+                          >
+                            <div class="flex items-center justify-between text-xs">
+                              <span class="text-[11px] font-bold" :class="person.deliveriesCount ? 'text-blue-900' : 'text-gray-500'">
+                                🛵 Rider Deliveries
+                              </span>
+                              <span class="font-black text-xs" :class="person.deliveriesCount ? 'text-blue-700' : 'text-gray-400'">
+                                {{ person.deliveriesCount || 0 }} completed
+                              </span>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] text-gray-500 mt-1">
+                              <span>Delivery Fees Earned:</span>
+                              <strong class="text-gray-900">₦{{ (person.deliveryFeesEarned || 0).toLocaleString() }}</strong>
+                            </div>
+                          </div>
+
+                          <!-- Vendor Specific Metrics -->
+                          <div
+                            v-else-if="person.role === 'vendor'"
+                            class="p-2.5 rounded-xl border"
+                            :class="person.vendorOrdersCount ? 'bg-emerald-50/60 border-emerald-100' : 'bg-gray-50/60 border-gray-100'"
+                          >
+                            <div class="flex items-center justify-between text-xs">
+                              <span class="text-[11px] font-bold" :class="person.vendorOrdersCount ? 'text-emerald-900' : 'text-gray-500'">
+                                🏪 Store Orders
+                              </span>
+                              <span class="font-black text-xs" :class="person.vendorOrdersCount ? 'text-emerald-700' : 'text-gray-400'">
+                                {{ person.vendorOrdersCount || 0 }} orders
+                              </span>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] text-gray-500 mt-1">
+                              <span>Store GMV:</span>
+                              <strong class="text-gray-900">₦{{ (person.vendorGmv || 0).toLocaleString() }}</strong>
+                            </div>
+                          </div>
+
+                          <!-- Customer Orders & Platform Spend -->
+                          <div class="grid grid-cols-2 gap-2">
+                            <div class="p-2 rounded-xl bg-gray-50 border border-gray-100 text-center">
+                              <span class="text-[9px] font-bold uppercase text-gray-400 block">Orders Made</span>
+                              <span
+                                class="text-xs font-black"
+                                :class="person.orders ? 'text-emerald-600' : 'text-gray-400'"
+                              >
+                                {{ person.orders || 0 }}
+                              </span>
+                            </div>
+                            <div class="p-2 rounded-xl bg-gray-50 border border-gray-100 text-center">
+                              <span class="text-[9px] font-bold uppercase text-gray-400 block">Total Spent</span>
+                              <span
+                                class="text-xs font-black tabular-nums"
                                 :class="person.spend ? 'text-gray-900' : 'text-gray-400'"
                               >
                                 ₦{{ (person.spend || 0).toLocaleString() }}
                               </span>
-                            </td>
+                            </div>
+                          </div>
 
-                            <!-- Ninja / Vendor Impact -->
-                            <td class="px-3.5 py-2.5">
-                              <div v-if="person.role === 'errander' && person.deliveriesCount">
-                                <span class="text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded">
-                                  🛵 {{ person.deliveriesCount }} deliveries (₦{{ (person.deliveryFeesEarned || 0).toLocaleString() }})
-                                </span>
-                              </div>
-                              <div v-else-if="person.role === 'vendor' && person.vendorOrdersCount">
-                                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
-                                  🏪 {{ person.vendorOrdersCount }} orders (₦{{ (person.vendorGmv || 0).toLocaleString() }} GMV)
-                                </span>
-                              </div>
-                              <span v-else class="text-[10px] text-gray-400">Regular Customer</span>
-                            </td>
+                          <!-- Action: Audit Orders Drawer Trigger -->
+                          <button
+                            @click="openPersonOrdersDrawer(person)"
+                            class="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold transition-all border"
+                            :class="person.orders > 0
+                              ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200 shadow-2xs'
+                              : 'bg-white hover:bg-gray-50 text-gray-700 border-gray-200'"
+                          >
+                            <span>{{ person.orders > 0 ? `Audit ${person.orders} Order Receipts` : 'Audit Account & Activity' }}</span>
+                            <ArrowUpRight class="w-3.5 h-3.5 text-current" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
 
-                            <!-- Action: Itemized Order Audit -->
-                            <td class="px-3.5 py-2.5 text-right">
-                              <button
-                                @click="openPersonOrdersDrawer(person)"
-                                class="px-2.5 py-1 bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 text-[11px] font-bold rounded-lg transition-colors shadow-2xs"
+                    <!-- 2. DENSE LIST VIEW -->
+                    <div v-else class="space-y-2">
+                      <div
+                        v-for="person in getFilteredCohortPeople(row)"
+                        :key="person.id"
+                        class="bg-white rounded-xl border border-gray-200/90 hover:border-orange-300 hover:shadow-xs transition-all p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-2xs"
+                      >
+                        <!-- Left Info -->
+                        <div class="flex items-center gap-3 min-w-0">
+                          <div
+                            class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs shrink-0 border"
+                            :class="getPersonaTheme(person.role).avatarClass"
+                          >
+                            <span>{{ getPersonaTheme(person.role).emoji }}</span>
+                          </div>
+                          <div class="min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
+                              <p class="text-xs font-black text-gray-900 truncate">{{ person.name }}</p>
+                              <span
+                                class="text-[9px] font-black uppercase px-1.5 py-0.2 rounded border"
+                                :class="getPersonaTheme(person.role).tagClass"
                               >
-                                Audit Orders
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                                {{ getPersonaTheme(person.role).label }}
+                              </span>
+                              <span class="text-[10px] text-gray-400">
+                                {{ formatJoinedDate(person.joinedAt) }}
+                              </span>
+                            </div>
+                            <div class="flex items-center gap-3 text-[11px] text-gray-500 mt-0.5">
+                              <span class="truncate">{{ person.email || 'No email' }}</span>
+                              <span v-if="person.phone" class="text-gray-400">· {{ person.phone }}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Center Metrics -->
+                        <div class="flex items-center gap-3 text-xs flex-wrap">
+                          <!-- Attribution -->
+                          <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-orange-50 text-[#FF5C1A] border border-orange-100">
+                            🔑 {{ person.signupReferralCode || row.referralCode || 'Code' }}
+                          </span>
+
+                          <!-- Ninja Role -->
+                          <span
+                            v-if="person.role === 'errander'"
+                            class="px-2 py-0.5 rounded-md text-[11px] font-bold"
+                            :class="person.deliveriesCount ? 'bg-blue-50 text-blue-700 border border-blue-200' : 'bg-gray-100 text-gray-500'"
+                          >
+                            🛵 {{ person.deliveriesCount || 0 }} deliveries (₦{{ (person.deliveryFeesEarned || 0).toLocaleString() }})
+                          </span>
+
+                          <!-- Customer Orders & Spend -->
+                          <div class="px-2.5 py-0.5 rounded-md bg-gray-50 border border-gray-100 flex items-center gap-1.5">
+                            <span class="text-[11px] text-gray-500">Orders:</span>
+                            <strong :class="person.orders ? 'text-emerald-700' : 'text-gray-600'">{{ person.orders || 0 }}</strong>
+                            <span class="text-gray-300">|</span>
+                            <span class="text-[11px] text-gray-500">Spent:</span>
+                            <strong class="text-gray-900">₦{{ (person.spend || 0).toLocaleString() }}</strong>
+                          </div>
+
+                          <!-- Action -->
+                          <button
+                            @click="openPersonOrdersDrawer(person)"
+                            class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all border shrink-0 flex items-center gap-1"
+                            :class="person.orders > 0
+                              ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200'
+                              : 'bg-white hover:bg-gray-50 text-gray-700 border-gray-200'"
+                          >
+                            <span>Audit</span>
+                            <ArrowUpRight class="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </td>
@@ -697,6 +917,8 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ layout: 'admin' });
+
 import { ref, computed, onMounted } from 'vue';
 import {
   Sparkles,
@@ -712,6 +934,11 @@ import {
   Package,
   Bike,
   Loader2,
+  LayoutGrid,
+  List,
+  Mail,
+  Phone,
+  ArrowUpRight,
 } from 'lucide-vue-next';
 import SideDrawer from '@/components/ui/SideDrawer.vue';
 import { admin_api } from '@/api_factory/modules/admin';
@@ -725,6 +952,11 @@ const statsData = ref<any>({});
 const loading = ref(true);
 const statsLoading = ref(true);
 const expandedRowId = ref<string | null>(null);
+
+// Cohort In-Expansion Filter State
+const cohortPersonaFilter = ref<string>('all');
+const cohortSearchQuery = ref<string>('');
+const cohortViewMode = ref<'grid' | 'list'>('grid');
 
 // Filters & Controls
 const selectedPersona = ref<string>('all');
@@ -854,7 +1086,76 @@ const selectPersona = (persona: string) => {
 };
 
 const toggleRow = (id: string) => {
-  expandedRowId.value = expandedRowId.value === id ? null : id;
+  if (expandedRowId.value === id) {
+    expandedRowId.value = null;
+  } else {
+    expandedRowId.value = id;
+    cohortPersonaFilter.value = 'all';
+    cohortSearchQuery.value = '';
+  }
+};
+
+// Cohort Helpers for Expanded Network
+const formatJoinedDate = (d: any) => {
+  if (!d) return '—';
+  try {
+    const date = new Date(d);
+    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch {
+    return '—';
+  }
+};
+
+const getCohortNinjaDeliveries = (row: any) => {
+  if (!row?.people?.length) return { count: 0, fees: 0 };
+  return row.people.reduce(
+    (acc: any, p: any) => {
+      acc.count += p.deliveriesCount || 0;
+      acc.fees += p.deliveryFeesEarned || 0;
+      return acc;
+    },
+    { count: 0, fees: 0 }
+  );
+};
+
+const getCohortPersonaTabs = (row: any) => {
+  const people = row?.people || [];
+  const stuCount = people.filter((p: any) => p.role === 'student').length;
+  const ninjaCount = people.filter((p: any) => p.role === 'errander').length;
+  const venCount = people.filter((p: any) => p.role === 'vendor').length;
+
+  const tabs = [
+    { label: 'All', value: 'all', emoji: '👥', count: people.length },
+    { label: 'Students', value: 'student', emoji: '🎓', count: stuCount },
+    { label: 'Errand Ninjas', value: 'errander', emoji: '🛵', count: ninjaCount },
+  ];
+  if (venCount > 0) {
+    tabs.push({ label: 'Vendors', value: 'vendor', emoji: '🏪', count: venCount });
+  }
+  return tabs;
+};
+
+const getFilteredCohortPeople = (row: any) => {
+  let list = row?.people || [];
+
+  if (cohortPersonaFilter.value !== 'all') {
+    list = list.filter((p: any) => p.role === cohortPersonaFilter.value);
+  }
+
+  if (cohortSearchQuery.value.trim()) {
+    const q = cohortSearchQuery.value.trim().toLowerCase();
+    list = list.filter((p: any) => {
+      return (
+        p.name?.toLowerCase().includes(q) ||
+        p.email?.toLowerCase().includes(q) ||
+        p.phone?.toLowerCase().includes(q) ||
+        p.signupReferralCode?.toLowerCase().includes(q) ||
+        p.promoCodesUsed?.some((code: string) => code.toLowerCase().includes(q))
+      );
+    });
+  }
+
+  return list;
 };
 
 // Copy Referral Code
@@ -937,26 +1238,36 @@ const getPersonaTheme = (role: string) => {
   switch (role) {
     case 'facilitator':
       return {
+        label: 'Campus Ambassador',
+        emoji: '💎',
         tagClass: 'bg-purple-50 text-purple-700 border-purple-200',
         avatarClass: 'bg-purple-50 text-purple-600 border-purple-200',
       };
     case 'errander':
       return {
+        label: 'Errand Ninja',
+        emoji: '🛵',
         tagClass: 'bg-blue-50 text-blue-700 border-blue-200',
         avatarClass: 'bg-blue-50 text-blue-600 border-blue-200',
       };
     case 'vendor':
       return {
+        label: 'Vendor',
+        emoji: '🏪',
         tagClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
         avatarClass: 'bg-emerald-50 text-emerald-600 border-emerald-200',
       };
     case 'staff':
       return {
+        label: 'Staff',
+        emoji: '👔',
         tagClass: 'bg-amber-50 text-amber-800 border-amber-200',
         avatarClass: 'bg-amber-50 text-amber-700 border-amber-200',
       };
     default:
       return {
+        label: 'Student',
+        emoji: '🎓',
         tagClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
         avatarClass: 'bg-indigo-50 text-indigo-600 border-indigo-200',
       };
