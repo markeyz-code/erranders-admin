@@ -2658,7 +2658,7 @@ import {
   Zap, Loader2, Truck, DollarSign, Tag, Bell, Megaphone, Moon, Info, AlertTriangle, 
   CheckCircle, Calculator, Save, ShieldAlert, Briefcase, Lock, Plus, Trash2, Edit3, 
   Eye, X, ExternalLink, BarChart2, Sparkles, Check, ArrowRight, ShoppingBag, Store, CreditCard, HelpCircle,
-  ArrowRightLeft, CalendarCheck, Coins, MessageSquare, ShieldCheck, Clock
+  ArrowRightLeft, CalendarCheck, Coins, MessageSquare, ShieldCheck, Clock, Headphones
 } from 'lucide-vue-next';
 import { admin_api } from '@/api_factory/modules/admin';
 import { appointments_api } from '@/api_factory/modules/appointments';
@@ -2683,7 +2683,7 @@ const tabs = [
   { id: 'adverts', label: 'adverts & monetization', icon: Megaphone },
   { id: 'campaigns', label: 'campaigns', icon: Moon },
   { id: 'erranders', label: 'erranders', icon: Briefcase },
-  { id: 'ninja-shifts', label: 'ninja shifts & bot', icon: Clock },
+  { id: 'ninja-shifts', label: 'customer service shifts & bot', icon: Headphones },
   { id: 'platform', label: 'platform status', icon: Lock },
 ];
 

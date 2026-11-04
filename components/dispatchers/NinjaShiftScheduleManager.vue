@@ -3,33 +3,33 @@
     <!-- ══════════════════════════════════════════════════════════════ -->
     <!-- 1. LIVE "ON DUTY NOW" HERO BANNER                            -->
     <!-- ══════════════════════════════════════════════════════════════ -->
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 p-6 sm:p-7 text-white shadow-xl border border-gray-800">
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 p-4 sm:p-7 text-white shadow-xl border border-gray-800">
       <!-- Background Glow -->
       <div class="absolute -top-24 -right-24 w-72 h-72 bg-[#FF5C1A]/20 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5 sm:gap-6">
         <!-- Left: Current Duty Status -->
         <div class="space-y-3">
-          <div class="flex items-center gap-2.5 flex-wrap">
+          <div class="flex items-center gap-2 flex-wrap">
             <span
               v-if="dutyStatus.isShiftActive && settings.enabled"
-              class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
             >
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
               SHIFT ACTIVE NOW
             </span>
             <span
               v-else-if="!settings.enabled"
-              class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30"
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30"
             >
-              ⚠️ SHIFT FILTERING DISABLED (Broadcasting to All)
+              ⚠️ CSR FILTERING DISABLED (Broadcasting to All)
             </span>
             <span
               v-else
-              class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-gray-700/60 text-gray-300 border border-gray-700"
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gray-700/60 text-gray-300 border border-gray-700"
             >
-              🌙 OFF-HOURS (No Shift Active)
+              🌙 OFF-HOURS (No CSR Shift Active)
             </span>
 
             <span class="text-xs text-gray-400 font-mono flex items-center gap-1.5">
@@ -38,20 +38,20 @@
             </span>
           </div>
 
-          <div class="flex items-center gap-4 flex-wrap">
-            <!-- Ninja Avatar -->
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#FF5C1A] to-orange-400 flex items-center justify-center text-3xl shadow-lg shadow-orange-500/30 shrink-0 border-2 border-white/20">
-              🛵
+          <div class="flex items-center gap-3 sm:gap-4">
+            <!-- CSR Avatar -->
+            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-[#FF5C1A] to-amber-500 flex items-center justify-center text-2xl sm:text-3xl shadow-lg shadow-orange-500/30 shrink-0 border-2 border-white/20">
+              🎧
             </div>
-            <div>
-              <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Currently On Duty</p>
-              <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2">
-                <span>{{ dutyStatus.assignedNinjaName || 'None' }}</span>
-                <span v-if="dutyStatus.isShiftActive" class="text-xs font-bold px-2 py-0.5 rounded-lg bg-[#FF5C1A] text-white">
-                  Errand Ninja
+            <div class="min-w-0">
+              <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Customer Service Rep On Duty</p>
+              <h2 class="text-xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2 flex-wrap">
+                <span class="truncate">{{ dutyStatus.assignedNinjaName || 'None' }}</span>
+                <span v-if="dutyStatus.isShiftActive" class="text-xs font-bold px-2 py-0.5 rounded-lg bg-[#FF5C1A] text-white flex items-center gap-1 shrink-0">
+                  <Headphones class="w-3 h-3" /> Customer Care
                 </span>
               </h2>
-              <p class="text-xs text-gray-300 mt-0.5">
+              <p class="text-xs text-gray-300 mt-0.5 truncate">
                 <span class="font-bold text-orange-400">{{ dutyStatus.currentShift?.name || 'Off-Hours' }}</span>:
                 {{ dutyStatus.currentShift?.timeLabel || 'Outside scheduled shifts (11 PM – 9 AM)' }}
               </p>
@@ -79,28 +79,29 @@
         </div>
 
         <!-- Right: Actions & Upcoming Shift Preview -->
-        <div class="flex flex-col sm:flex-row lg:flex-col items-start lg:items-end justify-between gap-4">
+        <div class="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end justify-between gap-3 sm:gap-4 w-full lg:w-auto">
           <!-- Test WhatsApp Alert Button -->
           <button
             @click="sendTestAlert"
             :disabled="testingAlert"
-            class="flex items-center gap-2 px-4 py-2.5 rounded-xl font-black text-xs transition-all shadow-md"
+            class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-black text-xs transition-all shadow-md w-full sm:w-auto"
             :class="dutyStatus.onDutyNinja?.phone
               ? 'bg-[#FF5C1A] hover:bg-[#e04f14] text-white shadow-orange-500/30'
               : 'bg-gray-800 text-gray-400 cursor-not-allowed border border-gray-700'"
           >
             <Send class="w-3.5 h-3.5" :class="{ 'animate-pulse': testingAlert }" />
-            <span>{{ testingAlert ? 'Sending Test...' : `Test WhatsApp Alert to ${dutyStatus.assignedNinjaName}` }}</span>
+            <span>{{ testingAlert ? 'Sending Test...' : `Test WhatsApp to ${dutyStatus.assignedNinjaName} (CSR)` }}</span>
           </button>
 
           <!-- Next Shift Preview Card -->
-          <div v-if="dutyStatus.nextShift" class="p-3 rounded-2xl bg-white/5 border border-white/10 text-right min-w-[220px]">
+          <div v-if="dutyStatus.nextShift" class="p-3 rounded-2xl bg-white/5 border border-white/10 text-left sm:text-right w-full sm:w-auto sm:min-w-[220px]">
             <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Next Upcoming Shift</p>
             <p class="text-xs font-black text-white mt-0.5">
               {{ dutyStatus.nextShift.day }} · {{ dutyStatus.nextShift.shift?.timeLabel }}
             </p>
-            <p class="text-xs font-bold text-orange-400 mt-0.5">
-              Assigned: {{ dutyStatus.nextShift.assignedNinja }}
+            <p class="text-xs font-bold text-orange-400 mt-0.5 flex items-center sm:justify-end gap-1">
+              <Headphones class="w-3 h-3" />
+              Assigned CSR: {{ dutyStatus.nextShift.assignedNinja }}
             </p>
           </div>
         </div>
@@ -114,16 +115,16 @@
       <div class="space-y-1">
         <h3 class="text-sm font-black text-gray-900 flex items-center gap-2">
           <Shield class="w-4 h-4 text-[#FF5C1A]" />
-          Shift-Controlled Bot Dispatch Rules
+          Customer Service Shift Bot Dispatch Rules
         </h3>
-        <p class="text-xs text-gray-500">
-          When enabled, Erranders Bot sends new errand notifications only to the ninja assigned to the current shift slot.
+        <p class="text-xs text-gray-500 leading-relaxed">
+          Routes real-time order alerts to the on-duty Customer Service Representative to coordinate customer care and support dispatchers (Errand Ninjas).
         </p>
       </div>
 
-      <div class="flex items-center gap-3 flex-wrap">
+      <div class="flex items-stretch sm:items-center gap-2 sm:gap-3 flex-wrap">
         <!-- Master Enable Toggle -->
-        <label class="flex items-center gap-2.5 cursor-pointer bg-gray-50 hover:bg-gray-100 p-2 px-3 rounded-xl border border-gray-200 transition-colors">
+        <label class="flex items-center gap-2.5 cursor-pointer bg-gray-50 hover:bg-gray-100 p-2 px-3 rounded-xl border border-gray-200 transition-colors flex-1 sm:flex-initial">
           <input
             v-model="settings.enabled"
             type="checkbox"
@@ -131,23 +132,23 @@
           />
           <div class="text-left">
             <span class="text-xs font-black block" :class="settings.enabled ? 'text-gray-900' : 'text-gray-500'">
-              {{ settings.enabled ? 'Shift Filtering Active' : 'Shift Filtering Disabled' }}
+              {{ settings.enabled ? 'CSR Shift Active' : 'CSR Shift Inactive' }}
             </span>
-            <span class="text-[10px] text-gray-400 block">
-              {{ settings.enabled ? 'Alerts restricted to on-duty ninja' : 'Broadcasts to all campus erranders' }}
+            <span class="text-[10px] text-gray-400 block hidden sm:inline">
+              {{ settings.enabled ? 'Alerts sent to on-duty CSR' : 'Disabled' }}
             </span>
           </div>
         </label>
 
         <!-- Off-Hours Fallback Custom Dropdown -->
-        <div class="relative custom-dropdown-container">
+        <div class="relative custom-dropdown-container flex-1 sm:flex-initial">
           <button
             type="button"
             @click.stop="toggleOffHoursDropdown"
-            class="flex items-center gap-2 bg-gray-50 hover:bg-gray-100 p-2 px-3 rounded-xl border border-gray-200 text-xs font-bold text-gray-800 transition-all focus:outline-none focus:border-[#FF5C1A] shadow-2xs"
+            class="w-full sm:w-auto flex items-center justify-between gap-2 bg-gray-50 hover:bg-gray-100 p-2 px-3 rounded-xl border border-gray-200 text-xs font-bold text-gray-800 transition-all focus:outline-none focus:border-[#FF5C1A] shadow-2xs"
           >
             <span class="text-[10px] uppercase font-black tracking-wider text-gray-400">Off-Hours:</span>
-            <span>{{ settings.offHoursFallback === 'all' ? '📢 Broadcast to All' : '🤫 Suppress Alerts' }}</span>
+            <span>{{ settings.offHoursFallback === 'all' ? '📢 All Ninjas' : '🤫 Silent' }}</span>
             <ChevronDown class="w-3.5 h-3.5 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': showOffHoursDropdown }" />
           </button>
 
@@ -190,40 +191,171 @@
           @click="resetToDefaults"
           :disabled="saving"
           title="Reset to official schedule"
-          class="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-200 text-gray-700 rounded-xl text-xs font-bold hover:bg-gray-50 transition-colors shadow-2xs"
+          class="flex items-center justify-center gap-1.5 px-3 py-2 bg-white border border-gray-200 text-gray-700 rounded-xl text-xs font-bold hover:bg-gray-50 transition-colors shadow-2xs"
         >
           <RotateCcw class="w-3.5 h-3.5 text-gray-400" />
-          <span>Reset Schedule</span>
+          <span class="hidden sm:inline">Reset</span>
         </button>
 
         <!-- Save Button -->
         <button
           @click="saveSchedule"
           :disabled="saving"
-          class="flex items-center gap-2 px-4 py-2 bg-[#FF5C1A] hover:bg-[#e04f14] text-white rounded-xl text-xs font-black transition-all shadow-sm shadow-[#FF5C1A]/20"
+          class="flex items-center justify-center gap-2 px-4 py-2 bg-[#FF5C1A] hover:bg-[#e04f14] text-white rounded-xl text-xs font-black transition-all shadow-sm shadow-[#FF5C1A]/20 flex-1 sm:flex-initial"
         >
           <Save class="w-3.5 h-3.5" :class="{ 'animate-spin': saving }" />
-          <span>{{ saving ? 'Saving...' : 'Save All Changes' }}</span>
+          <span>{{ saving ? 'Saving...' : 'Save Changes' }}</span>
         </button>
       </div>
     </div>
 
     <!-- ══════════════════════════════════════════════════════════════ -->
-    <!-- 3. WEEKLY SHIFT SCHEDULE MATRIX (7 DAYS x 3 SHIFTS)           -->
+    <!-- 3. WEEKLY SHIFT SCHEDULE (DESKTOP MATRIX + MOBILE CARDS)       -->
     <!-- ══════════════════════════════════════════════════════════════ -->
     <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs overflow-hidden">
       <div class="p-4 sm:p-5 border-b border-gray-100 flex items-center justify-between flex-wrap gap-2 bg-gray-50/50">
         <div class="flex items-center gap-2">
           <Calendar class="w-4 h-4 text-[#FF5C1A]" />
-          <h3 class="text-sm font-black text-gray-900 uppercase tracking-wider">Weekly Shift Timetable</h3>
+          <h3 class="text-sm font-black text-gray-900 uppercase tracking-wider">Customer Service Shift Timetable</h3>
           <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-orange-100 text-[#FF5C1A]">
-            7 Days · 3 Shift Slots / Day
+            7 Days · 3 Shifts / Day
           </span>
         </div>
-        <p class="text-xs text-gray-400">Click any shift cell to reassign the on-duty Errand Ninja</p>
+        <p class="text-xs text-gray-400 hidden sm:block">Assign the Customer Service Representative on duty for each shift</p>
       </div>
 
-      <div class="overflow-x-auto">
+      <!-- ─── MOBILE VIEW (block md:hidden): Day Selector Pills & Stacked Shift Cards ─── -->
+      <div class="block md:hidden p-4 space-y-4">
+        <!-- Horizontal Scrollable Day Pills -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          <button
+            v-for="daySched in settings.schedule"
+            :key="daySched.day"
+            type="button"
+            @click="selectedMobileDay = daySched.day"
+            class="px-3.5 py-2 rounded-xl text-xs font-black shrink-0 transition-all flex items-center gap-1.5"
+            :class="selectedMobileDay.toLowerCase() === daySched.day.toLowerCase()
+              ? 'bg-[#FF5C1A] text-white shadow-md shadow-orange-500/25'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+          >
+            <span>{{ daySched.day.slice(0, 3) }}</span>
+            <span
+              v-if="daySched.day.toLowerCase() === dutyStatus.currentDay?.toLowerCase()"
+              class="w-1.5 h-1.5 rounded-full"
+              :class="selectedMobileDay.toLowerCase() === daySched.day.toLowerCase() ? 'bg-white' : 'bg-[#FF5C1A]'"
+            ></span>
+          </button>
+        </div>
+
+        <!-- Shift Cards for the Selected Mobile Day -->
+        <div class="space-y-3">
+          <div
+            v-for="shift in settings.shifts"
+            :key="shift.shiftId"
+            class="p-4 rounded-2xl border transition-all space-y-3"
+            :class="isCurrentShiftSlot(selectedMobileDay, shift.shiftId)
+              ? 'bg-orange-50/60 border-[#FF5C1A] ring-1 ring-[#FF5C1A]/20'
+              : 'bg-gray-50/70 border-gray-200'"
+          >
+            <!-- Shift Header -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">
+                  {{ shift.shiftId === 'shift_1' ? '🌅' : shift.shiftId === 'shift_2' ? '☀️' : '🌙' }}
+                </span>
+                <div>
+                  <h4 class="text-xs font-black text-gray-900">{{ shift.name }}</h4>
+                  <p class="text-[10px] text-gray-500 font-mono">{{ shift.timeLabel }}</p>
+                </div>
+              </div>
+
+              <span
+                v-if="isCurrentShiftSlot(selectedMobileDay, shift.shiftId) && settings.enabled"
+                class="px-2 py-0.5 rounded-lg text-[9px] font-black bg-[#FF5C1A] text-white flex items-center gap-1 shadow-2xs shrink-0"
+              >
+                <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                ACTIVE NOW
+              </span>
+            </div>
+
+            <!-- Custom Dropdown Trigger for Mobile Slot -->
+            <div class="relative custom-dropdown-container">
+              <button
+                type="button"
+                @click.stop="toggleSlotDropdown(selectedMobileDay, shift.shiftId)"
+                class="w-full pl-3 pr-2.5 py-2.5 rounded-xl text-xs font-black border transition-all flex items-center justify-between gap-1.5 shadow-2xs focus:outline-none"
+                :class="[
+                  getNinjaSelectClass(getSlotNinja(selectedMobileDay, shift.shiftId)),
+                  isSlotDropdownOpen(selectedMobileDay, shift.shiftId) ? 'ring-2 ring-[#FF5C1A]/40 border-[#FF5C1A]' : ''
+                ]"
+              >
+                <div class="flex items-center gap-2 min-w-0 truncate">
+                  <span class="text-sm shrink-0">🎧</span>
+                  <span class="truncate">{{ getSlotNinja(selectedMobileDay, shift.shiftId) || 'Select Rep' }}</span>
+                  <span
+                    v-if="getNinjaPhone(getSlotNinja(selectedMobileDay, shift.shiftId))"
+                    class="text-[10px] opacity-75 font-mono truncate"
+                  >
+                    ({{ getNinjaPhone(getSlotNinja(selectedMobileDay, shift.shiftId)) }})
+                  </span>
+                </div>
+                <ChevronDown
+                  class="w-4 h-4 shrink-0 transition-transform duration-200 opacity-60"
+                  :class="{ 'rotate-180': isSlotDropdownOpen(selectedMobileDay, shift.shiftId) }"
+                />
+              </button>
+
+              <!-- Mobile Custom Dropdown Menu -->
+              <div
+                v-if="isSlotDropdownOpen(selectedMobileDay, shift.shiftId)"
+                class="absolute left-0 right-0 z-50 mt-1.5 bg-white rounded-2xl shadow-2xl border border-gray-100 p-2 space-y-1 animate-scale-in"
+              >
+                <div class="px-2 py-1 border-b border-gray-100 flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-gray-400">
+                  <span>Assign Customer Service Rep</span>
+                  <span class="text-gray-400">{{ shift.name }}</span>
+                </div>
+
+                <div class="max-h-52 overflow-y-auto space-y-1 py-1">
+                  <button
+                    v-for="ninja in settings.ninjas"
+                    :key="ninja.id"
+                    type="button"
+                    @click="selectSlotNinja(selectedMobileDay, shift.shiftId, ninja.name)"
+                    class="w-full flex items-center justify-between gap-2 p-2.5 rounded-xl text-left transition-all"
+                    :class="getSlotNinja(selectedMobileDay, shift.shiftId).toLowerCase() === ninja.name.toLowerCase()
+                      ? 'bg-orange-50 font-black text-[#FF5C1A]'
+                      : 'hover:bg-gray-50 text-gray-800 font-bold'"
+                  >
+                    <div class="flex items-center gap-2 min-w-0">
+                      <div
+                        class="w-7 h-7 rounded-lg flex items-center justify-center text-xs shrink-0 font-bold"
+                        :class="getNinjaAvatarClass(ninja.name)"
+                      >
+                        🎧
+                      </div>
+                      <div class="min-w-0">
+                        <p class="text-xs truncate font-bold">
+                          {{ ninja.name }}
+                        </p>
+                        <p v-if="ninja.phone" class="text-[10px] font-mono text-gray-400 truncate">
+                          {{ ninja.phone }}
+                        </p>
+                      </div>
+                    </div>
+                    <Check
+                      v-if="getSlotNinja(selectedMobileDay, shift.shiftId).toLowerCase() === ninja.name.toLowerCase()"
+                      class="w-4 h-4 text-[#FF5C1A] shrink-0"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── DESKTOP TABLE VIEW (hidden md:block) ─── -->
+      <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-gray-50 text-[11px] font-black uppercase tracking-wider text-gray-500 border-b border-gray-100">
@@ -287,11 +419,11 @@
                       ]"
                     >
                       <div class="flex items-center gap-1.5 min-w-0 truncate">
-                        <span class="text-sm shrink-0">🛵</span>
+                        <span class="text-sm shrink-0">🎧</span>
                         <span class="truncate">{{ getSlotNinja(daySched.day, shift.shiftId) || 'Unassigned' }}</span>
                         <span
                           v-if="getNinjaPhone(getSlotNinja(daySched.day, shift.shiftId))"
-                          class="text-[10px] opacity-75 font-mono truncate hidden sm:inline"
+                          class="text-[10px] opacity-75 font-mono truncate hidden lg:inline"
                         >
                           ({{ getNinjaPhone(getSlotNinja(daySched.day, shift.shiftId)) }})
                         </span>
@@ -309,7 +441,7 @@
                       :class="daySched.dayIndex >= 5 ? 'bottom-full mb-1.5' : 'top-full mt-1.5'"
                     >
                       <div class="px-2.5 py-1.5 border-b border-gray-100 flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-gray-400">
-                        <span>Assign Errand Ninja</span>
+                        <span>Assign Customer Service Rep</span>
                         <span class="font-normal lowercase text-gray-400">{{ shift.name }}</span>
                       </div>
 
@@ -329,7 +461,7 @@
                               class="w-7 h-7 rounded-lg flex items-center justify-center text-xs shrink-0 font-bold"
                               :class="getNinjaAvatarClass(ninja.name)"
                             >
-                              🛵
+                              🎧
                             </div>
                             <div class="min-w-0">
                               <p class="text-xs truncate flex items-center gap-1.5">
@@ -371,30 +503,30 @@
     </div>
 
     <!-- ══════════════════════════════════════════════════════════════ -->
-    <!-- 4. NINJA PERSONNEL & WHATSAPP ROSTER DIRECTORY                -->
+    <!-- 4. CUSTOMER SERVICE REPRESENTATIVES ROSTER DIRECTORY          -->
     <!-- ══════════════════════════════════════════════════════════════ -->
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs p-5 sm:p-6 space-y-4">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-2xs p-4 sm:p-6 space-y-4">
       <div class="flex items-center justify-between flex-wrap gap-2 border-b border-gray-100 pb-4">
         <div>
           <h3 class="text-sm font-black text-gray-900 flex items-center gap-2">
             <Users class="w-4 h-4 text-[#FF5C1A]" />
-            Ninja Roster & Phone Numbers
+            Customer Service Representatives Roster
           </h3>
           <p class="text-xs text-gray-500 mt-0.5">
-            Set each Errand Ninja's WhatsApp phone number so the bot knows exactly where to dispatch order alerts.
+            Configure each Customer Service Rep's WhatsApp number so the bot routes order notifications to the representative on duty.
           </p>
         </div>
 
         <button
           @click="addNinjaToRoster"
-          class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 rounded-xl text-xs font-bold transition-colors"
+          class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-700 rounded-xl text-xs font-bold transition-colors w-full sm:w-auto justify-center"
         >
           <Plus class="w-3.5 h-3.5 text-[#FF5C1A]" />
-          Add Ninja to Roster
+          Add Customer Service Rep
         </button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
           v-for="ninja in settings.ninjas"
           :key="ninja.id"
@@ -403,7 +535,7 @@
             ? 'bg-orange-50/50 border-orange-200 shadow-sm'
             : 'bg-white border-gray-200/80 hover:border-gray-300'"
         >
-          <!-- Ninja Header -->
+          <!-- CSR Header -->
           <div class="flex items-start justify-between gap-2">
             <div class="flex items-center gap-2.5">
               <div
@@ -416,7 +548,7 @@
                 <input
                   v-model="ninja.name"
                   type="text"
-                  placeholder="Ninja Name (e.g. Ife)"
+                  placeholder="Rep Name (e.g. Ife)"
                   class="text-xs font-black text-gray-900 bg-transparent border-b border-dashed border-gray-300 focus:outline-none focus:border-[#FF5C1A] w-28"
                 />
                 <p class="text-[10px] text-gray-400 mt-0.5">
@@ -435,7 +567,7 @@
               <button
                 v-if="settings.ninjas.length > 3"
                 @click="removeNinja(ninja.id)"
-                title="Remove Ninja"
+                title="Remove Customer Service Rep"
                 class="text-gray-300 hover:text-red-500 p-1"
               >
                 <Trash2 class="w-3.5 h-3.5" />
@@ -465,7 +597,7 @@
           <div class="space-y-1">
             <label class="text-[10px] font-bold uppercase tracking-wider text-gray-500 flex items-center justify-between">
               <span>Link User Account</span>
-              <span class="text-[9px] text-gray-400">For in-app push alerts</span>
+              <span class="text-[9px] text-gray-400">For in-app alerts</span>
             </label>
             <div class="relative custom-dropdown-container">
               <button
@@ -495,7 +627,7 @@
                   <input
                     v-model="userSearchQuery"
                     type="text"
-                    placeholder="Search erranders by name or phone..."
+                    placeholder="Search users by name or phone..."
                     class="w-full pl-8 pr-2.5 py-1.5 text-xs bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:border-[#FF5C1A] text-gray-800"
                     @click.stop
                   />
@@ -534,7 +666,7 @@
                   </button>
 
                   <div v-if="filteredErranderUsers.length === 0" class="p-3 text-center text-xs text-gray-400">
-                    No erranders found matching "{{ userSearchQuery }}"
+                    No users found matching "{{ userSearchQuery }}"
                   </div>
                 </div>
               </div>
@@ -545,21 +677,21 @@
     </div>
 
     <!-- ══════════════════════════════════════════════════════════════ -->
-    <!-- 4. OPERATIONS MANAGER NOTIFICATION (KIM)                       -->
+    <!-- 5. OPERATIONS MANAGER NOTIFICATION (KIM)                       -->
     <!-- ══════════════════════════════════════════════════════════════ -->
-    <div class="bg-white rounded-2xl p-5 border border-purple-100 shadow-2xs space-y-4">
+    <div class="bg-white rounded-2xl p-4 sm:p-5 border border-purple-100 shadow-2xs space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-lg">
+          <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-lg shrink-0">
             👩‍💼
           </div>
           <div>
-            <h3 class="text-sm font-black text-gray-900 flex items-center gap-2">
+            <h3 class="text-sm font-black text-gray-900 flex items-center gap-2 flex-wrap">
               Operations Manager Alert (Kim)
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-700">Always Notified</span>
             </h3>
             <p class="text-xs text-gray-500">
-              Kim receives instant WhatsApp bot notifications for all incoming orders regardless of which ninja is currently on duty.
+              Kim receives instant WhatsApp bot notifications for all incoming orders regardless of which CSR is currently on duty.
             </p>
           </div>
         </div>
@@ -567,14 +699,14 @@
         <button
           @click="sendManagerTestAlert"
           :disabled="testingManagerAlert"
-          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 transition-colors shrink-0"
+          class="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-bold text-xs bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 transition-colors w-full sm:w-auto shrink-0"
         >
           <Send class="w-3.5 h-3.5" :class="{ 'animate-pulse': testingManagerAlert }" />
           <span>{{ testingManagerAlert ? 'Testing...' : 'Test Manager WhatsApp' }}</span>
         </button>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-gray-100">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2 border-t border-gray-100">
         <div>
           <label class="text-[10px] font-bold uppercase tracking-wider text-gray-500 block mb-1">Manager Name</label>
           <input
@@ -598,7 +730,7 @@
           </div>
         </div>
 
-        <div class="flex items-center pt-5">
+        <div class="flex items-center pt-2 sm:pt-5">
           <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" v-model="settings.manager.enabled" class="sr-only peer" />
             <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#FF5C1A]"></div>
@@ -628,6 +760,7 @@ import {
   Check,
   Search,
   X,
+  Headphones,
 } from 'lucide-vue-next';
 import { admin_api } from '@/api_factory/modules/admin';
 import { useCustomToast as useToast } from '@/composables/core/useCustomToast';
@@ -638,6 +771,9 @@ const loading = ref(true);
 const saving = ref(false);
 const testingAlert = ref(false);
 const testingManagerAlert = ref(false);
+
+// Mobile Responsive Day Selector Tab
+const selectedMobileDay = ref('Monday');
 
 // Custom Dropdown Open States
 const activeSlotDropdown = ref<string | null>(null);
@@ -797,6 +933,9 @@ const loadData = async () => {
     }
     if (shiftsRes.data?.dutyStatus) {
       dutyStatus.value = shiftsRes.data.dutyStatus;
+      if (dutyStatus.value.currentDay) {
+        selectedMobileDay.value = dutyStatus.value.currentDay;
+      }
     }
 
     const allUsers = Array.isArray(usersRes.data?.users) ? usersRes.data.users : Array.isArray(usersRes.data) ? usersRes.data : [];
@@ -864,10 +1003,10 @@ const getNinjaAvatarClass = (name: string) => {
 
 // Roster Management
 const addNinjaToRoster = () => {
-  const newId = `ninja_${Date.now()}`;
+  const newId = `csr_${Date.now()}`;
   settings.value.ninjas.push({
     id: newId,
-    name: `Ninja ${settings.value.ninjas.length + 1}`,
+    name: `Rep ${settings.value.ninjas.length + 1}`,
     phone: '',
     userId: '',
     isActive: true,
@@ -888,7 +1027,7 @@ const saveSchedule = async () => {
 
     showToast({
       title: 'Schedule Saved',
-      message: 'Weekly Shift Schedule and bot dispatch rules saved successfully!',
+      message: 'Customer Service Representative Shift Schedule saved successfully!',
       toastType: 'success',
     } as any);
   } catch (e: any) {
@@ -904,7 +1043,7 @@ const saveSchedule = async () => {
 
 // Reset to Default Schedule
 const resetToDefaults = async () => {
-  if (!confirm('Are you sure you want to reset the timetable back to the official Ife/Brandy/Seun schedule?')) {
+  if (!confirm('Are you sure you want to reset the timetable back to the official Customer Service Rep (Ife/Brandy/Ruth) schedule?')) {
     return;
   }
   saving.value = true;
@@ -915,7 +1054,7 @@ const resetToDefaults = async () => {
 
     showToast({
       title: 'Schedule Reset',
-      message: 'Timetable reset to the official weekly schedule!',
+      message: 'Timetable reset to the official Customer Service Rep schedule!',
       toastType: 'success',
     } as any);
   } catch (e: any) {
@@ -935,13 +1074,13 @@ const sendTestAlert = async () => {
   try {
     const res = await admin_api.testNinjaShiftAlert({
       phone: dutyStatus.value.onDutyNinja?.phone,
-      ninjaName: dutyStatus.value.assignedNinjaName,
+      ninjaName: `${dutyStatus.value.assignedNinjaName} (Customer Service Rep)`,
     });
 
     if (res.data?.success) {
       showToast({
         title: 'Test Alert Sent',
-        message: res.data.message || `Test message sent to ${dutyStatus.value.assignedNinjaName}!`,
+        message: res.data.message || `Test message sent to ${dutyStatus.value.assignedNinjaName} (CSR)!`,
         toastType: 'success',
       } as any);
     } else {

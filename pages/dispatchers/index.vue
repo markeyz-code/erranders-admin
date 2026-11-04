@@ -34,9 +34,9 @@
         class="pb-4 text-sm font-bold transition-colors border-b-2 relative -mb-[1px] flex items-center gap-1.5"
         :class="activeTab === 'schedule' ? 'border-[#FF5C1A] text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700'"
       >
-        <span>🗓️ Weekly Shift Schedule</span>
+        <span>🎧 Customer Service Shifts</span>
         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black bg-orange-100 text-[#FF5C1A]">
-          Bot Dispatch Control
+          CSR Bot Alerts
         </span>
       </button>
     </div>
