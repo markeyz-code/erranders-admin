@@ -1599,14 +1599,16 @@
     <!-- TAB 2: COMMUNICATIONS -->
     <!-- ═══════════════════════════════════════════════════════ -->
     <div v-show="activeTab === 'comms'" class="space-y-8">
+      
+      <!-- SECTION 1: CORE NOTIFICATION CHANNELS -->
       <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-50 shadow-sm space-y-6">
         <div class="flex items-center gap-3 border-b border-gray-50 pb-4">
           <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
             <Bell class="w-5 h-5" />
           </div>
           <div>
-            <h3 class="text-sm font-medium text-gray-900 lowercase">notification channels</h3>
-            <p class="text-sm font-bold text-gray-400 lowercase">control how the platform communicates with users</p>
+            <h3 class="text-sm font-medium text-gray-900 lowercase">core notification channels</h3>
+            <p class="text-sm font-bold text-gray-400 lowercase">control transactional email and push communication</p>
           </div>
         </div>
 
@@ -1614,7 +1616,7 @@
         <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">email notifications</h4>
-            <p class="text-sm text-gray-500 lowercase">order confirmations, receipts, OTPs, and marketing emails</p>
+            <p class="text-sm text-gray-500 lowercase">order confirmations, receipts, OTPs, and transactional emails</p>
             <p v-if="!commsForm.emailsEnabled" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
               <AlertTriangle class="w-3 h-3" />
               disabling emails will stop all OTPs, receipts, and transactional emails. users may not be able to log in.
@@ -1630,7 +1632,7 @@
         <div class="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-50">
           <div class="space-y-1">
             <h4 class="text-sm font-medium text-gray-900 lowercase">push notifications</h4>
-            <p class="text-sm text-gray-500 lowercase">real-time alerts on mobile and desktop via FCM</p>
+            <p class="text-sm text-gray-500 lowercase">real-time alerts on mobile and desktop via Firebase Cloud Messaging (FCM)</p>
             <p v-if="!commsForm.pushNotificationsEnabled" class="text-[10px] font-medium text-red-600 bg-red-50 px-2 py-1 rounded-lg inline-flex items-center gap-1 mt-1">
               <AlertTriangle class="w-3 h-3" />
               disabling push notifications means vendors and riders won't receive instant new order alerts.
@@ -1641,19 +1643,228 @@
             <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#FF5C1A]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FF5C1A]"></div>
           </label>
         </div>
+      </div>
 
-        <div class="flex justify-end pt-2">
+      <!-- SECTION 2: WHATSAPP BOT & ANTI-BAN SUSPENSION PROTECTION -->
+      <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-emerald-100/60 shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <MessageSquare class="w-5 h-5" />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-gray-900 lowercase">whatsapp bot &amp; anti-ban protection</h3>
+                <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600">account safety engine</span>
+              </div>
+              <p class="text-xs text-gray-500 lowercase mt-0.5">pacing, human typing simulation, and smart routing to prevent whatsapp suspensions</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold" :class="commsForm.whatsappEnabled ? 'text-emerald-600' : 'text-gray-400'">
+              {{ commsForm.whatsappEnabled ? 'bot active' : 'bot paused' }}
+            </span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" v-model="commsForm.whatsappEnabled" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Anti-Ban Advisory Banner -->
+        <div class="p-5 bg-gradient-to-r from-emerald-50 via-teal-50/30 to-white rounded-2xl border border-emerald-200/60 space-y-2">
+          <div class="flex items-center gap-2">
+            <ShieldCheck class="w-4 h-4 text-emerald-600" />
+            <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-800">how anti-ban protection works</h4>
+          </div>
+          <p class="text-xs text-gray-600 leading-relaxed font-medium">
+            Meta suspends WhatsApp bot numbers when they blast identical messages to dozens of numbers simultaneously or send rapid bursts with 0-second delays. 
+            Erranders includes an automated FIFO queue with random human jitter delays (3–6s), typing indicators, and milestone filters to keep your bot number 100% compliant and healthy.
+          </p>
+        </div>
+
+        <div v-if="commsForm.whatsappEnabled" class="space-y-5 animate-fade-in">
+          <!-- Vendor WhatsApp Order Alerts -->
+          <div class="flex items-center justify-between p-5 bg-gray-50/80 rounded-2xl border border-gray-100">
+            <div class="space-y-1 pr-4">
+              <div class="flex items-center gap-2">
+                <h4 class="text-sm font-bold text-gray-900 lowercase">guaranteed vendor order alerts</h4>
+                <span class="text-[9px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">high priority</span>
+              </div>
+              <p class="text-xs text-gray-500 lowercase">
+                ensure every vendor receives a direct whatsapp message with order details, ordered items list, total, and one-click accept link for every new order.
+              </p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer shrink-0">
+              <input type="checkbox" v-model="commsForm.whatsappVendorAlertsEnabled" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+            </label>
+          </div>
+
+          <!-- Customer Milestones Filter -->
+          <div class="flex items-center justify-between p-5 bg-gray-50/80 rounded-2xl border border-gray-100">
+            <div class="space-y-1 pr-4">
+              <div class="flex items-center gap-2">
+                <h4 class="text-sm font-bold text-gray-900 lowercase">customer milestone mode (anti-ban recommended)</h4>
+                <span class="text-[9px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">cuts spam by 65%</span>
+              </div>
+              <p class="text-xs text-gray-500 lowercase">
+                only send whatsapp messages for 3 essential milestones: <strong>1. Order Confirmed</strong>, <strong>2. Out for Delivery (with PIN)</strong>, and <strong>3. Delivered</strong>. Suppresses noisy intermediate kitchen statuses (Preparing, Ready) which cause students to block the bot.
+              </p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer shrink-0">
+              <input type="checkbox" v-model="commsForm.whatsappCustomerMilestonesOnly" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+            </label>
+          </div>
+
+          <!-- Errander Ninja WhatsApp Broadcast -->
+          <div class="flex items-center justify-between p-5 bg-amber-50/60 rounded-2xl border border-amber-200/60">
+            <div class="space-y-1 pr-4">
+              <div class="flex items-center gap-2">
+                <h4 class="text-sm font-bold text-amber-900 lowercase">errander ninja mass whatsapp broadcast</h4>
+                <span class="text-[9px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-200 text-amber-800">⚠️ critical ban risk</span>
+              </div>
+              <p class="text-xs text-amber-800/80 lowercase">
+                blasting whatsapp messages to 20–50 riders simultaneously on every errand triggers automated spam bans. 
+                <strong>Keep OFF for DMs</strong>: riders already receive instant FCM push and real-time socket alerts, and still receive WhatsApp when an order is specifically assigned to them.
+              </p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer shrink-0">
+              <input type="checkbox" v-model="commsForm.whatsappNinjaBroadcastEnabled" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-amber-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+            </label>
+          </div>
+
+          <!-- Official Ninja WhatsApp Group (Zero Ban Risk Dispatch) -->
+          <div class="p-5 bg-purple-50/60 rounded-2xl border border-purple-100 space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="text-sm font-bold text-purple-950 lowercase">errander ninja group broadcast (zero ban risk)</h4>
+                  <span class="text-[9px] font-bold uppercase px-2 py-0.5 rounded-full bg-purple-200 text-purple-800">ideal for web app</span>
+                </div>
+                <p class="text-xs text-purple-900/80 lowercase mt-0.5">
+                  since riders are using the web app (<strong>dispatch.erranders.org</strong>), posting <strong>1 single group message</strong> alerts all active errander ninjas instantly without blasting dozens of DMs that trigger WhatsApp spam filters!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="text-[11px] font-bold text-purple-950 block lowercase mb-1">official ninja whatsapp group jid</label>
+              <input 
+                type="text" 
+                v-model="commsForm.whatsappNinjaGroupJid"
+                placeholder="e.g. 120363028392019@g.us"
+                class="w-full text-xs font-mono px-3.5 py-2.5 rounded-xl border border-purple-200 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <p class="text-[10px] text-purple-700 mt-1 lowercase">when set, every available order will post 1 interactive errand card to this group with direct link to dispatch.erranders.org</p>
+            </div>
+          </div>
+
+          <!-- Customer Service Alert Mode & Group Routing -->
+          <div class="p-5 bg-gray-50/80 rounded-2xl border border-gray-100 space-y-4">
+            <div>
+              <h4 class="text-sm font-bold text-gray-900 lowercase">customer service (cs desk) alert routing</h4>
+              <p class="text-xs text-gray-500 lowercase mt-0.5">
+                reduce message amplification by routing new order alerts to a primary agent or dedicated whatsapp group
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button 
+                type="button" 
+                @click="commsForm.whatsappSupportRecipientMode = 'single'"
+                :class="commsForm.whatsappSupportRecipientMode === 'single' ? 'border-emerald-500 bg-emerald-50/50 text-emerald-800' : 'border-gray-200 bg-white text-gray-600'"
+                class="p-4 rounded-xl border text-left transition-all"
+              >
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-bold lowercase">primary agent only (recommended)</span>
+                  <div class="w-4 h-4 rounded-full border flex items-center justify-center shrink-0" :class="commsForm.whatsappSupportRecipientMode === 'single' ? 'border-emerald-500' : 'border-gray-300'">
+                    <div v-if="commsForm.whatsappSupportRecipientMode === 'single'" class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                  </div>
+                </div>
+                <p class="text-[11px] text-gray-500 lowercase">sends to 1 primary CS number. Cuts desk message load by 80%.</p>
+              </button>
+
+              <button 
+                type="button" 
+                @click="commsForm.whatsappSupportRecipientMode = 'all'"
+                :class="commsForm.whatsappSupportRecipientMode === 'all' ? 'border-emerald-500 bg-emerald-50/50 text-emerald-800' : 'border-gray-200 bg-white text-gray-600'"
+                class="p-4 rounded-xl border text-left transition-all"
+              >
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-bold lowercase">all support agents (staggered)</span>
+                  <div class="w-4 h-4 rounded-full border flex items-center justify-center shrink-0" :class="commsForm.whatsappSupportRecipientMode === 'all' ? 'border-emerald-500' : 'border-gray-300'">
+                    <div v-if="commsForm.whatsappSupportRecipientMode === 'all'" class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                  </div>
+                </div>
+                <p class="text-[11px] text-gray-500 lowercase">sends to all 5 CS numbers sequentially with jitter throttling.</p>
+              </button>
+            </div>
+
+            <!-- Optional Group JID -->
+            <div class="space-y-1.5 pt-2">
+              <label class="text-xs font-bold text-gray-700 lowercase">dedicated cs whatsapp group jid (optional)</label>
+              <input 
+                v-model="commsForm.whatsappSupportGroupJid"
+                type="text"
+                placeholder="e.g. 1203630485938495@g.us"
+                class="w-full bg-white border border-gray-200 text-gray-900 text-xs rounded-xl px-4 py-3 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 font-mono transition-all"
+              />
+              <p class="text-[11px] text-gray-400 lowercase">
+                best practice: create one WhatsApp group with all CS agents and paste its Group JID here. The bot sends 1 message to the group instead of 5 individual messages!
+              </p>
+            </div>
+          </div>
+
+          <!-- Queue Delay & Presence Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Throttle Delay -->
+            <div class="p-5 bg-gray-50/80 rounded-2xl border border-gray-100 space-y-2">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-gray-800 lowercase">anti-ban message pacing delay</label>
+                <span class="text-xs font-black text-emerald-600">{{ commsForm.whatsappThrottleDelaySeconds }}s</span>
+              </div>
+              <input 
+                v-model.number="commsForm.whatsappThrottleDelaySeconds"
+                type="number"
+                min="2"
+                max="30"
+                step="1"
+                class="w-full bg-white border border-gray-200 text-gray-900 text-sm rounded-xl px-4 py-2.5 outline-none font-semibold focus:border-emerald-500 transition-all"
+              />
+              <p class="text-[11px] text-gray-500 lowercase">minimum seconds between consecutive outbound messages (recommended: 3–6s).</p>
+            </div>
+
+            <!-- Typing Simulation -->
+            <div class="p-5 bg-gray-50/80 rounded-2xl border border-gray-100 flex items-center justify-between">
+              <div class="space-y-1 pr-4">
+                <h4 class="text-xs font-bold text-gray-900 lowercase">simulate human typing presence</h4>
+                <p class="text-[11px] text-gray-500 lowercase">sends "typing..." status for 1.5s before message to mimic real human chat.</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                <input type="checkbox" v-model="commsForm.whatsappSimulateTyping" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-500/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- SAVE BUTTON -->
+        <div class="flex justify-end pt-4 border-t border-gray-50">
           <button 
             @click="confirmSave('comms')" 
             :disabled="savingComms"
-            class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-sm font-medium lowercase hover:bg-[#FF5C1A] transition-all shadow-xl shadow-gray-100 disabled:opacity-50 flex items-center gap-2"
+            class="px-8 py-3.5 bg-gray-900 text-white rounded-xl text-sm font-bold lowercase hover:bg-[#FF5C1A] transition-all shadow-lg shadow-gray-200 disabled:opacity-50 flex items-center gap-2 cursor-pointer"
           >
             <Loader2 v-if="savingComms" class="w-4 h-4 animate-spin" />
             <Save v-else class="w-4 h-4" />
-            <span>{{ savingComms ? 'saving...' : 'save communications' }}</span>
+            <span>{{ savingComms ? 'saving...' : 'save communications & anti-ban settings' }}</span>
           </button>
         </div>
       </div>
+
     </div>
 
     <!-- ═══════════════════════════════════════════════════════ -->
@@ -2440,7 +2651,7 @@ import {
   Zap, Loader2, Truck, DollarSign, Tag, Bell, Megaphone, Moon, Info, AlertTriangle, 
   CheckCircle, Calculator, Save, ShieldAlert, Briefcase, Lock, Plus, Trash2, Edit3, 
   Eye, X, ExternalLink, BarChart2, Sparkles, Check, ArrowRight, ShoppingBag, Store, CreditCard, HelpCircle,
-  ArrowRightLeft, CalendarCheck, Coins
+  ArrowRightLeft, CalendarCheck, Coins, MessageSquare, ShieldCheck, Clock
 } from 'lucide-vue-next';
 import { admin_api } from '@/api_factory/modules/admin';
 import { appointments_api } from '@/api_factory/modules/appointments';
@@ -2584,6 +2795,16 @@ const originalForm = reactive({ ...form });
 const commsForm = reactive({
   emailsEnabled: true,
   pushNotificationsEnabled: true,
+  whatsappEnabled: true,
+  whatsappVendorAlertsEnabled: true,
+  whatsappCustomerMilestonesOnly: true,
+  whatsappNinjaBroadcastEnabled: false,
+  whatsappNinjaGroupJid: '',
+  whatsappSupportAlertsEnabled: true,
+  whatsappSupportRecipientMode: 'single' as 'single' | 'all',
+  whatsappSupportGroupJid: '',
+  whatsappThrottleDelaySeconds: 4,
+  whatsappSimulateTyping: true,
 });
 
 const advertForm = reactive({
@@ -2863,10 +3084,16 @@ const confirmSave = (type: string) => {
     confirmModal.changes.push(`client commitment fee: <strong>${serviceForm.commitmentFeePercentage}%</strong>`);
     confirmModal.changes.push(`vendor completion commission: <strong>${serviceForm.vendorCommissionPercentage}%</strong>`);
   } else if (type === 'comms') {
-    confirmModal.message = 'you are about to update communication channel settings. this controls whether users receive emails and push notifications.';
+    confirmModal.message = 'you are about to update communication channel settings and WhatsApp anti-ban bot protections.';
     confirmModal.changes.push(`emails: <strong>${commsForm.emailsEnabled ? 'enabled' : 'disabled'}</strong>`);
     confirmModal.changes.push(`push notifications: <strong>${commsForm.pushNotificationsEnabled ? 'enabled' : 'disabled'}</strong>`);
+    confirmModal.changes.push(`whatsapp bot: <strong>${commsForm.whatsappEnabled ? 'active' : 'disabled'}</strong>`);
+    confirmModal.changes.push(`vendor order whatsapp alerts: <strong>${commsForm.whatsappVendorAlertsEnabled ? 'guaranteed enabled' : 'disabled'}</strong>`);
+    confirmModal.changes.push(`anti-ban customer milestones: <strong>${commsForm.whatsappCustomerMilestonesOnly ? 'active (essential only)' : 'disabled (all updates)'}</strong>`);
+    confirmModal.changes.push(`ninja whatsapp mass broadcast: <strong>${commsForm.whatsappNinjaBroadcastEnabled ? 'enabled (risk of ban)' : 'disabled (protected)'}</strong>`);
+    confirmModal.changes.push(`queue throttle delay: <strong>${commsForm.whatsappThrottleDelaySeconds}s between messages</strong>`);
     if (!commsForm.emailsEnabled) confirmModal.changes.push(`<span class="text-red-600">⚠️ warning: disabling emails will prevent OTP delivery and user login.</span>`);
+    if (!commsForm.whatsappEnabled) confirmModal.changes.push(`<span class="text-amber-600">⚠️ note: disabling WhatsApp bot will stop all WhatsApp notifications immediately.</span>`);
   } else if (type === 'adverts') {
     confirmModal.message = 'you are about to update advert popup settings. this affects the promotional popups students see inside the app.';
     confirmModal.changes.push(`adverts: <strong>${advertForm.enabled ? 'enabled' : 'disabled'}</strong>`);
@@ -2977,8 +3204,19 @@ const loadSettings = async () => {
     }
 
     if (commsSettled.status === 'fulfilled' && commsSettled.value?.data) {
-      commsForm.emailsEnabled = commsSettled.value.data.emailsEnabled ?? true;
-      commsForm.pushNotificationsEnabled = commsSettled.value.data.pushNotificationsEnabled ?? true;
+      const cData = commsSettled.value.data;
+      commsForm.emailsEnabled = cData.emailsEnabled ?? true;
+      commsForm.pushNotificationsEnabled = cData.pushNotificationsEnabled ?? true;
+      commsForm.whatsappEnabled = cData.whatsappEnabled ?? true;
+      commsForm.whatsappVendorAlertsEnabled = cData.whatsappVendorAlertsEnabled ?? true;
+      commsForm.whatsappCustomerMilestonesOnly = cData.whatsappCustomerMilestonesOnly ?? true;
+      commsForm.whatsappNinjaBroadcastEnabled = cData.whatsappNinjaBroadcastEnabled ?? false;
+      commsForm.whatsappNinjaGroupJid = cData.whatsappNinjaGroupJid ?? '';
+      commsForm.whatsappSupportAlertsEnabled = cData.whatsappSupportAlertsEnabled ?? true;
+      commsForm.whatsappSupportRecipientMode = cData.whatsappSupportRecipientMode ?? 'single';
+      commsForm.whatsappSupportGroupJid = cData.whatsappSupportGroupJid ?? '';
+      commsForm.whatsappThrottleDelaySeconds = cData.whatsappThrottleDelaySeconds !== undefined ? Number(cData.whatsappThrottleDelaySeconds) : 4;
+      commsForm.whatsappSimulateTyping = cData.whatsappSimulateTyping ?? true;
     }
 
     if (advertSettled.status === 'fulfilled' && advertSettled.value?.data) {
@@ -3173,8 +3411,18 @@ const saveCommunicationsSettings = async () => {
     await admin_api.updateCommunicationsSettings({
       emailsEnabled: commsForm.emailsEnabled,
       pushNotificationsEnabled: commsForm.pushNotificationsEnabled,
+      whatsappEnabled: commsForm.whatsappEnabled,
+      whatsappVendorAlertsEnabled: commsForm.whatsappVendorAlertsEnabled,
+      whatsappCustomerMilestonesOnly: commsForm.whatsappCustomerMilestonesOnly,
+      whatsappNinjaBroadcastEnabled: commsForm.whatsappNinjaBroadcastEnabled,
+      whatsappNinjaGroupJid: commsForm.whatsappNinjaGroupJid,
+      whatsappSupportAlertsEnabled: commsForm.whatsappSupportAlertsEnabled,
+      whatsappSupportRecipientMode: commsForm.whatsappSupportRecipientMode,
+      whatsappSupportGroupJid: commsForm.whatsappSupportGroupJid,
+      whatsappThrottleDelaySeconds: Number(commsForm.whatsappThrottleDelaySeconds) || 4,
+      whatsappSimulateTyping: commsForm.whatsappSimulateTyping,
     });
-    showToast({ title: 'success', message: 'communications settings updated!', toastType: 'success' });
+    showToast({ title: 'success', message: 'communications & WhatsApp anti-ban settings saved!', toastType: 'success' });
   } catch (e: any) {
     console.error('Failed to save communications settings:', e);
     showToast({ title: 'error', message: e.response?.data?.message || 'failed to save communications settings.', toastType: 'error' });
