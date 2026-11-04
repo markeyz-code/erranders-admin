@@ -390,6 +390,70 @@
         </div>
       </div>
     </div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- 4. OPERATIONS MANAGER NOTIFICATION (KIM)                       -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="bg-white rounded-2xl p-5 border border-purple-100 shadow-2xs space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-lg">
+            👩‍💼
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-gray-900 flex items-center gap-2">
+              Operations Manager Alert (Kim)
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-700">Always Notified</span>
+            </h3>
+            <p class="text-xs text-gray-500">
+              Kim receives instant WhatsApp bot notifications for all incoming orders regardless of which ninja is currently on duty.
+            </p>
+          </div>
+        </div>
+
+        <button
+          @click="sendManagerTestAlert"
+          :disabled="testingManagerAlert"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 transition-colors shrink-0"
+        >
+          <Send class="w-3.5 h-3.5" :class="{ 'animate-pulse': testingManagerAlert }" />
+          <span>{{ testingManagerAlert ? 'Testing...' : 'Test Manager WhatsApp' }}</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-gray-100">
+        <div>
+          <label class="text-[10px] font-bold uppercase tracking-wider text-gray-500 block mb-1">Manager Name</label>
+          <input
+            v-model="settings.manager.name"
+            type="text"
+            placeholder="Kim"
+            class="w-full px-3 py-2 text-xs bg-gray-50 rounded-xl border border-gray-200 font-bold text-gray-900 focus:outline-none focus:border-[#FF5C1A]"
+          />
+        </div>
+
+        <div>
+          <label class="text-[10px] font-bold uppercase tracking-wider text-gray-500 block mb-1">WhatsApp Phone Number</label>
+          <div class="relative">
+            <Phone class="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <input
+              v-model="settings.manager.phone"
+              type="text"
+              placeholder="+2348052854256"
+              class="w-full pl-8 pr-3 py-2 text-xs bg-gray-50 rounded-xl border border-gray-200 font-mono text-gray-900 focus:outline-none focus:border-[#FF5C1A]"
+            />
+          </div>
+        </div>
+
+        <div class="flex items-center pt-5">
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" v-model="settings.manager.enabled" class="sr-only peer" />
+            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#FF5C1A]"></div>
+            <span class="ml-2.5 text-xs font-bold text-gray-700">Manager Bot Alerts Active</span>
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -417,12 +481,18 @@ const { showToast } = useToast();
 const loading = ref(true);
 const saving = ref(false);
 const testingAlert = ref(false);
+const testingManagerAlert = ref(false);
 
 const settings = ref<any>({
   enabled: true,
   timezone: 'Africa/Lagos',
   offHoursFallback: 'all',
   directWhatsAppEnabled: true,
+  manager: {
+    name: 'Kim',
+    phone: '+2348052854256',
+    enabled: true,
+  },
   shifts: [],
   ninjas: [],
   schedule: [],
@@ -451,7 +521,14 @@ const loadData = async () => {
     ]);
 
     if (shiftsRes.data?.settings) {
-      settings.value = shiftsRes.data.settings;
+      settings.value = {
+        ...shiftsRes.data.settings,
+        manager: shiftsRes.data.settings.manager || {
+          name: 'Kim',
+          phone: '+2348052854256',
+          enabled: true,
+        },
+      };
     }
     if (shiftsRes.data?.dutyStatus) {
       dutyStatus.value = shiftsRes.data.dutyStatus;
@@ -516,6 +593,7 @@ const getNinjaSelectClass = (name: string) => {
       return 'bg-purple-50 text-purple-800 border-purple-200';
     case 'brandy':
       return 'bg-blue-50 text-blue-800 border-blue-200';
+    case 'ruth':
     case 'seun':
       return 'bg-emerald-50 text-emerald-800 border-emerald-200';
     default:
@@ -529,6 +607,7 @@ const getNinjaAvatarClass = (name: string) => {
       return 'bg-purple-100 text-purple-700 border-purple-200';
     case 'brandy':
       return 'bg-blue-100 text-blue-700 border-blue-200';
+    case 'ruth':
     case 'seun':
       return 'bg-emerald-100 text-emerald-700 border-emerald-200';
     default:
@@ -633,6 +712,49 @@ const sendTestAlert = async () => {
     } as any);
   } finally {
     testingAlert.value = false;
+  }
+};
+
+// Send Test WhatsApp Alert to Manager Kim
+const sendManagerTestAlert = async () => {
+  if (!settings.value.manager?.phone) {
+    showToast({
+      title: 'Phone Required',
+      message: 'Please enter Kim\'s WhatsApp phone number first',
+      toastType: 'warning',
+    } as any);
+    return;
+  }
+
+  testingManagerAlert.value = true;
+  try {
+    const res = await admin_api.testNinjaShiftAlert({
+      phone: settings.value.manager.phone,
+      ninjaName: `${settings.value.manager.name || 'Kim'} (Operations Manager)`,
+      target: 'manager',
+    });
+
+    if (res.data?.success) {
+      showToast({
+        title: 'Manager Alert Sent',
+        message: res.data.message || `Test message sent to ${settings.value.manager.name}!`,
+        toastType: 'success',
+      } as any);
+    } else {
+      showToast({
+        title: 'Alert Warning',
+        message: res.data?.message || 'Could not send test WhatsApp alert to manager',
+        toastType: 'warning',
+      } as any);
+    }
+  } catch (e: any) {
+    showToast({
+      title: 'Error',
+      message: e.response?.data?.message || 'Failed to trigger test alert to manager',
+      toastType: 'error',
+    } as any);
+  } finally {
+    testingManagerAlert.value = false;
   }
 };
 

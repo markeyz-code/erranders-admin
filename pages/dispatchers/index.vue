@@ -975,6 +975,7 @@ import StatusBadge from '@/components/ui/StatusBadge.vue';
 import SkeletonTable from '@/components/ui/SkeletonTable.vue';
 import ConfirmationModal from '@/components/ui/ConfirmationModal.vue';
 import DateRangePicker from '@/components/ui/DateRangePicker.vue';
+import NinjaShiftScheduleManager from '@/components/dispatchers/NinjaShiftScheduleManager.vue';
 import { useCustomToast as useToast } from '@/composables/core/useCustomToast'
 import { useConfirmModal } from '@/composables/core/useConfirmModal'
 import { usePermissions } from '@/composables/core/usePermissions'

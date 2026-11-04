@@ -2384,6 +2384,13 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- TAB 7: NINJA SHIFTS & BOT DISPATCH                      -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <div v-show="activeTab === 'ninja-shifts'" class="space-y-8">
+      <NinjaShiftScheduleManager />
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
     <!-- CONFIRMATION MODAL -->
     <!-- ═══════════════════════════════════════════════════════ -->
     <Teleport to="body">
@@ -2656,6 +2663,7 @@ import {
 import { admin_api } from '@/api_factory/modules/admin';
 import { appointments_api } from '@/api_factory/modules/appointments';
 import { useCustomToast } from '@/composables/core/useCustomToast';
+import NinjaShiftScheduleManager from '@/components/dispatchers/NinjaShiftScheduleManager.vue';
 
 definePageMeta({ layout: 'admin' });
 
@@ -2675,6 +2683,7 @@ const tabs = [
   { id: 'adverts', label: 'adverts & monetization', icon: Megaphone },
   { id: 'campaigns', label: 'campaigns', icon: Moon },
   { id: 'erranders', label: 'erranders', icon: Briefcase },
+  { id: 'ninja-shifts', label: 'ninja shifts & bot', icon: Clock },
   { id: 'platform', label: 'platform status', icon: Lock },
 ];
 
