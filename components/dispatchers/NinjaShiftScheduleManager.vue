@@ -139,16 +139,51 @@
           </div>
         </label>
 
-        <!-- Off-Hours Fallback Toggle -->
-        <label class="flex items-center gap-2 cursor-pointer bg-gray-50 hover:bg-gray-100 p-2 px-3 rounded-xl border border-gray-200 transition-colors">
-          <input
-            type="checkbox"
-            :checked="settings.offHoursFallback === 'all'"
-            @change="settings.offHoursFallback = ($event.target as any).checked ? 'all' : 'none'"
-            class="w-4 h-4 accent-[#FF5C1A] rounded"
-          />
-          <span class="text-xs font-bold text-gray-700">Fallback to All during Off-Hours</span>
-        </label>
+        <!-- Off-Hours Fallback Custom Dropdown -->
+        <div class="relative custom-dropdown-container">
+          <button
+            type="button"
+            @click.stop="toggleOffHoursDropdown"
+            class="flex items-center gap-2 bg-gray-50 hover:bg-gray-100 p-2 px-3 rounded-xl border border-gray-200 text-xs font-bold text-gray-800 transition-all focus:outline-none focus:border-[#FF5C1A] shadow-2xs"
+          >
+            <span class="text-[10px] uppercase font-black tracking-wider text-gray-400">Off-Hours:</span>
+            <span>{{ settings.offHoursFallback === 'all' ? '📢 Broadcast to All' : '🤫 Suppress Alerts' }}</span>
+            <ChevronDown class="w-3.5 h-3.5 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': showOffHoursDropdown }" />
+          </button>
+
+          <div
+            v-if="showOffHoursDropdown"
+            class="absolute right-0 z-50 mt-1.5 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 p-1.5 space-y-1 animate-scale-in"
+          >
+            <button
+              type="button"
+              @click="setOffHoursFallback('all')"
+              class="w-full flex items-start gap-2.5 p-2 rounded-xl text-left transition-colors"
+              :class="settings.offHoursFallback === 'all' ? 'bg-orange-50/80 text-[#FF5C1A]' : 'hover:bg-gray-50 text-gray-700'"
+            >
+              <span class="text-base">📢</span>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-black">Broadcast to All (Default)</p>
+                <p class="text-[10px] text-gray-400 leading-tight">Orders during 11 PM – 9 AM alert all active erranders.</p>
+              </div>
+              <Check v-if="settings.offHoursFallback === 'all'" class="w-4 h-4 text-[#FF5C1A] shrink-0 mt-0.5" />
+            </button>
+
+            <button
+              type="button"
+              @click="setOffHoursFallback('none')"
+              class="w-full flex items-start gap-2.5 p-2 rounded-xl text-left transition-colors"
+              :class="settings.offHoursFallback === 'none' ? 'bg-orange-50/80 text-[#FF5C1A]' : 'hover:bg-gray-50 text-gray-700'"
+            >
+              <span class="text-base">🤫</span>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-black">Suppress Alerts</p>
+                <p class="text-[10px] text-gray-400 leading-tight">No bot notifications dispatched during off-hours.</p>
+              </div>
+              <Check v-if="settings.offHoursFallback === 'none'" class="w-4 h-4 text-[#FF5C1A] shrink-0 mt-0.5" />
+            </button>
+          </div>
+        </div>
 
         <!-- Reset Button -->
         <button
@@ -240,23 +275,82 @@
                 }"
               >
                 <div class="flex items-center justify-between gap-2">
-                  <div class="relative w-full">
-                    <select
-                      :value="getSlotNinja(daySched.day, shift.shiftId)"
-                      @change="setSlotNinja(daySched.day, shift.shiftId, ($event.target as any).value)"
-                      class="w-full pl-3 pr-8 py-2 rounded-xl text-xs font-black border transition-all cursor-pointer appearance-none"
-                      :class="getNinjaSelectClass(getSlotNinja(daySched.day, shift.shiftId))"
+                  <div class="relative w-full custom-dropdown-container">
+                    <!-- Custom Slot Dropdown Trigger -->
+                    <button
+                      type="button"
+                      @click.stop="toggleSlotDropdown(daySched.day, shift.shiftId)"
+                      class="w-full pl-3 pr-2.5 py-2 rounded-xl text-xs font-black border transition-all flex items-center justify-between gap-1.5 shadow-2xs hover:shadow-xs group focus:outline-none"
+                      :class="[
+                        getNinjaSelectClass(getSlotNinja(daySched.day, shift.shiftId)),
+                        isSlotDropdownOpen(daySched.day, shift.shiftId) ? 'ring-2 ring-[#FF5C1A]/40 border-[#FF5C1A]' : ''
+                      ]"
                     >
-                      <option
-                        v-for="ninja in settings.ninjas"
-                        :key="ninja.id"
-                        :value="ninja.name"
-                      >
-                        🛵 {{ ninja.name }} {{ ninja.phone ? `(${ninja.phone})` : '' }}
-                      </option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
-                      <ChevronDown class="w-3.5 h-3.5" />
+                      <div class="flex items-center gap-1.5 min-w-0 truncate">
+                        <span class="text-sm shrink-0">🛵</span>
+                        <span class="truncate">{{ getSlotNinja(daySched.day, shift.shiftId) || 'Unassigned' }}</span>
+                        <span
+                          v-if="getNinjaPhone(getSlotNinja(daySched.day, shift.shiftId))"
+                          class="text-[10px] opacity-75 font-mono truncate hidden sm:inline"
+                        >
+                          ({{ getNinjaPhone(getSlotNinja(daySched.day, shift.shiftId)) }})
+                        </span>
+                      </div>
+                      <ChevronDown
+                        class="w-3.5 h-3.5 shrink-0 transition-transform duration-200 opacity-60 group-hover:opacity-100"
+                        :class="{ 'rotate-180': isSlotDropdownOpen(daySched.day, shift.shiftId) }"
+                      />
+                    </button>
+
+                    <!-- Custom Slot Dropdown Menu -->
+                    <div
+                      v-if="isSlotDropdownOpen(daySched.day, shift.shiftId)"
+                      class="absolute left-0 z-50 w-full min-w-[240px] max-w-[280px] bg-white rounded-2xl shadow-2xl border border-gray-100 p-1.5 space-y-1 animate-scale-in"
+                      :class="daySched.dayIndex >= 5 ? 'bottom-full mb-1.5' : 'top-full mt-1.5'"
+                    >
+                      <div class="px-2.5 py-1.5 border-b border-gray-100 flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-gray-400">
+                        <span>Assign Errand Ninja</span>
+                        <span class="font-normal lowercase text-gray-400">{{ shift.name }}</span>
+                      </div>
+
+                      <div class="max-h-56 overflow-y-auto space-y-0.5 py-0.5">
+                        <button
+                          v-for="ninja in settings.ninjas"
+                          :key="ninja.id"
+                          type="button"
+                          @click="selectSlotNinja(daySched.day, shift.shiftId, ninja.name)"
+                          class="w-full flex items-center justify-between gap-2 p-2 rounded-xl text-left transition-all"
+                          :class="getSlotNinja(daySched.day, shift.shiftId).toLowerCase() === ninja.name.toLowerCase()
+                            ? 'bg-orange-50 font-black text-[#FF5C1A]'
+                            : 'hover:bg-gray-50 text-gray-800 font-bold'"
+                        >
+                          <div class="flex items-center gap-2 min-w-0">
+                            <div
+                              class="w-7 h-7 rounded-lg flex items-center justify-center text-xs shrink-0 font-bold"
+                              :class="getNinjaAvatarClass(ninja.name)"
+                            >
+                              🛵
+                            </div>
+                            <div class="min-w-0">
+                              <p class="text-xs truncate flex items-center gap-1.5">
+                                <span>{{ ninja.name }}</span>
+                                <span v-if="!ninja.isActive" class="text-[9px] px-1 rounded bg-gray-200 text-gray-500 font-normal">Inactive</span>
+                              </p>
+                              <p v-if="ninja.phone" class="text-[10px] font-mono text-gray-400 truncate">
+                                {{ ninja.phone }}
+                              </p>
+                              <p v-else class="text-[10px] text-amber-500 font-normal">
+                                No WhatsApp phone set
+                              </p>
+                            </div>
+                          </div>
+
+                          <Check
+                            v-if="getSlotNinja(daySched.day, shift.shiftId).toLowerCase() === ninja.name.toLowerCase()"
+                            class="w-4 h-4 text-[#FF5C1A] shrink-0"
+                          />
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -373,19 +467,78 @@
               <span>Link User Account</span>
               <span class="text-[9px] text-gray-400">For in-app push alerts</span>
             </label>
-            <select
-              v-model="ninja.userId"
-              class="w-full px-2.5 py-1.5 text-xs bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:border-[#FF5C1A] text-gray-800"
-            >
-              <option value="">Unlinked (WhatsApp Direct Only)</option>
-              <option
-                v-for="user in erranderUsers"
-                :key="user._id"
-                :value="user._id"
+            <div class="relative custom-dropdown-container">
+              <button
+                type="button"
+                @click.stop="toggleUserLinkDropdown(ninja.id)"
+                class="w-full px-2.5 py-1.5 text-xs bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 text-gray-800 flex items-center justify-between gap-1.5 transition-colors focus:outline-none focus:border-[#FF5C1A] text-left"
+                :class="{ 'border-[#FF5C1A] ring-2 ring-[#FF5C1A]/20': activeUserDropdownNinjaId === ninja.id }"
               >
-                {{ user.firstName }} {{ user.lastName }} ({{ user.phone || user.email }})
-              </option>
-            </select>
+                <div class="flex items-center gap-1.5 min-w-0 truncate">
+                  <span class="truncate font-semibold" :class="ninja.userId ? 'text-gray-900 font-bold' : 'text-gray-500'">
+                    {{ getLinkedUserLabel(ninja.userId) }}
+                  </span>
+                </div>
+                <ChevronDown
+                  class="w-3.5 h-3.5 text-gray-400 shrink-0 transition-transform duration-200"
+                  :class="{ 'rotate-180': activeUserDropdownNinjaId === ninja.id }"
+                />
+              </button>
+
+              <div
+                v-if="activeUserDropdownNinjaId === ninja.id"
+                class="absolute left-0 z-50 mt-1.5 w-full min-w-[260px] bg-white rounded-2xl shadow-2xl border border-gray-100 p-2 space-y-2 animate-scale-in"
+              >
+                <!-- Search Input -->
+                <div class="relative">
+                  <Search class="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    v-model="userSearchQuery"
+                    type="text"
+                    placeholder="Search erranders by name or phone..."
+                    class="w-full pl-8 pr-2.5 py-1.5 text-xs bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:border-[#FF5C1A] text-gray-800"
+                    @click.stop
+                  />
+                </div>
+
+                <!-- Options List -->
+                <div class="max-h-48 overflow-y-auto space-y-0.5">
+                  <!-- Unlinked Option -->
+                  <button
+                    type="button"
+                    @click="selectLinkedUser(ninja, '')"
+                    class="w-full flex items-center justify-between gap-2 p-2 rounded-xl text-left text-xs transition-colors"
+                    :class="!ninja.userId ? 'bg-orange-50 text-[#FF5C1A] font-bold' : 'hover:bg-gray-50 text-gray-600'"
+                  >
+                    <div class="flex items-center gap-2">
+                      <span class="w-6 h-6 rounded-lg bg-gray-100 flex items-center justify-center text-[10px] text-gray-400 font-bold">✕</span>
+                      <span>Unlinked (WhatsApp Direct Only)</span>
+                    </div>
+                    <Check v-if="!ninja.userId" class="w-3.5 h-3.5 text-[#FF5C1A] shrink-0" />
+                  </button>
+
+                  <!-- Matching Users -->
+                  <button
+                    v-for="user in filteredErranderUsers"
+                    :key="user._id"
+                    type="button"
+                    @click="selectLinkedUser(ninja, user._id)"
+                    class="w-full flex items-center justify-between gap-2 p-2 rounded-xl text-left text-xs transition-colors"
+                    :class="ninja.userId === user._id ? 'bg-orange-50 text-[#FF5C1A] font-bold' : 'hover:bg-gray-50 text-gray-800'"
+                  >
+                    <div class="min-w-0">
+                      <p class="font-bold truncate">{{ user.firstName }} {{ user.lastName }}</p>
+                      <p class="text-[10px] font-mono text-gray-400 truncate">{{ user.phone || user.email }}</p>
+                    </div>
+                    <Check v-if="ninja.userId === user._id" class="w-3.5 h-3.5 text-[#FF5C1A] shrink-0" />
+                  </button>
+
+                  <div v-if="filteredErranderUsers.length === 0" class="p-3 text-center text-xs text-gray-400">
+                    No erranders found matching "{{ userSearchQuery }}"
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -458,7 +611,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import {
   Clock,
   Send,
@@ -472,6 +625,9 @@ import {
   Users,
   Plus,
   Trash2,
+  Check,
+  Search,
+  X,
 } from 'lucide-vue-next';
 import { admin_api } from '@/api_factory/modules/admin';
 import { useCustomToast as useToast } from '@/composables/core/useCustomToast';
@@ -482,6 +638,12 @@ const loading = ref(true);
 const saving = ref(false);
 const testingAlert = ref(false);
 const testingManagerAlert = ref(false);
+
+// Custom Dropdown Open States
+const activeSlotDropdown = ref<string | null>(null);
+const showOffHoursDropdown = ref(false);
+const activeUserDropdownNinjaId = ref<string | null>(null);
+const userSearchQuery = ref('');
 
 const settings = ref<any>({
   enabled: true,
@@ -510,6 +672,109 @@ const dutyStatus = ref<any>({
 });
 
 const erranderUsers = ref<any[]>([]);
+
+// Slot Helpers
+const getSlotNinja = (day: string, shiftId: string) => {
+  const daySched = settings.value.schedule?.find((s: any) => s.day.toLowerCase() === day.toLowerCase());
+  const slot = daySched?.slots?.find((sl: any) => sl.shiftId === shiftId);
+  return slot?.ninjaName || '';
+};
+
+const getNinjaPhone = (name: string) => {
+  if (!name || !settings.value.ninjas) return '';
+  const ninja = settings.value.ninjas.find((n: any) => n.name.toLowerCase() === name.toLowerCase());
+  return ninja?.phone || '';
+};
+
+const setSlotNinja = (day: string, shiftId: string, ninjaName: string) => {
+  const daySched = settings.value.schedule?.find((s: any) => s.day.toLowerCase() === day.toLowerCase());
+  if (!daySched) return;
+  const slot = daySched.slots?.find((sl: any) => sl.shiftId === shiftId);
+  if (slot) {
+    slot.ninjaName = ninjaName;
+  } else {
+    daySched.slots.push({ shiftId, ninjaName });
+  }
+};
+
+// Timetable Slot Custom Dropdown Handlers
+const toggleSlotDropdown = (day: string, shiftId: string) => {
+  const key = `${day}_${shiftId}`;
+  activeSlotDropdown.value = activeSlotDropdown.value === key ? null : key;
+  showOffHoursDropdown.value = false;
+  activeUserDropdownNinjaId.value = null;
+};
+
+const isSlotDropdownOpen = (day: string, shiftId: string) => {
+  return activeSlotDropdown.value === `${day}_${shiftId}`;
+};
+
+const selectSlotNinja = (day: string, shiftId: string, ninjaName: string) => {
+  setSlotNinja(day, shiftId, ninjaName);
+  activeSlotDropdown.value = null;
+};
+
+// Off-Hours Fallback Custom Dropdown Handlers
+const toggleOffHoursDropdown = () => {
+  showOffHoursDropdown.value = !showOffHoursDropdown.value;
+  activeSlotDropdown.value = null;
+  activeUserDropdownNinjaId.value = null;
+};
+
+const setOffHoursFallback = (mode: 'all' | 'none') => {
+  settings.value.offHoursFallback = mode;
+  showOffHoursDropdown.value = false;
+};
+
+// User Account Linking Custom Dropdown Handlers
+const toggleUserLinkDropdown = (ninjaId: string) => {
+  if (activeUserDropdownNinjaId.value === ninjaId) {
+    activeUserDropdownNinjaId.value = null;
+  } else {
+    activeUserDropdownNinjaId.value = ninjaId;
+    userSearchQuery.value = '';
+    activeSlotDropdown.value = null;
+    showOffHoursDropdown.value = false;
+  }
+};
+
+const getLinkedUserLabel = (userId: string) => {
+  if (!userId) return 'Unlinked (WhatsApp Direct Only)';
+  const user = erranderUsers.value.find((u: any) => u._id === userId);
+  if (!user) return 'Linked Account';
+  return `${user.firstName} ${user.lastName} (${user.phone || user.email})`;
+};
+
+const selectLinkedUser = (ninja: any, userId: string) => {
+  ninja.userId = userId;
+  const user = erranderUsers.value.find((u: any) => u._id === userId);
+  if (user) {
+    if (!ninja.phone && user.phone) ninja.phone = user.phone;
+    if (user.email) ninja.userEmail = user.email;
+  }
+  activeUserDropdownNinjaId.value = null;
+};
+
+const filteredErranderUsers = computed(() => {
+  if (!userSearchQuery.value.trim()) return erranderUsers.value;
+  const q = userSearchQuery.value.toLowerCase();
+  return erranderUsers.value.filter((u: any) => {
+    const fullName = `${u.firstName || ''} ${u.lastName || ''}`.toLowerCase();
+    const phone = (u.phone || '').toLowerCase();
+    const email = (u.email || '').toLowerCase();
+    return fullName.includes(q) || phone.includes(q) || email.includes(q);
+  });
+});
+
+// Click-Outside Listener to Close Custom Dropdowns
+const handleDocumentClick = (e: MouseEvent) => {
+  const target = e.target as HTMLElement;
+  if (!target.closest('.custom-dropdown-container')) {
+    activeSlotDropdown.value = null;
+    showOffHoursDropdown.value = false;
+    activeUserDropdownNinjaId.value = null;
+  }
+};
 
 // Load Schedule & Duty Status
 const loadData = async () => {
@@ -544,24 +809,6 @@ const loadData = async () => {
     } as any);
   } finally {
     loading.value = false;
-  }
-};
-
-// Slot Helpers
-const getSlotNinja = (day: string, shiftId: string) => {
-  const daySched = settings.value.schedule?.find((s: any) => s.day.toLowerCase() === day.toLowerCase());
-  const slot = daySched?.slots?.find((sl: any) => sl.shiftId === shiftId);
-  return slot?.ninjaName || '';
-};
-
-const setSlotNinja = (day: string, shiftId: string, ninjaName: string) => {
-  const daySched = settings.value.schedule?.find((s: any) => s.day.toLowerCase() === day.toLowerCase());
-  if (!daySched) return;
-  const slot = daySched.slots?.find((sl: any) => sl.shiftId === shiftId);
-  if (slot) {
-    slot.ninjaName = ninjaName;
-  } else {
-    daySched.slots.push({ shiftId, ninjaName });
   }
 };
 
@@ -758,6 +1005,13 @@ const sendManagerTestAlert = async () => {
   }
 };
 
-onMounted(loadData);
+onMounted(() => {
+  loadData();
+  document.addEventListener('click', handleDocumentClick);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleDocumentClick);
+});
 </script>
 
