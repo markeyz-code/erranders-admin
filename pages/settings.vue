@@ -1760,6 +1760,20 @@
               />
               <p class="text-[10px] text-purple-700 mt-1 lowercase">when set, every available order will post 1 interactive errand card to this group with direct link to dispatch.erranders.org</p>
             </div>
+
+            <div>
+              <label class="text-[11px] font-bold text-purple-950 block lowercase mb-1">riders messaged per order (direct messages)</label>
+              <input
+                type="number"
+                min="1"
+                max="10"
+                v-model.number="commsForm.whatsappNinjaBatchLimit"
+                class="w-full text-xs font-mono px-3.5 py-2.5 rounded-xl border border-purple-200 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <p class="text-[10px] text-purple-700 mt-1 lowercase">
+                only used when no group is set. kept low on purpose: a burst of identical messages is what gets a number banned. 4 is a sensible ceiling.
+              </p>
+            </div>
           </div>
 
           <!-- Customer Service Alert Mode & Group Routing -->
@@ -2809,6 +2823,7 @@ const commsForm = reactive({
   whatsappCustomerMilestonesOnly: true,
   whatsappNinjaBroadcastEnabled: false,
   whatsappNinjaGroupJid: '',
+  whatsappNinjaBatchLimit: 4,
   whatsappSupportAlertsEnabled: true,
   whatsappSupportRecipientMode: 'single' as 'single' | 'all',
   whatsappSupportGroupJid: '',
@@ -3221,6 +3236,7 @@ const loadSettings = async () => {
       commsForm.whatsappCustomerMilestonesOnly = cData.whatsappCustomerMilestonesOnly ?? true;
       commsForm.whatsappNinjaBroadcastEnabled = cData.whatsappNinjaBroadcastEnabled ?? false;
       commsForm.whatsappNinjaGroupJid = cData.whatsappNinjaGroupJid ?? '';
+      commsForm.whatsappNinjaBatchLimit = cData.whatsappNinjaBatchLimit ?? 4;
       commsForm.whatsappSupportAlertsEnabled = cData.whatsappSupportAlertsEnabled ?? true;
       commsForm.whatsappSupportRecipientMode = cData.whatsappSupportRecipientMode ?? 'single';
       commsForm.whatsappSupportGroupJid = cData.whatsappSupportGroupJid ?? '';
@@ -3425,6 +3441,7 @@ const saveCommunicationsSettings = async () => {
       whatsappCustomerMilestonesOnly: commsForm.whatsappCustomerMilestonesOnly,
       whatsappNinjaBroadcastEnabled: commsForm.whatsappNinjaBroadcastEnabled,
       whatsappNinjaGroupJid: commsForm.whatsappNinjaGroupJid,
+      whatsappNinjaBatchLimit: Number(commsForm.whatsappNinjaBatchLimit) || 4,
       whatsappSupportAlertsEnabled: commsForm.whatsappSupportAlertsEnabled,
       whatsappSupportRecipientMode: commsForm.whatsappSupportRecipientMode,
       whatsappSupportGroupJid: commsForm.whatsappSupportGroupJid,
