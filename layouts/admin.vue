@@ -384,6 +384,7 @@ const rawNavItems = [
  { path: '/vendors', label: 'Vendors', icon: Store },
  { path: '/orders', label: 'Orders', icon: Package },
  { path: '/booked-services', label: 'Booked Services', icon: CalendarCheck },
+ { path: '/group-orders', label: 'Group Orders', icon: Users },
  { path: '/scheduled-orders', label: 'Scheduled Orders', icon: Package },
  { path: '/market-pool/manage', label: 'Market Pool', icon: ShoppingCart },
  { path: '/referrals', label: 'Referrals', icon: Gift },

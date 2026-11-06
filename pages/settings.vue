@@ -1251,6 +1251,63 @@
     <!-- ═══════════════════════════════════════════════════════ -->
     <div v-show="activeTab === 'services'" class="space-y-8">
 
+      <!-- Group order fees -->
+      <div class="rounded-[1.5rem] border border-gray-100 bg-white p-5 sm:p-6 space-y-4">
+        <div>
+          <h3 class="text-sm font-bold text-gray-900">group order fees</h3>
+          <p class="mt-1 text-xs text-gray-500">
+            charged once per store basket in a group, not once per person. a group of five ordering from one store pays this fee once.
+          </p>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            class="rounded-xl border p-3 text-left text-xs font-bold transition"
+            :class="groupForm.serviceFeeType === 'flat' ? 'border-[#FF5C1A] bg-orange-50 text-[#FF5C1A]' : 'border-gray-200 text-gray-600'"
+            @click="groupForm.serviceFeeType = 'flat'"
+          >Flat amount</button>
+          <button
+            type="button"
+            class="rounded-xl border p-3 text-left text-xs font-bold transition"
+            :class="groupForm.serviceFeeType === 'percentage' ? 'border-[#FF5C1A] bg-orange-50 text-[#FF5C1A]' : 'border-gray-200 text-gray-600'"
+            @click="groupForm.serviceFeeType = 'percentage'"
+          >Percentage of basket</button>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+              {{ groupForm.serviceFeeType === 'flat' ? 'Fee (₦)' : 'Fee (%)' }}
+            </label>
+            <input v-model.number="groupForm.serviceFeeValue" type="number" min="0"
+              class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-semibold text-gray-900 outline-none focus:border-[#FF5C1A] focus:bg-white" />
+          </div>
+          <div>
+            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Minimum fee (₦)</label>
+            <input v-model.number="groupForm.minServiceFee" type="number" min="0"
+              class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-semibold text-gray-900 outline-none focus:border-[#FF5C1A] focus:bg-white" />
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-4 border-t border-gray-50 pt-3">
+          <label class="flex items-center gap-2 text-xs font-semibold text-gray-700">
+            <input type="checkbox" v-model="groupForm.allowSponsorPays" class="rounded" /> One person pays for the group
+          </label>
+          <label class="flex items-center gap-2 text-xs font-semibold text-gray-700">
+            <input type="checkbox" v-model="groupForm.allowSplitBill" class="rounded" /> Each person pays their share
+          </label>
+        </div>
+
+        <button
+          class="rounded-xl bg-[#FF5C1A] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#E54D12] disabled:opacity-50"
+          :disabled="savingGroup"
+          @click="saveGroupConfig"
+        >
+          {{ savingGroup ? 'Saving…' : 'Save group order settings' }}
+        </button>
+      </div>
+
       <!-- EXPLAINER BANNER -->
       <div class="bg-gradient-to-r from-orange-500/10 via-amber-500/5 to-transparent border border-[#FF5C1A]/20 rounded-[2rem] p-6 sm:p-7 backdrop-blur-sm relative overflow-hidden">
         <div class="flex items-start gap-4 relative z-10">
@@ -2685,6 +2742,43 @@ const { showToast } = useCustomToast();
 const route = useRoute();
 
 // ─── Tab Navigation ────────────────
+const groupForm = ref({
+  allowSponsorPays: true,
+  allowSplitBill: true,
+  serviceFeeType: 'flat' as 'flat' | 'percentage',
+  serviceFeeValue: 150,
+  minServiceFee: 100,
+});
+const savingGroup = ref(false);
+
+const loadGroupConfig = async () => {
+  try {
+    const { GATEWAY_ENDPOINT_WITH_AUTH: api } = await import('@/api_factory/axios.config');
+    const res = await api.get('/settings/group-orders/config');
+    const d = res.data || {};
+    groupForm.value = {
+      allowSponsorPays: d.allowSponsorPays !== false,
+      allowSplitBill: d.allowSplitBill !== false,
+      serviceFeeType: d.serviceFeeType === 'percentage' ? 'percentage' : 'flat',
+      serviceFeeValue: Number(d.serviceFeeValue ?? 150),
+      minServiceFee: Number(d.minServiceFee ?? 100),
+    };
+  } catch { /* keep defaults */ }
+};
+
+const saveGroupConfig = async () => {
+  savingGroup.value = true;
+  try {
+    const { GATEWAY_ENDPOINT_WITH_AUTH: api } = await import('@/api_factory/axios.config');
+    await api.put('/settings/group-orders/config', { ...groupForm.value });
+    showToast({ title: 'Saved', message: 'Group order settings updated', toastType: 'success' } as any);
+  } catch {
+    showToast({ title: 'Error', message: 'Could not save group order settings', toastType: 'error' } as any);
+  } finally {
+    savingGroup.value = false;
+  }
+};
+
 const activeTab = ref('pricing');
 if (route.query.tab) {
   activeTab.value = String(route.query.tab);
@@ -3530,6 +3624,7 @@ const savePlatformSettings = async () => {
 
 onMounted(() => {
   loadSettings();
+  loadGroupConfig();
 });
 </script>
 
