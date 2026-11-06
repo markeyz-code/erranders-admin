@@ -97,80 +97,178 @@
                 <span class="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase" :class="statusClass(g.status)">{{ g.status }}</span>
               </td>
               <td class="px-4 py-3 text-right">
-                <button class="rounded-lg px-2 py-1 text-[11px] font-bold text-gray-500 hover:bg-gray-100" @click="toggle(g.id)">
-                  {{ expanded === g.id ? 'Hide' : 'Details' }}
+                <button class="rounded-lg px-2 py-1 text-[11px] font-bold text-gray-500 hover:bg-gray-100" @click="openGroup(g)">
+                  Details
                 </button>
               </td>
             </tr>
 
-            <tr v-if="expanded === g.id">
-              <td colspan="8" class="bg-gray-50/70 px-4 py-4">
-                <div class="grid gap-4 lg:grid-cols-2">
-                  <!-- Who was in it -->
-                  <div class="overflow-hidden rounded-xl border border-gray-100 bg-white">
-                    <p class="border-b border-gray-50 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">Participants</p>
-                    <table class="w-full text-left text-xs">
-                      <tbody class="divide-y divide-gray-50">
-                        <tr v-for="(p, i) in g.participants" :key="i">
-                          <td class="px-3 py-2">
-                            <p class="font-semibold text-gray-800">{{ p.name }}</p>
-                            <p class="text-[10px] text-gray-400">{{ p.email || 'guest' }}</p>
-                          </td>
-                          <td class="px-3 py-2 text-gray-500">{{ p.items }} items</td>
-                          <td class="px-3 py-2 font-bold text-gray-800">₦{{ Number(p.total).toLocaleString() }}</td>
-                          <td class="px-3 py-2">
-                            <span v-if="p.isReady" class="text-[10px] font-bold text-emerald-600">ready</span>
-                            <span v-else class="text-[10px] text-gray-400">adding</span>
-                          </td>
-                        </tr>
-                        <tr v-if="!g.participants.length">
-                          <td colspan="4" class="px-3 py-4 text-center text-gray-400">Nobody joined yet.</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <!-- What it became -->
-                  <div class="overflow-hidden rounded-xl border border-gray-100 bg-white">
-                    <p class="border-b border-gray-50 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">Store orders</p>
-                    <table class="w-full text-left text-xs">
-                      <tbody class="divide-y divide-gray-50">
-                        <tr v-for="o in g.orders" :key="o.orderNumber">
-                          <td class="px-3 py-2 font-mono text-[11px] text-gray-600">{{ o.orderNumber }}</td>
-                          <td class="px-3 py-2 font-semibold text-gray-800">{{ o.store }}</td>
-                          <td class="px-3 py-2 font-bold text-gray-900">₦{{ Number(o.total).toLocaleString() }}</td>
-                          <td class="px-3 py-2">
-                            <span class="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase" :class="statusClass(o.status)">{{ o.status }}</span>
-                          </td>
-                        </tr>
-                        <tr v-if="!g.orders.length">
-                          <td colspan="4" class="px-3 py-4 text-center text-gray-400">
-                            No orders yet — the group has not checked out.
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </td>
-            </tr>
           </template>
         </tbody>
       </table>
     </div>
+
+    <!-- Details drawer -->
+    <Teleport to="body">
+      <div v-if="selected" class="fixed inset-0 z-[100] flex justify-end">
+        <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-[2px]" @click="selected = null" />
+
+        <aside class="relative flex h-full w-full max-w-[560px] flex-col bg-white shadow-2xl">
+          <!-- Header -->
+          <header class="flex items-start justify-between gap-4 border-b border-gray-100 px-5 py-4">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase" :class="statusClass(selected.status)">
+                  {{ selected.status }}
+                </span>
+                <span class="font-mono text-[11px] text-gray-400">{{ selected.inviteCode }}</span>
+              </div>
+              <h2 class="mt-1 truncate text-lg font-black tracking-tight text-gray-900">
+                {{ selected.name || 'Untitled group' }}
+              </h2>
+              <p class="text-xs text-gray-500">
+                {{ selected.participants.length }} people · {{ selected.orders.length }} store orders · created
+                {{ new Date(selected.createdAt).toLocaleDateString() }}
+              </p>
+            </div>
+            <button class="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100" @click="selected = null">
+              <X class="h-5 w-5" />
+            </button>
+          </header>
+
+          <div class="flex-1 space-y-5 overflow-y-auto px-5 py-4">
+            <!-- Money -->
+            <div class="grid grid-cols-3 gap-3">
+              <div class="rounded-xl border border-gray-100 bg-gray-50/60 p-3">
+                <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Group total</p>
+                <p class="mt-0.5 text-base font-black text-gray-900">₦{{ Number(selected.groupTotal).toLocaleString() }}</p>
+              </div>
+              <div class="rounded-xl border border-gray-100 bg-gray-50/60 p-3">
+                <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Split</p>
+                <p class="mt-0.5 text-base font-black capitalize text-gray-900">{{ (selected.splitType || '—').replace('_', ' ') }}</p>
+              </div>
+              <div class="rounded-xl border border-gray-100 bg-gray-50/60 p-3">
+                <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400">Orders</p>
+                <p class="mt-0.5 text-base font-black text-gray-900">{{ selected.orders.length }}</p>
+              </div>
+            </div>
+
+            <!-- Host -->
+            <section>
+              <h3 class="mb-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">Host</h3>
+              <div class="flex items-center justify-between rounded-xl border border-gray-100 p-3">
+                <div>
+                  <p class="text-sm font-bold text-gray-900">{{ selected.host }}</p>
+                  <p class="text-[11px] text-gray-500">{{ selected.hostEmail || 'no email' }}</p>
+                </div>
+                <a
+                  v-if="selected.hostPhone"
+                  :href="waLink(selected.hostPhone)"
+                  target="_blank"
+                  rel="noopener"
+                  class="flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2.5 py-1.5 text-[11px] font-bold text-emerald-700 hover:bg-emerald-100"
+                >
+                  <MessageCircle class="h-3.5 w-3.5" /> {{ selected.hostPhone }}
+                </a>
+                <span v-else class="text-[11px] text-gray-400">no phone</span>
+              </div>
+            </section>
+
+            <!-- Participants -->
+            <section>
+              <h3 class="mb-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                Participants ({{ selected.participants.length }})
+              </h3>
+              <div class="space-y-2">
+                <div v-for="(p, i) in selected.participants" :key="i" class="rounded-xl border border-gray-100 p-3">
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0">
+                      <p class="text-sm font-bold text-gray-900">{{ p.name }}</p>
+                      <p class="truncate text-[11px] text-gray-500">{{ p.email || 'guest' }}</p>
+                      <p v-if="p.phone" class="mt-0.5 font-mono text-[11px] text-gray-500">{{ p.phone }}</p>
+                    </div>
+                    <div class="flex shrink-0 flex-col items-end gap-1">
+                      <p class="text-sm font-black text-gray-900">₦{{ Number(p.total).toLocaleString() }}</p>
+                      <span class="rounded-full px-2 py-0.5 text-[10px] font-bold" :class="p.isReady ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-500'">
+                        {{ p.isReady ? 'ready' : 'adding' }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <a
+                    v-if="p.phone"
+                    :href="waLink(p.phone)"
+                    target="_blank"
+                    rel="noopener"
+                    class="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700 hover:bg-emerald-100"
+                  >
+                    <MessageCircle class="h-3 w-3" /> message on whatsapp
+                  </a>
+
+                  <ul v-if="p.itemList?.length" class="mt-2 space-y-1 border-t border-gray-50 pt-2">
+                    <li v-for="(it, j) in p.itemList" :key="j" class="flex items-center justify-between text-[11px]">
+                      <span class="text-gray-600">
+                        {{ it.quantity }}× {{ it.name }}
+                        <span v-if="it.vendorName" class="text-gray-400">· {{ it.vendorName }}</span>
+                      </span>
+                      <span class="font-semibold text-gray-700">₦{{ Number(it.subtotal).toLocaleString() }}</span>
+                    </li>
+                  </ul>
+                  <p v-else class="mt-2 border-t border-gray-50 pt-2 text-[11px] text-gray-400">No items added.</p>
+                </div>
+                <p v-if="!selected.participants.length" class="rounded-xl border border-dashed border-gray-200 p-4 text-center text-xs text-gray-400">
+                  Nobody joined this group.
+                </p>
+              </div>
+            </section>
+
+            <!-- Store orders -->
+            <section>
+              <h3 class="mb-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                Store orders ({{ selected.orders.length }})
+              </h3>
+              <div class="space-y-2">
+                <div v-for="o in selected.orders" :key="o.orderNumber" class="rounded-xl border border-gray-100 p-3">
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                      <p class="truncate text-sm font-bold text-gray-900">{{ o.store }}</p>
+                      <p class="font-mono text-[11px] text-gray-500">{{ o.orderNumber }}</p>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-sm font-black text-gray-900">₦{{ Number(o.total).toLocaleString() }}</p>
+                      <span class="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase" :class="statusClass(o.status)">{{ o.status }}</span>
+                    </div>
+                  </div>
+                  <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 border-t border-gray-50 pt-2 text-[11px] text-gray-500">
+                    <span>delivery ₦{{ Number(o.deliveryFee || 0).toLocaleString() }}</span>
+                    <span>service ₦{{ Number(o.serviceFee || 0).toLocaleString() }}</span>
+                    <span :class="String(o.paymentStatus).toLowerCase() === 'paid' ? 'font-bold text-emerald-600' : 'font-bold text-amber-600'">
+                      {{ o.paymentStatus }}
+                    </span>
+                  </div>
+                </div>
+                <p v-if="!selected.orders.length" class="rounded-xl border border-dashed border-amber-200 bg-amber-50/40 p-4 text-center text-xs text-amber-700">
+                  No store orders — this group has not checked out.
+                </p>
+              </div>
+            </section>
+          </div>
+        </aside>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { Users, ShoppingBag, CheckCircle, Wallet, Search } from 'lucide-vue-next';
+import { Users, ShoppingBag, CheckCircle, Wallet, Search, X, MessageCircle } from 'lucide-vue-next';
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config';
 import { useCustomToast as useToast } from '@/composables/core/useCustomToast';
 
 const { showToast } = useToast();
 const groups = ref<any[]>([]);
 const loading = ref(true);
-const expanded = ref<string | null>(null);
+const selected = ref<any>(null);
 const search = ref('');
 const statusFilter = ref('all');
 
@@ -214,8 +312,15 @@ const load = async () => {
   }
 };
 
-const toggle = (id: string) => {
-  expanded.value = expanded.value === id ? null : id;
+const openGroup = (group: any) => {
+  selected.value = group;
+};
+
+// WhatsApp needs digits only, with the Nigerian leading 0 replaced by 234.
+const waLink = (phone: string) => {
+  const digits = String(phone || '').replace(/\D/g, '');
+  const normalised = digits.startsWith('0') ? '234' + digits.slice(1) : digits;
+  return `https://wa.me/${normalised}`;
 };
 
 const statusClass = (status: string) => {
