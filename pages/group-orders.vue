@@ -43,7 +43,7 @@
           :key="tab.value"
           class="shrink-0 rounded-xl border px-3 py-2 text-xs font-bold transition"
           :class="statusFilter === tab.value ? 'border-[#FF5C1A] bg-orange-50 text-[#FF5C1A]' : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'"
-          @click="statusFilter = tab.value"
+          @click="statusFilter = tab.value; page = 1"
         >
           {{ tab.label }}
           <span class="ml-1 text-[10px] text-gray-400">{{ tab.count }}</span>
@@ -146,6 +146,32 @@
           </template>
         </tbody>
       </table>
+    </div>
+
+    <!-- Pagination -->
+    <div v-if="total > limit" class="flex flex-wrap items-center justify-between gap-3 rounded-[1.25rem] border border-gray-100 bg-white px-4 py-3">
+      <p class="text-xs text-gray-500">
+        Showing
+        <span class="font-bold text-gray-800">{{ (page - 1) * limit + 1 }}–{{ Math.min(page * limit, total) }}</span>
+        of <span class="font-bold text-gray-800">{{ total }}</span> groups
+      </p>
+      <div class="flex items-center gap-1">
+        <button
+          class="rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-bold text-gray-600 disabled:opacity-40"
+          :disabled="page === 1"
+          @click="goToPage(page - 1)"
+        >
+          Previous
+        </button>
+        <span class="px-2 text-xs font-bold text-gray-700">{{ page }} / {{ totalPages }}</span>
+        <button
+          class="rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-bold text-gray-600 disabled:opacity-40"
+          :disabled="page >= totalPages"
+          @click="goToPage(page + 1)"
+        >
+          Next
+        </button>
+      </div>
     </div>
 
     <!-- Delete confirmation -->
@@ -362,34 +388,47 @@ const filtered = computed(() => {
 });
 
 const statusTabs = computed(() => [
-  { value: 'all', label: 'All', count: groups.value.length },
+  { value: 'all', label: 'All', count: summary.value.total || 0 },
   ...['open', 'locked', 'completed', 'cancelled'].map((s) => ({
     value: s,
     label: s.charAt(0).toUpperCase() + s.slice(1),
-    count: groups.value.filter((g) => String(g.status).toLowerCase() === s).length,
+    count: summary.value[s] || 0,
   })),
 ]);
 
-const stats = computed(() => {
-  const totalValue = groups.value.reduce((sum, g) => sum + (Number(g.groupTotal) || 0), 0);
-  return [
-    { label: 'Groups', value: groups.value.length, icon: Users, tint: 'bg-blue-50 text-blue-600' },
-    { label: 'Open now', value: groups.value.filter((g) => String(g.status).toLowerCase() === 'open').length, icon: ShoppingBag, tint: 'bg-amber-50 text-amber-600' },
-    { label: 'Completed', value: groups.value.filter((g) => String(g.status).toLowerCase() === 'completed').length, icon: CheckCircle, tint: 'bg-emerald-50 text-emerald-600' },
-    { label: 'Value', value: '₦' + totalValue.toLocaleString(), icon: Wallet, tint: 'bg-orange-50 text-[#FF5C1A]' },
-  ];
-});
+const stats = computed(() => [
+  { label: 'Groups', value: summary.value.total || 0, icon: Users, tint: 'bg-blue-50 text-blue-600' },
+  { label: 'Open now', value: summary.value.open || 0, icon: ShoppingBag, tint: 'bg-amber-50 text-amber-600' },
+  { label: 'Completed', value: summary.value.completed || 0, icon: CheckCircle, tint: 'bg-emerald-50 text-emerald-600' },
+  { label: 'Value', value: '₦' + Number(summary.value.value || 0).toLocaleString(), icon: Wallet, tint: 'bg-orange-50 text-[#FF5C1A]' },
+]);
+
+const page = ref(1);
+const limit = ref(20);
+const total = ref(0);
+const summary = ref<any>({ total: 0, open: 0, locked: 0, completed: 0, cancelled: 0, value: 0 });
+const totalPages = computed(() => Math.max(1, Math.ceil(total.value / limit.value)));
 
 const load = async () => {
   loading.value = true;
   try {
-    const res = await api.get('/admin/group-orders');
+    const res = await api.get('/admin/group-orders', { params: { page: page.value, limit: limit.value } });
     groups.value = res.data?.groups || [];
+    total.value = Number(res.data?.total) || 0;
+    summary.value = res.data?.summary || summary.value;
   } catch {
     showToast({ title: 'Error', message: 'Could not load group orders', toastType: 'error' } as any);
   } finally {
     loading.value = false;
   }
+};
+
+const goToPage = async (next: number) => {
+  const target = Math.min(Math.max(1, next), totalPages.value);
+  if (target === page.value) return;
+  page.value = target;
+  await load();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 const openGroup = (group: any) => {
