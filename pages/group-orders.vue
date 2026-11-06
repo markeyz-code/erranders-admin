@@ -97,9 +97,49 @@
                 <span class="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase" :class="statusClass(g.status)">{{ g.status }}</span>
               </td>
               <td class="px-4 py-3 text-right">
-                <button class="rounded-lg px-2 py-1 text-[11px] font-bold text-gray-500 hover:bg-gray-100" @click="openGroup(g)">
-                  Details
-                </button>
+                <div class="relative inline-block text-left">
+                  <button
+                    class="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+                    @click.stop="openMenu = openMenu === g.id ? null : g.id"
+                  >
+                    <MoreHorizontal class="h-4 w-4" />
+                  </button>
+
+                  <div
+                    v-if="openMenu === g.id"
+                    class="absolute right-0 z-30 mt-1 w-56 overflow-hidden rounded-xl border border-gray-100 bg-white py-1 shadow-xl"
+                    @click.stop
+                  >
+                    <button class="menu-item" @click="openGroup(g); openMenu = null">
+                      <Eye class="h-3.5 w-3.5" /> view details
+                    </button>
+                    <button class="menu-item" @click="copyInvite(g); openMenu = null">
+                      <LinkIcon class="h-3.5 w-3.5" /> copy invite link
+                    </button>
+                    <button v-if="g.hostPhone" class="menu-item" @click="openGroup(g); openMenu = null">
+                      <MessageCircle class="h-3.5 w-3.5" /> message host
+                    </button>
+
+                    <div class="my-1 border-t border-gray-50" />
+
+                    <button v-if="g.status !== 'locked'" class="menu-item" @click="setStatus(g, 'locked')">
+                      <Lock class="h-3.5 w-3.5" /> lock group
+                    </button>
+                    <button v-if="g.status === 'locked'" class="menu-item" @click="setStatus(g, 'open')">
+                      <LockOpen class="h-3.5 w-3.5" /> unlock group
+                    </button>
+                    <button v-if="g.status !== 'cancelled'" class="menu-item" @click="setStatus(g, 'cancelled')">
+                      <Ban class="h-3.5 w-3.5" /> cancel group
+                    </button>
+
+                    <template v-if="!g.orders.length">
+                      <div class="my-1 border-t border-gray-50" />
+                      <button class="menu-item text-rose-600" @click="removeGroup(g)">
+                        <Trash2 class="h-3.5 w-3.5" /> delete group
+                      </button>
+                    </template>
+                  </div>
+                </div>
               </td>
             </tr>
 
@@ -107,6 +147,28 @@
         </tbody>
       </table>
     </div>
+
+    <!-- Delete confirmation -->
+    <Teleport to="body">
+      <div v-if="pendingDelete" class="fixed inset-0 z-[110] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-[2px]" @click="pendingDelete = null" />
+        <div class="relative w-full max-w-sm rounded-2xl bg-white p-5 shadow-2xl">
+          <h3 class="text-base font-black tracking-tight text-gray-900">Delete this group?</h3>
+          <p class="mt-1 text-xs text-gray-500">
+            <span class="font-bold text-gray-700">{{ pendingDelete.name || 'Untitled group' }}</span>
+            ({{ pendingDelete.inviteCode }}) will be removed for everyone in it. This cannot be undone.
+          </p>
+          <div class="mt-4 flex justify-end gap-2">
+            <button class="rounded-xl border border-gray-200 px-3 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50" @click="pendingDelete = null">
+              Keep it
+            </button>
+            <button class="rounded-xl bg-rose-600 px-3 py-2 text-xs font-bold text-white hover:bg-rose-700" @click="confirmDelete">
+              Delete group
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <!-- Details drawer -->
     <Teleport to="body">
@@ -259,9 +321,27 @@
   </div>
 </template>
 
+<style scoped>
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  text-align: left;
+  transition: background-color 0.12s ease;
+}
+.menu-item:hover {
+  background-color: #f9fafb;
+}
+</style>
+
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import { Users, ShoppingBag, CheckCircle, Wallet, Search, X, MessageCircle } from 'lucide-vue-next';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { Users, ShoppingBag, CheckCircle, Wallet, Search, X, MessageCircle, MoreHorizontal, Eye, Link as LinkIcon, Lock, LockOpen, Ban, Trash2 } from 'lucide-vue-next';
 import { GATEWAY_ENDPOINT_WITH_AUTH as api } from '@/api_factory/axios.config';
 import { useCustomToast as useToast } from '@/composables/core/useCustomToast';
 
@@ -331,5 +411,62 @@ const statusClass = (status: string) => {
   return 'bg-gray-100 text-gray-600';
 };
 
-onMounted(load);
+const openMenu = ref<string | null>(null);
+
+const copyInvite = async (g: any) => {
+  const link = `${window.location.origin.replace('admin.', 'www.')}/group/${g.inviteCode}`;
+  try {
+    await navigator.clipboard.writeText(link);
+    showToast({ title: 'Copied', message: 'Invite link copied to clipboard', toastType: 'success' } as any);
+  } catch {
+    showToast({ title: 'Invite code', message: g.inviteCode, toastType: 'info' } as any);
+  }
+  openMenu.value = null;
+};
+
+const setStatus = async (g: any, status: 'open' | 'locked' | 'cancelled') => {
+  openMenu.value = null;
+  try {
+    await api.patch(`/admin/group-orders/${g.id}/status`, { status });
+    showToast({ title: 'Updated', message: `Group is now ${status}`, toastType: 'success' } as any);
+    await load();
+  } catch (e: any) {
+    showToast({
+      title: 'Could not update',
+      message: e?.response?.data?.message || 'Try again',
+      toastType: 'error',
+    } as any);
+  }
+};
+
+const pendingDelete = ref<any>(null);
+
+const removeGroup = async (g: any) => {
+  openMenu.value = null;
+  pendingDelete.value = g;
+};
+
+const confirmDelete = async () => {
+  const g = pendingDelete.value;
+  if (!g) return;
+  pendingDelete.value = null;
+  try {
+    await api.delete(`/admin/group-orders/${g.id}`);
+    showToast({ title: 'Deleted', message: 'Group removed', toastType: 'success' } as any);
+    await load();
+  } catch (e: any) {
+    showToast({
+      title: 'Could not delete',
+      message: e?.response?.data?.message || 'This group cannot be deleted',
+      toastType: 'error',
+    } as any);
+  }
+};
+
+const closeMenu = () => { openMenu.value = null; };
+onMounted(() => {
+  load();
+  window.addEventListener('click', closeMenu);
+  onUnmounted(() => window.removeEventListener('click', closeMenu));
+});
 </script>
