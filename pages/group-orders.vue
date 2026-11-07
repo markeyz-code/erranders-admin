@@ -453,7 +453,9 @@ const statusClass = (status: string) => {
 const openMenu = ref<string | null>(null);
 
 const copyInvite = async (g: any) => {
-  const link = `${window.location.origin.replace('admin.', 'www.')}/group/${g.inviteCode}`;
+  // admin.erranders.org -> erranders.org. It used to rewrite to www, which serves the wrong
+  // TLS certificate, so every shared invite link failed to open.
+  const link = `${window.location.origin.replace('admin.', '')}/group/${g.inviteCode}`;
   try {
     await navigator.clipboard.writeText(link);
     showToast({ title: 'Copied', message: 'Invite link copied to clipboard', toastType: 'success' } as any);
