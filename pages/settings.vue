@@ -1251,6 +1251,66 @@
     <!-- ═══════════════════════════════════════════════════════ -->
     <div v-show="activeTab === 'services'" class="space-y-8">
 
+      <!-- Buffer payouts -->
+      <div class="rounded-[1.5rem] border border-gray-100 bg-white p-5 sm:p-6 space-y-4">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="text-sm font-bold text-gray-900">buffer payouts</h3>
+            <p class="mt-1 text-xs text-gray-500">
+              unused safety buffer is held in a separate pot and sent to the customer's bank each night at 11pm.
+              their wallet top-ups are never touched.
+            </p>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            :aria-checked="bufferForm.enabled"
+            class="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition"
+            :class="bufferForm.enabled ? 'bg-[#FF5C1A]' : 'bg-gray-200'"
+            @click="bufferForm.enabled = !bufferForm.enabled"
+          >
+            <span
+              class="inline-block h-4 w-4 transform rounded-full bg-white transition"
+              :class="bufferForm.enabled ? 'translate-x-6' : 'translate-x-1'"
+            />
+          </button>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Minimum payout (₦)</label>
+            <input
+              v-model.number="bufferForm.minimumPayout"
+              type="number"
+              min="0"
+              :disabled="!bufferForm.enabled"
+              class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-semibold text-gray-900 outline-none focus:border-[#FF5C1A] focus:bg-white disabled:opacity-50"
+            />
+          </div>
+        </div>
+
+        <p
+          class="rounded-xl px-3 py-2 text-[11px] font-medium"
+          :class="bufferForm.enabled ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-800'"
+        >
+          {{ bufferForm.enabled
+            ? 'Live. Any customer holding at least ₦' + Number(bufferForm.minimumPayout || 0).toLocaleString() + ' of unused buffer will be paid tonight.'
+            : 'Report only. The job runs at 11pm and logs who would be paid, but no money moves.' }}
+        </p>
+
+        <p class="text-[11px] text-gray-500">
+          Customers without a bank account on file are skipped and their buffer is held — it is never lost.
+        </p>
+
+        <button
+          class="rounded-xl bg-[#FF5C1A] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#E54D12] disabled:opacity-50"
+          :disabled="savingBuffer"
+          @click="saveBufferConfig"
+        >
+          {{ savingBuffer ? 'Saving…' : 'Save buffer payout settings' }}
+        </button>
+      </div>
+
       <!-- Referral cash back -->
       <div class="rounded-[1.5rem] border border-gray-100 bg-white p-5 sm:p-6 space-y-4">
         <div class="flex items-start justify-between gap-4">
@@ -2862,6 +2922,34 @@ const saveReferralConfig = async () => {
   }
 };
 
+const bufferForm = ref({ enabled: false, minimumPayout: 100 });
+const savingBuffer = ref(false);
+
+const loadBufferConfig = async () => {
+  try {
+    const { GATEWAY_ENDPOINT_WITH_AUTH: api } = await import('@/api_factory/axios.config');
+    const res = await api.get('/settings/buffer-payout/config');
+    const d = res.data || {};
+    bufferForm.value = {
+      enabled: d.enabled === true,
+      minimumPayout: Number(d.minimumPayout ?? 100),
+    };
+  } catch { /* keep defaults */ }
+};
+
+const saveBufferConfig = async () => {
+  savingBuffer.value = true;
+  try {
+    const { GATEWAY_ENDPOINT_WITH_AUTH: api } = await import('@/api_factory/axios.config');
+    await api.put('/settings/buffer-payout/config', { ...bufferForm.value });
+    showToast({ title: 'Saved', message: 'Buffer payout settings updated', toastType: 'success' } as any);
+  } catch {
+    showToast({ title: 'Error', message: 'Could not save buffer payout settings', toastType: 'error' } as any);
+  } finally {
+    savingBuffer.value = false;
+  }
+};
+
 const activeTab = ref('pricing');
 if (route.query.tab) {
   activeTab.value = String(route.query.tab);
@@ -3709,6 +3797,7 @@ onMounted(() => {
   loadSettings();
   loadGroupConfig();
   loadReferralConfig();
+  loadBufferConfig();
 });
 </script>
 
