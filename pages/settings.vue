@@ -1251,6 +1251,60 @@
     <!-- ═══════════════════════════════════════════════════════ -->
     <div v-show="activeTab === 'services'" class="space-y-8">
 
+      <!-- Referral cash back -->
+      <div class="rounded-[1.5rem] border border-gray-100 bg-white p-5 sm:p-6 space-y-4">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="text-sm font-bold text-gray-900">referral cash back</h3>
+            <p class="mt-1 text-xs text-gray-500">
+              paid to the student who referred someone, into their wallet, once per successful signup.
+            </p>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            :aria-checked="referralForm.enabled"
+            class="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition"
+            :class="referralForm.enabled ? 'bg-[#FF5C1A]' : 'bg-gray-200'"
+            @click="referralForm.enabled = !referralForm.enabled"
+          >
+            <span
+              class="inline-block h-4 w-4 transform rounded-full bg-white transition"
+              :class="referralForm.enabled ? 'translate-x-6' : 'translate-x-1'"
+            />
+          </button>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Cash back per student (₦)</label>
+            <input
+              v-model.number="referralForm.rewardAmount"
+              type="number"
+              min="0"
+              :disabled="!referralForm.enabled"
+              class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-semibold text-gray-900 outline-none focus:border-[#FF5C1A] focus:bg-white disabled:opacity-50"
+            />
+          </div>
+          <label class="flex items-end gap-2 pb-2.5 text-xs font-semibold text-gray-700">
+            <input type="checkbox" v-model="referralForm.sendCodeOnSignup" class="rounded" />
+            Send each new student their code on signup
+          </label>
+        </div>
+
+        <p class="rounded-xl bg-amber-50 px-3 py-2 text-[11px] font-medium text-amber-800">
+          At ₦{{ Number(referralForm.rewardAmount || 0).toLocaleString() }} per referral, 100 referrals costs ₦{{ (Number(referralForm.rewardAmount || 0) * 100).toLocaleString() }}.
+        </p>
+
+        <button
+          class="rounded-xl bg-[#FF5C1A] px-4 py-2.5 text-sm font-bold text-white hover:bg-[#E54D12] disabled:opacity-50"
+          :disabled="savingReferral"
+          @click="saveReferralConfig"
+        >
+          {{ savingReferral ? 'Saving…' : 'Save referral settings' }}
+        </button>
+      </div>
+
       <!-- Group order fees -->
       <div class="rounded-[1.5rem] border border-gray-100 bg-white p-5 sm:p-6 space-y-4">
         <div>
@@ -2779,6 +2833,35 @@ const saveGroupConfig = async () => {
   }
 };
 
+const referralForm = ref({ enabled: true, rewardAmount: 100, sendCodeOnSignup: true });
+const savingReferral = ref(false);
+
+const loadReferralConfig = async () => {
+  try {
+    const { GATEWAY_ENDPOINT_WITH_AUTH: api } = await import('@/api_factory/axios.config');
+    const res = await api.get('/settings/referrals/config');
+    const d = res.data || {};
+    referralForm.value = {
+      enabled: d.enabled !== false,
+      rewardAmount: Number(d.rewardAmount ?? 100),
+      sendCodeOnSignup: d.sendCodeOnSignup !== false,
+    };
+  } catch { /* keep defaults */ }
+};
+
+const saveReferralConfig = async () => {
+  savingReferral.value = true;
+  try {
+    const { GATEWAY_ENDPOINT_WITH_AUTH: api } = await import('@/api_factory/axios.config');
+    await api.put('/settings/referrals/config', { ...referralForm.value });
+    showToast({ title: 'Saved', message: 'Referral settings updated', toastType: 'success' } as any);
+  } catch {
+    showToast({ title: 'Error', message: 'Could not save referral settings', toastType: 'error' } as any);
+  } finally {
+    savingReferral.value = false;
+  }
+};
+
 const activeTab = ref('pricing');
 if (route.query.tab) {
   activeTab.value = String(route.query.tab);
@@ -3625,6 +3708,7 @@ const savePlatformSettings = async () => {
 onMounted(() => {
   loadSettings();
   loadGroupConfig();
+  loadReferralConfig();
 });
 </script>
 
