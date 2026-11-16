@@ -339,6 +339,15 @@
                   <span v-if="order.status === 'delivered' && getDeliveryDuration(order)" class="text-[9px] font-bold text-gray-500 bg-gray-50 border border-gray-50 px-1.5 py-0.5 rounded mt-1 flex items-center gap-1" title="Time from acceptance to delivery">
                     <Clock class="w-3 h-3" /> {{ getDeliveryDuration(order) }}
                   </span>
+
+                  <!-- Why it was cancelled, so two identical-looking rows can be told apart. -->
+                  <span
+                    v-if="order.status === 'cancelled'"
+                    class="text-[9px] font-semibold text-rose-500 max-w-[150px] text-right leading-tight"
+                    :title="order.cancelReason || order.cancellationReason || order.reason || 'No reason recorded'"
+                  >
+                    {{ cancelledLabel(order) }}
+                  </span>
                 </div>
               </td>
               <!-- Actions -->
@@ -2105,6 +2114,14 @@ const currentPage = ref(1);
 const totalPages = ref(1);
 const totalRecords = ref(0);
 const limit = ref(20);
+/** Who cancelled it and when, which is the only thing separating two identical cancelled rows. */
+const cancelledLabel = (order: any) => {
+  const reason = order.cancelReason || order.cancellationReason || order.reason || 'No reason recorded'
+  const when = order.updatedAt ? new Date(order.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''
+  const paid = order.paymentStatus === 'paid' ? 'after payment' : 'before payment'
+  return `${reason} · ${when} · ${paid}`
+}
+
 const orderStats = ref({
   pending: 0,
   processing: 0,
