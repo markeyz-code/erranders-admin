@@ -2414,7 +2414,7 @@ const typeOptions = [
   { label: 'Auto-Pilot Orders', value: 'auto_pilot' }
 ];
 
-const updateStatuses = ['pending', 'confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'delivered', 'cancelled'];
+const updateStatuses = ['pending', 'confirmed', 'preparing', 'ready_for_pickup', 'picked_up', 'in_transit', 'delivered'];
 const showActionModal = ref(false);
 const assigningErranderId = ref('');
 const isAssigning = ref(false);

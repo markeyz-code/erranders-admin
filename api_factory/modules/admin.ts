@@ -61,8 +61,8 @@ export const admin_api = {
     return GATEWAY_ENDPOINT_WITH_AUTH.post('/admin/users/batch-delete', { ids });
   },
 
-  cancelOrder: (id: string) => {
-    return GATEWAY_ENDPOINT_WITH_AUTH.post(`/orders/${id}/cancel`);
+  cancelOrder: (id: string, payload?: { reason: string }) => {
+    return GATEWAY_ENDPOINT_WITH_AUTH.post(`/orders/${id}/cancel`, payload || { reason: 'Cancelled by Admin' });
   },
 
   assignOrder: (id: string, payload: { erranderId: string }) => {
